@@ -1,0 +1,3 @@
+[submodule "tronj"]
+	path = trident-java
+	url = https://github.com/tronprotocol/tronj.git
