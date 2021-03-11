@@ -49,7 +49,7 @@ bintray {
 
     pkg {
         repo = 'trident'
-        name = 'client'
+        name = 'core'
         // userOrg = 'trident'
         // configurations = ['archives']
         desc = description

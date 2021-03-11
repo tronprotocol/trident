@@ -8,4 +8,4 @@ rootProject.name = 'trident'
 
 include 'utils'
 include 'abi'
-include 'client'
+include 'core'
