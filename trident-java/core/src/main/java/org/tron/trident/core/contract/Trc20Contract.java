@@ -4,7 +4,7 @@ package org.tron.trident.core.contract;
  * The {@code Trc20Contract} is a wrapper class of a standard TRC-20 smart contract.
  * 
  * <p>A {@code Trc20Contract} object includes standard TRC-20 functions defined 
- * in TIP-20. Each {@code Trc20Contract} binds a {@link TronClient} with specific 
+ * in TIP-20. Each {@code Trc20Contract} binds a {@link ApiWrapper} with specific 
  * caller's private key and address.</p>
  * 
  * @since jdk 13.0.2+8
@@ -35,8 +35,8 @@ import java.util.Collections;
 public class Trc20Contract extends Contract {
     protected int decimals;
 
-    public Trc20Contract(Contract cntr, String ownerAddr, ApiWrapper client) {
-        super(cntr, ownerAddr, client);
+    public Trc20Contract(Contract cntr, String ownerAddr, ApiWrapper wrapper) {
+        super(cntr, ownerAddr, wrapper);
         decimals = decimals().intValue();
     }
 
@@ -51,7 +51,7 @@ public class Trc20Contract extends Contract {
         Function name = new Function("name",
                 Collections.emptyList(), Arrays.asList(new TypeReference<Utf8String>() {}));
 
-        TransactionExtention txnExt = client.constantCall(Base58Check.bytesToBase58(ownerAddr.toByteArray()), 
+        TransactionExtention txnExt = wrapper.constantCall(Base58Check.bytesToBase58(ownerAddr.toByteArray()), 
                 Base58Check.bytesToBase58(cntrAddr.toByteArray()), name);
         //Convert constant result to human readable text
         String result = Numeric.toHexString(txnExt.getConstantResult(0).toByteArray());
@@ -69,7 +69,7 @@ public class Trc20Contract extends Contract {
         Function symbol = new Function("symbol",
                 Collections.emptyList(), Arrays.asList(new TypeReference<Utf8String>() {}));
 
-        TransactionExtention txnExt = client.constantCall(Base58Check.bytesToBase58(ownerAddr.toByteArray()), 
+        TransactionExtention txnExt = wrapper.constantCall(Base58Check.bytesToBase58(ownerAddr.toByteArray()), 
                 Base58Check.bytesToBase58(cntrAddr.toByteArray()), symbol);
         //Convert constant result to human readable text
         String result = Numeric.toHexString(txnExt.getConstantResult(0).toByteArray());
@@ -88,7 +88,7 @@ public class Trc20Contract extends Contract {
         Function decimals = new Function("decimals",
                 Collections.emptyList(), Arrays.asList(new TypeReference<Uint8>() {}));
         
-        TransactionExtention txnExt = client.constantCall(Base58Check.bytesToBase58(ownerAddr.toByteArray()), 
+        TransactionExtention txnExt = wrapper.constantCall(Base58Check.bytesToBase58(ownerAddr.toByteArray()), 
                 Base58Check.bytesToBase58(cntrAddr.toByteArray()), decimals);
         //Convert constant result to human readable text
         String result = Numeric.toHexString(txnExt.getConstantResult(0).toByteArray());
@@ -106,7 +106,7 @@ public class Trc20Contract extends Contract {
         Function totalSupply = new Function("totalSupply",
                 Collections.emptyList(), Arrays.asList(new TypeReference<Uint256>() {}));
 
-        TransactionExtention txnExt = client.constantCall(Base58Check.bytesToBase58(ownerAddr.toByteArray()), 
+        TransactionExtention txnExt = wrapper.constantCall(Base58Check.bytesToBase58(ownerAddr.toByteArray()), 
                 Base58Check.bytesToBase58(cntrAddr.toByteArray()), totalSupply);
         //Convert constant result to human readable text
         String result = Numeric.toHexString(txnExt.getConstantResult(0).toByteArray());
@@ -127,7 +127,7 @@ public class Trc20Contract extends Contract {
         Function balanceOf = new Function("balanceOf",
                 Arrays.asList(new Address(accountAddr)), Arrays.asList(new TypeReference<Uint256>() {}));
 
-        TransactionExtention txnExt = client.constantCall(Base58Check.bytesToBase58(ownerAddr.toByteArray()), 
+        TransactionExtention txnExt = wrapper.constantCall(Base58Check.bytesToBase58(ownerAddr.toByteArray()), 
                 Base58Check.bytesToBase58(cntrAddr.toByteArray()), balanceOf);
         //Convert constant result to human readable text
         String result = Numeric.toHexString(txnExt.getConstantResult(0).toByteArray());
@@ -152,13 +152,13 @@ public class Trc20Contract extends Contract {
                         new Uint256(BigInteger.valueOf(amount).multiply(BigInteger.valueOf(10).pow(decimals)))),
                 Arrays.asList(new TypeReference<Bool>() {}));
 
-        TransactionBuilder builder = client.triggerCall(Base58Check.bytesToBase58(ownerAddr.toByteArray()), 
+        TransactionBuilder builder = wrapper.triggerCall(Base58Check.bytesToBase58(ownerAddr.toByteArray()), 
                 Base58Check.bytesToBase58(cntrAddr.toByteArray()), transfer);
         builder.setFeeLimit(feeLimit);
         builder.setMemo(memo);
 
-        Transaction signedTxn = client.signTransaction(builder.build());
-        return client.broadcastTransaction(signedTxn);
+        Transaction signedTxn = wrapper.signTransaction(builder.build());
+        return wrapper.broadcastTransaction(signedTxn);
       }
 
       /**
@@ -182,13 +182,13 @@ public class Trc20Contract extends Contract {
                         new Uint256(BigInteger.valueOf(amount).multiply(BigInteger.valueOf(10).pow(decimals)))),
                 Arrays.asList(new TypeReference<Bool>() {}));
 
-        TransactionBuilder builder = client.triggerCall(Base58Check.bytesToBase58(ownerAddr.toByteArray()), 
+        TransactionBuilder builder = wrapper.triggerCall(Base58Check.bytesToBase58(ownerAddr.toByteArray()), 
                 Base58Check.bytesToBase58(cntrAddr.toByteArray()), transferFrom);
         builder.setFeeLimit(feeLimit);
         builder.setMemo(memo);
 
-        Transaction signedTxn = client.signTransaction(builder.build());
-        return client.broadcastTransaction(signedTxn);
+        Transaction signedTxn = wrapper.signTransaction(builder.build());
+        return wrapper.broadcastTransaction(signedTxn);
       }
 
       /**
@@ -210,13 +210,13 @@ public class Trc20Contract extends Contract {
                         new Uint256(BigInteger.valueOf(amount).multiply(BigInteger.valueOf(10).pow(decimals)))),
                 Arrays.asList(new TypeReference<Bool>() {}));
 
-                TransactionBuilder builder = client.triggerCall(Base58Check.bytesToBase58(ownerAddr.toByteArray()), 
+                TransactionBuilder builder = wrapper.triggerCall(Base58Check.bytesToBase58(ownerAddr.toByteArray()), 
                 Base58Check.bytesToBase58(cntrAddr.toByteArray()), approve);
         builder.setFeeLimit(feeLimit);
         builder.setMemo(memo);
 
-        Transaction signedTxn = client.signTransaction(builder.build());
-        return client.broadcastTransaction(signedTxn);
+        Transaction signedTxn = wrapper.signTransaction(builder.build());
+        return wrapper.broadcastTransaction(signedTxn);
       }
 
       /**
@@ -235,7 +235,7 @@ public class Trc20Contract extends Contract {
                 Arrays.asList(new Address(owner), new Address(spender)),
                 Arrays.asList(new TypeReference<Uint256>() {}));
         
-        TransactionExtention txnExt = client.constantCall(Base58Check.bytesToBase58(ownerAddr.toByteArray()), 
+        TransactionExtention txnExt = wrapper.constantCall(Base58Check.bytesToBase58(ownerAddr.toByteArray()), 
                 Base58Check.bytesToBase58(cntrAddr.toByteArray()), allowance);
         //Convert constant result to human readable text
         String result = Numeric.toHexString(txnExt.getConstantResult(0).toByteArray());
