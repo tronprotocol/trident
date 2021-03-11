@@ -1,0 +1,104 @@
+syntax = "proto3";
+package protocol;
+
+option java_package = "org.tron.trident.proto";
+
+enum ResourceCode {
+  BANDWIDTH = 0x00;
+  ENERGY = 0x01;
+}
+
+enum AccountType {
+  Normal = 0;
+  AssetIssue = 1;
+  Contract = 2;
+}
+
+message AccountId {
+  bytes name = 1;
+  bytes address = 2;
+}
+
+message authority {
+  AccountId account = 1;
+  bytes permission_name = 2;
+}
+
+message Key {
+  bytes address = 1;
+  int64 weight = 2;
+}
+
+message Permission {
+  enum PermissionType {
+    Owner = 0;
+    Witness = 1;
+    Active = 2;
+  }
+  PermissionType type = 1;
+  int32 id = 2;  // Owner id=0, Witness id=1, Active id start by 2
+  string permission_name = 3;
+  int64 threshold = 4;
+  int32 parent_id = 5;
+  bytes operations = 6;  // 1 bit 1 contract
+  repeated Key keys = 7;
+}
+
+message SmartContract {
+  message ABI {
+    message Entry {
+      enum EntryType {
+        UnknownEntryType = 0;
+        Constructor = 1;
+        Function = 2;
+        Event = 3;
+        Fallback = 4;
+      }
+      message Param {
+        bool indexed = 1;
+        string name = 2;
+        string type = 3;
+        // SolidityType type = 3;
+      }
+      enum StateMutabilityType {
+        UnknownMutabilityType = 0;
+        Pure = 1;
+        View = 2;
+        Nonpayable = 3;
+        Payable = 4;
+      }
+
+      bool anonymous = 1;
+      bool constant = 2;
+      string name = 3;
+      repeated Param inputs = 4;
+      repeated Param outputs = 5;
+      EntryType type = 6;
+      bool payable = 7;
+      StateMutabilityType stateMutability = 8;
+    }
+    repeated Entry entrys = 1;
+  }
+  bytes origin_address = 1;
+  bytes contract_address = 2;
+  ABI abi = 3;
+  bytes bytecode = 4;
+  int64 call_value = 5;
+  int64 consume_user_resource_percent = 6;
+  string name = 7;
+  int64 origin_energy_limit = 8;
+  bytes code_hash = 9;
+  bytes trx_hash = 10;
+}
+
+message Vote {
+  bytes vote_address = 1;
+  int64 vote_count = 2;
+}
+
+message Note {
+  int64 value = 1;
+  string payment_address = 2;
+  bytes rcm = 3;  // random 32
+  bytes memo = 4;
+}

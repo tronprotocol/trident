@@ -1,0 +1,563 @@
+syntax = "proto3";
+package protocol;
+
+option java_package = "org.tron.trident.proto";
+
+import "core/common.proto";
+import "core/chain.proto";
+import "core/contract.proto";
+
+message BlockExtention {
+    repeated TransactionExtention transactions = 1;
+    BlockHeader block_header = 2;
+    bytes blockid = 3;
+}
+
+message BlockListExtention {
+    repeated BlockExtention block = 1;
+}
+
+message TransactionReturn {
+    enum response_code {
+        SUCCESS = 0;
+        SIGERROR = 1;  // error in signature
+        CONTRACT_VALIDATE_ERROR = 2;
+        CONTRACT_EXE_ERROR = 3;
+        BANDWITH_ERROR = 4;
+        DUP_TRANSACTION_ERROR = 5;
+        TAPOS_ERROR = 6;
+        TOO_BIG_TRANSACTION_ERROR = 7;
+        TRANSACTION_EXPIRATION_ERROR = 8;
+        SERVER_BUSY = 9;
+        NO_CONNECTION = 10;
+        NOT_ENOUGH_EFFECTIVE_CONNECTION = 11;
+        OTHER_ERROR = 20;
+    }
+
+    bool result = 1;
+    response_code code = 2;
+    bytes message = 3;
+}
+
+message TransactionExtention {
+    Transaction transaction = 1;
+    bytes txid = 2;  // transaction id = sha256(transaction.raw_data)
+    repeated bytes constant_result = 3;
+    TransactionReturn result = 4;
+}
+
+message WitnessList {
+    repeated Witness witnesses = 1;
+}
+message ProposalList {
+    repeated Proposal proposals = 1;
+}
+message ExchangeList {
+    repeated Exchange exchanges = 1;
+}
+message AssetIssueList {
+    repeated AssetIssueContract assets = 1;
+}
+message BlockList {
+    repeated Block block = 1;
+}
+message TransactionList {
+    repeated Transaction transaction = 1;
+}
+message DelegatedResourceMessage {
+    bytes from_address = 1;
+    bytes to_address = 2;
+}
+message DelegatedResourceList {
+    repeated DelegatedResource delegatedResource = 1;
+}
+
+message AddressPrKeyPairMessage {
+    string address = 1;
+    string privateKey = 2;
+}
+
+message EasyTransferResponse {
+    Transaction transaction = 1;
+    TransactionReturn result = 2;
+    bytes txid = 3;  // transaction id = sha256(transaction.raw_data)
+}
+
+message SmartContractDataWrapper {
+    SmartContract smart_contract = 1;
+    bytes runtime_code = 2;
+}
+
+message InternalTransaction {
+    // internalTransaction identity, the root InternalTransaction hash
+    // should equals to root transaction id.
+    bytes hash = 1;
+    // the one send trx (TBD: or token) via function
+    bytes caller_address = 2;
+    // the one recieve trx (TBD: or token) via function
+    bytes transferTo_address = 3;
+    message CallValueInfo {
+        // trx (TBD: or token) value
+        int64 callValue = 1;
+        // TBD: tokenName, trx should be empty
+        string tokenId = 2;
+    }
+    repeated CallValueInfo callValueInfo = 4;
+    bytes note = 5;
+    bool rejected = 6;
+}
+
+message ResourceReceipt {
+    int64 energy_usage = 1;
+    int64 energy_fee = 2;
+    int64 origin_energy_usage = 3;
+    int64 energy_usage_total = 4;
+    int64 net_usage = 5;
+    int64 net_fee = 6;
+    Transaction.Result.contractResult result = 7;
+}
+
+message TransactionInfo {
+    enum code {
+        SUCESS = 0;
+        FAILED = 1;
+    }
+    message Log {
+        bytes address = 1;
+        repeated bytes topics = 2;
+        bytes data = 3;
+    }
+    bytes id = 1;
+    int64 fee = 2;
+    int64 blockNumber = 3;
+    int64 blockTimeStamp = 4;
+    repeated bytes contractResult = 5;
+    bytes contract_address = 6;
+    ResourceReceipt receipt = 7;
+    repeated Log log = 8;
+    code result = 9;
+    bytes resMessage = 10;
+
+    string assetIssueID = 14;
+    int64 withdraw_amount = 15;
+    int64 unfreeze_amount = 16;
+    repeated InternalTransaction internal_transactions = 17;
+    int64 exchange_received_amount = 18;
+    int64 exchange_inject_another_amount = 19;
+    int64 exchange_withdraw_another_amount = 20;
+    int64 exchange_id = 21;
+    int64 shielded_transaction_fee = 22;
+
+    bytes orderId = 25;
+    repeated MarketOrderDetail orderDetails = 26;
+}
+
+// Witness
+message Witness {
+    bytes address = 1;
+    int64 voteCount = 2;
+    bytes pubKey = 3;
+    string url = 4;
+    int64 totalProduced = 5;
+    int64 totalMissed = 6;
+    int64 latestBlockNum = 7;
+    int64 latestSlotNum = 8;
+    bool isJobs = 9;
+}
+
+/* Account */
+message Account {
+    /* frozen balance */
+    message Frozen {
+        int64 frozen_balance = 1;  // the frozen trx balance
+        int64 expire_time = 2;     // the expire time
+    }
+    // account nick name
+    bytes account_name = 1;
+    AccountType type = 2;
+    // the create address
+    bytes address = 3;
+    // the trx balance
+    int64 balance = 4;
+    // the votes
+    repeated Vote votes = 5;
+    // the other asset owned by this account
+    map<string, int64> asset = 6;
+
+    // the other asset owned by this account，key is assetId
+    map<string, int64> assetV2 = 56;
+
+    // the frozen balance for bandwidth
+    repeated Frozen frozen = 7;
+    // bandwidth, get from frozen
+    int64 net_usage = 8;
+    // Frozen balance provided by other accounts to this account
+    int64 acquired_delegated_frozen_balance_for_bandwidth = 41;
+    // Freeze and provide balances to other accounts
+    int64 delegated_frozen_balance_for_bandwidth = 42;
+
+    // this account create time
+    int64 create_time = 0x09;
+    // this last operation time, including transfer, voting and so on. //FIXME fix
+    // grammar
+    int64 latest_opration_time = 10;
+    // witness block producing allowance
+    int64 allowance = 0x0B;
+    // last withdraw time
+    int64 latest_withdraw_time = 0x0C;
+    // not used so far
+    bytes code = 13;
+    bool is_witness = 14;
+    bool is_committee = 15;
+    // frozen asset(for asset issuer)
+    repeated Frozen frozen_supply = 16;
+    // asset_issued_name
+    bytes asset_issued_name = 17;
+    bytes asset_issued_ID = 57;
+    map<string, int64> latest_asset_operation_time = 18;
+    map<string, int64> latest_asset_operation_timeV2 = 58;
+    int64 free_net_usage = 19;
+    map<string, int64> free_asset_net_usage = 20;
+    map<string, int64> free_asset_net_usageV2 = 59;
+    int64 latest_consume_time = 21;
+    int64 latest_consume_free_time = 22;
+
+    // the identity of this account, case insensitive
+    bytes account_id = 23;
+
+    message AccountResource {
+        // energy resource, get from frozen
+        int64 energy_usage = 1;
+        // the frozen balance for energy
+        Frozen frozen_balance_for_energy = 2;
+        int64 latest_consume_time_for_energy = 3;
+
+        // Frozen balance provided by other accounts to this account
+        int64 acquired_delegated_frozen_balance_for_energy = 4;
+        // Frozen balances provided to other accounts
+        int64 delegated_frozen_balance_for_energy = 5;
+
+        // storage resource, get from market
+        int64 storage_limit = 6;
+        int64 storage_usage = 7;
+        int64 latest_exchange_storage_time = 8;
+    }
+    AccountResource account_resource = 26;
+    bytes codeHash = 30;
+    Permission owner_permission = 31;
+    Permission witness_permission = 32;
+    repeated Permission active_permission = 33;
+}
+
+message MarketOrderDetail {
+    bytes makerOrderId = 1;
+    bytes takerOrderId = 2;
+    int64 fillSellQuantity = 3;
+    int64 fillBuyQuantity = 4;
+}
+
+message Proposal {
+    int64 proposal_id = 1;
+    bytes proposer_address = 2;
+    map<int64, int64> parameters = 3;
+    int64 expiration_time = 4;
+    int64 create_time = 5;
+    repeated bytes approvals = 6;
+    enum State {
+        PENDING = 0;
+        DISAPPROVED = 1;
+        APPROVED = 2;
+        CANCELED = 3;
+    }
+    State state = 7;
+}
+
+message Exchange {
+    int64 exchange_id = 1;
+    bytes creator_address = 2;
+    int64 create_time = 3;
+    bytes first_token_id = 6;
+    int64 first_token_balance = 7;
+    bytes second_token_id = 8;
+    int64 second_token_balance = 9;
+}
+
+message DelegatedResource {
+    bytes from = 1;
+    bytes to = 2;
+    int64 frozen_balance_for_bandwidth = 3;
+    int64 frozen_balance_for_energy = 4;
+    int64 expire_time_for_bandwidth = 5;
+    int64 expire_time_for_energy = 6;
+}
+
+message DelegatedResourceAccountIndex {
+    bytes account = 1;
+    repeated bytes fromAccounts = 2;
+    repeated bytes toAccounts = 3;
+}
+
+message TransactionSign {
+    Transaction transaction = 1;
+    bytes privateKey = 2;
+}
+
+message ChainParameters {
+    message ChainParameter {
+        string key = 1;
+        int64 value = 2;
+    }
+    repeated ChainParameter chainParameter = 1;
+}
+
+message NodeInfo {
+    int64 beginSyncNum = 1;
+    string block = 2;
+    string solidityBlock = 3;
+    // connect information
+    int32 currentConnectCount = 4;
+    int32 activeConnectCount = 5;
+    int32 passiveConnectCount = 6;
+    int64 totalFlow = 7;
+    repeated PeerInfo peerInfoList = 8;
+    ConfigNodeInfo configNodeInfo = 9;
+    MachineInfo machineInfo = 10;
+    map<string, string> cheatWitnessInfoMap = 11;
+
+    message PeerInfo {
+        string lastSyncBlock = 1;
+        int64 remainNum = 2;
+        int64 lastBlockUpdateTime = 3;
+        bool syncFlag = 4;
+        int64 headBlockTimeWeBothHave = 5;
+        bool needSyncFromPeer = 6;
+        bool needSyncFromUs = 7;
+        string host = 8;
+        int32 port = 9;
+        string nodeId = 10;
+        int64 connectTime = 11;
+        double avgLatency = 12;
+        int32 syncToFetchSize = 13;
+        int64 syncToFetchSizePeekNum = 14;
+        int32 syncBlockRequestedSize = 15;
+        int64 unFetchSynNum = 16;
+        int32 blockInPorcSize = 17;
+        string headBlockWeBothHave = 18;
+        bool isActive = 19;
+        int32 score = 20;
+        int32 nodeCount = 21;
+        int64 inFlow = 22;
+        int32 disconnectTimes = 23;
+        string localDisconnectReason = 24;
+        string remoteDisconnectReason = 25;
+    }
+
+    message ConfigNodeInfo {
+        string codeVersion = 1;
+        string p2pVersion = 2;
+        int32 listenPort = 3;
+        bool discoverEnable = 4;
+        int32 activeNodeSize = 5;
+        int32 passiveNodeSize = 6;
+        int32 sendNodeSize = 7;
+        int32 maxConnectCount = 8;
+        int32 sameIpMaxConnectCount = 9;
+        int32 backupListenPort = 10;
+        int32 backupMemberSize = 11;
+        int32 backupPriority = 12;
+        int32 dbVersion = 13;
+        int32 minParticipationRate = 14;
+        bool supportConstant = 15;
+        double minTimeRatio = 16;
+        double maxTimeRatio = 17;
+        int64 allowCreationOfContracts = 18;
+        int64 allowAdaptiveEnergy = 19;
+    }
+
+    message MachineInfo {
+        int32 threadCount = 1;
+        int32 deadLockThreadCount = 2;
+        int32 cpuCount = 3;
+        int64 totalMemory = 4;
+        int64 freeMemory = 5;
+        double cpuRate = 6;
+        string javaVersion = 7;
+        string osName = 8;
+        int64 jvmTotalMemoery = 9;
+        int64 jvmFreeMemory = 10;
+        double processCpuRate = 11;
+        repeated MemoryDescInfo memoryDescInfoList = 12;
+        repeated DeadLockThreadInfo deadLockThreadInfoList = 13;
+
+        message MemoryDescInfo {
+            string name = 1;
+            int64 initSize = 2;
+            int64 useSize = 3;
+            int64 maxSize = 4;
+            double useRate = 5;
+        }
+
+        message DeadLockThreadInfo {
+            string name = 1;
+            string lockName = 2;
+            string lockOwner = 3;
+            string state = 4;
+            int64 blockTime = 5;
+            int64 waitTime = 6;
+            string stackTrace = 7;
+        }
+    }
+}
+
+message MarketOrder {
+    bytes order_id = 1;
+    bytes owner_address = 2;
+    int64 create_time = 3;
+    bytes sell_token_id = 4;
+    int64 sell_token_quantity = 5;
+    bytes buy_token_id = 6;
+    int64 buy_token_quantity = 7;  // min to receive
+    int64 sell_token_quantity_remain = 9;
+    // When state != ACTIVE and sell_token_quantity_return !=0,
+    // it means that some sell tokens are returned to the account due to
+    // insufficient remaining amount
+    int64 sell_token_quantity_return = 10;
+
+    enum State {
+        ACTIVE = 0;
+        INACTIVE = 1;
+        CANCELED = 2;
+    }
+    State state = 11;
+
+    bytes prev = 12;
+    bytes next = 13;
+}
+
+message MarketOrderList {
+    repeated MarketOrder orders = 1;
+}
+message MarketOrderPair {
+    bytes sell_token_id = 1;
+    bytes buy_token_id = 2;
+}
+
+message MarketOrderPairList {
+    repeated MarketOrderPair orderPair = 1;
+}
+
+message MarketPrice {
+    int64 sell_token_quantity = 1;
+    int64 buy_token_quantity = 2;
+}
+
+message MarketPriceList {
+    bytes sell_token_id = 1;
+    bytes buy_token_id = 2;
+    repeated MarketPrice prices = 3;
+}
+
+// shielded TRC20 transaction
+
+message NullifierResult {
+    bool is_spent = 1;
+}
+
+message DecryptNotesTRC20 {
+    message NoteTx {
+        Note note = 1;
+        int64 position = 2;
+        bool is_spent = 3;
+        bytes txid = 4;
+        int32 index = 5;  // the index of note in txid
+        string to_amount = 6;
+        bytes transparent_to_address = 7;
+    }
+    repeated NoteTx noteTxs = 1;
+}
+
+message TransactionInfoList {
+    repeated TransactionInfo transactionInfo = 1;
+}
+
+message TransactionApprovedList {
+    message Result {
+        enum response_code {
+            SUCCESS = 0;
+            SIGNATURE_FORMAT_ERROR = 1;
+            COMPUTE_ADDRESS_ERROR = 2;
+            OTHER_ERROR = 20;
+        }
+        response_code code = 1;
+        string message = 2;
+    }
+
+    repeated bytes approved_list = 2;
+    Result result = 4;
+    TransactionExtention transaction = 5;
+}
+
+message TransactionSignWeight {
+    message Result {
+        enum response_code {
+            ENOUGH_PERMISSION = 0;
+            NOT_ENOUGH_PERMISSION = 1;  // error in
+            SIGNATURE_FORMAT_ERROR = 2;
+            COMPUTE_ADDRESS_ERROR = 3;
+            PERMISSION_ERROR = 4;  // The key is not in permission
+            OTHER_ERROR = 20;
+        }
+        response_code code = 1;
+        string message = 2;
+    }
+
+    Permission permission = 1;
+    repeated bytes approved_list = 2;
+    int64 current_weight = 3;
+    Result result = 4;
+    TransactionExtention transaction = 5;
+}
+
+// Gossip node list
+message NodeList {
+    // Gossip node
+    message Node {
+        // Gossip node address
+        message Address {
+            bytes host = 1;
+            int32 port = 2;
+        }
+        Address address = 1;
+    }
+    repeated Node nodes = 1;
+}
+
+// deprecated
+message AccountNetMessage {
+    int64 freeNetUsed = 1;
+    int64 freeNetLimit = 2;
+    int64 NetUsed = 3;
+    int64 NetLimit = 4;
+    map<string, int64> assetNetUsed = 5;
+    map<string, int64> assetNetLimit = 6;
+    int64 TotalNetLimit = 7;
+    int64 TotalNetWeight = 8;
+}
+message AccountResourceMessage {
+    int64 freeNetUsed = 1;
+    int64 freeNetLimit = 2;
+    int64 NetUsed = 3;
+    int64 NetLimit = 4;
+    map<string, int64> assetNetUsed = 5;
+    map<string, int64> assetNetLimit = 6;
+    int64 TotalNetLimit = 7;
+    int64 TotalNetWeight = 8;
+
+    int64 EnergyUsed = 13;
+    int64 EnergyLimit = 14;
+    int64 TotalEnergyLimit = 15;
+    int64 TotalEnergyWeight = 16;
+
+    int64 storageUsed = 21;
+    int64 storageLimit = 22;
+}

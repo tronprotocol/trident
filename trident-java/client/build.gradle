@@ -1,0 +1,68 @@
+plugins {
+    id 'com.jfrog.bintray'
+    id 'com.google.protobuf' version '0.8.12'
+}
+
+description 'Trident-Java gRPC client classes'
+
+dependencies {
+    implementation 'com.google.guava:guava:29.0-jre'
+
+    implementation project(':utils')
+    implementation project(':abi')
+
+    implementation 'io.grpc:grpc-netty-shaded:1.31.0'
+    implementation 'io.grpc:grpc-netty:1.31.0'
+    implementation 'io.grpc:grpc-okhttp:1.31.0'
+    implementation 'io.grpc:grpc-protobuf:1.31.0'
+    implementation 'io.grpc:grpc-stub:1.31.0'
+    compileOnly 'org.apache.tomcat:annotations-api:6.0.53' // necessary for Java 9+
+    //json parsing
+    implementation 'com.google.protobuf:protobuf-java-util:3.11.0'
+
+    implementation "org.bouncycastle:bcprov-jdk15on:$bouncycastleVersion"
+    // implementation 'org.apache.tuweni:tuweni-bytes:0.8.2'
+}
+
+protobuf {
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.12.0'
+    }
+    plugins {
+        grpc {
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.31.0'
+        }
+    }
+    generateProtoTasks {
+        all()*.plugins {
+            grpc { }
+        }
+    }
+    generatedFilesBaseDir = "$projectDir/src"
+}
+
+bintray {
+    user = System.getenv('BINTRAY_USER_TRON')
+    key = System.getenv('BINTRAY_KEY_TRON')
+
+    configurations = ['archives']
+
+    pkg {
+        repo = 'trident'
+        name = 'client'
+        // userOrg = 'trident'
+        // configurations = ['archives']
+        desc = description
+        websiteUrl = 'https://github.com/tronprotocol/trident'
+        vcsUrl = 'https://github.com/tronprotocol/trident.git'
+        licenses = ['Apache-2.0']
+        publish = true
+        publicDownloadNumbers = true
+        version {
+            afterEvaluate {
+                name = "${project.version}"
+                released = new Date()
+            }
+        }
+    }
+}

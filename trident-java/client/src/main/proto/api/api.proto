@@ -1,0 +1,391 @@
+syntax = "proto3";
+package protocol;
+
+option java_package = "org.tron.trident.api";
+option java_outer_classname = "GrpcAPI";
+
+
+import "core/common.proto";
+import "core/chain.proto";
+import "core/contract.proto";
+import "core/response.proto";
+
+service Wallet {
+  // Transactions:
+  rpc BroadcastTransaction(Transaction) returns (TransactionReturn) {}
+
+  rpc CreateCommonTransaction(Transaction) returns (TransactionExtention) {}
+
+  rpc CreateAccount(AccountCreateContract) returns (Transaction) {}
+  rpc CreateAccount2(AccountCreateContract) returns (TransactionExtention) {}
+
+  rpc UpdateAccount(AccountUpdateContract) returns (Transaction) {}
+  rpc UpdateAccount2(AccountUpdateContract) returns (TransactionExtention) {}
+
+  rpc SetAccountId(SetAccountIdContract) returns (Transaction) {}
+
+  rpc AccountPermissionUpdate(AccountPermissionUpdateContract) returns (TransactionExtention) {}
+
+  rpc CreateTransaction(TransferContract) returns (Transaction) {}
+  rpc CreateTransaction2(TransferContract) returns (TransactionExtention) {}
+
+  rpc CreateAssetIssue(AssetIssueContract) returns (Transaction) {}
+  rpc CreateAssetIssue2(AssetIssueContract) returns (TransactionExtention) {}
+
+  rpc UpdateAsset(UpdateAssetContract) returns (Transaction) {}
+  rpc UpdateAsset2(UpdateAssetContract) returns (TransactionExtention) {}
+
+  rpc TransferAsset(TransferAssetContract) returns (Transaction) {}
+  rpc TransferAsset2(TransferAssetContract) returns (TransactionExtention) {}
+
+  rpc ParticipateAssetIssue(ParticipateAssetIssueContract) returns (Transaction) {}
+  rpc ParticipateAssetIssue2(ParticipateAssetIssueContract) returns (TransactionExtention) {}
+
+  rpc UnfreezeAsset(UnfreezeAssetContract) returns (Transaction) {}
+  rpc UnfreezeAsset2(UnfreezeAssetContract) returns (TransactionExtention) {}
+
+  rpc CreateWitness(WitnessCreateContract) returns (Transaction) {}
+  rpc CreateWitness2(WitnessCreateContract) returns (TransactionExtention) {}
+
+  rpc UpdateWitness(WitnessUpdateContract) returns (Transaction) {}
+  rpc UpdateWitness2(WitnessUpdateContract) returns (TransactionExtention) {}
+
+  rpc UpdateBrokerage(UpdateBrokerageContract) returns (TransactionExtention) {}
+
+  rpc VoteWitnessAccount(VoteWitnessContract) returns (Transaction) {}
+  rpc VoteWitnessAccount2(VoteWitnessContract) returns (TransactionExtention) {}
+
+  rpc FreezeBalance(FreezeBalanceContract) returns (Transaction) {}
+  rpc FreezeBalance2(FreezeBalanceContract) returns (TransactionExtention) {}
+
+  rpc UnfreezeBalance(UnfreezeBalanceContract) returns (Transaction) {}
+  rpc UnfreezeBalance2(UnfreezeBalanceContract) returns (TransactionExtention) {}
+
+  rpc WithdrawBalance(WithdrawBalanceContract) returns (Transaction) {}
+  rpc WithdrawBalance2(WithdrawBalanceContract) returns (TransactionExtention) {}
+
+  rpc ProposalCreate(ProposalCreateContract) returns (TransactionExtention) {}
+  rpc ProposalApprove(ProposalApproveContract) returns (TransactionExtention) {}
+  rpc ProposalDelete(ProposalDeleteContract) returns (TransactionExtention) {}
+
+  rpc DeployContract(CreateSmartContract) returns (TransactionExtention) {}
+  rpc UpdateSetting(UpdateSettingContract) returns (TransactionExtention) {}          // consume_user_resource_percent
+  rpc UpdateEnergyLimit(UpdateEnergyLimitContract) returns (TransactionExtention) {}  // origin_energy_limit
+  rpc ClearContractABI(ClearABIContract) returns (TransactionExtention) {}
+  rpc TriggerContract(TriggerSmartContract) returns (TransactionExtention) {}
+  rpc TriggerConstantContract(TriggerSmartContract) returns (TransactionExtention) {}  // not a txn type
+
+  rpc ExchangeCreate(ExchangeCreateContract) returns (TransactionExtention) {}
+  rpc ExchangeInject(ExchangeInjectContract) returns (TransactionExtention) {}
+  rpc ExchangeWithdraw(ExchangeWithdrawContract) returns (TransactionExtention) {}
+  rpc ExchangeTransaction(ExchangeTransactionContract) returns (TransactionExtention) {}
+
+  rpc MarketSellAsset(MarketSellAssetContract) returns (TransactionExtention) {}
+  rpc MarketCancelOrder(MarketCancelOrderContract) returns (TransactionExtention) {}
+
+  // The real APIs:
+  rpc GetNodeInfo(EmptyMessage) returns (NodeInfo) {}
+  rpc ListNodes(EmptyMessage) returns (NodeList) {}
+
+  rpc GetChainParameters(EmptyMessage) returns (ChainParameters) {}
+  rpc TotalTransaction(EmptyMessage) returns (NumberMessage) {}
+  rpc GetNextMaintenanceTime(EmptyMessage) returns (NumberMessage) {}
+
+  rpc GetTransactionSignWeight(Transaction) returns (TransactionSignWeight) {}
+  rpc GetTransactionApprovedList(Transaction) returns (TransactionApprovedList) {}
+
+  // FLAW: Although the parameters' type is changed, it is still bad API design.
+  rpc GetAccount(AccountAddressMessage) returns (Account) {}
+  rpc GetAccountById(AccountIdMessage) returns (Account) {}
+
+  rpc GetAccountNet(AccountAddressMessage) returns (AccountNetMessage) {}
+  rpc GetAccountResource(AccountAddressMessage) returns (AccountResourceMessage) {}
+
+  rpc GetAssetIssueByAccount(AccountAddressMessage) returns (AssetIssueList) {}
+  rpc GetAssetIssueByName(BytesMessage) returns (AssetIssueContract) {}
+  rpc GetAssetIssueListByName(BytesMessage) returns (AssetIssueList) {}
+  rpc GetAssetIssueById(BytesMessage) returns (AssetIssueContract) {}
+  rpc GetAssetIssueList(EmptyMessage) returns (AssetIssueList) {}
+  rpc GetPaginatedAssetIssueList(PaginatedMessage) returns (AssetIssueList) {}
+
+  rpc GetNowBlock(EmptyMessage) returns (Block) {}
+  rpc GetNowBlock2(EmptyMessage) returns (BlockExtention) {}
+
+  rpc GetBlockByNum(NumberMessage) returns (Block) {}
+  rpc GetBlockByNum2(NumberMessage) returns (BlockExtention) {}
+
+  // NOTE: `GetBlockById2` is missing. The closest is `GetBlockByLatestNum2`.
+  rpc GetBlockById(BytesMessage) returns (Block) {}
+
+  rpc GetBlockByLimitNext(BlockLimit) returns (BlockList) {}
+  rpc GetBlockByLimitNext2(BlockLimit) returns (BlockListExtention) {}
+
+  rpc GetBlockByLatestNum(NumberMessage) returns (BlockList) {}
+  rpc GetBlockByLatestNum2(NumberMessage) returns (BlockListExtention) {}
+
+  rpc GetTransactionCountByBlockNum(NumberMessage) returns (NumberMessage) {}
+
+  rpc GetTransactionById(BytesMessage) returns (Transaction) {}
+
+  rpc GetTransactionInfoById(BytesMessage) returns (TransactionInfo) {}
+  rpc GetTransactionInfoByBlockNum(NumberMessage) returns (TransactionInfoList) {}
+
+  rpc GetContract(BytesMessage) returns (SmartContract) {}
+  // FLAW: Abusing of `info`. Should be a `GetContractCode`.
+  rpc GetContractInfo(BytesMessage) returns (SmartContractDataWrapper) {}
+
+  rpc ListWitnesses(EmptyMessage) returns (WitnessList) {}
+  rpc GetBrokerageInfo(BytesMessage) returns (NumberMessage) {}  // ???
+  rpc GetRewardInfo(BytesMessage) returns (NumberMessage) {}     // ???
+
+  rpc GetDelegatedResource(DelegatedResourceMessage) returns (DelegatedResourceList) {}
+  rpc GetDelegatedResourceAccountIndex(BytesMessage) returns (DelegatedResourceAccountIndex) {}
+
+  rpc ListProposals(EmptyMessage) returns (ProposalList) {}
+  rpc GetProposalById(BytesMessage) returns (Proposal) {}
+  rpc GetPaginatedProposalList(PaginatedMessage) returns (ProposalList) {}
+
+  rpc ListExchanges(EmptyMessage) returns (ExchangeList) {}
+  rpc GetExchangeById(BytesMessage) returns (Exchange) {}
+  rpc GetPaginatedExchangeList(PaginatedMessage) returns (ExchangeList) {}
+
+  // Shielded helpers:
+  rpc ScanShieldedTRC20NotesByIvk(IvkDecryptTRC20Parameters) returns (DecryptNotesTRC20) {}
+  rpc ScanShieldedTRC20NotesByOvk(OvkDecryptTRC20Parameters) returns (DecryptNotesTRC20) {}
+  rpc IsShieldedTRC20ContractNoteSpent(NfTRC20Parameters) returns (NullifierResult) {}
+
+  // Market API:
+  rpc GetMarketOrderByAccount(BytesMessage) returns (MarketOrderList) {}
+  rpc GetMarketOrderById(BytesMessage) returns (MarketOrder) {}
+  rpc GetMarketPriceByPair(MarketOrderPair) returns (MarketPriceList) {}
+  rpc GetMarketOrderListByPair(MarketOrderPair) returns (MarketOrderList) {}
+  rpc GetMarketPairList(EmptyMessage) returns (MarketOrderPairList) {}
+
+  // FLAW: Unsafe junk.
+  rpc GetTransactionSign(TransactionSign) returns (Transaction) {}
+  rpc GetTransactionSign2(TransactionSign) returns (TransactionExtention) {}
+  rpc EasyTransferAsset(EasyTransferAssetMessage) returns (EasyTransferResponse) {}
+  rpc EasyTransferAssetByPrivate(EasyTransferAssetByPrivateMessage) returns (EasyTransferResponse) {}
+  rpc EasyTransfer(EasyTransferMessage) returns (EasyTransferResponse) {}
+  rpc EasyTransferByPrivate(EasyTransferByPrivateMessage) returns (EasyTransferResponse) {}
+  rpc CreateAddress(BytesMessage) returns (BytesMessage) {}
+  rpc GenerateAddress(EmptyMessage) returns (AddressPrKeyPairMessage) {}
+  rpc AddSign(TransactionSign) returns (TransactionExtention) {}
+
+  // FLAW: Unsafe shielded junk(should be implemented offline).
+  rpc GetSpendingKey(EmptyMessage) returns (BytesMessage) {}
+  rpc GetExpandedSpendingKey(BytesMessage) returns (ExpandedSpendingKeyMessage) {}
+  rpc GetAkFromAsk(BytesMessage) returns (BytesMessage) {}
+  rpc GetNkFromNsk(BytesMessage) returns (BytesMessage) {}
+  rpc GetIncomingViewingKey(ViewingKeyMessage) returns (IncomingViewingKeyMessage) {}
+  rpc GetDiversifier(EmptyMessage) returns (DiversifierMessage) {}
+  rpc GetZenPaymentAddress(IncomingViewingKeyDiversifierMessage) returns (PaymentAddressMessage) {}
+  rpc GetNewShieldedAddress(EmptyMessage) returns (ShieldedAddressInfo) {}
+  rpc GetRcm(EmptyMessage) returns (BytesMessage) {}
+  rpc CreateShieldedContractParameters(PrivateShieldedTRC20Parameters) returns (ShieldedTRC20Parameters) {}
+  rpc CreateShieldedContractParametersWithoutAsk(PrivateShieldedTRC20ParametersWithoutAsk)
+      returns (ShieldedTRC20Parameters) {}
+  rpc GetTriggerInputForShieldedTRC20Contract(ShieldedTRC20TriggerContractParameters) returns (BytesMessage) {}
+};
+
+// NOTE: All other solidified APIs are useless.
+service WalletSolidity {
+  rpc GetAccount(AccountAddressMessage) returns (Account) {}
+  rpc GetNowBlock2(EmptyMessage) returns (BlockExtention) {}
+  // rpc GetBlockByLatestNum2(NumberMessage) returns (BlockListExtention) {}
+  rpc GetTransactionById(BytesMessage) returns (Transaction) {}
+  rpc GetRewardInfo(BytesMessage) returns (NumberMessage) {}     // ???
+};
+
+message EmptyMessage {}
+message NumberMessage {
+  int64 num = 1;
+}
+message BytesMessage {
+  bytes value = 1;
+}
+message BlockLimit {
+  int64 startNum = 1;
+  int64 endNum = 2;
+}
+
+// NOTE: This is used to replace the design flaw of GetAccount.
+message AccountAddressMessage {
+  bytes address = 3;
+}
+message AccountIdMessage {
+  bytes id = 23;
+}
+
+// FLAW: Paginated APIs are usless.
+message PaginatedMessage {
+  int64 offset = 1;
+  int64 limit = 2;
+}
+
+message EasyTransferMessage {
+  bytes passPhrase = 1;
+  bytes toAddress = 2;
+  int64 amount = 3;
+}
+
+message EasyTransferAssetMessage {
+  bytes passPhrase = 1;
+  bytes toAddress = 2;
+  string assetId = 3;
+  int64 amount = 4;
+}
+
+message EasyTransferByPrivateMessage {
+  bytes privateKey = 1;
+  bytes toAddress = 2;
+  int64 amount = 3;
+}
+
+message EasyTransferAssetByPrivateMessage {
+  bytes privateKey = 1;
+  bytes toAddress = 2;
+  string assetId = 3;
+  int64 amount = 4;
+}
+
+// - Shielded TRC20
+message ViewingKeyMessage {
+  bytes ak = 1;
+  bytes nk = 2;
+}
+
+message ShieldedAddressInfo {
+  bytes sk = 1;
+  bytes ask = 2;
+  bytes nsk = 3;
+  bytes ovk = 4;
+  bytes ak = 5;
+  bytes nk = 6;
+  bytes ivk = 7;
+  bytes d = 8;
+  bytes pkD = 9;
+  string payment_address = 10;
+}
+
+message PaymentAddressMessage {
+  DiversifierMessage d = 1;
+  bytes pkD = 2;
+  string payment_address = 3;
+}
+
+message DiversifierMessage {
+  bytes d = 1;
+}
+
+message ExpandedSpendingKeyMessage {
+  bytes ask = 1;
+  bytes nsk = 2;
+  bytes ovk = 3;
+}
+
+message IncomingViewingKeyMessage {
+  bytes ivk = 1;
+}
+
+// What's the fucking API design
+message IncomingViewingKeyDiversifierMessage {
+  IncomingViewingKeyMessage ivk = 1;
+  DiversifierMessage d = 2;
+}
+
+message ReceiveNote {
+  Note note = 1;
+}
+
+message SpendNoteTRC20 {
+  Note note = 1;
+  bytes alpha = 2;
+  bytes root = 3;
+  bytes path = 4;
+  int64 pos = 5;
+}
+
+message PrivateShieldedTRC20Parameters {
+  bytes ask = 1;
+  bytes nsk = 2;
+  bytes ovk = 3;
+  string from_amount = 4;
+  repeated SpendNoteTRC20 shielded_spends = 5;
+  repeated ReceiveNote shielded_receives = 6;
+  bytes transparent_to_address = 7;
+  string to_amount = 8;
+  bytes shielded_TRC20_contract_address = 9;
+}
+
+message PrivateShieldedTRC20ParametersWithoutAsk {
+  bytes ak = 1;
+  bytes nsk = 2;
+  bytes ovk = 3;
+  string from_amount = 4;
+  repeated SpendNoteTRC20 shielded_spends = 5;
+  repeated ReceiveNote shielded_receives = 6;
+  bytes transparent_to_address = 7;
+  string to_amount = 8;
+  bytes shielded_TRC20_contract_address = 9;
+}
+
+message SpendDescription {
+  bytes value_commitment = 1;
+  bytes anchor = 2;     // merkle root
+  bytes nullifier = 3;  // used for check double spend
+  bytes rk = 4;         // used for check spend authority signature
+  bytes zkproof = 5;
+  bytes spend_authority_signature = 6;
+}
+
+message ReceiveDescription {
+  bytes value_commitment = 1;
+  bytes note_commitment = 2;
+  bytes epk = 3;    // for Encryption
+  bytes c_enc = 4;  // Encryption for incoming, decrypt it with ivk
+  bytes c_out = 5;  // Encryption for audit, decrypt it with ovk
+  bytes zkproof = 6;
+}
+
+message ShieldedTRC20Parameters {
+  repeated SpendDescription spend_description = 1;
+  repeated ReceiveDescription receive_description = 2;
+  bytes binding_signature = 3;
+  bytes message_hash = 4;
+  string trigger_contract_input = 5;
+  string parameter_type = 6;
+}
+
+message IvkDecryptTRC20Parameters {
+  int64 start_block_index = 1;
+  int64 end_block_index = 2;
+  bytes shielded_TRC20_contract_address = 3;
+  bytes ivk = 4;
+  bytes ak = 5;
+  bytes nk = 6;
+  repeated string events = 7;
+}
+
+message OvkDecryptTRC20Parameters {
+  int64 start_block_index = 1;
+  int64 end_block_index = 2;
+  bytes ovk = 3;
+  bytes shielded_TRC20_contract_address = 4;
+  repeated string events = 5;
+}
+
+message NfTRC20Parameters {
+  Note note = 1;
+  bytes ak = 2;
+  bytes nk = 3;
+  int64 position = 4;
+  bytes shielded_TRC20_contract_address = 5;
+}
+
+message ShieldedTRC20TriggerContractParameters {
+  ShieldedTRC20Parameters shielded_TRC20_Parameters = 1;
+  repeated BytesMessage spend_authority_signature = 2;
+  string amount = 3;
+  bytes transparent_to_address = 4;
+}

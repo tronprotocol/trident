@@ -1,0 +1,62 @@
+plugins {
+    id 'com.jfrog.bintray'
+}
+
+description 'TRON Application Binary Interface (ABI) for working with smart contracts'
+
+dependencies {
+    implementation project(':utils')
+}
+
+/*
+publishing {
+    publications {
+        MyPublication(MavenPublication) {
+            from components.java
+            groupId 'org.tron.trident'
+            artifactId 'abi'
+            version '0.0.1'
+        }
+    }
+}
+*/
+
+bintray {
+    user = System.getenv('BINTRAY_USER_TRON')
+    key = System.getenv('BINTRAY_KEY_TRON')
+
+    configurations = ['archives']
+
+    pkg {
+        repo = 'trident'
+        name = 'abi'
+        // userOrg = 'trident'
+        // configurations = ['archives']
+        desc = description
+        websiteUrl = 'https://github.com/tronprotocol/trident'
+        vcsUrl = 'https://github.com/tronprotocol/trident.git'
+        licenses = ['Apache-2.0']
+        publish = true
+        publicDownloadNumbers = true
+        version {
+            afterEvaluate {
+                name = "${project.version}"
+                released = new Date()
+            }
+        }
+    }
+}
+
+tasks.create('buildLib', Jar) {
+    baseName = 'trident'
+    version = null
+    from(sourceSets.main.output) {
+        include '/**'
+    }
+
+    from {
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+}
