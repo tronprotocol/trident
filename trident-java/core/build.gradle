@@ -3,7 +3,7 @@ plugins {
     id 'com.google.protobuf' version '0.8.12'
 }
 
-description 'Trident-Java gRPC client classes'
+description 'Trident-Java gRPC core classes'
 
 dependencies {
     implementation 'com.google.guava:guava:29.0-jre'
@@ -21,7 +21,6 @@ dependencies {
     implementation 'com.google.protobuf:protobuf-java-util:3.11.0'
 
     implementation "org.bouncycastle:bcprov-jdk15on:$bouncycastleVersion"
-    // implementation 'org.apache.tuweni:tuweni-bytes:0.8.2'
 }
 
 protobuf {
@@ -42,16 +41,14 @@ protobuf {
 }
 
 bintray {
-    user = System.getenv('BINTRAY_USER_TRON')
-    key = System.getenv('BINTRAY_KEY_TRON')
+    user = System.getenv('BINTRAY_USER_TRIDENT')
+    key = System.getenv('BINTRAY_KEY_TRIDENT')
 
     configurations = ['archives']
 
     pkg {
         repo = 'trident'
         name = 'core'
-        // userOrg = 'trident'
-        // configurations = ['archives']
         desc = description
         websiteUrl = 'https://github.com/tronprotocol/trident'
         vcsUrl = 'https://github.com/tronprotocol/trident.git'
