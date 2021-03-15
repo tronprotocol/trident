@@ -4,7 +4,7 @@ Trident-Java is a lightweight SDK that includes libraries for working with TRON 
 
 Trident-Java makes it easy to build TRON applications with java.
 
-Trident-Java document: https://tridentdocument.readthedocs.io/en/latest/
+Trident-Java document: https://developers.tron.network/docs/trident-java
 
 ## How to use
 
@@ -15,7 +15,7 @@ Add repo setting:
 ```groovy
 repositories {
     maven {
-        url  "https://dl.bintray.com/trident/trident"
+        url  "https://dl.bintray.com/tridentjava/trident/"
     }
 }
 ```
@@ -27,9 +27,9 @@ dependencies {
     // protobuf & grpc
     implementation 'com.google.protobuf:protobuf-java:3.11.0'
 
-    implementation 'org.tron.trident:abi:0.1.2'
-    implementation 'org.tron.trident:client:0.1.2'
-    implementation 'org.tron.trident:utils:0.1.2'
+    implementation 'org.tron.trident:abi:0.1.0'
+    implementation 'org.tron.trident:core:0.1.0'
+    implementation 'org.tron.trident:utils:0.1.0'
 
     implementation 'com.google.guava:guava:28.0-jre'
 }
@@ -41,19 +41,19 @@ dependencies {
 <dependency>
   <groupId>org.tron.trident</groupId>
   <artifactId>abi</artifactId>
-  <version>0.1.2</version>
+  <version>0.1.0</version>
   <type>pom</type>
 </dependency>
 <dependency>
   <groupId>org.tron.trident</groupId>
   <artifactId>utils</artifactId>
-  <version>0.1.2</version>
+  <version>0.1.0</version>
   <type>pom</type>
 </dependency>
 <dependency>
   <groupId>org.tron.trident</groupId>
-  <artifactId>client</artifactId>
-  <version>0.1.2</version>
+  <artifactId>core</artifactId>
+  <version>0.1.0</version>
   <type>pom</type>
 </dependency>
 ```
@@ -125,9 +125,9 @@ hjMZIEg6d5XYFLRf1iaVG+TD
 Download package and the corresponding .asc file, take `abi` as an example:
 
 ```Shell
-gpg --verify abi-0.1.2.jar.asc abi-0.1.2.jar
+gpg --verify abi-0.1.0.jar.asc abi-0.1.0.jar
 
 gpg: Signature made Mon Dec 28 11:51:48 2020 CST
 gpg:                using RSA key 76C182C1E1269F494C2315FEA825D8D6E8B49016
-gpg: Good signature from "trident <tridentsdk@gmail.com>" [ultimate]
+gpg: Good signature from "tridentjava <tridentjava@gmail.com>" [ultimate]
 ```
