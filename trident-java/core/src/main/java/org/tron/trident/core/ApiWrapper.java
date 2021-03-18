@@ -146,9 +146,9 @@ public class ApiWrapper {
 
     /**
      * Generate random address
-     * @return Address in hex
+     * @return A list, inside are the public key and private key
      */
-    public static void generateAddress() {
+    public static List generateAddress() {
         // generate random address
         SECP256K1.KeyPair kp = SECP256K1.KeyPair.generate();
 
@@ -160,8 +160,11 @@ public class ApiWrapper {
         rawAddr[0] = 0x41;
         System.arraycopy(raw, 12, rawAddr, 1, 20);
 
-        System.out.println(Hex.toHexString(rawAddr));
-        System.out.println(Hex.toHexString(kp.getPrivateKey().getEncoded()));
+        List keyPairReturn = new ArrayList<String>();
+        keyPairReturn.add(Hex.toHexString(rawAddr));
+        keyPairReturn.add(Hex.toHexString(kp.getPrivateKey().getEncoded()));
+        
+        return keyPairReturn;
     }
 
     /**
