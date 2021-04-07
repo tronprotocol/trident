@@ -65,9 +65,12 @@ import org.tron.trident.api.GrpcAPI.AccountIdMessage;
 import org.tron.trident.api.GrpcAPI.BlockLimit;
 import org.tron.trident.api.GrpcAPI.PaginatedMessage;
 import org.tron.trident.utils.Base58Check;
+
 import com.google.protobuf.ByteString;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.Metadata;
+import io.grpc.stub.MetadataUtils;
 
 import java.nio.ByteBuffer;
 import java.util.*;
