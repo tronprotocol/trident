@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 public class ApiWrapperTest {
     @Test
     public void testGetNowBlockQuery() {
-        ApiWrapper client = ApiWrapper.ofShasta("3333333333333333333333333333333333333333333333333333333333333333");
+        ApiWrapper client = ApiWrapper.ofShasta("3333333333333333333333333333333333333333333333333333333333333333", "6650db29-a02a-4e60-a345-58fd358db4c0");
         BlockExtention block = client.blockingStub.getNowBlock2(EmptyMessage.newBuilder().build());
 
         System.out.println(block.getBlockHeader());
