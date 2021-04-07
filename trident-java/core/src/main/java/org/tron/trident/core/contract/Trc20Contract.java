@@ -143,9 +143,9 @@ public class Trc20Contract extends Contract {
        * @param amount The transfer amount
        * @param memo The transaction memo
        * @param feeLimit The energy fee limit
-       * @return A TransactionReturn object contains the trigger result(true / false)
+       * @return Transaction hash
        */
-      public TransactionReturn transfer(String destAddr, long amount, 
+      public String transfer(String destAddr, long amount, 
              String memo, long feeLimit) {
         Function transfer = new Function("transfer",
                 Arrays.asList(new Address(destAddr),
@@ -173,9 +173,9 @@ public class Trc20Contract extends Contract {
        * @param amount The transfer amount
        * @param memo The transaction memo
        * @param feeLimit The energy fee limit
-       * @return A TransactionReturn object contains the trigger result(true / false)
+       * @return Transaction hash
        */
-      public TransactionReturn transferFrom(String fromAddr, String destAddr, long amount, 
+      public String transferFrom(String fromAddr, String destAddr, long amount, 
              String memo, long feeLimit) {
         Function transferFrom = new Function("transferFrom",
                 Arrays.asList(new Address(fromAddr) ,new Address(destAddr),
@@ -201,9 +201,9 @@ public class Trc20Contract extends Contract {
        * @param amount The amount allowed to withdraw.
        * @param memo The transaction memo
        * @param feeLimit The energy fee limit
-       * @return A TransactionReturn object contains the trigger result(true / false)
+       * @return Transaction hash
        */
-      public TransactionReturn approve(String spender ,long amount, 
+      public String approve(String spender ,long amount, 
              String memo, long feeLimit) {
         Function approve = new Function("approve",
                 Arrays.asList(new Address(spender) ,

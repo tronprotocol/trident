@@ -10,7 +10,7 @@ ext {
 }
 
 allprojects {
-    version '0.1.2'
+    version '0.1.0'
     group = 'org.tron.trident'
 
     repositories {
@@ -23,7 +23,6 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
     apply plugin: 'maven-publish'
-    apply plugin: 'signing'
 
     java {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -59,11 +58,5 @@ subprojects {
         archives jar
         archives sourcesJar
     }
-
-
-    // signing {
-    //     useGpgCmd()
-    //     sign configurations.archives
-    // }
 }
 

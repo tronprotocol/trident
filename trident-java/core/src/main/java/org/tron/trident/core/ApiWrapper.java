@@ -146,9 +146,9 @@ public class ApiWrapper {
 
     /**
      * Generate random address
-     * @return Address in hex
+     * @return A list, inside are the public key and private key
      */
-    public static String generateAddress() {
+    public static List generateAddress() {
         // generate random address
         SECP256K1.KeyPair kp = SECP256K1.KeyPair.generate();
 
@@ -160,7 +160,11 @@ public class ApiWrapper {
         rawAddr[0] = 0x41;
         System.arraycopy(raw, 12, rawAddr, 1, 20);
 
-        return Hex.toHexString(kp.getPrivateKey().getEncoded());
+        List keyPairReturn = new ArrayList<String>();
+        keyPairReturn.add(Hex.toHexString(rawAddr));
+        keyPairReturn.add(Hex.toHexString(kp.getPrivateKey().getEncoded()));
+        
+        return keyPairReturn;
     }
 
     /**
@@ -260,13 +264,16 @@ public class ApiWrapper {
      * @return a TransactionReturn object contains the broadcasting result
      * @throws RuntimeException if broadcastin fails
      */
-    public TransactionReturn broadcastTransaction(Transaction txn) throws RuntimeException{
+    public String broadcastTransaction(Transaction txn) throws RuntimeException{
         TransactionReturn ret = blockingStub.broadcastTransaction(txn);
         if (!ret.getResult()) {
             String message = resolveResultCode(ret.getCodeValue()) + ", " + ret.getMessage();
             throw new RuntimeException(message);
         } else {
-            return ret;
+            SHA256.Digest digest = new SHA256.Digest();
+            digest.update(txn.getRawData().toByteArray());
+            byte[] txid = digest.digest();
+            return ByteString.copyFrom(Hex.encode(txid)).toStringUtf8();          
         }
     }
 

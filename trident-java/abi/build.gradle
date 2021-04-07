@@ -8,30 +8,15 @@ dependencies {
     implementation project(':utils')
 }
 
-/*
-publishing {
-    publications {
-        MyPublication(MavenPublication) {
-            from components.java
-            groupId 'org.tron.trident'
-            artifactId 'abi'
-            version '0.0.1'
-        }
-    }
-}
-*/
-
 bintray {
-    user = System.getenv('BINTRAY_USER_TRON')
-    key = System.getenv('BINTRAY_KEY_TRON')
+    user = System.getenv('BINTRAY_USER_TRIDENT')
+    key = System.getenv('BINTRAY_KEY_TRIDENT')
 
     configurations = ['archives']
 
     pkg {
         repo = 'trident'
         name = 'abi'
-        // userOrg = 'trident'
-        // configurations = ['archives']
         desc = description
         websiteUrl = 'https://github.com/tronprotocol/trident'
         vcsUrl = 'https://github.com/tronprotocol/trident.git'
