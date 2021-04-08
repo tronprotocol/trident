@@ -165,7 +165,7 @@ public class ApiWrapper {
      * @param apiKey this function works with TronGrid, an API key is required.
      * @return a ApiWrapper object
      */
-    public static ApiWrapper ofShasta(String hexPrivateKey, String apiKey) {
+    public static ApiWrapper ofShasta(String hexPrivateKey) {
         return new ApiWrapper("grpc.shasta.trongrid.io:50051", "grpc.shasta.trongrid.io:50052", hexPrivateKey);
     }
 
