@@ -152,7 +152,7 @@ public class ApiWrapper {
      * @return a ApiWrapper object
      */
     public static ApiWrapper ofShasta(String hexPrivateKey, String apiKey) {
-        return new ApiWrapper("grpc.shasta.trongrid.io:50051", "grpc.shasta.trongrid.io:50052", hexPrivateKey, apiKey);
+        return new ApiWrapper("grpc.shasta.trongrid.io:50051", "grpc.shasta.trongrid.io:50052", hexPrivateKey);
     }
 
     /**
