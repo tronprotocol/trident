@@ -136,7 +136,7 @@ public class ApiWrapper {
     }*/
 
     /**
-     * The constuctor for main net.
+     * The constuctor for main net. Use TronGrid as default
      * @param hexPrivateKey the binding private key. Operations require private key will all use this unless the private key is specified elsewhere.
      * @param apiKey this function works with TronGrid, an API key is required.
      * @return a ApiWrapper object
@@ -146,7 +146,21 @@ public class ApiWrapper {
     }
 
     /**
-     * The constuctor for Shasta test net.
+     * The constuctor for main net.
+     * @deprecated 
+     * This method will only be available before TronGrid prohibits the use without API key
+     * 
+     * @param hexPrivateKey the binding private key. Operations require private key will all use this unless the private key is specified elsewhere.
+     * @param apiKey this function works with TronGrid, an API key is required.
+     * @return a ApiWrapper object
+     */
+    @Deprecated(since = "0.2.0", forRemoval = true)
+    public static ApiWrapper ofMainnet(String hexPrivateKey) {
+        return new ApiWrapper("grpc.trongrid.io:50051", "grpc.trongrid.io:50052", hexPrivateKey);
+    }
+
+    /**
+     * The constuctor for Shasta test net. Use TronGrid as default.
      * @param hexPrivateKey the binding private key. Operations require private key will all use this unless the private key is specified elsewhere.
      * @param apiKey this function works with TronGrid, an API key is required.
      * @return a ApiWrapper object
