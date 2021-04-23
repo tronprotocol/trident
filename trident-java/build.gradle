@@ -15,11 +15,7 @@ allprojects {
 
     repositories {
         mavenCentral()
-        maven {
-            url "http://3.130.234.198:8081/nexus/content/repositories/trident/"
-            }
     }
-
 }
 
 subprojects {
