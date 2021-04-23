@@ -65,9 +65,12 @@ import org.tron.trident.api.GrpcAPI.AccountIdMessage;
 import org.tron.trident.api.GrpcAPI.BlockLimit;
 import org.tron.trident.api.GrpcAPI.PaginatedMessage;
 import org.tron.trident.utils.Base58Check;
+
 import com.google.protobuf.ByteString;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.Metadata;
+import io.grpc.stub.MetadataUtils;
 
 import java.nio.ByteBuffer;
 import java.util.*;
@@ -106,6 +109,21 @@ public class ApiWrapper {
         keyPair = SECP256K1.KeyPair.create(SECP256K1.PrivateKey.create(Bytes32.fromHexString(hexPrivateKey)));
     }
 
+    public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey, String apiKey) {
+        channel = ManagedChannelBuilder.forTarget(grpcEndpoint).usePlaintext().build();
+        channelSolidity = ManagedChannelBuilder.forTarget(grpcEndpointSolidity).usePlaintext().build();
+
+        //attach api key
+        Metadata header = new Metadata();
+        Metadata.Key<String> key = Metadata.Key.of("TRON-PRO-API-KEY", Metadata.ASCII_STRING_MARSHALLER);
+        header.put(key, apiKey);
+
+        blockingStub = (WalletGrpc.WalletBlockingStub)MetadataUtils.attachHeaders(WalletGrpc.newBlockingStub(channel), header);
+        blockingStubSolidity = (WalletSolidityGrpc.WalletSolidityBlockingStub)MetadataUtils.attachHeaders(WalletSolidityGrpc.newBlockingStub(channelSolidity), header);
+
+        keyPair = SECP256K1.KeyPair.create(SECP256K1.PrivateKey.create(Bytes32.fromHexString(hexPrivateKey)));
+    }
+
     public void close() {
         channel.shutdown();
         channelSolidity.shutdown();
@@ -118,17 +136,33 @@ public class ApiWrapper {
     }*/
 
     /**
-     * The constuctor for main net.
+     * The constuctor for main net. Use TronGrid as default
      * @param hexPrivateKey the binding private key. Operations require private key will all use this unless the private key is specified elsewhere.
+     * @param apiKey this function works with TronGrid, an API key is required.
      * @return a ApiWrapper object
      */
-    public static ApiWrapper ofMainnet(String hexPrivateKey) {
-        return new ApiWrapper("grpc.trongrid.io:50051", "grpc.trongrid.io:50052",hexPrivateKey);
+    public static ApiWrapper ofMainnet(String hexPrivateKey, String apiKey) {
+        return new ApiWrapper("grpc.trongrid.io:50051", "grpc.trongrid.io:50052", hexPrivateKey, apiKey);
     }
 
     /**
-     * The constuctor for Shasta test net.
+     * The constuctor for main net.
+     * @deprecated 
+     * This method will only be available before TronGrid prohibits the use without API key
+     * 
      * @param hexPrivateKey the binding private key. Operations require private key will all use this unless the private key is specified elsewhere.
+     * @param apiKey this function works with TronGrid, an API key is required.
+     * @return a ApiWrapper object
+     */
+    @Deprecated(since = "0.2.0", forRemoval = true)
+    public static ApiWrapper ofMainnet(String hexPrivateKey) {
+        return new ApiWrapper("grpc.trongrid.io:50051", "grpc.trongrid.io:50052", hexPrivateKey);
+    }
+
+    /**
+     * The constuctor for Shasta test net. Use TronGrid as default.
+     * @param hexPrivateKey the binding private key. Operations require private key will all use this unless the private key is specified elsewhere.
+     * @param apiKey this function works with TronGrid, an API key is required.
      * @return a ApiWrapper object
      */
     public static ApiWrapper ofShasta(String hexPrivateKey) {

@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Contract {
-    protected ApiWrapper client;
+    protected ApiWrapper wrapper;
     protected ByteString originAddr = ByteString.EMPTY;
     protected ByteString cntrAddr = ByteString.EMPTY;
     protected ABI abi;
@@ -47,7 +47,7 @@ public class Contract {
     protected ByteString ownerAddr = ByteString.EMPTY;
     protected List<ContractFunction> functions = new ArrayList();
 
-    public Contract(Contract cntr, String ownerAddr, ApiWrapper client) {
+    public Contract(Contract cntr, String ownerAddr, ApiWrapper wrapper) {
         this.originAddr = cntr.getOriginAddr();
         this.cntrAddr = cntr.getCntrAddr();
         this.abi = cntr.getAbi();
@@ -59,7 +59,7 @@ public class Contract {
         this.codeHash = cntr.getCodeHash();
         this.trxHash = cntr.getTrxHash();
         this.ownerAddr = ApiWrapper.parseAddress(ownerAddr);
-        this.client = client;
+        this.wrapper = wrapper;
     }
 
     public Contract(ByteString cntrAddr, ABI abi, ByteString bytecode, long consumeUserResourcePercent, String name, long originEnergyLimit) {
@@ -84,12 +84,12 @@ public class Contract {
         abiToFunctions();
     }
 
-    public ApiWrapper getClient() {
-        return client;
+    public ApiWrapper getWrapper() {
+        return wrapper;
     }
 
-    public void setClient(ApiWrapper client) {
-        this.client = client;
+    public void setWrapper(ApiWrapper wrapper) {
+        this.wrapper = wrapper;
     }
 
     public ByteString getOriginAddr() {
@@ -195,7 +195,7 @@ public class Contract {
     }
 
     public static class Builder {
-        protected ApiWrapper client;
+        protected ApiWrapper wrapper;
         protected ByteString originAddr = ByteString.EMPTY;
         protected ByteString cntrAddr = ByteString.EMPTY;
         protected ABI abi;
@@ -208,8 +208,8 @@ public class Contract {
         protected ByteString trxHash = ByteString.EMPTY;
         protected ByteString ownerAddr = ByteString.EMPTY;
 
-        public Builder setClient(ApiWrapper client) {
-            this.client = client;
+        public Builder setWrapper(ApiWrapper wrapper) {
+            this.wrapper = wrapper;
             return this;
         }
 
@@ -374,7 +374,7 @@ public class Contract {
             createSmartContractBuilder.setCallTokenValue(0);
         }
 
-        return new TransactionBuilder(client.blockingStub.deployContract(createSmartContractBuilder.build()).getTransaction());
+        return new TransactionBuilder(wrapper.blockingStub.deployContract(createSmartContractBuilder.build()).getTransaction());
     }
 
     /**
