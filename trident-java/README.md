@@ -43,19 +43,19 @@ dependencies {
 <dependency>
   <groupId>org.tron.trident</groupId>
   <artifactId>abi</artifactId>
-  <version>0.1.1</version>
+  <version>0.1.2</version>
   <type>pom</type>
 </dependency>
 <dependency>
   <groupId>org.tron.trident</groupId>
   <artifactId>utils</artifactId>
-  <version>0.1.1</version>
+  <version>0.1.2</version>
   <type>pom</type>
 </dependency>
 <dependency>
   <groupId>org.tron.trident</groupId>
   <artifactId>core</artifactId>
-  <version>0.1.1</version>
+  <version>0.1.2</version>
   <type>pom</type>
 </dependency>
 ```
