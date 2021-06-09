@@ -1,35 +1,11 @@
 plugins {
-    id 'com.jfrog.bintray'
+    
 }
 
 description 'TRON Application Binary Interface (ABI) for working with smart contracts'
 
 dependencies {
     implementation project(':utils')
-}
-
-bintray {
-    user = System.getenv('BINTRAY_USER_TRIDENT')
-    key = System.getenv('BINTRAY_KEY_TRIDENT')
-
-    configurations = ['archives']
-
-    pkg {
-        repo = 'trident'
-        name = 'abi'
-        desc = description
-        websiteUrl = 'https://github.com/tronprotocol/trident'
-        vcsUrl = 'https://github.com/tronprotocol/trident.git'
-        licenses = ['Apache-2.0']
-        publish = true
-        publicDownloadNumbers = true
-        version {
-            afterEvaluate {
-                name = "${project.version}"
-                released = new Date()
-            }
-        }
-    }
 }
 
 tasks.create('buildLib', Jar) {

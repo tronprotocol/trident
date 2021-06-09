@@ -8,7 +8,7 @@ Trident-Java document: https://developers.tron.network/docs/trident-java
 
 Due to safety concerns, trident-java will no longer upload packaged files to maven. Please clone the code from GitHub and do the packaging. 
 
-Trident-java is compiled with java version 13.0.2+8 and gradle 5.6.4.
+Trident-java is compiled with java version 1.8.0_231 and gradle 5.6.4.
 
 ## How to use
 
@@ -43,19 +43,19 @@ dependencies {
 <dependency>
   <groupId>org.tron.trident</groupId>
   <artifactId>abi</artifactId>
-  <version>0.1.1</version>
+  <version>0.1.2</version>
   <type>pom</type>
 </dependency>
 <dependency>
   <groupId>org.tron.trident</groupId>
   <artifactId>utils</artifactId>
-  <version>0.1.1</version>
+  <version>0.1.2</version>
   <type>pom</type>
 </dependency>
 <dependency>
   <groupId>org.tron.trident</groupId>
   <artifactId>core</artifactId>
-  <version>0.1.1</version>
+  <version>0.1.2</version>
   <type>pom</type>
 </dependency>
 ```

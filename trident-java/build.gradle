@@ -1,7 +1,5 @@
 plugins {
     id 'java-library'
-    id 'com.jfrog.bintray' apply false
-    id 'signing'
 }
 
 ext {
@@ -10,7 +8,7 @@ ext {
 }
 
 allprojects {
-    version '0.1.1'
+    version '0.1.2'
     group = 'org.tron.trident'
 
     repositories {

@@ -8,7 +8,7 @@ package org.tron.trident.core;
  * {@link #broadcastTransaction}, {@link #signTransaction} and other transaction related
  * operations can be done via a {@code ApiWrapper} object.</p>
  *
- * @since jdk13.0.2+8
+ * @since java version 1.8.0_231
  * @see org.tron.trident.core.contract.Contract
  * @see org.tron.trident.proto.Chain.Transaction
  * @see org.tron.trident.proto.Contract
@@ -154,7 +154,7 @@ public class ApiWrapper {
      * @param apiKey this function works with TronGrid, an API key is required.
      * @return a ApiWrapper object
      */
-    @Deprecated(since = "0.2.0", forRemoval = true)
+    @Deprecated
     public static ApiWrapper ofMainnet(String hexPrivateKey) {
         return new ApiWrapper("grpc.trongrid.io:50051", "grpc.trongrid.io:50052", hexPrivateKey);
     }
