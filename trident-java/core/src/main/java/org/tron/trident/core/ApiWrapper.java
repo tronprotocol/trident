@@ -1,20 +1,5 @@
 package org.tron.trident.core;
 
-
-/**
- * A {@code ApiWrapper} object is the entry point for calling the functions.
- *
- *<p>A {@code ApiWrapper} object is bind with a private key and a full node.
- * {@link #broadcastTransaction}, {@link #signTransaction} and other transaction related
- * operations can be done via a {@code ApiWrapper} object.</p>
- *
- * @since java version 1.8.0_231
- * @see org.tron.trident.core.contract.Contract
- * @see org.tron.trident.proto.Chain.Transaction
- * @see org.tron.trident.proto.Contract
- */
-
-
 import com.google.protobuf.InvalidProtocolBufferException;
 import org.tron.trident.abi.FunctionEncoder;
 import org.tron.trident.abi.datatypes.Function;
@@ -25,6 +10,7 @@ import org.tron.trident.api.WalletGrpc;
 import org.tron.trident.api.WalletSolidityGrpc;
 import org.tron.trident.core.contract.ContractFunction;
 import org.tron.trident.core.exceptions.IllegalException;
+import org.tron.trident.core.key.KeyPair;
 import org.tron.trident.core.transaction.TransactionBuilder;
 import org.tron.trident.crypto.SECP256K1;
 import org.tron.trident.proto.Chain.Transaction;
@@ -94,10 +80,23 @@ import org.tron.trident.proto.Response.TransactionApprovedList;
 
 import static org.tron.trident.proto.Response.TransactionReturn.response_code.SUCCESS;
 
+/**
+ * A {@code ApiWrapper} object is the entry point for calling the functions.
+ *
+ *<p>A {@code ApiWrapper} object is bind with a private key and a full node.
+ * {@link #broadcastTransaction}, {@link #signTransaction} and other transaction related
+ * operations can be done via a {@code ApiWrapper} object.</p>
+ *
+ * @since java version 1.8.0_231
+ * @see org.tron.trident.core.contract.Contract
+ * @see org.tron.trident.proto.Chain.Transaction
+ * @see org.tron.trident.proto.Contract
+ */
+
 public class ApiWrapper {
     public final WalletGrpc.WalletBlockingStub blockingStub;
     public final WalletSolidityGrpc.WalletSolidityBlockingStub blockingStubSolidity;
-    public final SECP256K1.KeyPair keyPair;
+    public final KeyPair keyPair;
     public final ManagedChannel channel;
     public final ManagedChannel channelSolidity;
 
@@ -106,7 +105,7 @@ public class ApiWrapper {
         channelSolidity = ManagedChannelBuilder.forTarget(grpcEndpointSolidity).usePlaintext().build();
         blockingStub = WalletGrpc.newBlockingStub(channel);
         blockingStubSolidity = WalletSolidityGrpc.newBlockingStub(channelSolidity);
-        keyPair = SECP256K1.KeyPair.create(SECP256K1.PrivateKey.create(Bytes32.fromHexString(hexPrivateKey)));
+        keyPair = new KeyPair(hexPrivateKey);
     }
 
     public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey, String apiKey) {
@@ -121,7 +120,7 @@ public class ApiWrapper {
         blockingStub = (WalletGrpc.WalletBlockingStub)MetadataUtils.attachHeaders(WalletGrpc.newBlockingStub(channel), header);
         blockingStubSolidity = (WalletSolidityGrpc.WalletSolidityBlockingStub)MetadataUtils.attachHeaders(WalletSolidityGrpc.newBlockingStub(channelSolidity), header);
 
-        keyPair = SECP256K1.KeyPair.create(SECP256K1.PrivateKey.create(Bytes32.fromHexString(hexPrivateKey)));
+        keyPair = new KeyPair(hexPrivateKey);
     }
 
     public void close() {
@@ -182,23 +181,9 @@ public class ApiWrapper {
      * Generate random address
      * @return A list, inside are the public key and private key
      */
-    public static List generateAddress() {
+    public static KeyPair generateAddress() {
         // generate random address
-        SECP256K1.KeyPair kp = SECP256K1.KeyPair.generate();
-
-        SECP256K1.PublicKey pubKey = kp.getPublicKey();
-        Keccak.Digest256 digest = new Keccak.Digest256();
-        digest.update(pubKey.getEncoded(), 0, 64);
-        byte[] raw = digest.digest();
-        byte[] rawAddr = new byte[21];
-        rawAddr[0] = 0x41;
-        System.arraycopy(raw, 12, rawAddr, 1, 20);
-
-        List keyPairReturn = new ArrayList<String>();
-        keyPairReturn.add(Hex.toHexString(rawAddr));
-        keyPairReturn.add(Hex.toHexString(kp.getPrivateKey().getEncoded()));
-        
-        return keyPairReturn;
+        return KeyPair.generate();
     }
 
     /**
@@ -312,11 +297,11 @@ public class ApiWrapper {
     }
 
     public Transaction signTransaction(TransactionExtention txnExt) {
-        return signTransaction(txnExt, keyPair);
+        return signTransaction(txnExt, keyPair.getRawPair());
     }
 
     public Transaction signTransaction(Transaction txn) {
-        return signTransaction(txn, keyPair);
+        return signTransaction(txn, keyPair.getRawPair());
     }
 
     /**

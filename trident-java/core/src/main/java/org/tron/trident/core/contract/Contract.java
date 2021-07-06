@@ -1,20 +1,5 @@
 package org.tron.trident.core.contract;
 
-/**
- * The {@code Contract} class is a wrapper for the {@code SmartContract}
- * class defined in the .proto file. An object of {@code Contract} contains
- * same attributes with the {@code SmartContract} class.
- *
- * <p>This class provides mutator and accessor methods for all
- * attributes. Besides, functions of smart contracts are wrapped
- * and can be easily viewed through {@link
- * org.tron.trident.core.contract.ContractFunction#toString()}</>
- *
- * @since jdk 13.0.2+8
- * @see org.tron.trident.core.contract.ContractFunction
- * @see org.tron.trident.proto.Common.SmartContract;
- */
-
 import com.google.protobuf.ByteString;
 import com.google.protobuf.util.JsonFormat;
 
@@ -28,6 +13,21 @@ import org.tron.trident.proto.Contract.CreateSmartContract;
 
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * The {@code Contract} class is a wrapper for the {@code SmartContract}
+ * class defined in the .proto file. An object of {@code Contract} contains
+ * same attributes with the {@code SmartContract} class.
+ *
+ * <p>This class provides mutator and accessor methods for all
+ * attributes. Besides, functions of smart contracts are wrapped
+ * and can be easily viewed through {@link
+ * org.tron.trident.core.contract.ContractFunction#toString()}</>
+ *
+ * @since jdk 1.8.0_231
+ * @see org.tron.trident.core.contract.ContractFunction
+ * @see org.tron.trident.proto.Common.SmartContract;
+ */
 
 public class Contract {
     protected ApiWrapper wrapper;

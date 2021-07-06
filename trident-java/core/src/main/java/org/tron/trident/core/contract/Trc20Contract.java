@@ -1,17 +1,5 @@
 package org.tron.trident.core.contract;
 
-/**
- * The {@code Trc20Contract} is a wrapper class of a standard TRC-20 smart contract.
- * 
- * <p>A {@code Trc20Contract} object includes standard TRC-20 functions defined 
- * in TIP-20. Each {@code Trc20Contract} binds a {@link ApiWrapper} with specific 
- * caller's private key and address.</p>
- * 
- * @since jdk 13.0.2+8
- * @see org.tron.trident.core.ApiWrapper
- * @see org.tron.trident.abi.datatypes.Function
- */
-
 import org.tron.trident.abi.datatypes.Address;
 import org.tron.trident.abi.datatypes.Bool;
 import org.tron.trident.abi.datatypes.Function;
@@ -32,6 +20,17 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
 
+/**
+ * The {@code Trc20Contract} is a wrapper class of a standard TRC-20 smart contract.
+ * 
+ * <p>A {@code Trc20Contract} object includes standard TRC-20 functions defined 
+ * in TIP-20. Each {@code Trc20Contract} binds a {@link ApiWrapper} with specific 
+ * caller's private key and address.</p>
+ * 
+ * @since jdk 1.8.0_231
+ * @see org.tron.trident.core.ApiWrapper
+ * @see org.tron.trident.abi.datatypes.Function
+ */
 public class Trc20Contract extends Contract {
 
     public Trc20Contract(Contract cntr, String ownerAddr, ApiWrapper wrapper) {
