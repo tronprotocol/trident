@@ -1,20 +1,5 @@
 package org.tron.trident.core;
 
-
-/**
- * A {@code ApiWrapper} object is the entry point for calling the functions.
- *
- *<p>A {@code ApiWrapper} object is bind with a private key and a full node.
- * {@link #broadcastTransaction}, {@link #signTransaction} and other transaction related
- * operations can be done via a {@code ApiWrapper} object.</p>
- *
- * @since java version 1.8.0_231
- * @see org.tron.trident.core.contract.Contract
- * @see org.tron.trident.proto.Chain.Transaction
- * @see org.tron.trident.proto.Contract
- */
-
-
 import com.google.protobuf.InvalidProtocolBufferException;
 import org.tron.trident.abi.FunctionEncoder;
 import org.tron.trident.abi.datatypes.Function;
@@ -94,6 +79,19 @@ import org.tron.trident.proto.Response.TransactionSignWeight;
 import org.tron.trident.proto.Response.TransactionApprovedList;
 
 import static org.tron.trident.proto.Response.TransactionReturn.response_code.SUCCESS;
+
+/**
+ * A {@code ApiWrapper} object is the entry point for calling the functions.
+ *
+ *<p>A {@code ApiWrapper} object is bind with a private key and a full node.
+ * {@link #broadcastTransaction}, {@link #signTransaction} and other transaction related
+ * operations can be done via a {@code ApiWrapper} object.</p>
+ *
+ * @since java version 1.8.0_231
+ * @see org.tron.trident.core.contract.Contract
+ * @see org.tron.trident.proto.Chain.Transaction
+ * @see org.tron.trident.proto.Contract
+ */
 
 public class ApiWrapper {
     public final WalletGrpc.WalletBlockingStub blockingStub;

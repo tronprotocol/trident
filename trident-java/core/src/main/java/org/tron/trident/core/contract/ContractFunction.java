@@ -1,5 +1,12 @@
 package org.tron.trident.core.contract;
 
+import com.google.protobuf.ByteString;
+import org.tron.trident.proto.Common.SmartContract.ABI.Entry;
+
+import java.lang.StringBuilder;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The class {@code ContractFunction} provides a easier way to access smart contract
  * functions.
@@ -8,17 +15,10 @@ package org.tron.trident.core.contract;
  * declaration and easy to call by construct a {@link
  * org.tron.trident.abi.datatypes.Function}</p>
  *
- * @since jdk 13.0.2+8
+ * @since jdk 1.8.0_231
  * @see org.tron.trident.abi.datatypes.Function
  * @see org.tron.trident.proto.Common.SmartContract
  */
-
-import com.google.protobuf.ByteString;
-import org.tron.trident.proto.Common.SmartContract.ABI.Entry;
-
-import java.lang.StringBuilder;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ContractFunction {
     private String name;
