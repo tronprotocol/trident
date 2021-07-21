@@ -31,6 +31,7 @@ import org.tron.trident.proto.Contract.AccountCreateContract;
 import org.tron.trident.proto.Contract.AssetIssueContract;
 import org.tron.trident.proto.Contract.SetAccountIdContract;
 import org.tron.trident.proto.Contract.UpdateAssetContract;
+import org.tron.trident.proto.Contract.UpdateBrokerageContract;
 import org.tron.trident.proto.Contract.ParticipateAssetIssueContract;
 import org.tron.trident.proto.Contract.UnfreezeAssetContract;
 import org.tron.trident.proto.Contract.AccountPermissionUpdateContract;
@@ -1291,6 +1292,25 @@ public class ApiWrapper {
         UnfreezeAssetContract.Builder builder = UnfreezeAssetContract.newBuilder();
         builder.setOwnerAddress(address);
         return builder.build();
+    }
+
+    public TransactionExtention updateBrokerage(String address, int brokerage) throws IllegalException{
+        ByteString ownerAddr = parseAddress(address);
+        UpdateBrokerageContract upContract = 
+                           UpdateBrokerageContract.newBuilder()
+                                        .setOwnerAddress(ownerAddr)
+                                        .setBrokerage(brokerage)
+                                        .build();
+        return blockingStub.updateBrokerage(upContract);
+    }
+
+    public long getBrokerageInfo(String address) {
+        ByteString sr = parseAddress(address);
+        BytesMessage param =
+                BytesMessage.newBuilder()
+                        .setValue(sr)
+                        .build();        
+        return blockingStub.getBrokerageInfo(param).getNum();
     }
 
     /*public void transferTrc20(String from, String to, String cntr, long feeLimit, long amount, int precision) {
