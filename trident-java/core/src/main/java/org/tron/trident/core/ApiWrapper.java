@@ -6,6 +6,7 @@ import org.tron.trident.abi.datatypes.Function;
 import org.tron.trident.api.GrpcAPI.BytesMessage;
 
 import org.tron.trident.core.contract.Contract;
+import org.tron.trident.core.Constant;
 import org.tron.trident.api.WalletGrpc;
 import org.tron.trident.api.WalletSolidityGrpc;
 import org.tron.trident.core.contract.ContractFunction;
@@ -30,6 +31,7 @@ import org.tron.trident.proto.Contract.AccountCreateContract;
 import org.tron.trident.proto.Contract.AssetIssueContract;
 import org.tron.trident.proto.Contract.SetAccountIdContract;
 import org.tron.trident.proto.Contract.UpdateAssetContract;
+import org.tron.trident.proto.Contract.UpdateBrokerageContract;
 import org.tron.trident.proto.Contract.ParticipateAssetIssueContract;
 import org.tron.trident.proto.Contract.UnfreezeAssetContract;
 import org.tron.trident.proto.Contract.AccountPermissionUpdateContract;
@@ -141,7 +143,7 @@ public class ApiWrapper {
      * @return a ApiWrapper object
      */
     public static ApiWrapper ofMainnet(String hexPrivateKey, String apiKey) {
-        return new ApiWrapper("grpc.trongrid.io:50051", "grpc.trongrid.io:50052", hexPrivateKey, apiKey);
+        return new ApiWrapper(Constant.TRONGRID_MAIN_NET, Constant.TRONGRID_MAIN_NET_SOLIDITY, hexPrivateKey, apiKey);
     }
 
     /**
@@ -155,7 +157,7 @@ public class ApiWrapper {
      */
     @Deprecated
     public static ApiWrapper ofMainnet(String hexPrivateKey) {
-        return new ApiWrapper("grpc.trongrid.io:50051", "grpc.trongrid.io:50052", hexPrivateKey);
+        return new ApiWrapper(Constant.TRONGRID_MAIN_NET, Constant.TRONGRID_MAIN_NET_SOLIDITY, hexPrivateKey);
     }
 
     /**
@@ -165,7 +167,7 @@ public class ApiWrapper {
      * @return a ApiWrapper object
      */
     public static ApiWrapper ofShasta(String hexPrivateKey) {
-        return new ApiWrapper("grpc.shasta.trongrid.io:50051", "grpc.shasta.trongrid.io:50052", hexPrivateKey);
+        return new ApiWrapper(Constant.TRONGRID_SHASTA, Constant.TRONGRID_SHASTA_SOLIDITY, hexPrivateKey);
     }
 
     /**
@@ -174,7 +176,7 @@ public class ApiWrapper {
      * @return a ApiWrapper object
      */
     public static ApiWrapper ofNile(String hexPrivateKey) {
-        return new ApiWrapper("47.252.19.181:50051", "47.252.19.181:50061", hexPrivateKey);
+        return new ApiWrapper(Constant.FULLNODE_NILE, Constant.FULLNODE_NILE_SOLIDITY, hexPrivateKey);
     }
 
     /**
@@ -1290,6 +1292,25 @@ public class ApiWrapper {
         UnfreezeAssetContract.Builder builder = UnfreezeAssetContract.newBuilder();
         builder.setOwnerAddress(address);
         return builder.build();
+    }
+
+    public TransactionExtention updateBrokerage(String address, int brokerage) throws IllegalException{
+        ByteString ownerAddr = parseAddress(address);
+        UpdateBrokerageContract upContract = 
+                           UpdateBrokerageContract.newBuilder()
+                                        .setOwnerAddress(ownerAddr)
+                                        .setBrokerage(brokerage)
+                                        .build();
+        return blockingStub.updateBrokerage(upContract);
+    }
+
+    public long getBrokerageInfo(String address) {
+        ByteString sr = parseAddress(address);
+        BytesMessage param =
+                BytesMessage.newBuilder()
+                        .setValue(sr)
+                        .build();        
+        return blockingStub.getBrokerageInfo(param).getNum();
     }
 
     /*public void transferTrc20(String from, String to, String cntr, long feeLimit, long amount, int precision) {
