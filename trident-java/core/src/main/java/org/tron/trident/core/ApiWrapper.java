@@ -245,11 +245,11 @@ public class ApiWrapper {
     }
 
     public Transaction signTransaction(TransactionExtention txnExt) {
-        return signTransaction(txnExt, keyPair.getRawPair());
+        return signTransaction(txnExt, keyPair);
     }
 
     public Transaction signTransaction(Transaction txn) {
-        return signTransaction(txn, keyPair.getRawPair());
+        return signTransaction(txn, keyPair);
     }
 
     /**
