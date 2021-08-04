@@ -39,6 +39,17 @@ public class KeyPair {
 
     public String toBase58CheckAddress() {
         SECP256K1.PublicKey pubKey = rawPair.getPublicKey();
+        
+        return publicKeyToBase58CheckAddress(pubKey);
+    }
+
+    public String toHexAddress() {
+        SECP256K1.PublicKey pubKey = rawPair.getPublicKey();
+        
+        return publicKeyToHexAddress(pubKey);
+    }
+
+    public static String publicKeyToBase58CheckAddress(final SECP256K1.PublicKey pubKey) {
         Keccak.Digest256 digest = new Keccak.Digest256();
         digest.update(pubKey.getEncoded(), 0, 64);
         byte[] raw = digest.digest();
@@ -49,8 +60,7 @@ public class KeyPair {
         return Base58Check.bytesToBase58(rawAddr);
     }
 
-    public String toHexAddress() {
-        SECP256K1.PublicKey pubKey = rawPair.getPublicKey();
+    public static String publicKeyToHexAddress(final SECP256K1.PublicKey pubKey) {
         Keccak.Digest256 digest = new Keccak.Digest256();
         digest.update(pubKey.getEncoded(), 0, 64);
         byte[] raw = digest.digest();
