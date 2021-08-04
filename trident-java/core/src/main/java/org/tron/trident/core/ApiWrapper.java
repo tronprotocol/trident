@@ -225,20 +225,31 @@ public class ApiWrapper {
         return Hex.toHexString(raw.toByteArray());
     }
 
-    public Transaction signTransaction(TransactionExtention txnExt, SECP256K1.KeyPair kp) {
+    public Transaction signTransaction(TransactionExtention txnExt, KeyPair keyPair) {
+        SECP256K1.KeyPair kp = keyPair.getRawPair();
         SECP256K1.Signature sig = SECP256K1.sign(Bytes32.wrap(txnExt.getTxid().toByteArray()), kp);
         Transaction signedTxn =
                 txnExt.getTransaction().toBuilder().addSignature(ByteString.copyFrom(sig.encodedBytes().toArray())).build();
         return signedTxn;
     }
 
-    public Transaction signTransaction(Transaction txn, SECP256K1.KeyPair kp) {
+    public Transaction signTransaction(Transaction txn, KeyPair keyPair) {
         SHA256.Digest digest = new SHA256.Digest();
         digest.update(txn.getRawData().toByteArray());
         byte[] txid = digest.digest();
+
+        SECP256K1.KeyPair kp = keyPair.getRawPair();
         SECP256K1.Signature sig = SECP256K1.sign(Bytes32.wrap(txid), kp);
         Transaction signedTxn = txn.toBuilder().addSignature(ByteString.copyFrom(sig.encodedBytes().toArray())).build();
         return signedTxn;
+    }
+
+    public Transaction signTransaction(TransactionExtention txnExt) {
+        return signTransaction(txnExt, keyPair.getRawPair());
+    }
+
+    public Transaction signTransaction(Transaction txn) {
+        return signTransaction(txn, keyPair.getRawPair());
     }
 
     /**
@@ -296,14 +307,6 @@ public class ApiWrapper {
             byte[] txid = digest.digest();
             return ByteString.copyFrom(Hex.encode(txid)).toStringUtf8();          
         }
-    }
-
-    public Transaction signTransaction(TransactionExtention txnExt) {
-        return signTransaction(txnExt, keyPair.getRawPair());
-    }
-
-    public Transaction signTransaction(Transaction txn) {
-        return signTransaction(txn, keyPair.getRawPair());
     }
 
     /**
