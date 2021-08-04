@@ -1,9 +1,12 @@
 package org.tron.trident.core.key;
 
 import org.bouncycastle.jcajce.provider.digest.Keccak;
+import org.bouncycastle.jcajce.provider.digest.SHA256;
 import org.bouncycastle.util.encoders.Hex;
 import org.tron.trident.crypto.SECP256K1;
 import org.tron.trident.crypto.tuwenitypes.Bytes32;
+import org.tron.trident.proto.Chain.Transaction;
+import org.tron.trident.proto.Response.TransactionExtention;
 import org.tron.trident.utils.Base58Check;
 
 /**
@@ -69,5 +72,35 @@ public class KeyPair {
         System.arraycopy(raw, 12, rawAddr, 1, 20);
 
         return Hex.toHexString(rawAddr);
+    }
+
+    /**
+     * Return a signature message in byte[]
+     * @param txnExt the transaction waiting for signature
+     * @param keyPair 
+     * @return the signature message in byte[]
+     */
+    public static byte[] signTransaction(TransactionExtention txnExt, KeyPair keyPair) {
+        SECP256K1.KeyPair kp = keyPair.getRawPair();
+        SECP256K1.Signature signature = SECP256K1.sign(Bytes32.wrap(txnExt.getTxid().toByteArray()), kp);
+        
+        return signature.encodedBytes().toArray();
+    }
+
+    /**
+     * Return a signature message in byte[]
+     * @param txn the transaction waiting for signature
+     * @param keyPair 
+     * @return the signature message in byte[]
+     */
+    public static byte[] signTransaction(Transaction txn, KeyPair keyPair) {
+        SHA256.Digest digest = new SHA256.Digest();
+        digest.update(txn.getRawData().toByteArray());
+        byte[] txid = digest.digest();
+
+        SECP256K1.KeyPair kp = keyPair.getRawPair();
+        SECP256K1.Signature sig = SECP256K1.sign(Bytes32.wrap(txid), kp);
+
+        return sig.encodedBytes().toArray();
     }
 }

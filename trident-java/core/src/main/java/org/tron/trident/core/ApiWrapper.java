@@ -211,6 +211,14 @@ public class ApiWrapper {
         return ByteString.copyFrom(raw);
     }
 
+    public static byte[] calculateTransactionHash (Transaction txn) {
+        SHA256.Digest digest = new SHA256.Digest();
+        digest.update(txn.getRawData().toByteArray());
+        byte[] txid = digest.digest();
+
+        return txid;
+    }
+
 
     public static ByteString parseHex(String hexString) {
         byte[] raw = Hex.decode(hexString);
@@ -234,10 +242,7 @@ public class ApiWrapper {
     }
 
     public Transaction signTransaction(Transaction txn, KeyPair keyPair) {
-        SHA256.Digest digest = new SHA256.Digest();
-        digest.update(txn.getRawData().toByteArray());
-        byte[] txid = digest.digest();
-
+        byte[] txid = calculateTransactionHash(txn);
         SECP256K1.KeyPair kp = keyPair.getRawPair();
         SECP256K1.Signature sig = SECP256K1.sign(Bytes32.wrap(txid), kp);
         Transaction signedTxn = txn.toBuilder().addSignature(ByteString.copyFrom(sig.encodedBytes().toArray())).build();
@@ -302,9 +307,7 @@ public class ApiWrapper {
             String message = resolveResultCode(ret.getCodeValue()) + ", " + ret.getMessage();
             throw new RuntimeException(message);
         } else {
-            SHA256.Digest digest = new SHA256.Digest();
-            digest.update(txn.getRawData().toByteArray());
-            byte[] txid = digest.digest();
+            byte[] txid = calculateTransactionHash(txn);
             return ByteString.copyFrom(Hex.encode(txid)).toStringUtf8();          
         }
     }
