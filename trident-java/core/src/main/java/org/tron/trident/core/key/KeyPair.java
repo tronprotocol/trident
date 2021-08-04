@@ -52,24 +52,25 @@ public class KeyPair {
         return publicKeyToHexAddress(pubKey);
     }
 
-    public static String publicKeyToBase58CheckAddress(final SECP256K1.PublicKey pubKey) {
+    public static byte[] publicKeyToAddress(final SECP256K1.PublicKey pubKey) {
         Keccak.Digest256 digest = new Keccak.Digest256();
         digest.update(pubKey.getEncoded(), 0, 64);
         byte[] raw = digest.digest();
         byte[] rawAddr = new byte[21];
         rawAddr[0] = 0x41;
         System.arraycopy(raw, 12, rawAddr, 1, 20);
+
+        return rawAddr;
+    }
+
+    public static String publicKeyToBase58CheckAddress(final SECP256K1.PublicKey pubKey) {
+        byte[] rawAddr = publicKeyToAddress(pubKey);
 
         return Base58Check.bytesToBase58(rawAddr);
     }
 
     public static String publicKeyToHexAddress(final SECP256K1.PublicKey pubKey) {
-        Keccak.Digest256 digest = new Keccak.Digest256();
-        digest.update(pubKey.getEncoded(), 0, 64);
-        byte[] raw = digest.digest();
-        byte[] rawAddr = new byte[21];
-        rawAddr[0] = 0x41;
-        System.arraycopy(raw, 12, rawAddr, 1, 20);
+        byte[] rawAddr = publicKeyToAddress(pubKey);
 
         return Hex.toHexString(rawAddr);
     }
