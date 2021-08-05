@@ -37,26 +37,33 @@ dependencies {
 }
 ```
 
+Or if you are using the jar files as your dependencies:
+
+```groovy
+dependencies {
+    implementation fileTree(dir:'your path', include: '*.jar')
+}
+```
+
 ### Maven Settings
 
 ```xml
 <dependency>
   <groupId>org.tron.trident</groupId>
   <artifactId>abi</artifactId>
-  <version>0.1.2</version>
+  <version>0.2.0</version>
   <type>pom</type>
 </dependency>
 <dependency>
   <groupId>org.tron.trident</groupId>
   <artifactId>utils</artifactId>
-  <version>0.1.2</version>
+  <version>0.2.0</version>
   <type>pom</type>
 </dependency>
 <dependency>
   <groupId>org.tron.trident</groupId>
   <artifactId>core</artifactId>
-  <version>0.1.2</version>
+  <version>0.2.0</version>
   <type>pom</type>
 </dependency>
 ```
-
