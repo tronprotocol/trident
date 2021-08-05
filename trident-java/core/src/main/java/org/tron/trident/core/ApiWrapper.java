@@ -233,18 +233,18 @@ public class ApiWrapper {
     }
 
     public Transaction signTransaction(TransactionExtention txnExt, KeyPair keyPair) {
-        SECP256K1.KeyPair kp = keyPair.getRawPair();
-        SECP256K1.Signature sig = SECP256K1.sign(Bytes32.wrap(txnExt.getTxid().toByteArray()), kp);
-        Transaction signedTxn =
-                txnExt.getTransaction().toBuilder().addSignature(ByteString.copyFrom(sig.encodedBytes().toArray())).build();
+        byte[] txid = txnExt.getTxid().toByteArray();
+        byte[] signature = KeyPair.signTransaction(txid, keyPair);
+        Transaction signedTxn = 
+                        txnExt.getTransaction().toBuilder().addSignature(ByteString.copyFrom(signature)).build();
+
         return signedTxn;
     }
 
     public Transaction signTransaction(Transaction txn, KeyPair keyPair) {
         byte[] txid = calculateTransactionHash(txn);
-        SECP256K1.KeyPair kp = keyPair.getRawPair();
-        SECP256K1.Signature sig = SECP256K1.sign(Bytes32.wrap(txid), kp);
-        Transaction signedTxn = txn.toBuilder().addSignature(ByteString.copyFrom(sig.encodedBytes().toArray())).build();
+        byte[] signature = KeyPair.signTransaction(txid, keyPair);
+        Transaction signedTxn = txn.toBuilder().addSignature(ByteString.copyFrom(signature)).build();
         return signedTxn;
     }
 
