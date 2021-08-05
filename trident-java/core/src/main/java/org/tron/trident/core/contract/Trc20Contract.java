@@ -1,17 +1,5 @@
 package org.tron.trident.core.contract;
 
-/**
- * The {@code Trc20Contract} is a wrapper class of a standard TRC-20 smart contract.
- * 
- * <p>A {@code Trc20Contract} object includes standard TRC-20 functions defined 
- * in TIP-20. Each {@code Trc20Contract} binds a {@link ApiWrapper} with specific 
- * caller's private key and address.</p>
- * 
- * @since jdk 13.0.2+8
- * @see org.tron.trident.core.ApiWrapper
- * @see org.tron.trident.abi.datatypes.Function
- */
-
 import org.tron.trident.abi.datatypes.Address;
 import org.tron.trident.abi.datatypes.Bool;
 import org.tron.trident.abi.datatypes.Function;
@@ -32,12 +20,21 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
 
+/**
+ * The {@code Trc20Contract} is a wrapper class of a standard TRC-20 smart contract.
+ * 
+ * <p>A {@code Trc20Contract} object includes standard TRC-20 functions defined 
+ * in TIP-20. Each {@code Trc20Contract} binds a {@link ApiWrapper} with specific 
+ * caller's private key and address.</p>
+ * 
+ * @since jdk 1.8.0_231
+ * @see org.tron.trident.core.ApiWrapper
+ * @see org.tron.trident.abi.datatypes.Function
+ */
 public class Trc20Contract extends Contract {
-    protected int decimals;
 
     public Trc20Contract(Contract cntr, String ownerAddr, ApiWrapper wrapper) {
         super(cntr, ownerAddr, wrapper);
-        decimals = decimals().intValue();
     }
 
     /**
@@ -141,15 +138,16 @@ public class Trc20Contract extends Contract {
        * 
        * @param destAddr The address to receive the token
        * @param amount The transfer amount
+       * @param power The power number of 10 that the transfer amount multiplied by
        * @param memo The transaction memo
        * @param feeLimit The energy fee limit
        * @return Transaction hash
        */
-      public String transfer(String destAddr, long amount, 
+      public String transfer(String destAddr, long amount, int power,
              String memo, long feeLimit) {
         Function transfer = new Function("transfer",
                 Arrays.asList(new Address(destAddr),
-                        new Uint256(BigInteger.valueOf(amount).multiply(BigInteger.valueOf(10).pow(decimals)))),
+                        new Uint256(BigInteger.valueOf(amount).multiply(BigInteger.valueOf(10).pow(power)))),
                 Arrays.asList(new TypeReference<Bool>() {}));
 
         TransactionBuilder builder = wrapper.triggerCall(Base58Check.bytesToBase58(ownerAddr.toByteArray()), 
@@ -171,15 +169,16 @@ public class Trc20Contract extends Contract {
        * @param fromAddr The address who sends tokens (or the address to withdraw from)
        * @param destAddr The address to receive the token
        * @param amount The transfer amount
+       * @param power The power number of 10 that the transfer amount multiplied by
        * @param memo The transaction memo
        * @param feeLimit The energy fee limit
        * @return Transaction hash
        */
-      public String transferFrom(String fromAddr, String destAddr, long amount, 
+      public String transferFrom(String fromAddr, String destAddr, long amount, int power,
              String memo, long feeLimit) {
         Function transferFrom = new Function("transferFrom",
                 Arrays.asList(new Address(fromAddr) ,new Address(destAddr),
-                        new Uint256(BigInteger.valueOf(amount).multiply(BigInteger.valueOf(10).pow(decimals)))),
+                        new Uint256(BigInteger.valueOf(amount).multiply(BigInteger.valueOf(10).pow(power)))),
                 Arrays.asList(new TypeReference<Bool>() {}));
 
         TransactionBuilder builder = wrapper.triggerCall(Base58Check.bytesToBase58(ownerAddr.toByteArray()), 
@@ -199,15 +198,16 @@ public class Trc20Contract extends Contract {
        * 
        * @param spender The address who is allowed to withdraw.
        * @param amount The amount allowed to withdraw.
+       * @param power The power number of 10 that the transfer amount multiplied by
        * @param memo The transaction memo
        * @param feeLimit The energy fee limit
        * @return Transaction hash
        */
-      public String approve(String spender ,long amount, 
+      public String approve(String spender ,long amount, int power,
              String memo, long feeLimit) {
         Function approve = new Function("approve",
                 Arrays.asList(new Address(spender) ,
-                        new Uint256(BigInteger.valueOf(amount).multiply(BigInteger.valueOf(10).pow(decimals)))),
+                        new Uint256(BigInteger.valueOf(amount).multiply(BigInteger.valueOf(10).pow(power)))),
                 Arrays.asList(new TypeReference<Bool>() {}));
 
                 TransactionBuilder builder = wrapper.triggerCall(Base58Check.bytesToBase58(ownerAddr.toByteArray()), 

@@ -8,7 +8,7 @@ package org.tron.trident.core.transaction;
  * transaction, for setting attributes values like {@link #setFeeLimit}, {@link
  * #setMemo}, Etc.</p>
  *
- * @since jdk13.0.2+8
+ * @since java version 1.8.0_231
  * @see org.tron.trident.proto.Chain.Transaction;
  */
 

@@ -1,30 +1,17 @@
 package org.tron.trident.core;
 
-
-/**
- * A {@code ApiWrapper} object is the entry point for calling the functions.
- *
- *<p>A {@code ApiWrapper} object is bind with a private key and a full node.
- * {@link #broadcastTransaction}, {@link #signTransaction} and other transaction related
- * operations can be done via a {@code ApiWrapper} object.</p>
- *
- * @since jdk13.0.2+8
- * @see org.tron.trident.core.contract.Contract
- * @see org.tron.trident.proto.Chain.Transaction
- * @see org.tron.trident.proto.Contract
- */
-
-
 import com.google.protobuf.InvalidProtocolBufferException;
 import org.tron.trident.abi.FunctionEncoder;
 import org.tron.trident.abi.datatypes.Function;
 import org.tron.trident.api.GrpcAPI.BytesMessage;
 
 import org.tron.trident.core.contract.Contract;
+import org.tron.trident.core.Constant;
 import org.tron.trident.api.WalletGrpc;
 import org.tron.trident.api.WalletSolidityGrpc;
 import org.tron.trident.core.contract.ContractFunction;
 import org.tron.trident.core.exceptions.IllegalException;
+import org.tron.trident.core.key.KeyPair;
 import org.tron.trident.core.transaction.TransactionBuilder;
 import org.tron.trident.crypto.SECP256K1;
 import org.tron.trident.proto.Chain.Transaction;
@@ -44,6 +31,7 @@ import org.tron.trident.proto.Contract.AccountCreateContract;
 import org.tron.trident.proto.Contract.AssetIssueContract;
 import org.tron.trident.proto.Contract.SetAccountIdContract;
 import org.tron.trident.proto.Contract.UpdateAssetContract;
+import org.tron.trident.proto.Contract.UpdateBrokerageContract;
 import org.tron.trident.proto.Contract.ParticipateAssetIssueContract;
 import org.tron.trident.proto.Contract.UnfreezeAssetContract;
 import org.tron.trident.proto.Contract.AccountPermissionUpdateContract;
@@ -94,10 +82,23 @@ import org.tron.trident.proto.Response.TransactionApprovedList;
 
 import static org.tron.trident.proto.Response.TransactionReturn.response_code.SUCCESS;
 
+/**
+ * A {@code ApiWrapper} object is the entry point for calling the functions.
+ *
+ *<p>A {@code ApiWrapper} object is bind with a private key and a full node.
+ * {@link #broadcastTransaction}, {@link #signTransaction} and other transaction related
+ * operations can be done via a {@code ApiWrapper} object.</p>
+ *
+ * @since java version 1.8.0_231
+ * @see org.tron.trident.core.contract.Contract
+ * @see org.tron.trident.proto.Chain.Transaction
+ * @see org.tron.trident.proto.Contract
+ */
+
 public class ApiWrapper {
     public final WalletGrpc.WalletBlockingStub blockingStub;
     public final WalletSolidityGrpc.WalletSolidityBlockingStub blockingStubSolidity;
-    public final SECP256K1.KeyPair keyPair;
+    public final KeyPair keyPair;
     public final ManagedChannel channel;
     public final ManagedChannel channelSolidity;
 
@@ -106,7 +107,7 @@ public class ApiWrapper {
         channelSolidity = ManagedChannelBuilder.forTarget(grpcEndpointSolidity).usePlaintext().build();
         blockingStub = WalletGrpc.newBlockingStub(channel);
         blockingStubSolidity = WalletSolidityGrpc.newBlockingStub(channelSolidity);
-        keyPair = SECP256K1.KeyPair.create(SECP256K1.PrivateKey.create(Bytes32.fromHexString(hexPrivateKey)));
+        keyPair = new KeyPair(hexPrivateKey);
     }
 
     public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey, String apiKey) {
@@ -121,7 +122,7 @@ public class ApiWrapper {
         blockingStub = (WalletGrpc.WalletBlockingStub)MetadataUtils.attachHeaders(WalletGrpc.newBlockingStub(channel), header);
         blockingStubSolidity = (WalletSolidityGrpc.WalletSolidityBlockingStub)MetadataUtils.attachHeaders(WalletSolidityGrpc.newBlockingStub(channelSolidity), header);
 
-        keyPair = SECP256K1.KeyPair.create(SECP256K1.PrivateKey.create(Bytes32.fromHexString(hexPrivateKey)));
+        keyPair = new KeyPair(hexPrivateKey);
     }
 
     public void close() {
@@ -142,7 +143,7 @@ public class ApiWrapper {
      * @return a ApiWrapper object
      */
     public static ApiWrapper ofMainnet(String hexPrivateKey, String apiKey) {
-        return new ApiWrapper("grpc.trongrid.io:50051", "grpc.trongrid.io:50052", hexPrivateKey, apiKey);
+        return new ApiWrapper(Constant.TRONGRID_MAIN_NET, Constant.TRONGRID_MAIN_NET_SOLIDITY, hexPrivateKey, apiKey);
     }
 
     /**
@@ -154,9 +155,9 @@ public class ApiWrapper {
      * @param apiKey this function works with TronGrid, an API key is required.
      * @return a ApiWrapper object
      */
-    @Deprecated(since = "0.2.0", forRemoval = true)
+    @Deprecated
     public static ApiWrapper ofMainnet(String hexPrivateKey) {
-        return new ApiWrapper("grpc.trongrid.io:50051", "grpc.trongrid.io:50052", hexPrivateKey);
+        return new ApiWrapper(Constant.TRONGRID_MAIN_NET, Constant.TRONGRID_MAIN_NET_SOLIDITY, hexPrivateKey);
     }
 
     /**
@@ -166,7 +167,7 @@ public class ApiWrapper {
      * @return a ApiWrapper object
      */
     public static ApiWrapper ofShasta(String hexPrivateKey) {
-        return new ApiWrapper("grpc.shasta.trongrid.io:50051", "grpc.shasta.trongrid.io:50052", hexPrivateKey);
+        return new ApiWrapper(Constant.TRONGRID_SHASTA, Constant.TRONGRID_SHASTA_SOLIDITY, hexPrivateKey);
     }
 
     /**
@@ -175,30 +176,16 @@ public class ApiWrapper {
      * @return a ApiWrapper object
      */
     public static ApiWrapper ofNile(String hexPrivateKey) {
-        return new ApiWrapper("47.252.19.181:50051", "47.252.19.181:50061", hexPrivateKey);
+        return new ApiWrapper(Constant.FULLNODE_NILE, Constant.FULLNODE_NILE_SOLIDITY, hexPrivateKey);
     }
 
     /**
      * Generate random address
      * @return A list, inside are the public key and private key
      */
-    public static List generateAddress() {
+    public static KeyPair generateAddress() {
         // generate random address
-        SECP256K1.KeyPair kp = SECP256K1.KeyPair.generate();
-
-        SECP256K1.PublicKey pubKey = kp.getPublicKey();
-        Keccak.Digest256 digest = new Keccak.Digest256();
-        digest.update(pubKey.getEncoded(), 0, 64);
-        byte[] raw = digest.digest();
-        byte[] rawAddr = new byte[21];
-        rawAddr[0] = 0x41;
-        System.arraycopy(raw, 12, rawAddr, 1, 20);
-
-        List keyPairReturn = new ArrayList<String>();
-        keyPairReturn.add(Hex.toHexString(rawAddr));
-        keyPairReturn.add(Hex.toHexString(kp.getPrivateKey().getEncoded()));
-        
-        return keyPairReturn;
+        return KeyPair.generate();
     }
 
     /**
@@ -224,6 +211,13 @@ public class ApiWrapper {
         return ByteString.copyFrom(raw);
     }
 
+    public static byte[] calculateTransactionHash (Transaction txn) {
+        SHA256.Digest digest = new SHA256.Digest();
+        digest.update(txn.getRawData().toByteArray());
+        byte[] txid = digest.digest();
+
+        return txid;
+    }
 
     public static ByteString parseHex(String hexString) {
         byte[] raw = Hex.decode(hexString);
@@ -238,20 +232,28 @@ public class ApiWrapper {
         return Hex.toHexString(raw.toByteArray());
     }
 
-    public Transaction signTransaction(TransactionExtention txnExt, SECP256K1.KeyPair kp) {
-        SECP256K1.Signature sig = SECP256K1.sign(Bytes32.wrap(txnExt.getTxid().toByteArray()), kp);
-        Transaction signedTxn =
-                txnExt.getTransaction().toBuilder().addSignature(ByteString.copyFrom(sig.encodedBytes().toArray())).build();
+    public Transaction signTransaction(TransactionExtention txnExt, KeyPair keyPair) {
+        byte[] txid = txnExt.getTxid().toByteArray();
+        byte[] signature = KeyPair.signTransaction(txid, keyPair);
+        Transaction signedTxn = 
+                        txnExt.getTransaction().toBuilder().addSignature(ByteString.copyFrom(signature)).build();
+
         return signedTxn;
     }
 
-    public Transaction signTransaction(Transaction txn, SECP256K1.KeyPair kp) {
-        SHA256.Digest digest = new SHA256.Digest();
-        digest.update(txn.getRawData().toByteArray());
-        byte[] txid = digest.digest();
-        SECP256K1.Signature sig = SECP256K1.sign(Bytes32.wrap(txid), kp);
-        Transaction signedTxn = txn.toBuilder().addSignature(ByteString.copyFrom(sig.encodedBytes().toArray())).build();
+    public Transaction signTransaction(Transaction txn, KeyPair keyPair) {
+        byte[] txid = calculateTransactionHash(txn);
+        byte[] signature = KeyPair.signTransaction(txid, keyPair);
+        Transaction signedTxn = txn.toBuilder().addSignature(ByteString.copyFrom(signature)).build();
         return signedTxn;
+    }
+
+    public Transaction signTransaction(TransactionExtention txnExt) {
+        return signTransaction(txnExt, keyPair);
+    }
+
+    public Transaction signTransaction(Transaction txn) {
+        return signTransaction(txn, keyPair);
     }
 
     /**
@@ -304,19 +306,9 @@ public class ApiWrapper {
             String message = resolveResultCode(ret.getCodeValue()) + ", " + ret.getMessage();
             throw new RuntimeException(message);
         } else {
-            SHA256.Digest digest = new SHA256.Digest();
-            digest.update(txn.getRawData().toByteArray());
-            byte[] txid = digest.digest();
+            byte[] txid = calculateTransactionHash(txn);
             return ByteString.copyFrom(Hex.encode(txid)).toStringUtf8();          
         }
-    }
-
-    public Transaction signTransaction(TransactionExtention txnExt) {
-        return signTransaction(txnExt, keyPair);
-    }
-
-    public Transaction signTransaction(Transaction txn) {
-        return signTransaction(txn, keyPair);
     }
 
     /**
@@ -1305,6 +1297,25 @@ public class ApiWrapper {
         UnfreezeAssetContract.Builder builder = UnfreezeAssetContract.newBuilder();
         builder.setOwnerAddress(address);
         return builder.build();
+    }
+
+    public TransactionExtention updateBrokerage(String address, int brokerage) throws IllegalException{
+        ByteString ownerAddr = parseAddress(address);
+        UpdateBrokerageContract upContract = 
+                           UpdateBrokerageContract.newBuilder()
+                                        .setOwnerAddress(ownerAddr)
+                                        .setBrokerage(brokerage)
+                                        .build();
+        return blockingStub.updateBrokerage(upContract);
+    }
+
+    public long getBrokerageInfo(String address) {
+        ByteString sr = parseAddress(address);
+        BytesMessage param =
+                BytesMessage.newBuilder()
+                        .setValue(sr)
+                        .build();        
+        return blockingStub.getBrokerageInfo(param).getNum();
     }
 
     /*public void transferTrc20(String from, String to, String cntr, long feeLimit, long amount, int precision) {
