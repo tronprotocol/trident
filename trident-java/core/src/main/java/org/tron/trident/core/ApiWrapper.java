@@ -1431,15 +1431,13 @@ public class ApiWrapper {
      * @param contractAddr smart contract address.
      * @param function contract function.
      * @return TransactionExtention.
-     * @throws RuntimeException if function cannot be found in the contract.
      */
     public TransactionExtention constantCall(String ownerAddr, String contractAddr, Function function) {
         Contract cntr = getContract(contractAddr);
-        if (isFuncInContract(cntr, function)) {
-            return callWithoutBroadcast(ownerAddr, cntr, function);
-        } else {
-            throw new RuntimeException("Function not found in the contract");
-        }
+
+        TransactionExtention txnExt =  callWithoutBroadcast(ownerAddr, cntr, function);
+        
+        return txnExt;
     }
 
     /**
@@ -1448,16 +1446,13 @@ public class ApiWrapper {
      * @param contractAddr smart contract address
      * @param function contract function
      * @return transaction builder. Users may set other fields, e.g. feeLimit
-     * @throws RuntimeException if function cannot be found in the contract
      */
     public TransactionBuilder triggerCall(String ownerAddr, String contractAddr, Function function) {
         Contract cntr = getContract(contractAddr);
-        if (isFuncInContract(cntr, function)) {
-            TransactionExtention txnExt = callWithoutBroadcast(ownerAddr, cntr, function);
-            return new TransactionBuilder(txnExt.getTransaction());
-        } else {
-            throw new RuntimeException("Function not found in the contract");
-        }
+
+        TransactionExtention txnExt = callWithoutBroadcast(ownerAddr, cntr, function);
+
+        return new TransactionBuilder(txnExt.getTransaction());
     }
 
 }
