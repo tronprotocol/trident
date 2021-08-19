@@ -32,6 +32,7 @@ public class ContractFunction {
     private long callValue = 0;
     private long callTokenValue = 0;
     private int callTokenId = 0;
+    private String stateMutability;
 
   public ContractFunction(Builder builder) {
     this.name = builder.name;
@@ -45,6 +46,7 @@ public class ContractFunction {
     this.callValue = builder.callValue;
     this.callTokenValue = builder.callTokenValue;
     this.callTokenId = builder.callTokenId;
+    this.stateMutability = builder.stateMutability;
   }
 
   public String getName() {
@@ -135,6 +137,14 @@ public class ContractFunction {
     this.callTokenId = callTokenId;
   }
 
+  public String getStateMutability() {
+    return stateMutability;
+  }
+
+  public void setStateMutability(String stateMutability) {
+    this.stateMutability = stateMutability;
+  }
+
   public static class Builder {
     private String name;
     private Entry abi;
@@ -147,6 +157,7 @@ public class ContractFunction {
     private long callValue = 0;
     private long callTokenValue = 0;
     private int callTokenId = 0;
+    private String stateMutability;
 
     public Builder setName(String name) {
         this.name = name;
@@ -202,6 +213,11 @@ public class ContractFunction {
         this.callTokenId = callTokenId;
         return this;
     }
+  
+    public Builder setStateMutability(String stateMutability) {
+      this.stateMutability = stateMutability;
+      return this;
+    }
 
     public ContractFunction build() {
         return new ContractFunction(this);
@@ -219,9 +235,7 @@ public class ContractFunction {
       ret.delete(ret.length() - 2, ret.length() - 1);
     }
     ret.append(")");
-    if (abi.getStateMutabilityValue() == 2) {
-      ret.append(" view");
-    }
+    ret.append(" " + stateMutability);
     ret.append(" returns (");
     ret.append(outputType);
     ret.append(" " + output);

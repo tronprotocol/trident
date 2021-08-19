@@ -4,9 +4,9 @@ Trident-Java is a lightweight SDK that includes libraries for working with TRON 
 
 Trident-Java makes it easy to build TRON applications with java.
 
-Trident-Java document: https://developers.tron.network/docs/trident-java
+[Trident-Java document](https://developers.tron.network/docs/trident-java)
 
-Due to safety concerns, trident-java will no longer upload packaged files to maven. Please clone the code from GitHub and do the packaging. 
+Due to safety concerns, trident-java will no longer upload packaged files to maven. Please clone the code from GitHub and do the packaging.
 
 Trident-java is compiled with java version 1.8.0_231 and gradle 5.6.4.
 
@@ -51,19 +51,22 @@ dependencies {
 <dependency>
   <groupId>org.tron.trident</groupId>
   <artifactId>abi</artifactId>
-  <version>0.2.0</version>
-  <type>pom</type>
+  <version>0.3.0</version>
+  <scope>system</scope>
+  <systemPath>your path</systemPath>
 </dependency>
 <dependency>
   <groupId>org.tron.trident</groupId>
   <artifactId>utils</artifactId>
-  <version>0.2.0</version>
-  <type>pom</type>
+  <version>0.3.0</version>
+  <scope>system</scope>
+  <systemPath>your path</systemPath>
 </dependency>
 <dependency>
   <groupId>org.tron.trident</groupId>
   <artifactId>core</artifactId>
-  <version>0.2.0</version>
-  <type>pom</type>
+  <version>0.3.0</version>
+  <scope>system</scope>
+  <systemPath>your path</systemPath>
 </dependency>
 ```
