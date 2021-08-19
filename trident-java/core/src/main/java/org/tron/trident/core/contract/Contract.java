@@ -3,6 +3,8 @@ package org.tron.trident.core.contract;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.util.JsonFormat;
 
+import org.tron.trident.abi.datatypes.Type;
+import org.tron.trident.core.exceptions.ContractCreateException;
 import org.tron.trident.core.transaction.TransactionBuilder;
 import org.tron.trident.core.ApiWrapper;
 import org.tron.trident.proto.Common.SmartContract;
@@ -12,6 +14,7 @@ import org.tron.trident.proto.Common.SmartContract.ABI.Entry.Param;
 import org.tron.trident.proto.Contract.CreateSmartContract;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -46,6 +49,8 @@ public class Contract {
     //Current transaction owner's address, to call or trigger contract"
     protected ByteString ownerAddr = ByteString.EMPTY;
     protected List<ContractFunction> functions = new ArrayList();
+    //the constructor is loaded automatically from the abi, if has
+    protected ContractConstructor constructor = null;
 
     public Contract(Contract cntr, String ownerAddr, ApiWrapper wrapper) {
         this.originAddr = cntr.getOriginAddr();
@@ -194,6 +199,10 @@ public class Contract {
         this.functions = functions;
     }
 
+    public ContractConstructor getConstructor() {
+        return constructor;
+    }
+
     public static class Builder {
         protected ApiWrapper wrapper;
         protected ByteString originAddr = ByteString.EMPTY;
@@ -299,6 +308,25 @@ public class Contract {
                     }
                     builder.setOutputType((String)collectParams(params, 't').get(0));
                 }
+
+                switch (funcAbi.getStateMutabilityValue()) {
+                    case 0:
+                      builder.setStateMutability("unknownmutabilitytype");
+                      break;
+                    case 1:
+                      builder.setStateMutability("pure");
+                      break;
+                    case 2:
+                      builder.setStateMutability("view");
+                      break;
+                    case 3:
+                      builder.setStateMutability("nonpayable");
+                      break;
+                    case 4:
+                      builder.setStateMutability("payable");
+                      break;
+                  }
+
                 functions.add(builder.build());
             }
         }
@@ -342,39 +370,51 @@ public class Contract {
 
     public TransactionBuilder deploy() throws Exception {
         //No deposit when creating contract
-        return deploy(0, 0);
+        return deploy(Collections.emptyList());
     }
 
   /**
-   * create a CreateSmartContract object to get ready for deployment
-   * @param callTokenValue deposit amount while deploying
-   * @param tokenId token id
+   * create a CreateSmartContract object to get ready for deployment.
+   * please note if any deposit is made during deployment(@see callValue),
+   * the constructor of this contract must be payable
+   * 
    * @return TransactionBuilder object for signing and broadcasting
-   * @throws RuntimeException if deployment duplicating / owner and origin address don't match
+   * @throws Exception if deployment duplicating / owner and origin address don't match
+   * @throws ContractCreateException if passes parameters but no constructor exists
    */
-    public TransactionBuilder deploy(long callTokenValue, long tokenId) throws Exception {
+    public TransactionBuilder deploy(List<Type> buildParams) throws Exception {
         //throws if deployed
         if (!this.cntrAddr.isEmpty()) {
-            throw new RuntimeException("This contract has already been deployed.");
+            throw new ContractCreateException("This contract has already been deployed.");
         }
         //throws if origin address does not match owner address
         if (!this.originAddr.equals(this.ownerAddr)) {
-            throw new RuntimeException("Origin address and owner address mismatch.");
+            throw new ContractCreateException("Origin address and owner address mismatch.");
         }
+        loadConstructor();
+        //throws if the contract does not have a constructor
+        if (null == this.constructor && !buildParams.isEmpty()) {
+            throw new ContractCreateException("The contract does not have a constructor.");
+        }
+        this.constructor.encodeParameter(buildParams);
+        setBytecode(getBytecode().concat(this.constructor.getBytecode()));
         //create
         CreateSmartContract.Builder createSmartContractBuilder = CreateSmartContract.newBuilder();
         createSmartContractBuilder.setOwnerAddress(ownerAddr);
         createSmartContractBuilder.setNewContract(toProto());
-        //if any deposit
-        if (tokenId != 0) {
-            createSmartContractBuilder.setTokenId(tokenId);
-            createSmartContractBuilder.setCallTokenValue(callTokenValue);
-        } else {
-            createSmartContractBuilder.setTokenId(0);
-            createSmartContractBuilder.setCallTokenValue(0);
-        }
 
         return new TransactionBuilder(wrapper.blockingStub.deployContract(createSmartContractBuilder.build()).getTransaction());
+    }
+
+    /**
+     * load the constructor from ABI
+     */
+    protected void loadConstructor() {
+        for (Entry e: abi.getEntrysList()) {
+            if (e.getName().equals("")) {
+                this.constructor = new ContractConstructor(e);
+            }
+        }
     }
 
     /**
