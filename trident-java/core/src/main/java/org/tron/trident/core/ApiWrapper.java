@@ -257,6 +257,16 @@ public class ApiWrapper {
     }
 
     /**
+     * Estimate the bandwidth consumption of the transaction.
+     * Please note that bandwidth estimations are based on signed transactions.
+     * @param txn the transaction to be estimated.
+     */
+    public long estimateBandwidth(Transaction txn) {
+        long byteSize = txn.toBuilder().clearRet().build().getSerializedSize() + 64;
+        return byteSize;
+    }
+
+    /**
      * Resolve the result code from TransactionReturn objects.
      * @param code the result code.
      * @return the corresponding message.
