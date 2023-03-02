@@ -3747,6 +3747,316 @@ public final class WalletGrpc {
     return getGetTriggerInputForShieldedTRC20ContractMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<org.tron.trident.proto.Contract.FreezeBalanceV2Contract,
+      org.tron.trident.proto.Response.TransactionExtention> getFreezeBalanceV2Method;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "FreezeBalanceV2",
+      requestType = org.tron.trident.proto.Contract.FreezeBalanceV2Contract.class,
+      responseType = org.tron.trident.proto.Response.TransactionExtention.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<org.tron.trident.proto.Contract.FreezeBalanceV2Contract,
+      org.tron.trident.proto.Response.TransactionExtention> getFreezeBalanceV2Method() {
+    io.grpc.MethodDescriptor<org.tron.trident.proto.Contract.FreezeBalanceV2Contract, org.tron.trident.proto.Response.TransactionExtention> getFreezeBalanceV2Method;
+    if ((getFreezeBalanceV2Method = WalletGrpc.getFreezeBalanceV2Method) == null) {
+      synchronized (WalletGrpc.class) {
+        if ((getFreezeBalanceV2Method = WalletGrpc.getFreezeBalanceV2Method) == null) {
+          WalletGrpc.getFreezeBalanceV2Method = getFreezeBalanceV2Method =
+              io.grpc.MethodDescriptor.<org.tron.trident.proto.Contract.FreezeBalanceV2Contract, org.tron.trident.proto.Response.TransactionExtention>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "FreezeBalanceV2"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.proto.Contract.FreezeBalanceV2Contract.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.proto.Response.TransactionExtention.getDefaultInstance()))
+              .setSchemaDescriptor(new WalletMethodDescriptorSupplier("FreezeBalanceV2"))
+              .build();
+        }
+      }
+    }
+    return getFreezeBalanceV2Method;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract,
+      org.tron.trident.proto.Response.TransactionExtention> getUnfreezeBalanceV2Method;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "UnfreezeBalanceV2",
+      requestType = org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract.class,
+      responseType = org.tron.trident.proto.Response.TransactionExtention.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract,
+      org.tron.trident.proto.Response.TransactionExtention> getUnfreezeBalanceV2Method() {
+    io.grpc.MethodDescriptor<org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract, org.tron.trident.proto.Response.TransactionExtention> getUnfreezeBalanceV2Method;
+    if ((getUnfreezeBalanceV2Method = WalletGrpc.getUnfreezeBalanceV2Method) == null) {
+      synchronized (WalletGrpc.class) {
+        if ((getUnfreezeBalanceV2Method = WalletGrpc.getUnfreezeBalanceV2Method) == null) {
+          WalletGrpc.getUnfreezeBalanceV2Method = getUnfreezeBalanceV2Method =
+              io.grpc.MethodDescriptor.<org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract, org.tron.trident.proto.Response.TransactionExtention>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "UnfreezeBalanceV2"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.proto.Response.TransactionExtention.getDefaultInstance()))
+              .setSchemaDescriptor(new WalletMethodDescriptorSupplier("UnfreezeBalanceV2"))
+              .build();
+        }
+      }
+    }
+    return getUnfreezeBalanceV2Method;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<org.tron.trident.proto.Contract.DelegateResourceContract,
+      org.tron.trident.proto.Response.TransactionExtention> getDelegateResourceMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "DelegateResource",
+      requestType = org.tron.trident.proto.Contract.DelegateResourceContract.class,
+      responseType = org.tron.trident.proto.Response.TransactionExtention.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<org.tron.trident.proto.Contract.DelegateResourceContract,
+      org.tron.trident.proto.Response.TransactionExtention> getDelegateResourceMethod() {
+    io.grpc.MethodDescriptor<org.tron.trident.proto.Contract.DelegateResourceContract, org.tron.trident.proto.Response.TransactionExtention> getDelegateResourceMethod;
+    if ((getDelegateResourceMethod = WalletGrpc.getDelegateResourceMethod) == null) {
+      synchronized (WalletGrpc.class) {
+        if ((getDelegateResourceMethod = WalletGrpc.getDelegateResourceMethod) == null) {
+          WalletGrpc.getDelegateResourceMethod = getDelegateResourceMethod =
+              io.grpc.MethodDescriptor.<org.tron.trident.proto.Contract.DelegateResourceContract, org.tron.trident.proto.Response.TransactionExtention>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "DelegateResource"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.proto.Contract.DelegateResourceContract.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.proto.Response.TransactionExtention.getDefaultInstance()))
+              .setSchemaDescriptor(new WalletMethodDescriptorSupplier("DelegateResource"))
+              .build();
+        }
+      }
+    }
+    return getDelegateResourceMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<org.tron.trident.proto.Contract.UnDelegateResourceContract,
+      org.tron.trident.proto.Response.TransactionExtention> getUnDelegateResourceMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "UnDelegateResource",
+      requestType = org.tron.trident.proto.Contract.UnDelegateResourceContract.class,
+      responseType = org.tron.trident.proto.Response.TransactionExtention.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<org.tron.trident.proto.Contract.UnDelegateResourceContract,
+      org.tron.trident.proto.Response.TransactionExtention> getUnDelegateResourceMethod() {
+    io.grpc.MethodDescriptor<org.tron.trident.proto.Contract.UnDelegateResourceContract, org.tron.trident.proto.Response.TransactionExtention> getUnDelegateResourceMethod;
+    if ((getUnDelegateResourceMethod = WalletGrpc.getUnDelegateResourceMethod) == null) {
+      synchronized (WalletGrpc.class) {
+        if ((getUnDelegateResourceMethod = WalletGrpc.getUnDelegateResourceMethod) == null) {
+          WalletGrpc.getUnDelegateResourceMethod = getUnDelegateResourceMethod =
+              io.grpc.MethodDescriptor.<org.tron.trident.proto.Contract.UnDelegateResourceContract, org.tron.trident.proto.Response.TransactionExtention>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "UnDelegateResource"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.proto.Contract.UnDelegateResourceContract.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.proto.Response.TransactionExtention.getDefaultInstance()))
+              .setSchemaDescriptor(new WalletMethodDescriptorSupplier("UnDelegateResource"))
+              .build();
+        }
+      }
+    }
+    return getUnDelegateResourceMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract,
+      org.tron.trident.proto.Response.TransactionExtention> getWithdrawExpireUnfreezeMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "WithdrawExpireUnfreeze",
+      requestType = org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract.class,
+      responseType = org.tron.trident.proto.Response.TransactionExtention.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract,
+      org.tron.trident.proto.Response.TransactionExtention> getWithdrawExpireUnfreezeMethod() {
+    io.grpc.MethodDescriptor<org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract, org.tron.trident.proto.Response.TransactionExtention> getWithdrawExpireUnfreezeMethod;
+    if ((getWithdrawExpireUnfreezeMethod = WalletGrpc.getWithdrawExpireUnfreezeMethod) == null) {
+      synchronized (WalletGrpc.class) {
+        if ((getWithdrawExpireUnfreezeMethod = WalletGrpc.getWithdrawExpireUnfreezeMethod) == null) {
+          WalletGrpc.getWithdrawExpireUnfreezeMethod = getWithdrawExpireUnfreezeMethod =
+              io.grpc.MethodDescriptor.<org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract, org.tron.trident.proto.Response.TransactionExtention>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "WithdrawExpireUnfreeze"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.proto.Response.TransactionExtention.getDefaultInstance()))
+              .setSchemaDescriptor(new WalletMethodDescriptorSupplier("WithdrawExpireUnfreeze"))
+              .build();
+        }
+      }
+    }
+    return getWithdrawExpireUnfreezeMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage,
+      org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage> getGetAvailableUnfreezeCountMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "GetAvailableUnfreezeCount",
+      requestType = org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage.class,
+      responseType = org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage,
+      org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage> getGetAvailableUnfreezeCountMethod() {
+    io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage, org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage> getGetAvailableUnfreezeCountMethod;
+    if ((getGetAvailableUnfreezeCountMethod = WalletGrpc.getGetAvailableUnfreezeCountMethod) == null) {
+      synchronized (WalletGrpc.class) {
+        if ((getGetAvailableUnfreezeCountMethod = WalletGrpc.getGetAvailableUnfreezeCountMethod) == null) {
+          WalletGrpc.getGetAvailableUnfreezeCountMethod = getGetAvailableUnfreezeCountMethod =
+              io.grpc.MethodDescriptor.<org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage, org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "GetAvailableUnfreezeCount"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage.getDefaultInstance()))
+              .setSchemaDescriptor(new WalletMethodDescriptorSupplier("GetAvailableUnfreezeCount"))
+              .build();
+        }
+      }
+    }
+    return getGetAvailableUnfreezeCountMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage,
+      org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage> getGetCanWithdrawUnfreezeAmountMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "GetCanWithdrawUnfreezeAmount",
+      requestType = org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage.class,
+      responseType = org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage,
+      org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage> getGetCanWithdrawUnfreezeAmountMethod() {
+    io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage, org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage> getGetCanWithdrawUnfreezeAmountMethod;
+    if ((getGetCanWithdrawUnfreezeAmountMethod = WalletGrpc.getGetCanWithdrawUnfreezeAmountMethod) == null) {
+      synchronized (WalletGrpc.class) {
+        if ((getGetCanWithdrawUnfreezeAmountMethod = WalletGrpc.getGetCanWithdrawUnfreezeAmountMethod) == null) {
+          WalletGrpc.getGetCanWithdrawUnfreezeAmountMethod = getGetCanWithdrawUnfreezeAmountMethod =
+              io.grpc.MethodDescriptor.<org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage, org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "GetCanWithdrawUnfreezeAmount"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage.getDefaultInstance()))
+              .setSchemaDescriptor(new WalletMethodDescriptorSupplier("GetCanWithdrawUnfreezeAmount"))
+              .build();
+        }
+      }
+    }
+    return getGetCanWithdrawUnfreezeAmountMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage,
+      org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage> getGetCanDelegatedMaxSizeMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "GetCanDelegatedMaxSize",
+      requestType = org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage.class,
+      responseType = org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage,
+      org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage> getGetCanDelegatedMaxSizeMethod() {
+    io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage, org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage> getGetCanDelegatedMaxSizeMethod;
+    if ((getGetCanDelegatedMaxSizeMethod = WalletGrpc.getGetCanDelegatedMaxSizeMethod) == null) {
+      synchronized (WalletGrpc.class) {
+        if ((getGetCanDelegatedMaxSizeMethod = WalletGrpc.getGetCanDelegatedMaxSizeMethod) == null) {
+          WalletGrpc.getGetCanDelegatedMaxSizeMethod = getGetCanDelegatedMaxSizeMethod =
+              io.grpc.MethodDescriptor.<org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage, org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "GetCanDelegatedMaxSize"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage.getDefaultInstance()))
+              .setSchemaDescriptor(new WalletMethodDescriptorSupplier("GetCanDelegatedMaxSize"))
+              .build();
+        }
+      }
+    }
+    return getGetCanDelegatedMaxSizeMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<org.tron.trident.proto.Response.DelegatedResourceMessage,
+      org.tron.trident.proto.Response.DelegatedResourceList> getGetDelegatedResourceV2Method;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "GetDelegatedResourceV2",
+      requestType = org.tron.trident.proto.Response.DelegatedResourceMessage.class,
+      responseType = org.tron.trident.proto.Response.DelegatedResourceList.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<org.tron.trident.proto.Response.DelegatedResourceMessage,
+      org.tron.trident.proto.Response.DelegatedResourceList> getGetDelegatedResourceV2Method() {
+    io.grpc.MethodDescriptor<org.tron.trident.proto.Response.DelegatedResourceMessage, org.tron.trident.proto.Response.DelegatedResourceList> getGetDelegatedResourceV2Method;
+    if ((getGetDelegatedResourceV2Method = WalletGrpc.getGetDelegatedResourceV2Method) == null) {
+      synchronized (WalletGrpc.class) {
+        if ((getGetDelegatedResourceV2Method = WalletGrpc.getGetDelegatedResourceV2Method) == null) {
+          WalletGrpc.getGetDelegatedResourceV2Method = getGetDelegatedResourceV2Method =
+              io.grpc.MethodDescriptor.<org.tron.trident.proto.Response.DelegatedResourceMessage, org.tron.trident.proto.Response.DelegatedResourceList>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "GetDelegatedResourceV2"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.proto.Response.DelegatedResourceMessage.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.proto.Response.DelegatedResourceList.getDefaultInstance()))
+              .setSchemaDescriptor(new WalletMethodDescriptorSupplier("GetDelegatedResourceV2"))
+              .build();
+        }
+      }
+    }
+    return getGetDelegatedResourceV2Method;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.BytesMessage,
+      org.tron.trident.proto.Response.DelegatedResourceAccountIndex> getGetDelegatedResourceAccountIndexV2Method;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "GetDelegatedResourceAccountIndexV2",
+      requestType = org.tron.trident.api.GrpcAPI.BytesMessage.class,
+      responseType = org.tron.trident.proto.Response.DelegatedResourceAccountIndex.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.BytesMessage,
+      org.tron.trident.proto.Response.DelegatedResourceAccountIndex> getGetDelegatedResourceAccountIndexV2Method() {
+    io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.BytesMessage, org.tron.trident.proto.Response.DelegatedResourceAccountIndex> getGetDelegatedResourceAccountIndexV2Method;
+    if ((getGetDelegatedResourceAccountIndexV2Method = WalletGrpc.getGetDelegatedResourceAccountIndexV2Method) == null) {
+      synchronized (WalletGrpc.class) {
+        if ((getGetDelegatedResourceAccountIndexV2Method = WalletGrpc.getGetDelegatedResourceAccountIndexV2Method) == null) {
+          WalletGrpc.getGetDelegatedResourceAccountIndexV2Method = getGetDelegatedResourceAccountIndexV2Method =
+              io.grpc.MethodDescriptor.<org.tron.trident.api.GrpcAPI.BytesMessage, org.tron.trident.proto.Response.DelegatedResourceAccountIndex>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "GetDelegatedResourceAccountIndexV2"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.api.GrpcAPI.BytesMessage.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.proto.Response.DelegatedResourceAccountIndex.getDefaultInstance()))
+              .setSchemaDescriptor(new WalletMethodDescriptorSupplier("GetDelegatedResourceAccountIndexV2"))
+              .build();
+        }
+      }
+    }
+    return getGetDelegatedResourceAccountIndexV2Method;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -4662,6 +4972,79 @@ public final class WalletGrpc {
       asyncUnimplementedUnaryCall(getGetTriggerInputForShieldedTRC20ContractMethod(), responseObserver);
     }
 
+    /**
+     * <pre>
+     *Stake 2.0
+     * </pre>
+     */
+    public void freezeBalanceV2(org.tron.trident.proto.Contract.FreezeBalanceV2Contract request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.TransactionExtention> responseObserver) {
+      asyncUnimplementedUnaryCall(getFreezeBalanceV2Method(), responseObserver);
+    }
+
+    /**
+     */
+    public void unfreezeBalanceV2(org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.TransactionExtention> responseObserver) {
+      asyncUnimplementedUnaryCall(getUnfreezeBalanceV2Method(), responseObserver);
+    }
+
+    /**
+     */
+    public void delegateResource(org.tron.trident.proto.Contract.DelegateResourceContract request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.TransactionExtention> responseObserver) {
+      asyncUnimplementedUnaryCall(getDelegateResourceMethod(), responseObserver);
+    }
+
+    /**
+     */
+    public void unDelegateResource(org.tron.trident.proto.Contract.UnDelegateResourceContract request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.TransactionExtention> responseObserver) {
+      asyncUnimplementedUnaryCall(getUnDelegateResourceMethod(), responseObserver);
+    }
+
+    /**
+     */
+    public void withdrawExpireUnfreeze(org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.TransactionExtention> responseObserver) {
+      asyncUnimplementedUnaryCall(getWithdrawExpireUnfreezeMethod(), responseObserver);
+    }
+
+    /**
+     */
+    public void getAvailableUnfreezeCount(org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage request,
+        io.grpc.stub.StreamObserver<org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage> responseObserver) {
+      asyncUnimplementedUnaryCall(getGetAvailableUnfreezeCountMethod(), responseObserver);
+    }
+
+    /**
+     */
+    public void getCanWithdrawUnfreezeAmount(org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage request,
+        io.grpc.stub.StreamObserver<org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage> responseObserver) {
+      asyncUnimplementedUnaryCall(getGetCanWithdrawUnfreezeAmountMethod(), responseObserver);
+    }
+
+    /**
+     */
+    public void getCanDelegatedMaxSize(org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage request,
+        io.grpc.stub.StreamObserver<org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage> responseObserver) {
+      asyncUnimplementedUnaryCall(getGetCanDelegatedMaxSizeMethod(), responseObserver);
+    }
+
+    /**
+     */
+    public void getDelegatedResourceV2(org.tron.trident.proto.Response.DelegatedResourceMessage request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.DelegatedResourceList> responseObserver) {
+      asyncUnimplementedUnaryCall(getGetDelegatedResourceV2Method(), responseObserver);
+    }
+
+    /**
+     */
+    public void getDelegatedResourceAccountIndexV2(org.tron.trident.api.GrpcAPI.BytesMessage request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.DelegatedResourceAccountIndex> responseObserver) {
+      asyncUnimplementedUnaryCall(getGetDelegatedResourceAccountIndexV2Method(), responseObserver);
+    }
+
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -5504,6 +5887,76 @@ public final class WalletGrpc {
                 org.tron.trident.api.GrpcAPI.ShieldedTRC20TriggerContractParameters,
                 org.tron.trident.api.GrpcAPI.BytesMessage>(
                   this, METHODID_GET_TRIGGER_INPUT_FOR_SHIELDED_TRC20CONTRACT)))
+          .addMethod(
+            getFreezeBalanceV2Method(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                org.tron.trident.proto.Contract.FreezeBalanceV2Contract,
+                org.tron.trident.proto.Response.TransactionExtention>(
+                  this, METHODID_FREEZE_BALANCE_V2)))
+          .addMethod(
+            getUnfreezeBalanceV2Method(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract,
+                org.tron.trident.proto.Response.TransactionExtention>(
+                  this, METHODID_UNFREEZE_BALANCE_V2)))
+          .addMethod(
+            getDelegateResourceMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                org.tron.trident.proto.Contract.DelegateResourceContract,
+                org.tron.trident.proto.Response.TransactionExtention>(
+                  this, METHODID_DELEGATE_RESOURCE)))
+          .addMethod(
+            getUnDelegateResourceMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                org.tron.trident.proto.Contract.UnDelegateResourceContract,
+                org.tron.trident.proto.Response.TransactionExtention>(
+                  this, METHODID_UN_DELEGATE_RESOURCE)))
+          .addMethod(
+            getWithdrawExpireUnfreezeMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract,
+                org.tron.trident.proto.Response.TransactionExtention>(
+                  this, METHODID_WITHDRAW_EXPIRE_UNFREEZE)))
+          .addMethod(
+            getGetAvailableUnfreezeCountMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage,
+                org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage>(
+                  this, METHODID_GET_AVAILABLE_UNFREEZE_COUNT)))
+          .addMethod(
+            getGetCanWithdrawUnfreezeAmountMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage,
+                org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage>(
+                  this, METHODID_GET_CAN_WITHDRAW_UNFREEZE_AMOUNT)))
+          .addMethod(
+            getGetCanDelegatedMaxSizeMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage,
+                org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage>(
+                  this, METHODID_GET_CAN_DELEGATED_MAX_SIZE)))
+          .addMethod(
+            getGetDelegatedResourceV2Method(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                org.tron.trident.proto.Response.DelegatedResourceMessage,
+                org.tron.trident.proto.Response.DelegatedResourceList>(
+                  this, METHODID_GET_DELEGATED_RESOURCE_V2)))
+          .addMethod(
+            getGetDelegatedResourceAccountIndexV2Method(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                org.tron.trident.api.GrpcAPI.BytesMessage,
+                org.tron.trident.proto.Response.DelegatedResourceAccountIndex>(
+                  this, METHODID_GET_DELEGATED_RESOURCE_ACCOUNT_INDEX_V2)))
           .build();
     }
   }
@@ -6508,6 +6961,89 @@ public final class WalletGrpc {
       asyncUnaryCall(
           getChannel().newCall(getGetTriggerInputForShieldedTRC20ContractMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     * <pre>
+     *Stake 2.0
+     * </pre>
+     */
+    public void freezeBalanceV2(org.tron.trident.proto.Contract.FreezeBalanceV2Contract request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.TransactionExtention> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getFreezeBalanceV2Method(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
+    public void unfreezeBalanceV2(org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.TransactionExtention> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getUnfreezeBalanceV2Method(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
+    public void delegateResource(org.tron.trident.proto.Contract.DelegateResourceContract request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.TransactionExtention> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getDelegateResourceMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
+    public void unDelegateResource(org.tron.trident.proto.Contract.UnDelegateResourceContract request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.TransactionExtention> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getUnDelegateResourceMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
+    public void withdrawExpireUnfreeze(org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.TransactionExtention> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getWithdrawExpireUnfreezeMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
+    public void getAvailableUnfreezeCount(org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage request,
+        io.grpc.stub.StreamObserver<org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getGetAvailableUnfreezeCountMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
+    public void getCanWithdrawUnfreezeAmount(org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage request,
+        io.grpc.stub.StreamObserver<org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getGetCanWithdrawUnfreezeAmountMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
+    public void getCanDelegatedMaxSize(org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage request,
+        io.grpc.stub.StreamObserver<org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getGetCanDelegatedMaxSizeMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
+    public void getDelegatedResourceV2(org.tron.trident.proto.Response.DelegatedResourceMessage request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.DelegatedResourceList> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getGetDelegatedResourceV2Method(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
+    public void getDelegatedResourceAccountIndexV2(org.tron.trident.api.GrpcAPI.BytesMessage request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.DelegatedResourceAccountIndex> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getGetDelegatedResourceAccountIndexV2Method(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -7389,6 +7925,79 @@ public final class WalletGrpc {
     public org.tron.trident.api.GrpcAPI.BytesMessage getTriggerInputForShieldedTRC20Contract(org.tron.trident.api.GrpcAPI.ShieldedTRC20TriggerContractParameters request) {
       return blockingUnaryCall(
           getChannel(), getGetTriggerInputForShieldedTRC20ContractMethod(), getCallOptions(), request);
+    }
+
+    /**
+     * <pre>
+     *Stake 2.0
+     * </pre>
+     */
+    public org.tron.trident.proto.Response.TransactionExtention freezeBalanceV2(org.tron.trident.proto.Contract.FreezeBalanceV2Contract request) {
+      return blockingUnaryCall(
+          getChannel(), getFreezeBalanceV2Method(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public org.tron.trident.proto.Response.TransactionExtention unfreezeBalanceV2(org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract request) {
+      return blockingUnaryCall(
+          getChannel(), getUnfreezeBalanceV2Method(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public org.tron.trident.proto.Response.TransactionExtention delegateResource(org.tron.trident.proto.Contract.DelegateResourceContract request) {
+      return blockingUnaryCall(
+          getChannel(), getDelegateResourceMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public org.tron.trident.proto.Response.TransactionExtention unDelegateResource(org.tron.trident.proto.Contract.UnDelegateResourceContract request) {
+      return blockingUnaryCall(
+          getChannel(), getUnDelegateResourceMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public org.tron.trident.proto.Response.TransactionExtention withdrawExpireUnfreeze(org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract request) {
+      return blockingUnaryCall(
+          getChannel(), getWithdrawExpireUnfreezeMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage getAvailableUnfreezeCount(org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage request) {
+      return blockingUnaryCall(
+          getChannel(), getGetAvailableUnfreezeCountMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage getCanWithdrawUnfreezeAmount(org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage request) {
+      return blockingUnaryCall(
+          getChannel(), getGetCanWithdrawUnfreezeAmountMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage getCanDelegatedMaxSize(org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage request) {
+      return blockingUnaryCall(
+          getChannel(), getGetCanDelegatedMaxSizeMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public org.tron.trident.proto.Response.DelegatedResourceList getDelegatedResourceV2(org.tron.trident.proto.Response.DelegatedResourceMessage request) {
+      return blockingUnaryCall(
+          getChannel(), getGetDelegatedResourceV2Method(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public org.tron.trident.proto.Response.DelegatedResourceAccountIndex getDelegatedResourceAccountIndexV2(org.tron.trident.api.GrpcAPI.BytesMessage request) {
+      return blockingUnaryCall(
+          getChannel(), getGetDelegatedResourceAccountIndexV2Method(), getCallOptions(), request);
     }
   }
 
@@ -8392,6 +9001,89 @@ public final class WalletGrpc {
       return futureUnaryCall(
           getChannel().newCall(getGetTriggerInputForShieldedTRC20ContractMethod(), getCallOptions()), request);
     }
+
+    /**
+     * <pre>
+     *Stake 2.0
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<org.tron.trident.proto.Response.TransactionExtention> freezeBalanceV2(
+        org.tron.trident.proto.Contract.FreezeBalanceV2Contract request) {
+      return futureUnaryCall(
+          getChannel().newCall(getFreezeBalanceV2Method(), getCallOptions()), request);
+    }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<org.tron.trident.proto.Response.TransactionExtention> unfreezeBalanceV2(
+        org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract request) {
+      return futureUnaryCall(
+          getChannel().newCall(getUnfreezeBalanceV2Method(), getCallOptions()), request);
+    }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<org.tron.trident.proto.Response.TransactionExtention> delegateResource(
+        org.tron.trident.proto.Contract.DelegateResourceContract request) {
+      return futureUnaryCall(
+          getChannel().newCall(getDelegateResourceMethod(), getCallOptions()), request);
+    }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<org.tron.trident.proto.Response.TransactionExtention> unDelegateResource(
+        org.tron.trident.proto.Contract.UnDelegateResourceContract request) {
+      return futureUnaryCall(
+          getChannel().newCall(getUnDelegateResourceMethod(), getCallOptions()), request);
+    }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<org.tron.trident.proto.Response.TransactionExtention> withdrawExpireUnfreeze(
+        org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract request) {
+      return futureUnaryCall(
+          getChannel().newCall(getWithdrawExpireUnfreezeMethod(), getCallOptions()), request);
+    }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage> getAvailableUnfreezeCount(
+        org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage request) {
+      return futureUnaryCall(
+          getChannel().newCall(getGetAvailableUnfreezeCountMethod(), getCallOptions()), request);
+    }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage> getCanWithdrawUnfreezeAmount(
+        org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage request) {
+      return futureUnaryCall(
+          getChannel().newCall(getGetCanWithdrawUnfreezeAmountMethod(), getCallOptions()), request);
+    }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage> getCanDelegatedMaxSize(
+        org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage request) {
+      return futureUnaryCall(
+          getChannel().newCall(getGetCanDelegatedMaxSizeMethod(), getCallOptions()), request);
+    }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<org.tron.trident.proto.Response.DelegatedResourceList> getDelegatedResourceV2(
+        org.tron.trident.proto.Response.DelegatedResourceMessage request) {
+      return futureUnaryCall(
+          getChannel().newCall(getGetDelegatedResourceV2Method(), getCallOptions()), request);
+    }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<org.tron.trident.proto.Response.DelegatedResourceAccountIndex> getDelegatedResourceAccountIndexV2(
+        org.tron.trident.api.GrpcAPI.BytesMessage request) {
+      return futureUnaryCall(
+          getChannel().newCall(getGetDelegatedResourceAccountIndexV2Method(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_BROADCAST_TRANSACTION = 0;
@@ -8514,6 +9206,16 @@ public final class WalletGrpc {
   private static final int METHODID_CREATE_SHIELDED_CONTRACT_PARAMETERS = 117;
   private static final int METHODID_CREATE_SHIELDED_CONTRACT_PARAMETERS_WITHOUT_ASK = 118;
   private static final int METHODID_GET_TRIGGER_INPUT_FOR_SHIELDED_TRC20CONTRACT = 119;
+  private static final int METHODID_FREEZE_BALANCE_V2 = 120;
+  private static final int METHODID_UNFREEZE_BALANCE_V2 = 121;
+  private static final int METHODID_DELEGATE_RESOURCE = 122;
+  private static final int METHODID_UN_DELEGATE_RESOURCE = 123;
+  private static final int METHODID_WITHDRAW_EXPIRE_UNFREEZE = 124;
+  private static final int METHODID_GET_AVAILABLE_UNFREEZE_COUNT = 125;
+  private static final int METHODID_GET_CAN_WITHDRAW_UNFREEZE_AMOUNT = 126;
+  private static final int METHODID_GET_CAN_DELEGATED_MAX_SIZE = 127;
+  private static final int METHODID_GET_DELEGATED_RESOURCE_V2 = 128;
+  private static final int METHODID_GET_DELEGATED_RESOURCE_ACCOUNT_INDEX_V2 = 129;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -9012,6 +9714,46 @@ public final class WalletGrpc {
           serviceImpl.getTriggerInputForShieldedTRC20Contract((org.tron.trident.api.GrpcAPI.ShieldedTRC20TriggerContractParameters) request,
               (io.grpc.stub.StreamObserver<org.tron.trident.api.GrpcAPI.BytesMessage>) responseObserver);
           break;
+        case METHODID_FREEZE_BALANCE_V2:
+          serviceImpl.freezeBalanceV2((org.tron.trident.proto.Contract.FreezeBalanceV2Contract) request,
+              (io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.TransactionExtention>) responseObserver);
+          break;
+        case METHODID_UNFREEZE_BALANCE_V2:
+          serviceImpl.unfreezeBalanceV2((org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract) request,
+              (io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.TransactionExtention>) responseObserver);
+          break;
+        case METHODID_DELEGATE_RESOURCE:
+          serviceImpl.delegateResource((org.tron.trident.proto.Contract.DelegateResourceContract) request,
+              (io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.TransactionExtention>) responseObserver);
+          break;
+        case METHODID_UN_DELEGATE_RESOURCE:
+          serviceImpl.unDelegateResource((org.tron.trident.proto.Contract.UnDelegateResourceContract) request,
+              (io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.TransactionExtention>) responseObserver);
+          break;
+        case METHODID_WITHDRAW_EXPIRE_UNFREEZE:
+          serviceImpl.withdrawExpireUnfreeze((org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract) request,
+              (io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.TransactionExtention>) responseObserver);
+          break;
+        case METHODID_GET_AVAILABLE_UNFREEZE_COUNT:
+          serviceImpl.getAvailableUnfreezeCount((org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage) request,
+              (io.grpc.stub.StreamObserver<org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage>) responseObserver);
+          break;
+        case METHODID_GET_CAN_WITHDRAW_UNFREEZE_AMOUNT:
+          serviceImpl.getCanWithdrawUnfreezeAmount((org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage) request,
+              (io.grpc.stub.StreamObserver<org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage>) responseObserver);
+          break;
+        case METHODID_GET_CAN_DELEGATED_MAX_SIZE:
+          serviceImpl.getCanDelegatedMaxSize((org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage) request,
+              (io.grpc.stub.StreamObserver<org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage>) responseObserver);
+          break;
+        case METHODID_GET_DELEGATED_RESOURCE_V2:
+          serviceImpl.getDelegatedResourceV2((org.tron.trident.proto.Response.DelegatedResourceMessage) request,
+              (io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.DelegatedResourceList>) responseObserver);
+          break;
+        case METHODID_GET_DELEGATED_RESOURCE_ACCOUNT_INDEX_V2:
+          serviceImpl.getDelegatedResourceAccountIndexV2((org.tron.trident.api.GrpcAPI.BytesMessage) request,
+              (io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.DelegatedResourceAccountIndex>) responseObserver);
+          break;
         default:
           throw new AssertionError();
       }
@@ -9193,6 +9935,16 @@ public final class WalletGrpc {
               .addMethod(getCreateShieldedContractParametersMethod())
               .addMethod(getCreateShieldedContractParametersWithoutAskMethod())
               .addMethod(getGetTriggerInputForShieldedTRC20ContractMethod())
+              .addMethod(getFreezeBalanceV2Method())
+              .addMethod(getUnfreezeBalanceV2Method())
+              .addMethod(getDelegateResourceMethod())
+              .addMethod(getUnDelegateResourceMethod())
+              .addMethod(getWithdrawExpireUnfreezeMethod())
+              .addMethod(getGetAvailableUnfreezeCountMethod())
+              .addMethod(getGetCanWithdrawUnfreezeAmountMethod())
+              .addMethod(getGetCanDelegatedMaxSizeMethod())
+              .addMethod(getGetDelegatedResourceV2Method())
+              .addMethod(getGetDelegatedResourceAccountIndexV2Method())
               .build();
         }
       }
