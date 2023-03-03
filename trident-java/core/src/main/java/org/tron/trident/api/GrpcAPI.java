@@ -24290,6 +24290,3098 @@ public final class GrpcAPI {
 
   }
 
+  public interface CanWithdrawUnfreezeAmountRequestMessageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:protocol.CanWithdrawUnfreezeAmountRequestMessage)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>bytes owner_address = 1;</code>
+     * @return The ownerAddress.
+     */
+    com.google.protobuf.ByteString getOwnerAddress();
+
+    /**
+     * <code>int64 timestamp = 2;</code>
+     * @return The timestamp.
+     */
+    long getTimestamp();
+  }
+  /**
+   * <pre>
+   *stake 2.0
+   * </pre>
+   *
+   * Protobuf type {@code protocol.CanWithdrawUnfreezeAmountRequestMessage}
+   */
+  public static final class CanWithdrawUnfreezeAmountRequestMessage extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:protocol.CanWithdrawUnfreezeAmountRequestMessage)
+      CanWithdrawUnfreezeAmountRequestMessageOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use CanWithdrawUnfreezeAmountRequestMessage.newBuilder() to construct.
+    private CanWithdrawUnfreezeAmountRequestMessage(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private CanWithdrawUnfreezeAmountRequestMessage() {
+      ownerAddress_ = com.google.protobuf.ByteString.EMPTY;
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new CanWithdrawUnfreezeAmountRequestMessage();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private CanWithdrawUnfreezeAmountRequestMessage(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+
+              ownerAddress_ = input.readBytes();
+              break;
+            }
+            case 16: {
+
+              timestamp_ = input.readInt64();
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return org.tron.trident.api.GrpcAPI.internal_static_protocol_CanWithdrawUnfreezeAmountRequestMessage_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return org.tron.trident.api.GrpcAPI.internal_static_protocol_CanWithdrawUnfreezeAmountRequestMessage_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage.class, org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage.Builder.class);
+    }
+
+    public static final int OWNER_ADDRESS_FIELD_NUMBER = 1;
+    private com.google.protobuf.ByteString ownerAddress_;
+    /**
+     * <code>bytes owner_address = 1;</code>
+     * @return The ownerAddress.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString getOwnerAddress() {
+      return ownerAddress_;
+    }
+
+    public static final int TIMESTAMP_FIELD_NUMBER = 2;
+    private long timestamp_;
+    /**
+     * <code>int64 timestamp = 2;</code>
+     * @return The timestamp.
+     */
+    @java.lang.Override
+    public long getTimestamp() {
+      return timestamp_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!ownerAddress_.isEmpty()) {
+        output.writeBytes(1, ownerAddress_);
+      }
+      if (timestamp_ != 0L) {
+        output.writeInt64(2, timestamp_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!ownerAddress_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, ownerAddress_);
+      }
+      if (timestamp_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(2, timestamp_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage)) {
+        return super.equals(obj);
+      }
+      org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage other = (org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage) obj;
+
+      if (!getOwnerAddress()
+          .equals(other.getOwnerAddress())) return false;
+      if (getTimestamp()
+          != other.getTimestamp()) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + OWNER_ADDRESS_FIELD_NUMBER;
+      hash = (53 * hash) + getOwnerAddress().hashCode();
+      hash = (37 * hash) + TIMESTAMP_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getTimestamp());
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * <pre>
+     *stake 2.0
+     * </pre>
+     *
+     * Protobuf type {@code protocol.CanWithdrawUnfreezeAmountRequestMessage}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:protocol.CanWithdrawUnfreezeAmountRequestMessage)
+        org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessageOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return org.tron.trident.api.GrpcAPI.internal_static_protocol_CanWithdrawUnfreezeAmountRequestMessage_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return org.tron.trident.api.GrpcAPI.internal_static_protocol_CanWithdrawUnfreezeAmountRequestMessage_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage.class, org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage.Builder.class);
+      }
+
+      // Construct using org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        ownerAddress_ = com.google.protobuf.ByteString.EMPTY;
+
+        timestamp_ = 0L;
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return org.tron.trident.api.GrpcAPI.internal_static_protocol_CanWithdrawUnfreezeAmountRequestMessage_descriptor;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage getDefaultInstanceForType() {
+        return org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage build() {
+        org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage buildPartial() {
+        org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage result = new org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage(this);
+        result.ownerAddress_ = ownerAddress_;
+        result.timestamp_ = timestamp_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage) {
+          return mergeFrom((org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage other) {
+        if (other == org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage.getDefaultInstance()) return this;
+        if (other.getOwnerAddress() != com.google.protobuf.ByteString.EMPTY) {
+          setOwnerAddress(other.getOwnerAddress());
+        }
+        if (other.getTimestamp() != 0L) {
+          setTimestamp(other.getTimestamp());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private com.google.protobuf.ByteString ownerAddress_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <code>bytes owner_address = 1;</code>
+       * @return The ownerAddress.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString getOwnerAddress() {
+        return ownerAddress_;
+      }
+      /**
+       * <code>bytes owner_address = 1;</code>
+       * @param value The ownerAddress to set.
+       * @return This builder for chaining.
+       */
+      public Builder setOwnerAddress(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        ownerAddress_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bytes owner_address = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearOwnerAddress() {
+        
+        ownerAddress_ = getDefaultInstance().getOwnerAddress();
+        onChanged();
+        return this;
+      }
+
+      private long timestamp_ ;
+      /**
+       * <code>int64 timestamp = 2;</code>
+       * @return The timestamp.
+       */
+      @java.lang.Override
+      public long getTimestamp() {
+        return timestamp_;
+      }
+      /**
+       * <code>int64 timestamp = 2;</code>
+       * @param value The timestamp to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTimestamp(long value) {
+        
+        timestamp_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int64 timestamp = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearTimestamp() {
+        
+        timestamp_ = 0L;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:protocol.CanWithdrawUnfreezeAmountRequestMessage)
+    }
+
+    // @@protoc_insertion_point(class_scope:protocol.CanWithdrawUnfreezeAmountRequestMessage)
+    private static final org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage();
+    }
+
+    public static org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<CanWithdrawUnfreezeAmountRequestMessage>
+        PARSER = new com.google.protobuf.AbstractParser<CanWithdrawUnfreezeAmountRequestMessage>() {
+      @java.lang.Override
+      public CanWithdrawUnfreezeAmountRequestMessage parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new CanWithdrawUnfreezeAmountRequestMessage(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<CanWithdrawUnfreezeAmountRequestMessage> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<CanWithdrawUnfreezeAmountRequestMessage> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface GetAvailableUnfreezeCountRequestMessageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:protocol.GetAvailableUnfreezeCountRequestMessage)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>bytes owner_address = 1;</code>
+     * @return The ownerAddress.
+     */
+    com.google.protobuf.ByteString getOwnerAddress();
+  }
+  /**
+   * Protobuf type {@code protocol.GetAvailableUnfreezeCountRequestMessage}
+   */
+  public static final class GetAvailableUnfreezeCountRequestMessage extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:protocol.GetAvailableUnfreezeCountRequestMessage)
+      GetAvailableUnfreezeCountRequestMessageOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use GetAvailableUnfreezeCountRequestMessage.newBuilder() to construct.
+    private GetAvailableUnfreezeCountRequestMessage(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private GetAvailableUnfreezeCountRequestMessage() {
+      ownerAddress_ = com.google.protobuf.ByteString.EMPTY;
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new GetAvailableUnfreezeCountRequestMessage();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private GetAvailableUnfreezeCountRequestMessage(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+
+              ownerAddress_ = input.readBytes();
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return org.tron.trident.api.GrpcAPI.internal_static_protocol_GetAvailableUnfreezeCountRequestMessage_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return org.tron.trident.api.GrpcAPI.internal_static_protocol_GetAvailableUnfreezeCountRequestMessage_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage.class, org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage.Builder.class);
+    }
+
+    public static final int OWNER_ADDRESS_FIELD_NUMBER = 1;
+    private com.google.protobuf.ByteString ownerAddress_;
+    /**
+     * <code>bytes owner_address = 1;</code>
+     * @return The ownerAddress.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString getOwnerAddress() {
+      return ownerAddress_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!ownerAddress_.isEmpty()) {
+        output.writeBytes(1, ownerAddress_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!ownerAddress_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, ownerAddress_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage)) {
+        return super.equals(obj);
+      }
+      org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage other = (org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage) obj;
+
+      if (!getOwnerAddress()
+          .equals(other.getOwnerAddress())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + OWNER_ADDRESS_FIELD_NUMBER;
+      hash = (53 * hash) + getOwnerAddress().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code protocol.GetAvailableUnfreezeCountRequestMessage}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:protocol.GetAvailableUnfreezeCountRequestMessage)
+        org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessageOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return org.tron.trident.api.GrpcAPI.internal_static_protocol_GetAvailableUnfreezeCountRequestMessage_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return org.tron.trident.api.GrpcAPI.internal_static_protocol_GetAvailableUnfreezeCountRequestMessage_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage.class, org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage.Builder.class);
+      }
+
+      // Construct using org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        ownerAddress_ = com.google.protobuf.ByteString.EMPTY;
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return org.tron.trident.api.GrpcAPI.internal_static_protocol_GetAvailableUnfreezeCountRequestMessage_descriptor;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage getDefaultInstanceForType() {
+        return org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage build() {
+        org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage buildPartial() {
+        org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage result = new org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage(this);
+        result.ownerAddress_ = ownerAddress_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage) {
+          return mergeFrom((org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage other) {
+        if (other == org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage.getDefaultInstance()) return this;
+        if (other.getOwnerAddress() != com.google.protobuf.ByteString.EMPTY) {
+          setOwnerAddress(other.getOwnerAddress());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private com.google.protobuf.ByteString ownerAddress_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <code>bytes owner_address = 1;</code>
+       * @return The ownerAddress.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString getOwnerAddress() {
+        return ownerAddress_;
+      }
+      /**
+       * <code>bytes owner_address = 1;</code>
+       * @param value The ownerAddress to set.
+       * @return This builder for chaining.
+       */
+      public Builder setOwnerAddress(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        ownerAddress_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bytes owner_address = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearOwnerAddress() {
+        
+        ownerAddress_ = getDefaultInstance().getOwnerAddress();
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:protocol.GetAvailableUnfreezeCountRequestMessage)
+    }
+
+    // @@protoc_insertion_point(class_scope:protocol.GetAvailableUnfreezeCountRequestMessage)
+    private static final org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage();
+    }
+
+    public static org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<GetAvailableUnfreezeCountRequestMessage>
+        PARSER = new com.google.protobuf.AbstractParser<GetAvailableUnfreezeCountRequestMessage>() {
+      @java.lang.Override
+      public GetAvailableUnfreezeCountRequestMessage parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new GetAvailableUnfreezeCountRequestMessage(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<GetAvailableUnfreezeCountRequestMessage> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<GetAvailableUnfreezeCountRequestMessage> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountRequestMessage getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface GetAvailableUnfreezeCountResponseMessageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:protocol.GetAvailableUnfreezeCountResponseMessage)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>int64 count = 1;</code>
+     * @return The count.
+     */
+    long getCount();
+  }
+  /**
+   * Protobuf type {@code protocol.GetAvailableUnfreezeCountResponseMessage}
+   */
+  public static final class GetAvailableUnfreezeCountResponseMessage extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:protocol.GetAvailableUnfreezeCountResponseMessage)
+      GetAvailableUnfreezeCountResponseMessageOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use GetAvailableUnfreezeCountResponseMessage.newBuilder() to construct.
+    private GetAvailableUnfreezeCountResponseMessage(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private GetAvailableUnfreezeCountResponseMessage() {
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new GetAvailableUnfreezeCountResponseMessage();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private GetAvailableUnfreezeCountResponseMessage(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 8: {
+
+              count_ = input.readInt64();
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return org.tron.trident.api.GrpcAPI.internal_static_protocol_GetAvailableUnfreezeCountResponseMessage_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return org.tron.trident.api.GrpcAPI.internal_static_protocol_GetAvailableUnfreezeCountResponseMessage_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage.class, org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage.Builder.class);
+    }
+
+    public static final int COUNT_FIELD_NUMBER = 1;
+    private long count_;
+    /**
+     * <code>int64 count = 1;</code>
+     * @return The count.
+     */
+    @java.lang.Override
+    public long getCount() {
+      return count_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (count_ != 0L) {
+        output.writeInt64(1, count_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (count_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(1, count_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage)) {
+        return super.equals(obj);
+      }
+      org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage other = (org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage) obj;
+
+      if (getCount()
+          != other.getCount()) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + COUNT_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getCount());
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code protocol.GetAvailableUnfreezeCountResponseMessage}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:protocol.GetAvailableUnfreezeCountResponseMessage)
+        org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessageOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return org.tron.trident.api.GrpcAPI.internal_static_protocol_GetAvailableUnfreezeCountResponseMessage_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return org.tron.trident.api.GrpcAPI.internal_static_protocol_GetAvailableUnfreezeCountResponseMessage_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage.class, org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage.Builder.class);
+      }
+
+      // Construct using org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        count_ = 0L;
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return org.tron.trident.api.GrpcAPI.internal_static_protocol_GetAvailableUnfreezeCountResponseMessage_descriptor;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage getDefaultInstanceForType() {
+        return org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage build() {
+        org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage buildPartial() {
+        org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage result = new org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage(this);
+        result.count_ = count_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage) {
+          return mergeFrom((org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage other) {
+        if (other == org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage.getDefaultInstance()) return this;
+        if (other.getCount() != 0L) {
+          setCount(other.getCount());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private long count_ ;
+      /**
+       * <code>int64 count = 1;</code>
+       * @return The count.
+       */
+      @java.lang.Override
+      public long getCount() {
+        return count_;
+      }
+      /**
+       * <code>int64 count = 1;</code>
+       * @param value The count to set.
+       * @return This builder for chaining.
+       */
+      public Builder setCount(long value) {
+        
+        count_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int64 count = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearCount() {
+        
+        count_ = 0L;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:protocol.GetAvailableUnfreezeCountResponseMessage)
+    }
+
+    // @@protoc_insertion_point(class_scope:protocol.GetAvailableUnfreezeCountResponseMessage)
+    private static final org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage();
+    }
+
+    public static org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<GetAvailableUnfreezeCountResponseMessage>
+        PARSER = new com.google.protobuf.AbstractParser<GetAvailableUnfreezeCountResponseMessage>() {
+      @java.lang.Override
+      public GetAvailableUnfreezeCountResponseMessage parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new GetAvailableUnfreezeCountResponseMessage(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<GetAvailableUnfreezeCountResponseMessage> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<GetAvailableUnfreezeCountResponseMessage> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public org.tron.trident.api.GrpcAPI.GetAvailableUnfreezeCountResponseMessage getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface CanWithdrawUnfreezeAmountResponseMessageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:protocol.CanWithdrawUnfreezeAmountResponseMessage)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>int64 amount = 1;</code>
+     * @return The amount.
+     */
+    long getAmount();
+  }
+  /**
+   * Protobuf type {@code protocol.CanWithdrawUnfreezeAmountResponseMessage}
+   */
+  public static final class CanWithdrawUnfreezeAmountResponseMessage extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:protocol.CanWithdrawUnfreezeAmountResponseMessage)
+      CanWithdrawUnfreezeAmountResponseMessageOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use CanWithdrawUnfreezeAmountResponseMessage.newBuilder() to construct.
+    private CanWithdrawUnfreezeAmountResponseMessage(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private CanWithdrawUnfreezeAmountResponseMessage() {
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new CanWithdrawUnfreezeAmountResponseMessage();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private CanWithdrawUnfreezeAmountResponseMessage(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 8: {
+
+              amount_ = input.readInt64();
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return org.tron.trident.api.GrpcAPI.internal_static_protocol_CanWithdrawUnfreezeAmountResponseMessage_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return org.tron.trident.api.GrpcAPI.internal_static_protocol_CanWithdrawUnfreezeAmountResponseMessage_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage.class, org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage.Builder.class);
+    }
+
+    public static final int AMOUNT_FIELD_NUMBER = 1;
+    private long amount_;
+    /**
+     * <code>int64 amount = 1;</code>
+     * @return The amount.
+     */
+    @java.lang.Override
+    public long getAmount() {
+      return amount_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (amount_ != 0L) {
+        output.writeInt64(1, amount_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (amount_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(1, amount_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage)) {
+        return super.equals(obj);
+      }
+      org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage other = (org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage) obj;
+
+      if (getAmount()
+          != other.getAmount()) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + AMOUNT_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getAmount());
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code protocol.CanWithdrawUnfreezeAmountResponseMessage}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:protocol.CanWithdrawUnfreezeAmountResponseMessage)
+        org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessageOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return org.tron.trident.api.GrpcAPI.internal_static_protocol_CanWithdrawUnfreezeAmountResponseMessage_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return org.tron.trident.api.GrpcAPI.internal_static_protocol_CanWithdrawUnfreezeAmountResponseMessage_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage.class, org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage.Builder.class);
+      }
+
+      // Construct using org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        amount_ = 0L;
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return org.tron.trident.api.GrpcAPI.internal_static_protocol_CanWithdrawUnfreezeAmountResponseMessage_descriptor;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage getDefaultInstanceForType() {
+        return org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage build() {
+        org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage buildPartial() {
+        org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage result = new org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage(this);
+        result.amount_ = amount_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage) {
+          return mergeFrom((org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage other) {
+        if (other == org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage.getDefaultInstance()) return this;
+        if (other.getAmount() != 0L) {
+          setAmount(other.getAmount());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private long amount_ ;
+      /**
+       * <code>int64 amount = 1;</code>
+       * @return The amount.
+       */
+      @java.lang.Override
+      public long getAmount() {
+        return amount_;
+      }
+      /**
+       * <code>int64 amount = 1;</code>
+       * @param value The amount to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAmount(long value) {
+        
+        amount_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int64 amount = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearAmount() {
+        
+        amount_ = 0L;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:protocol.CanWithdrawUnfreezeAmountResponseMessage)
+    }
+
+    // @@protoc_insertion_point(class_scope:protocol.CanWithdrawUnfreezeAmountResponseMessage)
+    private static final org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage();
+    }
+
+    public static org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<CanWithdrawUnfreezeAmountResponseMessage>
+        PARSER = new com.google.protobuf.AbstractParser<CanWithdrawUnfreezeAmountResponseMessage>() {
+      @java.lang.Override
+      public CanWithdrawUnfreezeAmountResponseMessage parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new CanWithdrawUnfreezeAmountResponseMessage(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<CanWithdrawUnfreezeAmountResponseMessage> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<CanWithdrawUnfreezeAmountResponseMessage> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public org.tron.trident.api.GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface CanDelegatedMaxSizeRequestMessageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:protocol.CanDelegatedMaxSizeRequestMessage)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>int32 type = 1;</code>
+     * @return The type.
+     */
+    int getType();
+
+    /**
+     * <code>bytes owner_address = 2;</code>
+     * @return The ownerAddress.
+     */
+    com.google.protobuf.ByteString getOwnerAddress();
+  }
+  /**
+   * Protobuf type {@code protocol.CanDelegatedMaxSizeRequestMessage}
+   */
+  public static final class CanDelegatedMaxSizeRequestMessage extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:protocol.CanDelegatedMaxSizeRequestMessage)
+      CanDelegatedMaxSizeRequestMessageOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use CanDelegatedMaxSizeRequestMessage.newBuilder() to construct.
+    private CanDelegatedMaxSizeRequestMessage(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private CanDelegatedMaxSizeRequestMessage() {
+      ownerAddress_ = com.google.protobuf.ByteString.EMPTY;
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new CanDelegatedMaxSizeRequestMessage();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private CanDelegatedMaxSizeRequestMessage(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 8: {
+
+              type_ = input.readInt32();
+              break;
+            }
+            case 18: {
+
+              ownerAddress_ = input.readBytes();
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return org.tron.trident.api.GrpcAPI.internal_static_protocol_CanDelegatedMaxSizeRequestMessage_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return org.tron.trident.api.GrpcAPI.internal_static_protocol_CanDelegatedMaxSizeRequestMessage_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage.class, org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage.Builder.class);
+    }
+
+    public static final int TYPE_FIELD_NUMBER = 1;
+    private int type_;
+    /**
+     * <code>int32 type = 1;</code>
+     * @return The type.
+     */
+    @java.lang.Override
+    public int getType() {
+      return type_;
+    }
+
+    public static final int OWNER_ADDRESS_FIELD_NUMBER = 2;
+    private com.google.protobuf.ByteString ownerAddress_;
+    /**
+     * <code>bytes owner_address = 2;</code>
+     * @return The ownerAddress.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString getOwnerAddress() {
+      return ownerAddress_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (type_ != 0) {
+        output.writeInt32(1, type_);
+      }
+      if (!ownerAddress_.isEmpty()) {
+        output.writeBytes(2, ownerAddress_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (type_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, type_);
+      }
+      if (!ownerAddress_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(2, ownerAddress_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage)) {
+        return super.equals(obj);
+      }
+      org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage other = (org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage) obj;
+
+      if (getType()
+          != other.getType()) return false;
+      if (!getOwnerAddress()
+          .equals(other.getOwnerAddress())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + TYPE_FIELD_NUMBER;
+      hash = (53 * hash) + getType();
+      hash = (37 * hash) + OWNER_ADDRESS_FIELD_NUMBER;
+      hash = (53 * hash) + getOwnerAddress().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code protocol.CanDelegatedMaxSizeRequestMessage}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:protocol.CanDelegatedMaxSizeRequestMessage)
+        org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessageOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return org.tron.trident.api.GrpcAPI.internal_static_protocol_CanDelegatedMaxSizeRequestMessage_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return org.tron.trident.api.GrpcAPI.internal_static_protocol_CanDelegatedMaxSizeRequestMessage_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage.class, org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage.Builder.class);
+      }
+
+      // Construct using org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        type_ = 0;
+
+        ownerAddress_ = com.google.protobuf.ByteString.EMPTY;
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return org.tron.trident.api.GrpcAPI.internal_static_protocol_CanDelegatedMaxSizeRequestMessage_descriptor;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage getDefaultInstanceForType() {
+        return org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage build() {
+        org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage buildPartial() {
+        org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage result = new org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage(this);
+        result.type_ = type_;
+        result.ownerAddress_ = ownerAddress_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage) {
+          return mergeFrom((org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage other) {
+        if (other == org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage.getDefaultInstance()) return this;
+        if (other.getType() != 0) {
+          setType(other.getType());
+        }
+        if (other.getOwnerAddress() != com.google.protobuf.ByteString.EMPTY) {
+          setOwnerAddress(other.getOwnerAddress());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private int type_ ;
+      /**
+       * <code>int32 type = 1;</code>
+       * @return The type.
+       */
+      @java.lang.Override
+      public int getType() {
+        return type_;
+      }
+      /**
+       * <code>int32 type = 1;</code>
+       * @param value The type to set.
+       * @return This builder for chaining.
+       */
+      public Builder setType(int value) {
+        
+        type_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 type = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearType() {
+        
+        type_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private com.google.protobuf.ByteString ownerAddress_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <code>bytes owner_address = 2;</code>
+       * @return The ownerAddress.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString getOwnerAddress() {
+        return ownerAddress_;
+      }
+      /**
+       * <code>bytes owner_address = 2;</code>
+       * @param value The ownerAddress to set.
+       * @return This builder for chaining.
+       */
+      public Builder setOwnerAddress(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        ownerAddress_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bytes owner_address = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearOwnerAddress() {
+        
+        ownerAddress_ = getDefaultInstance().getOwnerAddress();
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:protocol.CanDelegatedMaxSizeRequestMessage)
+    }
+
+    // @@protoc_insertion_point(class_scope:protocol.CanDelegatedMaxSizeRequestMessage)
+    private static final org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage();
+    }
+
+    public static org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<CanDelegatedMaxSizeRequestMessage>
+        PARSER = new com.google.protobuf.AbstractParser<CanDelegatedMaxSizeRequestMessage>() {
+      @java.lang.Override
+      public CanDelegatedMaxSizeRequestMessage parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new CanDelegatedMaxSizeRequestMessage(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<CanDelegatedMaxSizeRequestMessage> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<CanDelegatedMaxSizeRequestMessage> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeRequestMessage getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface CanDelegatedMaxSizeResponseMessageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:protocol.CanDelegatedMaxSizeResponseMessage)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>int64 max_size = 1;</code>
+     * @return The maxSize.
+     */
+    long getMaxSize();
+  }
+  /**
+   * Protobuf type {@code protocol.CanDelegatedMaxSizeResponseMessage}
+   */
+  public static final class CanDelegatedMaxSizeResponseMessage extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:protocol.CanDelegatedMaxSizeResponseMessage)
+      CanDelegatedMaxSizeResponseMessageOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use CanDelegatedMaxSizeResponseMessage.newBuilder() to construct.
+    private CanDelegatedMaxSizeResponseMessage(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private CanDelegatedMaxSizeResponseMessage() {
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new CanDelegatedMaxSizeResponseMessage();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private CanDelegatedMaxSizeResponseMessage(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 8: {
+
+              maxSize_ = input.readInt64();
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return org.tron.trident.api.GrpcAPI.internal_static_protocol_CanDelegatedMaxSizeResponseMessage_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return org.tron.trident.api.GrpcAPI.internal_static_protocol_CanDelegatedMaxSizeResponseMessage_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage.class, org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage.Builder.class);
+    }
+
+    public static final int MAX_SIZE_FIELD_NUMBER = 1;
+    private long maxSize_;
+    /**
+     * <code>int64 max_size = 1;</code>
+     * @return The maxSize.
+     */
+    @java.lang.Override
+    public long getMaxSize() {
+      return maxSize_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (maxSize_ != 0L) {
+        output.writeInt64(1, maxSize_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (maxSize_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(1, maxSize_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage)) {
+        return super.equals(obj);
+      }
+      org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage other = (org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage) obj;
+
+      if (getMaxSize()
+          != other.getMaxSize()) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + MAX_SIZE_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getMaxSize());
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code protocol.CanDelegatedMaxSizeResponseMessage}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:protocol.CanDelegatedMaxSizeResponseMessage)
+        org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessageOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return org.tron.trident.api.GrpcAPI.internal_static_protocol_CanDelegatedMaxSizeResponseMessage_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return org.tron.trident.api.GrpcAPI.internal_static_protocol_CanDelegatedMaxSizeResponseMessage_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage.class, org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage.Builder.class);
+      }
+
+      // Construct using org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        maxSize_ = 0L;
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return org.tron.trident.api.GrpcAPI.internal_static_protocol_CanDelegatedMaxSizeResponseMessage_descriptor;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage getDefaultInstanceForType() {
+        return org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage build() {
+        org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage buildPartial() {
+        org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage result = new org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage(this);
+        result.maxSize_ = maxSize_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage) {
+          return mergeFrom((org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage other) {
+        if (other == org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage.getDefaultInstance()) return this;
+        if (other.getMaxSize() != 0L) {
+          setMaxSize(other.getMaxSize());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private long maxSize_ ;
+      /**
+       * <code>int64 max_size = 1;</code>
+       * @return The maxSize.
+       */
+      @java.lang.Override
+      public long getMaxSize() {
+        return maxSize_;
+      }
+      /**
+       * <code>int64 max_size = 1;</code>
+       * @param value The maxSize to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMaxSize(long value) {
+        
+        maxSize_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int64 max_size = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMaxSize() {
+        
+        maxSize_ = 0L;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:protocol.CanDelegatedMaxSizeResponseMessage)
+    }
+
+    // @@protoc_insertion_point(class_scope:protocol.CanDelegatedMaxSizeResponseMessage)
+    private static final org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage();
+    }
+
+    public static org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<CanDelegatedMaxSizeResponseMessage>
+        PARSER = new com.google.protobuf.AbstractParser<CanDelegatedMaxSizeResponseMessage>() {
+      @java.lang.Override
+      public CanDelegatedMaxSizeResponseMessage parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new CanDelegatedMaxSizeResponseMessage(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<CanDelegatedMaxSizeResponseMessage> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<CanDelegatedMaxSizeResponseMessage> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public org.tron.trident.api.GrpcAPI.CanDelegatedMaxSizeResponseMessage getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_protocol_EmptyMessage_descriptor;
   private static final 
@@ -24435,6 +27527,36 @@ public final class GrpcAPI {
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_protocol_ShieldedTRC20TriggerContractParameters_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_protocol_CanWithdrawUnfreezeAmountRequestMessage_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_protocol_CanWithdrawUnfreezeAmountRequestMessage_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_protocol_GetAvailableUnfreezeCountRequestMessage_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_protocol_GetAvailableUnfreezeCountRequestMessage_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_protocol_GetAvailableUnfreezeCountResponseMessage_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_protocol_GetAvailableUnfreezeCountResponseMessage_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_protocol_CanWithdrawUnfreezeAmountResponseMessage_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_protocol_CanWithdrawUnfreezeAmountResponseMessage_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_protocol_CanDelegatedMaxSizeRequestMessage_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_protocol_CanDelegatedMaxSizeRequestMessage_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_protocol_CanDelegatedMaxSizeResponseMessage_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_protocol_CanDelegatedMaxSizeResponseMessage_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -24525,7 +27647,17 @@ public final class GrpcAPI {
       "rotocol.ShieldedTRC20Parameters\0229\n\031spend" +
       "_authority_signature\030\002 \003(\0132\026.protocol.By" +
       "tesMessage\022\016\n\006amount\030\003 \001(\t\022\036\n\026transparen" +
-      "t_to_address\030\004 \001(\0142\263L\n\006Wallet\022L\n\024Broadca" +
+      "t_to_address\030\004 \001(\014\"S\n\'CanWithdrawUnfreez" +
+      "eAmountRequestMessage\022\025\n\rowner_address\030\001" +
+      " \001(\014\022\021\n\ttimestamp\030\002 \001(\003\"@\n\'GetAvailableU" +
+      "nfreezeCountRequestMessage\022\025\n\rowner_addr" +
+      "ess\030\001 \001(\014\"9\n(GetAvailableUnfreezeCountRe" +
+      "sponseMessage\022\r\n\005count\030\001 \001(\003\":\n(CanWithd" +
+      "rawUnfreezeAmountResponseMessage\022\016\n\006amou" +
+      "nt\030\001 \001(\003\"H\n!CanDelegatedMaxSizeRequestMe" +
+      "ssage\022\014\n\004type\030\001 \001(\005\022\025\n\rowner_address\030\002 \001" +
+      "(\014\"6\n\"CanDelegatedMaxSizeResponseMessage" +
+      "\022\020\n\010max_size\030\001 \001(\0032\327T\n\006Wallet\022L\n\024Broadca" +
       "stTransaction\022\025.protocol.Transaction\032\033.p" +
       "rotocol.TransactionReturn\"\000\022R\n\027CreateCom" +
       "monTransaction\022\025.protocol.Transaction\032\036." +
@@ -24770,15 +27902,41 @@ public final class GrpcAPI {
       "\000\022u\n\'GetTriggerInputForShieldedTRC20Cont" +
       "ract\0220.protocol.ShieldedTRC20TriggerCont" +
       "ractParameters\032\026.protocol.BytesMessage\"\000" +
-      "2\243\002\n\016WalletSolidity\022B\n\nGetAccount\022\037.prot" +
-      "ocol.AccountAddressMessage\032\021.protocol.Ac" +
-      "count\"\000\022B\n\014GetNowBlock2\022\026.protocol.Empty" +
-      "Message\032\030.protocol.BlockExtention\"\000\022E\n\022G" +
-      "etTransactionById\022\026.protocol.BytesMessag" +
-      "e\032\025.protocol.Transaction\"\000\022B\n\rGetRewardI" +
-      "nfo\022\026.protocol.BytesMessage\032\027.protocol.N" +
-      "umberMessage\"\000B\037\n\024org.tron.trident.apiB\007" +
-      "GrpcAPIb\006proto3"
+      "\022V\n\017FreezeBalanceV2\022!.protocol.FreezeBal" +
+      "anceV2Contract\032\036.protocol.TransactionExt" +
+      "ention\"\000\022Z\n\021UnfreezeBalanceV2\022#.protocol" +
+      ".UnfreezeBalanceV2Contract\032\036.protocol.Tr" +
+      "ansactionExtention\"\000\022X\n\020DelegateResource" +
+      "\022\".protocol.DelegateResourceContract\032\036.p" +
+      "rotocol.TransactionExtention\"\000\022\\\n\022UnDele" +
+      "gateResource\022$.protocol.UnDelegateResour" +
+      "ceContract\032\036.protocol.TransactionExtenti" +
+      "on\"\000\022d\n\026WithdrawExpireUnfreeze\022(.protoco" +
+      "l.WithdrawExpireUnfreezeContract\032\036.proto" +
+      "col.TransactionExtention\"\000\022\204\001\n\031GetAvaila" +
+      "bleUnfreezeCount\0221.protocol.GetAvailable" +
+      "UnfreezeCountRequestMessage\0322.protocol.G" +
+      "etAvailableUnfreezeCountResponseMessage\"" +
+      "\000\022\207\001\n\034GetCanWithdrawUnfreezeAmount\0221.pro" +
+      "tocol.CanWithdrawUnfreezeAmountRequestMe" +
+      "ssage\0322.protocol.CanWithdrawUnfreezeAmou" +
+      "ntResponseMessage\"\000\022u\n\026GetCanDelegatedMa" +
+      "xSize\022+.protocol.CanDelegatedMaxSizeRequ" +
+      "estMessage\032,.protocol.CanDelegatedMaxSiz" +
+      "eResponseMessage\"\000\022_\n\026GetDelegatedResour" +
+      "ceV2\022\".protocol.DelegatedResourceMessage" +
+      "\032\037.protocol.DelegatedResourceList\"\000\022g\n\"G" +
+      "etDelegatedResourceAccountIndexV2\022\026.prot" +
+      "ocol.BytesMessage\032\'.protocol.DelegatedRe" +
+      "sourceAccountIndex\"\0002\243\002\n\016WalletSolidity\022" +
+      "B\n\nGetAccount\022\037.protocol.AccountAddressM" +
+      "essage\032\021.protocol.Account\"\000\022B\n\014GetNowBlo" +
+      "ck2\022\026.protocol.EmptyMessage\032\030.protocol.B" +
+      "lockExtention\"\000\022E\n\022GetTransactionById\022\026." +
+      "protocol.BytesMessage\032\025.protocol.Transac" +
+      "tion\"\000\022B\n\rGetRewardInfo\022\026.protocol.Bytes" +
+      "Message\032\027.protocol.NumberMessage\"\000B\037\n\024or" +
+      "g.tron.trident.apiB\007GrpcAPIb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -24962,6 +28120,42 @@ public final class GrpcAPI {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_ShieldedTRC20TriggerContractParameters_descriptor,
         new java.lang.String[] { "ShieldedTRC20Parameters", "SpendAuthoritySignature", "Amount", "TransparentToAddress", });
+    internal_static_protocol_CanWithdrawUnfreezeAmountRequestMessage_descriptor =
+      getDescriptor().getMessageTypes().get(29);
+    internal_static_protocol_CanWithdrawUnfreezeAmountRequestMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_protocol_CanWithdrawUnfreezeAmountRequestMessage_descriptor,
+        new java.lang.String[] { "OwnerAddress", "Timestamp", });
+    internal_static_protocol_GetAvailableUnfreezeCountRequestMessage_descriptor =
+      getDescriptor().getMessageTypes().get(30);
+    internal_static_protocol_GetAvailableUnfreezeCountRequestMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_protocol_GetAvailableUnfreezeCountRequestMessage_descriptor,
+        new java.lang.String[] { "OwnerAddress", });
+    internal_static_protocol_GetAvailableUnfreezeCountResponseMessage_descriptor =
+      getDescriptor().getMessageTypes().get(31);
+    internal_static_protocol_GetAvailableUnfreezeCountResponseMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_protocol_GetAvailableUnfreezeCountResponseMessage_descriptor,
+        new java.lang.String[] { "Count", });
+    internal_static_protocol_CanWithdrawUnfreezeAmountResponseMessage_descriptor =
+      getDescriptor().getMessageTypes().get(32);
+    internal_static_protocol_CanWithdrawUnfreezeAmountResponseMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_protocol_CanWithdrawUnfreezeAmountResponseMessage_descriptor,
+        new java.lang.String[] { "Amount", });
+    internal_static_protocol_CanDelegatedMaxSizeRequestMessage_descriptor =
+      getDescriptor().getMessageTypes().get(33);
+    internal_static_protocol_CanDelegatedMaxSizeRequestMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_protocol_CanDelegatedMaxSizeRequestMessage_descriptor,
+        new java.lang.String[] { "Type", "OwnerAddress", });
+    internal_static_protocol_CanDelegatedMaxSizeResponseMessage_descriptor =
+      getDescriptor().getMessageTypes().get(34);
+    internal_static_protocol_CanDelegatedMaxSizeResponseMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_protocol_CanDelegatedMaxSizeResponseMessage_descriptor,
+        new java.lang.String[] { "MaxSize", });
     org.tron.trident.proto.Common.getDescriptor();
     org.tron.trident.proto.Chain.getDescriptor();
     org.tron.trident.proto.Contract.getDescriptor();

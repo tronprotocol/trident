@@ -25511,6 +25511,3405 @@ public final class Contract {
 
   }
 
+  public interface FreezeBalanceV2ContractOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:protocol.FreezeBalanceV2Contract)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>bytes owner_address = 1;</code>
+     * @return The ownerAddress.
+     */
+    com.google.protobuf.ByteString getOwnerAddress();
+
+    /**
+     * <code>int64 frozen_balance = 2;</code>
+     * @return The frozenBalance.
+     */
+    long getFrozenBalance();
+
+    /**
+     * <code>.protocol.ResourceCode resource = 3;</code>
+     * @return The enum numeric value on the wire for resource.
+     */
+    int getResourceValue();
+    /**
+     * <code>.protocol.ResourceCode resource = 3;</code>
+     * @return The resource.
+     */
+    org.tron.trident.proto.Common.ResourceCode getResource();
+  }
+  /**
+   * <pre>
+   *stake 2.0
+   * </pre>
+   *
+   * Protobuf type {@code protocol.FreezeBalanceV2Contract}
+   */
+  public static final class FreezeBalanceV2Contract extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:protocol.FreezeBalanceV2Contract)
+      FreezeBalanceV2ContractOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use FreezeBalanceV2Contract.newBuilder() to construct.
+    private FreezeBalanceV2Contract(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private FreezeBalanceV2Contract() {
+      ownerAddress_ = com.google.protobuf.ByteString.EMPTY;
+      resource_ = 0;
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new FreezeBalanceV2Contract();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private FreezeBalanceV2Contract(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+
+              ownerAddress_ = input.readBytes();
+              break;
+            }
+            case 16: {
+
+              frozenBalance_ = input.readInt64();
+              break;
+            }
+            case 24: {
+              int rawValue = input.readEnum();
+
+              resource_ = rawValue;
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return org.tron.trident.proto.Contract.internal_static_protocol_FreezeBalanceV2Contract_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return org.tron.trident.proto.Contract.internal_static_protocol_FreezeBalanceV2Contract_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              org.tron.trident.proto.Contract.FreezeBalanceV2Contract.class, org.tron.trident.proto.Contract.FreezeBalanceV2Contract.Builder.class);
+    }
+
+    public static final int OWNER_ADDRESS_FIELD_NUMBER = 1;
+    private com.google.protobuf.ByteString ownerAddress_;
+    /**
+     * <code>bytes owner_address = 1;</code>
+     * @return The ownerAddress.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString getOwnerAddress() {
+      return ownerAddress_;
+    }
+
+    public static final int FROZEN_BALANCE_FIELD_NUMBER = 2;
+    private long frozenBalance_;
+    /**
+     * <code>int64 frozen_balance = 2;</code>
+     * @return The frozenBalance.
+     */
+    @java.lang.Override
+    public long getFrozenBalance() {
+      return frozenBalance_;
+    }
+
+    public static final int RESOURCE_FIELD_NUMBER = 3;
+    private int resource_;
+    /**
+     * <code>.protocol.ResourceCode resource = 3;</code>
+     * @return The enum numeric value on the wire for resource.
+     */
+    @java.lang.Override public int getResourceValue() {
+      return resource_;
+    }
+    /**
+     * <code>.protocol.ResourceCode resource = 3;</code>
+     * @return The resource.
+     */
+    @java.lang.Override public org.tron.trident.proto.Common.ResourceCode getResource() {
+      @SuppressWarnings("deprecation")
+      org.tron.trident.proto.Common.ResourceCode result = org.tron.trident.proto.Common.ResourceCode.valueOf(resource_);
+      return result == null ? org.tron.trident.proto.Common.ResourceCode.UNRECOGNIZED : result;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!ownerAddress_.isEmpty()) {
+        output.writeBytes(1, ownerAddress_);
+      }
+      if (frozenBalance_ != 0L) {
+        output.writeInt64(2, frozenBalance_);
+      }
+      if (resource_ != org.tron.trident.proto.Common.ResourceCode.BANDWIDTH.getNumber()) {
+        output.writeEnum(3, resource_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!ownerAddress_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, ownerAddress_);
+      }
+      if (frozenBalance_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(2, frozenBalance_);
+      }
+      if (resource_ != org.tron.trident.proto.Common.ResourceCode.BANDWIDTH.getNumber()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(3, resource_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof org.tron.trident.proto.Contract.FreezeBalanceV2Contract)) {
+        return super.equals(obj);
+      }
+      org.tron.trident.proto.Contract.FreezeBalanceV2Contract other = (org.tron.trident.proto.Contract.FreezeBalanceV2Contract) obj;
+
+      if (!getOwnerAddress()
+          .equals(other.getOwnerAddress())) return false;
+      if (getFrozenBalance()
+          != other.getFrozenBalance()) return false;
+      if (resource_ != other.resource_) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + OWNER_ADDRESS_FIELD_NUMBER;
+      hash = (53 * hash) + getOwnerAddress().hashCode();
+      hash = (37 * hash) + FROZEN_BALANCE_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getFrozenBalance());
+      hash = (37 * hash) + RESOURCE_FIELD_NUMBER;
+      hash = (53 * hash) + resource_;
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static org.tron.trident.proto.Contract.FreezeBalanceV2Contract parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.proto.Contract.FreezeBalanceV2Contract parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Contract.FreezeBalanceV2Contract parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.proto.Contract.FreezeBalanceV2Contract parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Contract.FreezeBalanceV2Contract parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.proto.Contract.FreezeBalanceV2Contract parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Contract.FreezeBalanceV2Contract parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.proto.Contract.FreezeBalanceV2Contract parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Contract.FreezeBalanceV2Contract parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.proto.Contract.FreezeBalanceV2Contract parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Contract.FreezeBalanceV2Contract parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.proto.Contract.FreezeBalanceV2Contract parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(org.tron.trident.proto.Contract.FreezeBalanceV2Contract prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * <pre>
+     *stake 2.0
+     * </pre>
+     *
+     * Protobuf type {@code protocol.FreezeBalanceV2Contract}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:protocol.FreezeBalanceV2Contract)
+        org.tron.trident.proto.Contract.FreezeBalanceV2ContractOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return org.tron.trident.proto.Contract.internal_static_protocol_FreezeBalanceV2Contract_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return org.tron.trident.proto.Contract.internal_static_protocol_FreezeBalanceV2Contract_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                org.tron.trident.proto.Contract.FreezeBalanceV2Contract.class, org.tron.trident.proto.Contract.FreezeBalanceV2Contract.Builder.class);
+      }
+
+      // Construct using org.tron.trident.proto.Contract.FreezeBalanceV2Contract.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        ownerAddress_ = com.google.protobuf.ByteString.EMPTY;
+
+        frozenBalance_ = 0L;
+
+        resource_ = 0;
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return org.tron.trident.proto.Contract.internal_static_protocol_FreezeBalanceV2Contract_descriptor;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.proto.Contract.FreezeBalanceV2Contract getDefaultInstanceForType() {
+        return org.tron.trident.proto.Contract.FreezeBalanceV2Contract.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public org.tron.trident.proto.Contract.FreezeBalanceV2Contract build() {
+        org.tron.trident.proto.Contract.FreezeBalanceV2Contract result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.proto.Contract.FreezeBalanceV2Contract buildPartial() {
+        org.tron.trident.proto.Contract.FreezeBalanceV2Contract result = new org.tron.trident.proto.Contract.FreezeBalanceV2Contract(this);
+        result.ownerAddress_ = ownerAddress_;
+        result.frozenBalance_ = frozenBalance_;
+        result.resource_ = resource_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof org.tron.trident.proto.Contract.FreezeBalanceV2Contract) {
+          return mergeFrom((org.tron.trident.proto.Contract.FreezeBalanceV2Contract)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(org.tron.trident.proto.Contract.FreezeBalanceV2Contract other) {
+        if (other == org.tron.trident.proto.Contract.FreezeBalanceV2Contract.getDefaultInstance()) return this;
+        if (other.getOwnerAddress() != com.google.protobuf.ByteString.EMPTY) {
+          setOwnerAddress(other.getOwnerAddress());
+        }
+        if (other.getFrozenBalance() != 0L) {
+          setFrozenBalance(other.getFrozenBalance());
+        }
+        if (other.resource_ != 0) {
+          setResourceValue(other.getResourceValue());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        org.tron.trident.proto.Contract.FreezeBalanceV2Contract parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (org.tron.trident.proto.Contract.FreezeBalanceV2Contract) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private com.google.protobuf.ByteString ownerAddress_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <code>bytes owner_address = 1;</code>
+       * @return The ownerAddress.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString getOwnerAddress() {
+        return ownerAddress_;
+      }
+      /**
+       * <code>bytes owner_address = 1;</code>
+       * @param value The ownerAddress to set.
+       * @return This builder for chaining.
+       */
+      public Builder setOwnerAddress(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        ownerAddress_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bytes owner_address = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearOwnerAddress() {
+        
+        ownerAddress_ = getDefaultInstance().getOwnerAddress();
+        onChanged();
+        return this;
+      }
+
+      private long frozenBalance_ ;
+      /**
+       * <code>int64 frozen_balance = 2;</code>
+       * @return The frozenBalance.
+       */
+      @java.lang.Override
+      public long getFrozenBalance() {
+        return frozenBalance_;
+      }
+      /**
+       * <code>int64 frozen_balance = 2;</code>
+       * @param value The frozenBalance to set.
+       * @return This builder for chaining.
+       */
+      public Builder setFrozenBalance(long value) {
+        
+        frozenBalance_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int64 frozen_balance = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearFrozenBalance() {
+        
+        frozenBalance_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private int resource_ = 0;
+      /**
+       * <code>.protocol.ResourceCode resource = 3;</code>
+       * @return The enum numeric value on the wire for resource.
+       */
+      @java.lang.Override public int getResourceValue() {
+        return resource_;
+      }
+      /**
+       * <code>.protocol.ResourceCode resource = 3;</code>
+       * @param value The enum numeric value on the wire for resource to set.
+       * @return This builder for chaining.
+       */
+      public Builder setResourceValue(int value) {
+        
+        resource_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>.protocol.ResourceCode resource = 3;</code>
+       * @return The resource.
+       */
+      @java.lang.Override
+      public org.tron.trident.proto.Common.ResourceCode getResource() {
+        @SuppressWarnings("deprecation")
+        org.tron.trident.proto.Common.ResourceCode result = org.tron.trident.proto.Common.ResourceCode.valueOf(resource_);
+        return result == null ? org.tron.trident.proto.Common.ResourceCode.UNRECOGNIZED : result;
+      }
+      /**
+       * <code>.protocol.ResourceCode resource = 3;</code>
+       * @param value The resource to set.
+       * @return This builder for chaining.
+       */
+      public Builder setResource(org.tron.trident.proto.Common.ResourceCode value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        
+        resource_ = value.getNumber();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>.protocol.ResourceCode resource = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearResource() {
+        
+        resource_ = 0;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:protocol.FreezeBalanceV2Contract)
+    }
+
+    // @@protoc_insertion_point(class_scope:protocol.FreezeBalanceV2Contract)
+    private static final org.tron.trident.proto.Contract.FreezeBalanceV2Contract DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new org.tron.trident.proto.Contract.FreezeBalanceV2Contract();
+    }
+
+    public static org.tron.trident.proto.Contract.FreezeBalanceV2Contract getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<FreezeBalanceV2Contract>
+        PARSER = new com.google.protobuf.AbstractParser<FreezeBalanceV2Contract>() {
+      @java.lang.Override
+      public FreezeBalanceV2Contract parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new FreezeBalanceV2Contract(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<FreezeBalanceV2Contract> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<FreezeBalanceV2Contract> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public org.tron.trident.proto.Contract.FreezeBalanceV2Contract getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface UnfreezeBalanceV2ContractOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:protocol.UnfreezeBalanceV2Contract)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>bytes owner_address = 1;</code>
+     * @return The ownerAddress.
+     */
+    com.google.protobuf.ByteString getOwnerAddress();
+
+    /**
+     * <code>int64 unfreeze_balance = 2;</code>
+     * @return The unfreezeBalance.
+     */
+    long getUnfreezeBalance();
+
+    /**
+     * <code>.protocol.ResourceCode resource = 3;</code>
+     * @return The enum numeric value on the wire for resource.
+     */
+    int getResourceValue();
+    /**
+     * <code>.protocol.ResourceCode resource = 3;</code>
+     * @return The resource.
+     */
+    org.tron.trident.proto.Common.ResourceCode getResource();
+  }
+  /**
+   * Protobuf type {@code protocol.UnfreezeBalanceV2Contract}
+   */
+  public static final class UnfreezeBalanceV2Contract extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:protocol.UnfreezeBalanceV2Contract)
+      UnfreezeBalanceV2ContractOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use UnfreezeBalanceV2Contract.newBuilder() to construct.
+    private UnfreezeBalanceV2Contract(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private UnfreezeBalanceV2Contract() {
+      ownerAddress_ = com.google.protobuf.ByteString.EMPTY;
+      resource_ = 0;
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new UnfreezeBalanceV2Contract();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private UnfreezeBalanceV2Contract(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+
+              ownerAddress_ = input.readBytes();
+              break;
+            }
+            case 16: {
+
+              unfreezeBalance_ = input.readInt64();
+              break;
+            }
+            case 24: {
+              int rawValue = input.readEnum();
+
+              resource_ = rawValue;
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return org.tron.trident.proto.Contract.internal_static_protocol_UnfreezeBalanceV2Contract_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return org.tron.trident.proto.Contract.internal_static_protocol_UnfreezeBalanceV2Contract_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract.class, org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract.Builder.class);
+    }
+
+    public static final int OWNER_ADDRESS_FIELD_NUMBER = 1;
+    private com.google.protobuf.ByteString ownerAddress_;
+    /**
+     * <code>bytes owner_address = 1;</code>
+     * @return The ownerAddress.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString getOwnerAddress() {
+      return ownerAddress_;
+    }
+
+    public static final int UNFREEZE_BALANCE_FIELD_NUMBER = 2;
+    private long unfreezeBalance_;
+    /**
+     * <code>int64 unfreeze_balance = 2;</code>
+     * @return The unfreezeBalance.
+     */
+    @java.lang.Override
+    public long getUnfreezeBalance() {
+      return unfreezeBalance_;
+    }
+
+    public static final int RESOURCE_FIELD_NUMBER = 3;
+    private int resource_;
+    /**
+     * <code>.protocol.ResourceCode resource = 3;</code>
+     * @return The enum numeric value on the wire for resource.
+     */
+    @java.lang.Override public int getResourceValue() {
+      return resource_;
+    }
+    /**
+     * <code>.protocol.ResourceCode resource = 3;</code>
+     * @return The resource.
+     */
+    @java.lang.Override public org.tron.trident.proto.Common.ResourceCode getResource() {
+      @SuppressWarnings("deprecation")
+      org.tron.trident.proto.Common.ResourceCode result = org.tron.trident.proto.Common.ResourceCode.valueOf(resource_);
+      return result == null ? org.tron.trident.proto.Common.ResourceCode.UNRECOGNIZED : result;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!ownerAddress_.isEmpty()) {
+        output.writeBytes(1, ownerAddress_);
+      }
+      if (unfreezeBalance_ != 0L) {
+        output.writeInt64(2, unfreezeBalance_);
+      }
+      if (resource_ != org.tron.trident.proto.Common.ResourceCode.BANDWIDTH.getNumber()) {
+        output.writeEnum(3, resource_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!ownerAddress_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, ownerAddress_);
+      }
+      if (unfreezeBalance_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(2, unfreezeBalance_);
+      }
+      if (resource_ != org.tron.trident.proto.Common.ResourceCode.BANDWIDTH.getNumber()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(3, resource_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract)) {
+        return super.equals(obj);
+      }
+      org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract other = (org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract) obj;
+
+      if (!getOwnerAddress()
+          .equals(other.getOwnerAddress())) return false;
+      if (getUnfreezeBalance()
+          != other.getUnfreezeBalance()) return false;
+      if (resource_ != other.resource_) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + OWNER_ADDRESS_FIELD_NUMBER;
+      hash = (53 * hash) + getOwnerAddress().hashCode();
+      hash = (37 * hash) + UNFREEZE_BALANCE_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getUnfreezeBalance());
+      hash = (37 * hash) + RESOURCE_FIELD_NUMBER;
+      hash = (53 * hash) + resource_;
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code protocol.UnfreezeBalanceV2Contract}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:protocol.UnfreezeBalanceV2Contract)
+        org.tron.trident.proto.Contract.UnfreezeBalanceV2ContractOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return org.tron.trident.proto.Contract.internal_static_protocol_UnfreezeBalanceV2Contract_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return org.tron.trident.proto.Contract.internal_static_protocol_UnfreezeBalanceV2Contract_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract.class, org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract.Builder.class);
+      }
+
+      // Construct using org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        ownerAddress_ = com.google.protobuf.ByteString.EMPTY;
+
+        unfreezeBalance_ = 0L;
+
+        resource_ = 0;
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return org.tron.trident.proto.Contract.internal_static_protocol_UnfreezeBalanceV2Contract_descriptor;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract getDefaultInstanceForType() {
+        return org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract build() {
+        org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract buildPartial() {
+        org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract result = new org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract(this);
+        result.ownerAddress_ = ownerAddress_;
+        result.unfreezeBalance_ = unfreezeBalance_;
+        result.resource_ = resource_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract) {
+          return mergeFrom((org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract other) {
+        if (other == org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract.getDefaultInstance()) return this;
+        if (other.getOwnerAddress() != com.google.protobuf.ByteString.EMPTY) {
+          setOwnerAddress(other.getOwnerAddress());
+        }
+        if (other.getUnfreezeBalance() != 0L) {
+          setUnfreezeBalance(other.getUnfreezeBalance());
+        }
+        if (other.resource_ != 0) {
+          setResourceValue(other.getResourceValue());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private com.google.protobuf.ByteString ownerAddress_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <code>bytes owner_address = 1;</code>
+       * @return The ownerAddress.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString getOwnerAddress() {
+        return ownerAddress_;
+      }
+      /**
+       * <code>bytes owner_address = 1;</code>
+       * @param value The ownerAddress to set.
+       * @return This builder for chaining.
+       */
+      public Builder setOwnerAddress(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        ownerAddress_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bytes owner_address = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearOwnerAddress() {
+        
+        ownerAddress_ = getDefaultInstance().getOwnerAddress();
+        onChanged();
+        return this;
+      }
+
+      private long unfreezeBalance_ ;
+      /**
+       * <code>int64 unfreeze_balance = 2;</code>
+       * @return The unfreezeBalance.
+       */
+      @java.lang.Override
+      public long getUnfreezeBalance() {
+        return unfreezeBalance_;
+      }
+      /**
+       * <code>int64 unfreeze_balance = 2;</code>
+       * @param value The unfreezeBalance to set.
+       * @return This builder for chaining.
+       */
+      public Builder setUnfreezeBalance(long value) {
+        
+        unfreezeBalance_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int64 unfreeze_balance = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearUnfreezeBalance() {
+        
+        unfreezeBalance_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private int resource_ = 0;
+      /**
+       * <code>.protocol.ResourceCode resource = 3;</code>
+       * @return The enum numeric value on the wire for resource.
+       */
+      @java.lang.Override public int getResourceValue() {
+        return resource_;
+      }
+      /**
+       * <code>.protocol.ResourceCode resource = 3;</code>
+       * @param value The enum numeric value on the wire for resource to set.
+       * @return This builder for chaining.
+       */
+      public Builder setResourceValue(int value) {
+        
+        resource_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>.protocol.ResourceCode resource = 3;</code>
+       * @return The resource.
+       */
+      @java.lang.Override
+      public org.tron.trident.proto.Common.ResourceCode getResource() {
+        @SuppressWarnings("deprecation")
+        org.tron.trident.proto.Common.ResourceCode result = org.tron.trident.proto.Common.ResourceCode.valueOf(resource_);
+        return result == null ? org.tron.trident.proto.Common.ResourceCode.UNRECOGNIZED : result;
+      }
+      /**
+       * <code>.protocol.ResourceCode resource = 3;</code>
+       * @param value The resource to set.
+       * @return This builder for chaining.
+       */
+      public Builder setResource(org.tron.trident.proto.Common.ResourceCode value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        
+        resource_ = value.getNumber();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>.protocol.ResourceCode resource = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearResource() {
+        
+        resource_ = 0;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:protocol.UnfreezeBalanceV2Contract)
+    }
+
+    // @@protoc_insertion_point(class_scope:protocol.UnfreezeBalanceV2Contract)
+    private static final org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract();
+    }
+
+    public static org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<UnfreezeBalanceV2Contract>
+        PARSER = new com.google.protobuf.AbstractParser<UnfreezeBalanceV2Contract>() {
+      @java.lang.Override
+      public UnfreezeBalanceV2Contract parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new UnfreezeBalanceV2Contract(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<UnfreezeBalanceV2Contract> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<UnfreezeBalanceV2Contract> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface DelegateResourceContractOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:protocol.DelegateResourceContract)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>bytes owner_address = 1;</code>
+     * @return The ownerAddress.
+     */
+    com.google.protobuf.ByteString getOwnerAddress();
+
+    /**
+     * <code>.protocol.ResourceCode resource = 2;</code>
+     * @return The enum numeric value on the wire for resource.
+     */
+    int getResourceValue();
+    /**
+     * <code>.protocol.ResourceCode resource = 2;</code>
+     * @return The resource.
+     */
+    org.tron.trident.proto.Common.ResourceCode getResource();
+
+    /**
+     * <code>int64 balance = 3;</code>
+     * @return The balance.
+     */
+    long getBalance();
+
+    /**
+     * <code>bytes receiver_address = 4;</code>
+     * @return The receiverAddress.
+     */
+    com.google.protobuf.ByteString getReceiverAddress();
+
+    /**
+     * <code>bool lock = 5;</code>
+     * @return The lock.
+     */
+    boolean getLock();
+  }
+  /**
+   * Protobuf type {@code protocol.DelegateResourceContract}
+   */
+  public static final class DelegateResourceContract extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:protocol.DelegateResourceContract)
+      DelegateResourceContractOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use DelegateResourceContract.newBuilder() to construct.
+    private DelegateResourceContract(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private DelegateResourceContract() {
+      ownerAddress_ = com.google.protobuf.ByteString.EMPTY;
+      resource_ = 0;
+      receiverAddress_ = com.google.protobuf.ByteString.EMPTY;
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new DelegateResourceContract();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private DelegateResourceContract(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+
+              ownerAddress_ = input.readBytes();
+              break;
+            }
+            case 16: {
+              int rawValue = input.readEnum();
+
+              resource_ = rawValue;
+              break;
+            }
+            case 24: {
+
+              balance_ = input.readInt64();
+              break;
+            }
+            case 34: {
+
+              receiverAddress_ = input.readBytes();
+              break;
+            }
+            case 40: {
+
+              lock_ = input.readBool();
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return org.tron.trident.proto.Contract.internal_static_protocol_DelegateResourceContract_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return org.tron.trident.proto.Contract.internal_static_protocol_DelegateResourceContract_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              org.tron.trident.proto.Contract.DelegateResourceContract.class, org.tron.trident.proto.Contract.DelegateResourceContract.Builder.class);
+    }
+
+    public static final int OWNER_ADDRESS_FIELD_NUMBER = 1;
+    private com.google.protobuf.ByteString ownerAddress_;
+    /**
+     * <code>bytes owner_address = 1;</code>
+     * @return The ownerAddress.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString getOwnerAddress() {
+      return ownerAddress_;
+    }
+
+    public static final int RESOURCE_FIELD_NUMBER = 2;
+    private int resource_;
+    /**
+     * <code>.protocol.ResourceCode resource = 2;</code>
+     * @return The enum numeric value on the wire for resource.
+     */
+    @java.lang.Override public int getResourceValue() {
+      return resource_;
+    }
+    /**
+     * <code>.protocol.ResourceCode resource = 2;</code>
+     * @return The resource.
+     */
+    @java.lang.Override public org.tron.trident.proto.Common.ResourceCode getResource() {
+      @SuppressWarnings("deprecation")
+      org.tron.trident.proto.Common.ResourceCode result = org.tron.trident.proto.Common.ResourceCode.valueOf(resource_);
+      return result == null ? org.tron.trident.proto.Common.ResourceCode.UNRECOGNIZED : result;
+    }
+
+    public static final int BALANCE_FIELD_NUMBER = 3;
+    private long balance_;
+    /**
+     * <code>int64 balance = 3;</code>
+     * @return The balance.
+     */
+    @java.lang.Override
+    public long getBalance() {
+      return balance_;
+    }
+
+    public static final int RECEIVER_ADDRESS_FIELD_NUMBER = 4;
+    private com.google.protobuf.ByteString receiverAddress_;
+    /**
+     * <code>bytes receiver_address = 4;</code>
+     * @return The receiverAddress.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString getReceiverAddress() {
+      return receiverAddress_;
+    }
+
+    public static final int LOCK_FIELD_NUMBER = 5;
+    private boolean lock_;
+    /**
+     * <code>bool lock = 5;</code>
+     * @return The lock.
+     */
+    @java.lang.Override
+    public boolean getLock() {
+      return lock_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!ownerAddress_.isEmpty()) {
+        output.writeBytes(1, ownerAddress_);
+      }
+      if (resource_ != org.tron.trident.proto.Common.ResourceCode.BANDWIDTH.getNumber()) {
+        output.writeEnum(2, resource_);
+      }
+      if (balance_ != 0L) {
+        output.writeInt64(3, balance_);
+      }
+      if (!receiverAddress_.isEmpty()) {
+        output.writeBytes(4, receiverAddress_);
+      }
+      if (lock_ != false) {
+        output.writeBool(5, lock_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!ownerAddress_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, ownerAddress_);
+      }
+      if (resource_ != org.tron.trident.proto.Common.ResourceCode.BANDWIDTH.getNumber()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(2, resource_);
+      }
+      if (balance_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(3, balance_);
+      }
+      if (!receiverAddress_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(4, receiverAddress_);
+      }
+      if (lock_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(5, lock_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof org.tron.trident.proto.Contract.DelegateResourceContract)) {
+        return super.equals(obj);
+      }
+      org.tron.trident.proto.Contract.DelegateResourceContract other = (org.tron.trident.proto.Contract.DelegateResourceContract) obj;
+
+      if (!getOwnerAddress()
+          .equals(other.getOwnerAddress())) return false;
+      if (resource_ != other.resource_) return false;
+      if (getBalance()
+          != other.getBalance()) return false;
+      if (!getReceiverAddress()
+          .equals(other.getReceiverAddress())) return false;
+      if (getLock()
+          != other.getLock()) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + OWNER_ADDRESS_FIELD_NUMBER;
+      hash = (53 * hash) + getOwnerAddress().hashCode();
+      hash = (37 * hash) + RESOURCE_FIELD_NUMBER;
+      hash = (53 * hash) + resource_;
+      hash = (37 * hash) + BALANCE_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getBalance());
+      hash = (37 * hash) + RECEIVER_ADDRESS_FIELD_NUMBER;
+      hash = (53 * hash) + getReceiverAddress().hashCode();
+      hash = (37 * hash) + LOCK_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getLock());
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static org.tron.trident.proto.Contract.DelegateResourceContract parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.proto.Contract.DelegateResourceContract parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Contract.DelegateResourceContract parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.proto.Contract.DelegateResourceContract parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Contract.DelegateResourceContract parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.proto.Contract.DelegateResourceContract parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Contract.DelegateResourceContract parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.proto.Contract.DelegateResourceContract parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Contract.DelegateResourceContract parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.proto.Contract.DelegateResourceContract parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Contract.DelegateResourceContract parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.proto.Contract.DelegateResourceContract parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(org.tron.trident.proto.Contract.DelegateResourceContract prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code protocol.DelegateResourceContract}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:protocol.DelegateResourceContract)
+        org.tron.trident.proto.Contract.DelegateResourceContractOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return org.tron.trident.proto.Contract.internal_static_protocol_DelegateResourceContract_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return org.tron.trident.proto.Contract.internal_static_protocol_DelegateResourceContract_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                org.tron.trident.proto.Contract.DelegateResourceContract.class, org.tron.trident.proto.Contract.DelegateResourceContract.Builder.class);
+      }
+
+      // Construct using org.tron.trident.proto.Contract.DelegateResourceContract.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        ownerAddress_ = com.google.protobuf.ByteString.EMPTY;
+
+        resource_ = 0;
+
+        balance_ = 0L;
+
+        receiverAddress_ = com.google.protobuf.ByteString.EMPTY;
+
+        lock_ = false;
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return org.tron.trident.proto.Contract.internal_static_protocol_DelegateResourceContract_descriptor;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.proto.Contract.DelegateResourceContract getDefaultInstanceForType() {
+        return org.tron.trident.proto.Contract.DelegateResourceContract.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public org.tron.trident.proto.Contract.DelegateResourceContract build() {
+        org.tron.trident.proto.Contract.DelegateResourceContract result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.proto.Contract.DelegateResourceContract buildPartial() {
+        org.tron.trident.proto.Contract.DelegateResourceContract result = new org.tron.trident.proto.Contract.DelegateResourceContract(this);
+        result.ownerAddress_ = ownerAddress_;
+        result.resource_ = resource_;
+        result.balance_ = balance_;
+        result.receiverAddress_ = receiverAddress_;
+        result.lock_ = lock_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof org.tron.trident.proto.Contract.DelegateResourceContract) {
+          return mergeFrom((org.tron.trident.proto.Contract.DelegateResourceContract)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(org.tron.trident.proto.Contract.DelegateResourceContract other) {
+        if (other == org.tron.trident.proto.Contract.DelegateResourceContract.getDefaultInstance()) return this;
+        if (other.getOwnerAddress() != com.google.protobuf.ByteString.EMPTY) {
+          setOwnerAddress(other.getOwnerAddress());
+        }
+        if (other.resource_ != 0) {
+          setResourceValue(other.getResourceValue());
+        }
+        if (other.getBalance() != 0L) {
+          setBalance(other.getBalance());
+        }
+        if (other.getReceiverAddress() != com.google.protobuf.ByteString.EMPTY) {
+          setReceiverAddress(other.getReceiverAddress());
+        }
+        if (other.getLock() != false) {
+          setLock(other.getLock());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        org.tron.trident.proto.Contract.DelegateResourceContract parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (org.tron.trident.proto.Contract.DelegateResourceContract) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private com.google.protobuf.ByteString ownerAddress_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <code>bytes owner_address = 1;</code>
+       * @return The ownerAddress.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString getOwnerAddress() {
+        return ownerAddress_;
+      }
+      /**
+       * <code>bytes owner_address = 1;</code>
+       * @param value The ownerAddress to set.
+       * @return This builder for chaining.
+       */
+      public Builder setOwnerAddress(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        ownerAddress_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bytes owner_address = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearOwnerAddress() {
+        
+        ownerAddress_ = getDefaultInstance().getOwnerAddress();
+        onChanged();
+        return this;
+      }
+
+      private int resource_ = 0;
+      /**
+       * <code>.protocol.ResourceCode resource = 2;</code>
+       * @return The enum numeric value on the wire for resource.
+       */
+      @java.lang.Override public int getResourceValue() {
+        return resource_;
+      }
+      /**
+       * <code>.protocol.ResourceCode resource = 2;</code>
+       * @param value The enum numeric value on the wire for resource to set.
+       * @return This builder for chaining.
+       */
+      public Builder setResourceValue(int value) {
+        
+        resource_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>.protocol.ResourceCode resource = 2;</code>
+       * @return The resource.
+       */
+      @java.lang.Override
+      public org.tron.trident.proto.Common.ResourceCode getResource() {
+        @SuppressWarnings("deprecation")
+        org.tron.trident.proto.Common.ResourceCode result = org.tron.trident.proto.Common.ResourceCode.valueOf(resource_);
+        return result == null ? org.tron.trident.proto.Common.ResourceCode.UNRECOGNIZED : result;
+      }
+      /**
+       * <code>.protocol.ResourceCode resource = 2;</code>
+       * @param value The resource to set.
+       * @return This builder for chaining.
+       */
+      public Builder setResource(org.tron.trident.proto.Common.ResourceCode value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        
+        resource_ = value.getNumber();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>.protocol.ResourceCode resource = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearResource() {
+        
+        resource_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private long balance_ ;
+      /**
+       * <code>int64 balance = 3;</code>
+       * @return The balance.
+       */
+      @java.lang.Override
+      public long getBalance() {
+        return balance_;
+      }
+      /**
+       * <code>int64 balance = 3;</code>
+       * @param value The balance to set.
+       * @return This builder for chaining.
+       */
+      public Builder setBalance(long value) {
+        
+        balance_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int64 balance = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearBalance() {
+        
+        balance_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private com.google.protobuf.ByteString receiverAddress_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <code>bytes receiver_address = 4;</code>
+       * @return The receiverAddress.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString getReceiverAddress() {
+        return receiverAddress_;
+      }
+      /**
+       * <code>bytes receiver_address = 4;</code>
+       * @param value The receiverAddress to set.
+       * @return This builder for chaining.
+       */
+      public Builder setReceiverAddress(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        receiverAddress_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bytes receiver_address = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearReceiverAddress() {
+        
+        receiverAddress_ = getDefaultInstance().getReceiverAddress();
+        onChanged();
+        return this;
+      }
+
+      private boolean lock_ ;
+      /**
+       * <code>bool lock = 5;</code>
+       * @return The lock.
+       */
+      @java.lang.Override
+      public boolean getLock() {
+        return lock_;
+      }
+      /**
+       * <code>bool lock = 5;</code>
+       * @param value The lock to set.
+       * @return This builder for chaining.
+       */
+      public Builder setLock(boolean value) {
+        
+        lock_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bool lock = 5;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearLock() {
+        
+        lock_ = false;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:protocol.DelegateResourceContract)
+    }
+
+    // @@protoc_insertion_point(class_scope:protocol.DelegateResourceContract)
+    private static final org.tron.trident.proto.Contract.DelegateResourceContract DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new org.tron.trident.proto.Contract.DelegateResourceContract();
+    }
+
+    public static org.tron.trident.proto.Contract.DelegateResourceContract getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<DelegateResourceContract>
+        PARSER = new com.google.protobuf.AbstractParser<DelegateResourceContract>() {
+      @java.lang.Override
+      public DelegateResourceContract parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new DelegateResourceContract(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<DelegateResourceContract> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<DelegateResourceContract> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public org.tron.trident.proto.Contract.DelegateResourceContract getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface UnDelegateResourceContractOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:protocol.UnDelegateResourceContract)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>bytes owner_address = 1;</code>
+     * @return The ownerAddress.
+     */
+    com.google.protobuf.ByteString getOwnerAddress();
+
+    /**
+     * <code>.protocol.ResourceCode resource = 2;</code>
+     * @return The enum numeric value on the wire for resource.
+     */
+    int getResourceValue();
+    /**
+     * <code>.protocol.ResourceCode resource = 2;</code>
+     * @return The resource.
+     */
+    org.tron.trident.proto.Common.ResourceCode getResource();
+
+    /**
+     * <code>int64 balance = 3;</code>
+     * @return The balance.
+     */
+    long getBalance();
+
+    /**
+     * <code>bytes receiver_address = 4;</code>
+     * @return The receiverAddress.
+     */
+    com.google.protobuf.ByteString getReceiverAddress();
+  }
+  /**
+   * Protobuf type {@code protocol.UnDelegateResourceContract}
+   */
+  public static final class UnDelegateResourceContract extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:protocol.UnDelegateResourceContract)
+      UnDelegateResourceContractOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use UnDelegateResourceContract.newBuilder() to construct.
+    private UnDelegateResourceContract(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private UnDelegateResourceContract() {
+      ownerAddress_ = com.google.protobuf.ByteString.EMPTY;
+      resource_ = 0;
+      receiverAddress_ = com.google.protobuf.ByteString.EMPTY;
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new UnDelegateResourceContract();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private UnDelegateResourceContract(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+
+              ownerAddress_ = input.readBytes();
+              break;
+            }
+            case 16: {
+              int rawValue = input.readEnum();
+
+              resource_ = rawValue;
+              break;
+            }
+            case 24: {
+
+              balance_ = input.readInt64();
+              break;
+            }
+            case 34: {
+
+              receiverAddress_ = input.readBytes();
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return org.tron.trident.proto.Contract.internal_static_protocol_UnDelegateResourceContract_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return org.tron.trident.proto.Contract.internal_static_protocol_UnDelegateResourceContract_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              org.tron.trident.proto.Contract.UnDelegateResourceContract.class, org.tron.trident.proto.Contract.UnDelegateResourceContract.Builder.class);
+    }
+
+    public static final int OWNER_ADDRESS_FIELD_NUMBER = 1;
+    private com.google.protobuf.ByteString ownerAddress_;
+    /**
+     * <code>bytes owner_address = 1;</code>
+     * @return The ownerAddress.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString getOwnerAddress() {
+      return ownerAddress_;
+    }
+
+    public static final int RESOURCE_FIELD_NUMBER = 2;
+    private int resource_;
+    /**
+     * <code>.protocol.ResourceCode resource = 2;</code>
+     * @return The enum numeric value on the wire for resource.
+     */
+    @java.lang.Override public int getResourceValue() {
+      return resource_;
+    }
+    /**
+     * <code>.protocol.ResourceCode resource = 2;</code>
+     * @return The resource.
+     */
+    @java.lang.Override public org.tron.trident.proto.Common.ResourceCode getResource() {
+      @SuppressWarnings("deprecation")
+      org.tron.trident.proto.Common.ResourceCode result = org.tron.trident.proto.Common.ResourceCode.valueOf(resource_);
+      return result == null ? org.tron.trident.proto.Common.ResourceCode.UNRECOGNIZED : result;
+    }
+
+    public static final int BALANCE_FIELD_NUMBER = 3;
+    private long balance_;
+    /**
+     * <code>int64 balance = 3;</code>
+     * @return The balance.
+     */
+    @java.lang.Override
+    public long getBalance() {
+      return balance_;
+    }
+
+    public static final int RECEIVER_ADDRESS_FIELD_NUMBER = 4;
+    private com.google.protobuf.ByteString receiverAddress_;
+    /**
+     * <code>bytes receiver_address = 4;</code>
+     * @return The receiverAddress.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString getReceiverAddress() {
+      return receiverAddress_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!ownerAddress_.isEmpty()) {
+        output.writeBytes(1, ownerAddress_);
+      }
+      if (resource_ != org.tron.trident.proto.Common.ResourceCode.BANDWIDTH.getNumber()) {
+        output.writeEnum(2, resource_);
+      }
+      if (balance_ != 0L) {
+        output.writeInt64(3, balance_);
+      }
+      if (!receiverAddress_.isEmpty()) {
+        output.writeBytes(4, receiverAddress_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!ownerAddress_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, ownerAddress_);
+      }
+      if (resource_ != org.tron.trident.proto.Common.ResourceCode.BANDWIDTH.getNumber()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(2, resource_);
+      }
+      if (balance_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(3, balance_);
+      }
+      if (!receiverAddress_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(4, receiverAddress_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof org.tron.trident.proto.Contract.UnDelegateResourceContract)) {
+        return super.equals(obj);
+      }
+      org.tron.trident.proto.Contract.UnDelegateResourceContract other = (org.tron.trident.proto.Contract.UnDelegateResourceContract) obj;
+
+      if (!getOwnerAddress()
+          .equals(other.getOwnerAddress())) return false;
+      if (resource_ != other.resource_) return false;
+      if (getBalance()
+          != other.getBalance()) return false;
+      if (!getReceiverAddress()
+          .equals(other.getReceiverAddress())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + OWNER_ADDRESS_FIELD_NUMBER;
+      hash = (53 * hash) + getOwnerAddress().hashCode();
+      hash = (37 * hash) + RESOURCE_FIELD_NUMBER;
+      hash = (53 * hash) + resource_;
+      hash = (37 * hash) + BALANCE_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getBalance());
+      hash = (37 * hash) + RECEIVER_ADDRESS_FIELD_NUMBER;
+      hash = (53 * hash) + getReceiverAddress().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static org.tron.trident.proto.Contract.UnDelegateResourceContract parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.proto.Contract.UnDelegateResourceContract parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Contract.UnDelegateResourceContract parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.proto.Contract.UnDelegateResourceContract parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Contract.UnDelegateResourceContract parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.proto.Contract.UnDelegateResourceContract parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Contract.UnDelegateResourceContract parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.proto.Contract.UnDelegateResourceContract parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Contract.UnDelegateResourceContract parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.proto.Contract.UnDelegateResourceContract parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Contract.UnDelegateResourceContract parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.proto.Contract.UnDelegateResourceContract parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(org.tron.trident.proto.Contract.UnDelegateResourceContract prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code protocol.UnDelegateResourceContract}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:protocol.UnDelegateResourceContract)
+        org.tron.trident.proto.Contract.UnDelegateResourceContractOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return org.tron.trident.proto.Contract.internal_static_protocol_UnDelegateResourceContract_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return org.tron.trident.proto.Contract.internal_static_protocol_UnDelegateResourceContract_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                org.tron.trident.proto.Contract.UnDelegateResourceContract.class, org.tron.trident.proto.Contract.UnDelegateResourceContract.Builder.class);
+      }
+
+      // Construct using org.tron.trident.proto.Contract.UnDelegateResourceContract.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        ownerAddress_ = com.google.protobuf.ByteString.EMPTY;
+
+        resource_ = 0;
+
+        balance_ = 0L;
+
+        receiverAddress_ = com.google.protobuf.ByteString.EMPTY;
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return org.tron.trident.proto.Contract.internal_static_protocol_UnDelegateResourceContract_descriptor;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.proto.Contract.UnDelegateResourceContract getDefaultInstanceForType() {
+        return org.tron.trident.proto.Contract.UnDelegateResourceContract.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public org.tron.trident.proto.Contract.UnDelegateResourceContract build() {
+        org.tron.trident.proto.Contract.UnDelegateResourceContract result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.proto.Contract.UnDelegateResourceContract buildPartial() {
+        org.tron.trident.proto.Contract.UnDelegateResourceContract result = new org.tron.trident.proto.Contract.UnDelegateResourceContract(this);
+        result.ownerAddress_ = ownerAddress_;
+        result.resource_ = resource_;
+        result.balance_ = balance_;
+        result.receiverAddress_ = receiverAddress_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof org.tron.trident.proto.Contract.UnDelegateResourceContract) {
+          return mergeFrom((org.tron.trident.proto.Contract.UnDelegateResourceContract)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(org.tron.trident.proto.Contract.UnDelegateResourceContract other) {
+        if (other == org.tron.trident.proto.Contract.UnDelegateResourceContract.getDefaultInstance()) return this;
+        if (other.getOwnerAddress() != com.google.protobuf.ByteString.EMPTY) {
+          setOwnerAddress(other.getOwnerAddress());
+        }
+        if (other.resource_ != 0) {
+          setResourceValue(other.getResourceValue());
+        }
+        if (other.getBalance() != 0L) {
+          setBalance(other.getBalance());
+        }
+        if (other.getReceiverAddress() != com.google.protobuf.ByteString.EMPTY) {
+          setReceiverAddress(other.getReceiverAddress());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        org.tron.trident.proto.Contract.UnDelegateResourceContract parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (org.tron.trident.proto.Contract.UnDelegateResourceContract) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private com.google.protobuf.ByteString ownerAddress_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <code>bytes owner_address = 1;</code>
+       * @return The ownerAddress.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString getOwnerAddress() {
+        return ownerAddress_;
+      }
+      /**
+       * <code>bytes owner_address = 1;</code>
+       * @param value The ownerAddress to set.
+       * @return This builder for chaining.
+       */
+      public Builder setOwnerAddress(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        ownerAddress_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bytes owner_address = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearOwnerAddress() {
+        
+        ownerAddress_ = getDefaultInstance().getOwnerAddress();
+        onChanged();
+        return this;
+      }
+
+      private int resource_ = 0;
+      /**
+       * <code>.protocol.ResourceCode resource = 2;</code>
+       * @return The enum numeric value on the wire for resource.
+       */
+      @java.lang.Override public int getResourceValue() {
+        return resource_;
+      }
+      /**
+       * <code>.protocol.ResourceCode resource = 2;</code>
+       * @param value The enum numeric value on the wire for resource to set.
+       * @return This builder for chaining.
+       */
+      public Builder setResourceValue(int value) {
+        
+        resource_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>.protocol.ResourceCode resource = 2;</code>
+       * @return The resource.
+       */
+      @java.lang.Override
+      public org.tron.trident.proto.Common.ResourceCode getResource() {
+        @SuppressWarnings("deprecation")
+        org.tron.trident.proto.Common.ResourceCode result = org.tron.trident.proto.Common.ResourceCode.valueOf(resource_);
+        return result == null ? org.tron.trident.proto.Common.ResourceCode.UNRECOGNIZED : result;
+      }
+      /**
+       * <code>.protocol.ResourceCode resource = 2;</code>
+       * @param value The resource to set.
+       * @return This builder for chaining.
+       */
+      public Builder setResource(org.tron.trident.proto.Common.ResourceCode value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        
+        resource_ = value.getNumber();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>.protocol.ResourceCode resource = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearResource() {
+        
+        resource_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private long balance_ ;
+      /**
+       * <code>int64 balance = 3;</code>
+       * @return The balance.
+       */
+      @java.lang.Override
+      public long getBalance() {
+        return balance_;
+      }
+      /**
+       * <code>int64 balance = 3;</code>
+       * @param value The balance to set.
+       * @return This builder for chaining.
+       */
+      public Builder setBalance(long value) {
+        
+        balance_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int64 balance = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearBalance() {
+        
+        balance_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private com.google.protobuf.ByteString receiverAddress_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <code>bytes receiver_address = 4;</code>
+       * @return The receiverAddress.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString getReceiverAddress() {
+        return receiverAddress_;
+      }
+      /**
+       * <code>bytes receiver_address = 4;</code>
+       * @param value The receiverAddress to set.
+       * @return This builder for chaining.
+       */
+      public Builder setReceiverAddress(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        receiverAddress_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bytes receiver_address = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearReceiverAddress() {
+        
+        receiverAddress_ = getDefaultInstance().getReceiverAddress();
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:protocol.UnDelegateResourceContract)
+    }
+
+    // @@protoc_insertion_point(class_scope:protocol.UnDelegateResourceContract)
+    private static final org.tron.trident.proto.Contract.UnDelegateResourceContract DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new org.tron.trident.proto.Contract.UnDelegateResourceContract();
+    }
+
+    public static org.tron.trident.proto.Contract.UnDelegateResourceContract getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<UnDelegateResourceContract>
+        PARSER = new com.google.protobuf.AbstractParser<UnDelegateResourceContract>() {
+      @java.lang.Override
+      public UnDelegateResourceContract parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new UnDelegateResourceContract(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<UnDelegateResourceContract> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<UnDelegateResourceContract> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public org.tron.trident.proto.Contract.UnDelegateResourceContract getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface WithdrawExpireUnfreezeContractOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:protocol.WithdrawExpireUnfreezeContract)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>bytes owner_address = 1;</code>
+     * @return The ownerAddress.
+     */
+    com.google.protobuf.ByteString getOwnerAddress();
+  }
+  /**
+   * Protobuf type {@code protocol.WithdrawExpireUnfreezeContract}
+   */
+  public static final class WithdrawExpireUnfreezeContract extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:protocol.WithdrawExpireUnfreezeContract)
+      WithdrawExpireUnfreezeContractOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use WithdrawExpireUnfreezeContract.newBuilder() to construct.
+    private WithdrawExpireUnfreezeContract(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private WithdrawExpireUnfreezeContract() {
+      ownerAddress_ = com.google.protobuf.ByteString.EMPTY;
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new WithdrawExpireUnfreezeContract();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private WithdrawExpireUnfreezeContract(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+
+              ownerAddress_ = input.readBytes();
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return org.tron.trident.proto.Contract.internal_static_protocol_WithdrawExpireUnfreezeContract_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return org.tron.trident.proto.Contract.internal_static_protocol_WithdrawExpireUnfreezeContract_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract.class, org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract.Builder.class);
+    }
+
+    public static final int OWNER_ADDRESS_FIELD_NUMBER = 1;
+    private com.google.protobuf.ByteString ownerAddress_;
+    /**
+     * <code>bytes owner_address = 1;</code>
+     * @return The ownerAddress.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString getOwnerAddress() {
+      return ownerAddress_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!ownerAddress_.isEmpty()) {
+        output.writeBytes(1, ownerAddress_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!ownerAddress_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, ownerAddress_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract)) {
+        return super.equals(obj);
+      }
+      org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract other = (org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract) obj;
+
+      if (!getOwnerAddress()
+          .equals(other.getOwnerAddress())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + OWNER_ADDRESS_FIELD_NUMBER;
+      hash = (53 * hash) + getOwnerAddress().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code protocol.WithdrawExpireUnfreezeContract}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:protocol.WithdrawExpireUnfreezeContract)
+        org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContractOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return org.tron.trident.proto.Contract.internal_static_protocol_WithdrawExpireUnfreezeContract_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return org.tron.trident.proto.Contract.internal_static_protocol_WithdrawExpireUnfreezeContract_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract.class, org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract.Builder.class);
+      }
+
+      // Construct using org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        ownerAddress_ = com.google.protobuf.ByteString.EMPTY;
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return org.tron.trident.proto.Contract.internal_static_protocol_WithdrawExpireUnfreezeContract_descriptor;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract getDefaultInstanceForType() {
+        return org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract build() {
+        org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract buildPartial() {
+        org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract result = new org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract(this);
+        result.ownerAddress_ = ownerAddress_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract) {
+          return mergeFrom((org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract other) {
+        if (other == org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract.getDefaultInstance()) return this;
+        if (other.getOwnerAddress() != com.google.protobuf.ByteString.EMPTY) {
+          setOwnerAddress(other.getOwnerAddress());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private com.google.protobuf.ByteString ownerAddress_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <code>bytes owner_address = 1;</code>
+       * @return The ownerAddress.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString getOwnerAddress() {
+        return ownerAddress_;
+      }
+      /**
+       * <code>bytes owner_address = 1;</code>
+       * @param value The ownerAddress to set.
+       * @return This builder for chaining.
+       */
+      public Builder setOwnerAddress(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        ownerAddress_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bytes owner_address = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearOwnerAddress() {
+        
+        ownerAddress_ = getDefaultInstance().getOwnerAddress();
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:protocol.WithdrawExpireUnfreezeContract)
+    }
+
+    // @@protoc_insertion_point(class_scope:protocol.WithdrawExpireUnfreezeContract)
+    private static final org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract();
+    }
+
+    public static org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<WithdrawExpireUnfreezeContract>
+        PARSER = new com.google.protobuf.AbstractParser<WithdrawExpireUnfreezeContract>() {
+      @java.lang.Override
+      public WithdrawExpireUnfreezeContract parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new WithdrawExpireUnfreezeContract(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<WithdrawExpireUnfreezeContract> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<WithdrawExpireUnfreezeContract> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_protocol_AccountCreateContract_descriptor;
   private static final 
@@ -25686,6 +29085,31 @@ public final class Contract {
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_protocol_ExchangeTransactionContract_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_protocol_FreezeBalanceV2Contract_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_protocol_FreezeBalanceV2Contract_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_protocol_UnfreezeBalanceV2Contract_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_protocol_UnfreezeBalanceV2Contract_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_protocol_DelegateResourceContract_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_protocol_DelegateResourceContract_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_protocol_UnDelegateResourceContract_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_protocol_UnDelegateResourceContract_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_protocol_WithdrawExpireUnfreezeContract_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_protocol_WithdrawExpireUnfreezeContract_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -25792,8 +29216,23 @@ public final class Contract {
       "\022\020\n\010token_id\030\003 \001(\014\022\r\n\005quant\030\004 \001(\003\"|\n\033Exc" +
       "hangeTransactionContract\022\025\n\rowner_addres" +
       "s\030\001 \001(\014\022\023\n\013exchange_id\030\002 \001(\003\022\020\n\010token_id" +
-      "\030\003 \001(\014\022\r\n\005quant\030\004 \001(\003\022\020\n\010expected\030\005 \001(\003B" +
-      "\030\n\026org.tron.trident.protob\006proto3"
+      "\030\003 \001(\014\022\r\n\005quant\030\004 \001(\003\022\020\n\010expected\030\005 \001(\003\"" +
+      "r\n\027FreezeBalanceV2Contract\022\025\n\rowner_addr" +
+      "ess\030\001 \001(\014\022\026\n\016frozen_balance\030\002 \001(\003\022(\n\010res" +
+      "ource\030\003 \001(\0162\026.protocol.ResourceCode\"v\n\031U" +
+      "nfreezeBalanceV2Contract\022\025\n\rowner_addres" +
+      "s\030\001 \001(\014\022\030\n\020unfreeze_balance\030\002 \001(\003\022(\n\010res" +
+      "ource\030\003 \001(\0162\026.protocol.ResourceCode\"\224\001\n\030" +
+      "DelegateResourceContract\022\025\n\rowner_addres" +
+      "s\030\001 \001(\014\022(\n\010resource\030\002 \001(\0162\026.protocol.Res" +
+      "ourceCode\022\017\n\007balance\030\003 \001(\003\022\030\n\020receiver_a" +
+      "ddress\030\004 \001(\014\022\014\n\004lock\030\005 \001(\010\"\210\001\n\032UnDelegat" +
+      "eResourceContract\022\025\n\rowner_address\030\001 \001(\014" +
+      "\022(\n\010resource\030\002 \001(\0162\026.protocol.ResourceCo" +
+      "de\022\017\n\007balance\030\003 \001(\003\022\030\n\020receiver_address\030" +
+      "\004 \001(\014\"7\n\036WithdrawExpireUnfreezeContract\022" +
+      "\025\n\rowner_address\030\001 \001(\014B\030\n\026org.tron.tride" +
+      "nt.protob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -26010,6 +29449,36 @@ public final class Contract {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_ExchangeTransactionContract_descriptor,
         new java.lang.String[] { "OwnerAddress", "ExchangeId", "TokenId", "Quant", "Expected", });
+    internal_static_protocol_FreezeBalanceV2Contract_descriptor =
+      getDescriptor().getMessageTypes().get(32);
+    internal_static_protocol_FreezeBalanceV2Contract_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_protocol_FreezeBalanceV2Contract_descriptor,
+        new java.lang.String[] { "OwnerAddress", "FrozenBalance", "Resource", });
+    internal_static_protocol_UnfreezeBalanceV2Contract_descriptor =
+      getDescriptor().getMessageTypes().get(33);
+    internal_static_protocol_UnfreezeBalanceV2Contract_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_protocol_UnfreezeBalanceV2Contract_descriptor,
+        new java.lang.String[] { "OwnerAddress", "UnfreezeBalance", "Resource", });
+    internal_static_protocol_DelegateResourceContract_descriptor =
+      getDescriptor().getMessageTypes().get(34);
+    internal_static_protocol_DelegateResourceContract_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_protocol_DelegateResourceContract_descriptor,
+        new java.lang.String[] { "OwnerAddress", "Resource", "Balance", "ReceiverAddress", "Lock", });
+    internal_static_protocol_UnDelegateResourceContract_descriptor =
+      getDescriptor().getMessageTypes().get(35);
+    internal_static_protocol_UnDelegateResourceContract_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_protocol_UnDelegateResourceContract_descriptor,
+        new java.lang.String[] { "OwnerAddress", "Resource", "Balance", "ReceiverAddress", });
+    internal_static_protocol_WithdrawExpireUnfreezeContract_descriptor =
+      getDescriptor().getMessageTypes().get(36);
+    internal_static_protocol_WithdrawExpireUnfreezeContract_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_protocol_WithdrawExpireUnfreezeContract_descriptor,
+        new java.lang.String[] { "OwnerAddress", });
     org.tron.trident.proto.Common.getDescriptor();
   }
 
