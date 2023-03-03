@@ -504,7 +504,7 @@ public class ApiWrapper {
      * @return TransactionExtention
      * @throws IllegalException if fail to unfreeze balance
      */
-    public TransactionExtention unfreezeBalanceV2(String ownerAddress, int unfreezeBalance, int resourceCode) throws IllegalException {
+    public TransactionExtention unfreezeBalanceV2(String ownerAddress, long unfreezeBalance, int resourceCode) throws IllegalException {
 
         UnfreezeBalanceV2Contract unfreeze =
             UnfreezeBalanceV2Contract.newBuilder()
