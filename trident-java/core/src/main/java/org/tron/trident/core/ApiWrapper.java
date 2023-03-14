@@ -3,6 +3,7 @@ package org.tron.trident.core;
 import com.google.protobuf.InvalidProtocolBufferException;
 import org.tron.trident.abi.FunctionEncoder;
 import org.tron.trident.abi.datatypes.Function;
+import org.tron.trident.api.GrpcAPI;
 import org.tron.trident.api.GrpcAPI.BytesMessage;
 
 import org.tron.trident.core.contract.Contract;
@@ -53,6 +54,12 @@ import org.tron.trident.api.GrpcAPI.AccountIdMessage;
 import org.tron.trident.api.GrpcAPI.BlockLimit;
 import org.tron.trident.api.GrpcAPI.PaginatedMessage;
 import org.tron.trident.utils.Base58Check;
+
+import org.tron.trident.proto.Contract.FreezeBalanceV2Contract;
+import org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract;
+import org.tron.trident.proto.Contract.DelegateResourceContract;
+import org.tron.trident.proto.Contract.UnDelegateResourceContract;
+import org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract;
 
 import com.google.protobuf.ByteString;
 import io.grpc.ManagedChannel;
@@ -424,6 +431,33 @@ public class ApiWrapper {
     }
 
     /**
+     * Stake2.0 API
+     * Stake an amount of TRX to obtain bandwidth or energy, and obtain equivalent TRON Power(TP) according to the staked amount
+     * @param ownerAddress owner address
+     * @param frozenBalance TRX stake amount, the unit is sun
+     * @param resourceCode resource type, can be 0("BANDWIDTH") or 1("ENERGY")
+     * @return TransactionExtention
+     * @throws IllegalException if fail to freeze balance
+     */
+    public TransactionExtention freezeBalanceV2(String ownerAddress, long frozenBalance, int resourceCode) throws IllegalException {
+        ByteString rawOwner = parseAddress(ownerAddress);
+        FreezeBalanceV2Contract freezeBalanceContract=
+            FreezeBalanceV2Contract.newBuilder()
+                .setOwnerAddress(rawOwner)
+                .setFrozenBalance(frozenBalance)
+                .setResourceValue(resourceCode)
+                .build();
+        TransactionExtention txnExt = blockingStub.freezeBalanceV2(freezeBalanceContract);
+
+        if(SUCCESS != txnExt.getResult().getCode()){
+            throw new IllegalException(txnExt.getResult().getMessage().toStringUtf8());
+        }
+
+        return txnExt;
+    }
+
+
+    /**
      * Unfreeze balance to get TRX back
      * @param ownerAddress owner address
      * @param resourceCode Resource type, can be 0("BANDWIDTH") or 1("ENERGY")
@@ -460,6 +494,211 @@ public class ApiWrapper {
 
         return txnExt;
     }
+
+    /**
+     * Stake2.0 API
+     * Unstake some TRX, release the corresponding amount of bandwidth or energy, and voting rights (TP)
+     * @param ownerAddress owner address
+     * @param unfreezeBalance the amount of TRX to unstake, in sun
+     * @param resourceCode Resource type, can be 0("BANDWIDTH") or 1("ENERGY")
+     * @return TransactionExtention
+     * @throws IllegalException if fail to unfreeze balance
+     */
+    public TransactionExtention unfreezeBalanceV2(String ownerAddress, long unfreezeBalance, int resourceCode) throws IllegalException {
+
+        UnfreezeBalanceV2Contract unfreeze =
+            UnfreezeBalanceV2Contract.newBuilder()
+                .setOwnerAddress(parseAddress(ownerAddress))
+                .setResourceValue(resourceCode)
+                .setUnfreezeBalance(unfreezeBalance)
+                .build();
+
+        TransactionExtention txnExt = blockingStub.unfreezeBalanceV2(unfreeze);
+
+        if(SUCCESS != txnExt.getResult().getCode()){
+            throw new IllegalException(txnExt.getResult().getMessage().toStringUtf8());
+        }
+
+        return txnExt;
+    }
+
+
+    /**
+     * Stake2.0 API
+     * Delegate bandwidth or energy resources to other accounts
+     * @param ownerAddress owner address
+     * @param balance  Amount of TRX staked for resources to be delegated, unit is sun
+     * @param resourceCode Resource type, can be 0("BANDWIDTH") or 1("ENERGY")
+     * @param receiverAddress  Resource receiver address
+     * @param lock  Whether it is locked, if it is set to true,
+     *              the delegated resources cannot be undelegated within 3 days.
+     *              When the lock time is not over, if the owner delegates the same type of resources using the lock to the same address,
+     *              the lock time will be reset to 3 days
+     * @return TransactionExtention
+     * @throws IllegalException if fail to delegate resource
+     */
+    public TransactionExtention delegateResource(String ownerAddress, long balance, int resourceCode,String receiverAddress,boolean lock) throws IllegalException {
+        ByteString rawOwner = parseAddress(ownerAddress);
+        ByteString rawReciever = parseAddress(receiverAddress);
+        DelegateResourceContract delegateResourceContract=
+            DelegateResourceContract.newBuilder()
+                .setOwnerAddress(rawOwner)
+                .setBalance(balance)
+                .setReceiverAddress(rawReciever)
+                .setLock(lock)
+                .setResourceValue(resourceCode)
+                .build();
+        TransactionExtention txnExt = blockingStub.delegateResource(delegateResourceContract);
+
+        if(SUCCESS != txnExt.getResult().getCode()){
+            throw new IllegalException(txnExt.getResult().getMessage().toStringUtf8());
+        }
+
+        return txnExt;
+    }
+
+    /**
+     * Stake2.0 API
+     * unDelegate resource
+     * @param ownerAddress owner address
+     * @param balance  Amount of TRX staked for resources to be delegated, unit is sun
+     * @param resourceCode Resource type, can be 0("BANDWIDTH") or 1("ENERGY")
+     * @param receiverAddress  Resource receiver address
+     * @return TransactionExtention
+     * @throws IllegalException if fail to undelegate resource
+     */
+    public TransactionExtention undelegateResource(String ownerAddress, long balance, int resourceCode,String receiverAddress) throws IllegalException {
+        ByteString rawOwner = parseAddress(ownerAddress);
+        ByteString rawReciever = parseAddress(receiverAddress);
+        UnDelegateResourceContract unDelegateResourceContract =
+            UnDelegateResourceContract.newBuilder()
+                .setOwnerAddress(rawOwner)
+                .setBalance(balance)
+                .setReceiverAddress(rawReciever)
+                .setResourceValue(resourceCode)
+                .build();
+        TransactionExtention txnExt = blockingStub.unDelegateResource(unDelegateResourceContract);
+
+        if(SUCCESS != txnExt.getResult().getCode()){
+            throw new IllegalException(txnExt.getResult().getMessage().toStringUtf8());
+        }
+
+        return txnExt;
+    }
+
+
+    /**
+     * Stake2.0 API
+     * withdraw unfrozen balance
+     * @param ownerAddress owner address
+     * @return TransactionExtention
+     * @throws IllegalException if fail to withdraw
+     */
+    public TransactionExtention withdrawExpireUnfreeze(String ownerAddress) throws IllegalException {
+        ByteString rawOwner = parseAddress(ownerAddress);
+        WithdrawExpireUnfreezeContract withdrawExpireUnfreezeContract =
+            WithdrawExpireUnfreezeContract.newBuilder()
+                .setOwnerAddress(rawOwner)
+                .build();
+        TransactionExtention txnExt = blockingStub.withdrawExpireUnfreeze(withdrawExpireUnfreezeContract);
+
+        if(SUCCESS != txnExt.getResult().getCode()){
+            throw new IllegalException(txnExt.getResult().getMessage().toStringUtf8());
+        }
+
+        return txnExt;
+    }
+
+    /**
+     * Stake2.0 API
+     * query remaining times of executing unstake operation
+     * @param ownerAddress owner address
+     */
+    public long getAvailableUnfreezeCount(String ownerAddress) {
+        ByteString rawOwner = parseAddress(ownerAddress);
+        GrpcAPI.GetAvailableUnfreezeCountRequestMessage getAvailableUnfreezeCountRequestMessage =
+            GrpcAPI.GetAvailableUnfreezeCountRequestMessage.newBuilder()
+                .setOwnerAddress(rawOwner)
+                .build();
+        GrpcAPI.GetAvailableUnfreezeCountResponseMessage responseMessage = blockingStub.getAvailableUnfreezeCount(getAvailableUnfreezeCountRequestMessage);
+
+        return responseMessage.getCount();
+    }
+
+    /**
+     * Stake2.0 API
+     * query the withdrawable balance at the specified timestamp
+     * @param ownerAddress owner address
+     */
+    public long getCanWithdrawUnfreezeAmount(String ownerAddress)  {
+        ByteString rawOwner = parseAddress(ownerAddress);
+        GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage getAvailableUnfreezeCountRequestMessage =
+            GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage.newBuilder()
+                .setOwnerAddress(rawOwner)
+                .build();
+        GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage responseMessage = blockingStub.getCanWithdrawUnfreezeAmount(getAvailableUnfreezeCountRequestMessage);
+
+        return responseMessage.getAmount();
+    }
+
+    /**
+     * Stake2.0 API
+     * query the amount of delegatable resources share of the specified resource type for an address, unit is sun.
+     * @param ownerAddress owner address
+     * @param type resource type, 0 is bandwidth, 1 is energy
+     */
+    public long getCanDelegatedMaxSize(String ownerAddress,int type)  {
+        ByteString rawFrom = parseAddress(ownerAddress);
+        GrpcAPI.CanDelegatedMaxSizeRequestMessage getAvailableUnfreezeCountRequestMessage =
+            GrpcAPI.CanDelegatedMaxSizeRequestMessage.newBuilder()
+                .setOwnerAddress(rawFrom)
+                .setType(type)
+                .build();
+        GrpcAPI.CanDelegatedMaxSizeResponseMessage responseMessage = blockingStub.getCanDelegatedMaxSize(getAvailableUnfreezeCountRequestMessage);
+
+        return responseMessage.getMaxSize();
+    }
+
+    /**
+     * Stake2.0 API
+     * query the detail of resource share delegated from fromAddress to toAddress
+     * @param fromAddress from address
+     * @param toAddress to address
+     * @return DelegatedResourceList
+     */
+    public DelegatedResourceList getDelegatedResourceV2(String fromAddress,String toAddress) {
+        ByteString rawFrom = parseAddress(fromAddress);
+        ByteString rawTo = parseAddress(toAddress);
+        DelegatedResourceMessage delegatedResourceMessage =
+            DelegatedResourceMessage.newBuilder()
+                .setFromAddress(rawFrom)
+                .setToAddress(rawTo)
+                .build();
+        DelegatedResourceList responseMessage = blockingStub.getDelegatedResourceV2(delegatedResourceMessage);
+
+        return responseMessage;
+    }
+
+
+    /**
+     * Stake2.0 API
+     * query the resource delegation index by an account.
+     * @param address  address
+     * @return DelegatedResourceAccountIndex
+     * @throws IllegalException if fail to freeze balance
+     */
+    public DelegatedResourceAccountIndex getDelegatedResourceAccountIndexV2(String address) throws IllegalException {
+        ByteString rawAddress = parseAddress(address);
+        BytesMessage request = BytesMessage.newBuilder()
+            .setValue(rawAddress)
+            .build();
+        DelegatedResourceAccountIndex responseMessage = blockingStub.getDelegatedResourceAccountIndexV2(request);
+
+        return responseMessage;
+    }
+
+
+
 
     /**
      * Vote for witnesses
