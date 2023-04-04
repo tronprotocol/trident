@@ -151,6 +151,7 @@ message TransactionInfo {
 
     bytes orderId = 25;
     repeated MarketOrderDetail orderDetails = 26;
+    int64 withdraw_expire_amount = 28;
 }
 
 // Witness
@@ -197,6 +198,11 @@ message Account {
     // Freeze and provide balances to other accounts
     int64 delegated_frozen_balance_for_bandwidth = 42;
 
+    int64 old_tron_power = 46;
+    Frozen tron_power = 47;
+
+    bool asset_optimized = 60;
+
     // this account create time
     int64 create_time = 0x09;
     // this last operation time, including transfer, voting and so on. //FIXME fix
@@ -226,6 +232,8 @@ message Account {
     // the identity of this account, case insensitive
     bytes account_id = 23;
 
+    int64 net_window_size = 24;
+
     message AccountResource {
         // energy resource, get from frozen
         int64 energy_usage = 1;
@@ -242,12 +250,33 @@ message Account {
         int64 storage_limit = 6;
         int64 storage_usage = 7;
         int64 latest_exchange_storage_time = 8;
+
+        int64 energy_window_size = 9;
+
+        int64 delegated_frozenV2_balance_for_energy = 10;
+        int64 acquired_delegated_frozenV2_balance_for_energy = 11;
     }
     AccountResource account_resource = 26;
     bytes codeHash = 30;
     Permission owner_permission = 31;
     Permission witness_permission = 32;
     repeated Permission active_permission = 33;
+
+    message FreezeV2 {
+        ResourceCode type = 1;
+        int64 amount = 2;
+    }
+    message UnFreezeV2 {
+        ResourceCode type = 1;
+        int64 unfreeze_amount = 3;
+        int64 unfreeze_expire_time = 4;
+    }
+    repeated FreezeV2 frozenV2 = 34;
+    repeated UnFreezeV2 unfrozenV2 = 35;
+
+    int64 delegated_frozenV2_balance_for_bandwidth = 36;
+    int64 acquired_delegated_frozenV2_balance_for_bandwidth = 37;
+
 }
 
 message MarketOrderDetail {

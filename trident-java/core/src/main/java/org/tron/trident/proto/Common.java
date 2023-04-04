@@ -27,6 +27,10 @@ public final class Common {
      * <code>ENERGY = 1;</code>
      */
     ENERGY(1),
+    /**
+     * <code>TRON_POWER = 2;</code>
+     */
+    TRON_POWER(2),
     UNRECOGNIZED(-1),
     ;
 
@@ -38,6 +42,10 @@ public final class Common {
      * <code>ENERGY = 1;</code>
      */
     public static final int ENERGY_VALUE = 1;
+    /**
+     * <code>TRON_POWER = 2;</code>
+     */
+    public static final int TRON_POWER_VALUE = 2;
 
 
     public final int getNumber() {
@@ -66,6 +74,7 @@ public final class Common {
       switch (value) {
         case 0: return BANDWIDTH;
         case 1: return ENERGY;
+        case 2: return TRON_POWER;
         default: return null;
       }
     }
@@ -10004,10 +10013,11 @@ public final class Common {
       "\020\003\022\013\n\007Payable\020\004\"0\n\004Vote\022\024\n\014vote_address\030" +
       "\001 \001(\014\022\022\n\nvote_count\030\002 \001(\003\"I\n\004Note\022\r\n\005val" +
       "ue\030\001 \001(\003\022\027\n\017payment_address\030\002 \001(\t\022\013\n\003rcm" +
-      "\030\003 \001(\014\022\014\n\004memo\030\004 \001(\014*)\n\014ResourceCode\022\r\n\t" +
-      "BANDWIDTH\020\000\022\n\n\006ENERGY\020\001*7\n\013AccountType\022\n" +
-      "\n\006Normal\020\000\022\016\n\nAssetIssue\020\001\022\014\n\010Contract\020\002" +
-      "B\030\n\026org.tron.trident.protob\006proto3"
+      "\030\003 \001(\014\022\014\n\004memo\030\004 \001(\014*9\n\014ResourceCode\022\r\n\t" +
+      "BANDWIDTH\020\000\022\n\n\006ENERGY\020\001\022\016\n\nTRON_POWER\020\002*" +
+      "7\n\013AccountType\022\n\n\006Normal\020\000\022\016\n\nAssetIssue" +
+      "\020\001\022\014\n\010Contract\020\002B\030\n\026org.tron.trident.pro" +
+      "tob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,

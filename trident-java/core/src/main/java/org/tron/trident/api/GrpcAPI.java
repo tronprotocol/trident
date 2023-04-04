@@ -24308,7 +24308,7 @@ public final class GrpcAPI {
   }
   /**
    * <pre>
-   *stake 2.0
+   * Stake 2.0
    * </pre>
    *
    * Protobuf type {@code protocol.CanWithdrawUnfreezeAmountRequestMessage}
@@ -24589,7 +24589,7 @@ public final class GrpcAPI {
     }
     /**
      * <pre>
-     *stake 2.0
+     * Stake 2.0
      * </pre>
      *
      * Protobuf type {@code protocol.CanWithdrawUnfreezeAmountRequestMessage}
