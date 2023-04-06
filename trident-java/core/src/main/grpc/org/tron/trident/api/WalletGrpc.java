@@ -4974,7 +4974,7 @@ public final class WalletGrpc {
 
     /**
      * <pre>
-     *Stake 2.0
+     * Stake 2.0
      * </pre>
      */
     public void freezeBalanceV2(org.tron.trident.proto.Contract.FreezeBalanceV2Contract request,
@@ -6964,7 +6964,7 @@ public final class WalletGrpc {
 
     /**
      * <pre>
-     *Stake 2.0
+     * Stake 2.0
      * </pre>
      */
     public void freezeBalanceV2(org.tron.trident.proto.Contract.FreezeBalanceV2Contract request,
@@ -7929,7 +7929,7 @@ public final class WalletGrpc {
 
     /**
      * <pre>
-     *Stake 2.0
+     * Stake 2.0
      * </pre>
      */
     public org.tron.trident.proto.Response.TransactionExtention freezeBalanceV2(org.tron.trident.proto.Contract.FreezeBalanceV2Contract request) {
@@ -9004,7 +9004,7 @@ public final class WalletGrpc {
 
     /**
      * <pre>
-     *Stake 2.0
+     * Stake 2.0
      * </pre>
      */
     public com.google.common.util.concurrent.ListenableFuture<org.tron.trident.proto.Response.TransactionExtention> freezeBalanceV2(

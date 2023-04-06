@@ -15463,6 +15463,12 @@ public final class Response {
      */
     org.tron.trident.proto.Response.MarketOrderDetailOrBuilder getOrderDetailsOrBuilder(
         int index);
+
+    /**
+     * <code>int64 withdraw_expire_amount = 28;</code>
+     * @return The withdrawExpireAmount.
+     */
+    long getWithdrawExpireAmount();
   }
   /**
    * Protobuf type {@code protocol.TransactionInfo}
@@ -15648,6 +15654,11 @@ public final class Response {
               }
               orderDetails_.add(
                   input.readMessage(org.tron.trident.proto.Response.MarketOrderDetail.parser(), extensionRegistry));
+              break;
+            }
+            case 224: {
+
+              withdrawExpireAmount_ = input.readInt64();
               break;
             }
             default: {
@@ -16931,6 +16942,17 @@ public final class Response {
       return orderDetails_.get(index);
     }
 
+    public static final int WITHDRAW_EXPIRE_AMOUNT_FIELD_NUMBER = 28;
+    private long withdrawExpireAmount_;
+    /**
+     * <code>int64 withdraw_expire_amount = 28;</code>
+     * @return The withdrawExpireAmount.
+     */
+    @java.lang.Override
+    public long getWithdrawExpireAmount() {
+      return withdrawExpireAmount_;
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -17007,6 +17029,9 @@ public final class Response {
       }
       for (int i = 0; i < orderDetails_.size(); i++) {
         output.writeMessage(26, orderDetails_.get(i));
+      }
+      if (withdrawExpireAmount_ != 0L) {
+        output.writeInt64(28, withdrawExpireAmount_);
       }
       unknownFields.writeTo(output);
     }
@@ -17105,6 +17130,10 @@ public final class Response {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(26, orderDetails_.get(i));
       }
+      if (withdrawExpireAmount_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(28, withdrawExpireAmount_);
+      }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
@@ -17164,6 +17193,8 @@ public final class Response {
           .equals(other.getOrderId())) return false;
       if (!getOrderDetailsList()
           .equals(other.getOrderDetailsList())) return false;
+      if (getWithdrawExpireAmount()
+          != other.getWithdrawExpireAmount()) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -17237,6 +17268,9 @@ public final class Response {
         hash = (37 * hash) + ORDERDETAILS_FIELD_NUMBER;
         hash = (53 * hash) + getOrderDetailsList().hashCode();
       }
+      hash = (37 * hash) + WITHDRAW_EXPIRE_AMOUNT_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getWithdrawExpireAmount());
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -17431,6 +17465,8 @@ public final class Response {
         } else {
           orderDetailsBuilder_.clear();
         }
+        withdrawExpireAmount_ = 0L;
+
         return this;
       }
 
@@ -17511,6 +17547,7 @@ public final class Response {
         } else {
           result.orderDetails_ = orderDetailsBuilder_.build();
         }
+        result.withdrawExpireAmount_ = withdrawExpireAmount_;
         onBuilt();
         return result;
       }
@@ -17698,6 +17735,9 @@ public final class Response {
               orderDetailsBuilder_.addAllMessages(other.orderDetails_);
             }
           }
+        }
+        if (other.getWithdrawExpireAmount() != 0L) {
+          setWithdrawExpireAmount(other.getWithdrawExpireAmount());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -19228,6 +19268,37 @@ public final class Response {
         }
         return orderDetailsBuilder_;
       }
+
+      private long withdrawExpireAmount_ ;
+      /**
+       * <code>int64 withdraw_expire_amount = 28;</code>
+       * @return The withdrawExpireAmount.
+       */
+      @java.lang.Override
+      public long getWithdrawExpireAmount() {
+        return withdrawExpireAmount_;
+      }
+      /**
+       * <code>int64 withdraw_expire_amount = 28;</code>
+       * @param value The withdrawExpireAmount to set.
+       * @return This builder for chaining.
+       */
+      public Builder setWithdrawExpireAmount(long value) {
+        
+        withdrawExpireAmount_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int64 withdraw_expire_amount = 28;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearWithdrawExpireAmount() {
+        
+        withdrawExpireAmount_ = 0L;
+        onChanged();
+        return this;
+      }
       @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -20703,6 +20774,33 @@ public final class Response {
     long getDelegatedFrozenBalanceForBandwidth();
 
     /**
+     * <code>int64 old_tron_power = 46;</code>
+     * @return The oldTronPower.
+     */
+    long getOldTronPower();
+
+    /**
+     * <code>.protocol.Account.Frozen tron_power = 47;</code>
+     * @return Whether the tronPower field is set.
+     */
+    boolean hasTronPower();
+    /**
+     * <code>.protocol.Account.Frozen tron_power = 47;</code>
+     * @return The tronPower.
+     */
+    org.tron.trident.proto.Response.Account.Frozen getTronPower();
+    /**
+     * <code>.protocol.Account.Frozen tron_power = 47;</code>
+     */
+    org.tron.trident.proto.Response.Account.FrozenOrBuilder getTronPowerOrBuilder();
+
+    /**
+     * <code>bool asset_optimized = 60;</code>
+     * @return The assetOptimized.
+     */
+    boolean getAssetOptimized();
+
+    /**
      * <pre>
      * this account create time
      * </pre>
@@ -20990,6 +21088,12 @@ public final class Response {
     com.google.protobuf.ByteString getAccountId();
 
     /**
+     * <code>int64 net_window_size = 24;</code>
+     * @return The netWindowSize.
+     */
+    long getNetWindowSize();
+
+    /**
      * <code>.protocol.Account.AccountResource account_resource = 26;</code>
      * @return Whether the accountResource field is set.
      */
@@ -21063,6 +21167,66 @@ public final class Response {
      */
     org.tron.trident.proto.Common.PermissionOrBuilder getActivePermissionOrBuilder(
         int index);
+
+    /**
+     * <code>repeated .protocol.Account.FreezeV2 frozenV2 = 34;</code>
+     */
+    java.util.List<org.tron.trident.proto.Response.Account.FreezeV2> 
+        getFrozenV2List();
+    /**
+     * <code>repeated .protocol.Account.FreezeV2 frozenV2 = 34;</code>
+     */
+    org.tron.trident.proto.Response.Account.FreezeV2 getFrozenV2(int index);
+    /**
+     * <code>repeated .protocol.Account.FreezeV2 frozenV2 = 34;</code>
+     */
+    int getFrozenV2Count();
+    /**
+     * <code>repeated .protocol.Account.FreezeV2 frozenV2 = 34;</code>
+     */
+    java.util.List<? extends org.tron.trident.proto.Response.Account.FreezeV2OrBuilder> 
+        getFrozenV2OrBuilderList();
+    /**
+     * <code>repeated .protocol.Account.FreezeV2 frozenV2 = 34;</code>
+     */
+    org.tron.trident.proto.Response.Account.FreezeV2OrBuilder getFrozenV2OrBuilder(
+        int index);
+
+    /**
+     * <code>repeated .protocol.Account.UnFreezeV2 unfrozenV2 = 35;</code>
+     */
+    java.util.List<org.tron.trident.proto.Response.Account.UnFreezeV2> 
+        getUnfrozenV2List();
+    /**
+     * <code>repeated .protocol.Account.UnFreezeV2 unfrozenV2 = 35;</code>
+     */
+    org.tron.trident.proto.Response.Account.UnFreezeV2 getUnfrozenV2(int index);
+    /**
+     * <code>repeated .protocol.Account.UnFreezeV2 unfrozenV2 = 35;</code>
+     */
+    int getUnfrozenV2Count();
+    /**
+     * <code>repeated .protocol.Account.UnFreezeV2 unfrozenV2 = 35;</code>
+     */
+    java.util.List<? extends org.tron.trident.proto.Response.Account.UnFreezeV2OrBuilder> 
+        getUnfrozenV2OrBuilderList();
+    /**
+     * <code>repeated .protocol.Account.UnFreezeV2 unfrozenV2 = 35;</code>
+     */
+    org.tron.trident.proto.Response.Account.UnFreezeV2OrBuilder getUnfrozenV2OrBuilder(
+        int index);
+
+    /**
+     * <code>int64 delegated_frozenV2_balance_for_bandwidth = 36;</code>
+     * @return The delegatedFrozenV2BalanceForBandwidth.
+     */
+    long getDelegatedFrozenV2BalanceForBandwidth();
+
+    /**
+     * <code>int64 acquired_delegated_frozenV2_balance_for_bandwidth = 37;</code>
+     * @return The acquiredDelegatedFrozenV2BalanceForBandwidth.
+     */
+    long getAcquiredDelegatedFrozenV2BalanceForBandwidth();
   }
   /**
    * <pre>
@@ -21093,6 +21257,8 @@ public final class Response {
       accountId_ = com.google.protobuf.ByteString.EMPTY;
       codeHash_ = com.google.protobuf.ByteString.EMPTY;
       activePermission_ = java.util.Collections.emptyList();
+      frozenV2_ = java.util.Collections.emptyList();
+      unfrozenV2_ = java.util.Collections.emptyList();
     }
 
     @java.lang.Override
@@ -21278,6 +21444,11 @@ public final class Response {
               accountId_ = input.readBytes();
               break;
             }
+            case 192: {
+
+              netWindowSize_ = input.readInt64();
+              break;
+            }
             case 210: {
               org.tron.trident.proto.Response.Account.AccountResource.Builder subBuilder = null;
               if (accountResource_ != null) {
@@ -21331,6 +21502,34 @@ public final class Response {
                   input.readMessage(org.tron.trident.proto.Common.Permission.parser(), extensionRegistry));
               break;
             }
+            case 274: {
+              if (!((mutable_bitField0_ & 0x00000400) != 0)) {
+                frozenV2_ = new java.util.ArrayList<org.tron.trident.proto.Response.Account.FreezeV2>();
+                mutable_bitField0_ |= 0x00000400;
+              }
+              frozenV2_.add(
+                  input.readMessage(org.tron.trident.proto.Response.Account.FreezeV2.parser(), extensionRegistry));
+              break;
+            }
+            case 282: {
+              if (!((mutable_bitField0_ & 0x00000800) != 0)) {
+                unfrozenV2_ = new java.util.ArrayList<org.tron.trident.proto.Response.Account.UnFreezeV2>();
+                mutable_bitField0_ |= 0x00000800;
+              }
+              unfrozenV2_.add(
+                  input.readMessage(org.tron.trident.proto.Response.Account.UnFreezeV2.parser(), extensionRegistry));
+              break;
+            }
+            case 288: {
+
+              delegatedFrozenV2BalanceForBandwidth_ = input.readInt64();
+              break;
+            }
+            case 296: {
+
+              acquiredDelegatedFrozenV2BalanceForBandwidth_ = input.readInt64();
+              break;
+            }
             case 328: {
 
               acquiredDelegatedFrozenBalanceForBandwidth_ = input.readInt64();
@@ -21339,6 +21538,24 @@ public final class Response {
             case 336: {
 
               delegatedFrozenBalanceForBandwidth_ = input.readInt64();
+              break;
+            }
+            case 368: {
+
+              oldTronPower_ = input.readInt64();
+              break;
+            }
+            case 378: {
+              org.tron.trident.proto.Response.Account.Frozen.Builder subBuilder = null;
+              if (tronPower_ != null) {
+                subBuilder = tronPower_.toBuilder();
+              }
+              tronPower_ = input.readMessage(org.tron.trident.proto.Response.Account.Frozen.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(tronPower_);
+                tronPower_ = subBuilder.buildPartial();
+              }
+
               break;
             }
             case 450: {
@@ -21385,6 +21602,11 @@ public final class Response {
                   freeAssetNetUsageV2__.getKey(), freeAssetNetUsageV2__.getValue());
               break;
             }
+            case 480: {
+
+              assetOptimized_ = input.readBool();
+              break;
+            }
             default: {
               if (!parseUnknownField(
                   input, unknownFields, extensionRegistry, tag)) {
@@ -21411,6 +21633,12 @@ public final class Response {
         }
         if (((mutable_bitField0_ & 0x00000200) != 0)) {
           activePermission_ = java.util.Collections.unmodifiableList(activePermission_);
+        }
+        if (((mutable_bitField0_ & 0x00000400) != 0)) {
+          frozenV2_ = java.util.Collections.unmodifiableList(frozenV2_);
+        }
+        if (((mutable_bitField0_ & 0x00000800) != 0)) {
+          unfrozenV2_ = java.util.Collections.unmodifiableList(unfrozenV2_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -22147,6 +22375,24 @@ public final class Response {
        * @return The latestExchangeStorageTime.
        */
       long getLatestExchangeStorageTime();
+
+      /**
+       * <code>int64 energy_window_size = 9;</code>
+       * @return The energyWindowSize.
+       */
+      long getEnergyWindowSize();
+
+      /**
+       * <code>int64 delegated_frozenV2_balance_for_energy = 10;</code>
+       * @return The delegatedFrozenV2BalanceForEnergy.
+       */
+      long getDelegatedFrozenV2BalanceForEnergy();
+
+      /**
+       * <code>int64 acquired_delegated_frozenV2_balance_for_energy = 11;</code>
+       * @return The acquiredDelegatedFrozenV2BalanceForEnergy.
+       */
+      long getAcquiredDelegatedFrozenV2BalanceForEnergy();
     }
     /**
      * Protobuf type {@code protocol.Account.AccountResource}
@@ -22239,6 +22485,21 @@ public final class Response {
               case 64: {
 
                 latestExchangeStorageTime_ = input.readInt64();
+                break;
+              }
+              case 72: {
+
+                energyWindowSize_ = input.readInt64();
+                break;
+              }
+              case 80: {
+
+                delegatedFrozenV2BalanceForEnergy_ = input.readInt64();
+                break;
+              }
+              case 88: {
+
+                acquiredDelegatedFrozenV2BalanceForEnergy_ = input.readInt64();
                 break;
               }
               default: {
@@ -22404,6 +22665,39 @@ public final class Response {
         return latestExchangeStorageTime_;
       }
 
+      public static final int ENERGY_WINDOW_SIZE_FIELD_NUMBER = 9;
+      private long energyWindowSize_;
+      /**
+       * <code>int64 energy_window_size = 9;</code>
+       * @return The energyWindowSize.
+       */
+      @java.lang.Override
+      public long getEnergyWindowSize() {
+        return energyWindowSize_;
+      }
+
+      public static final int DELEGATED_FROZENV2_BALANCE_FOR_ENERGY_FIELD_NUMBER = 10;
+      private long delegatedFrozenV2BalanceForEnergy_;
+      /**
+       * <code>int64 delegated_frozenV2_balance_for_energy = 10;</code>
+       * @return The delegatedFrozenV2BalanceForEnergy.
+       */
+      @java.lang.Override
+      public long getDelegatedFrozenV2BalanceForEnergy() {
+        return delegatedFrozenV2BalanceForEnergy_;
+      }
+
+      public static final int ACQUIRED_DELEGATED_FROZENV2_BALANCE_FOR_ENERGY_FIELD_NUMBER = 11;
+      private long acquiredDelegatedFrozenV2BalanceForEnergy_;
+      /**
+       * <code>int64 acquired_delegated_frozenV2_balance_for_energy = 11;</code>
+       * @return The acquiredDelegatedFrozenV2BalanceForEnergy.
+       */
+      @java.lang.Override
+      public long getAcquiredDelegatedFrozenV2BalanceForEnergy() {
+        return acquiredDelegatedFrozenV2BalanceForEnergy_;
+      }
+
       private byte memoizedIsInitialized = -1;
       @java.lang.Override
       public final boolean isInitialized() {
@@ -22441,6 +22735,15 @@ public final class Response {
         }
         if (latestExchangeStorageTime_ != 0L) {
           output.writeInt64(8, latestExchangeStorageTime_);
+        }
+        if (energyWindowSize_ != 0L) {
+          output.writeInt64(9, energyWindowSize_);
+        }
+        if (delegatedFrozenV2BalanceForEnergy_ != 0L) {
+          output.writeInt64(10, delegatedFrozenV2BalanceForEnergy_);
+        }
+        if (acquiredDelegatedFrozenV2BalanceForEnergy_ != 0L) {
+          output.writeInt64(11, acquiredDelegatedFrozenV2BalanceForEnergy_);
         }
         unknownFields.writeTo(output);
       }
@@ -22483,6 +22786,18 @@ public final class Response {
           size += com.google.protobuf.CodedOutputStream
             .computeInt64Size(8, latestExchangeStorageTime_);
         }
+        if (energyWindowSize_ != 0L) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeInt64Size(9, energyWindowSize_);
+        }
+        if (delegatedFrozenV2BalanceForEnergy_ != 0L) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeInt64Size(10, delegatedFrozenV2BalanceForEnergy_);
+        }
+        if (acquiredDelegatedFrozenV2BalanceForEnergy_ != 0L) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeInt64Size(11, acquiredDelegatedFrozenV2BalanceForEnergy_);
+        }
         size += unknownFields.getSerializedSize();
         memoizedSize = size;
         return size;
@@ -22517,6 +22832,12 @@ public final class Response {
             != other.getStorageUsage()) return false;
         if (getLatestExchangeStorageTime()
             != other.getLatestExchangeStorageTime()) return false;
+        if (getEnergyWindowSize()
+            != other.getEnergyWindowSize()) return false;
+        if (getDelegatedFrozenV2BalanceForEnergy()
+            != other.getDelegatedFrozenV2BalanceForEnergy()) return false;
+        if (getAcquiredDelegatedFrozenV2BalanceForEnergy()
+            != other.getAcquiredDelegatedFrozenV2BalanceForEnergy()) return false;
         if (!unknownFields.equals(other.unknownFields)) return false;
         return true;
       }
@@ -22553,6 +22874,15 @@ public final class Response {
         hash = (37 * hash) + LATEST_EXCHANGE_STORAGE_TIME_FIELD_NUMBER;
         hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
             getLatestExchangeStorageTime());
+        hash = (37 * hash) + ENERGY_WINDOW_SIZE_FIELD_NUMBER;
+        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+            getEnergyWindowSize());
+        hash = (37 * hash) + DELEGATED_FROZENV2_BALANCE_FOR_ENERGY_FIELD_NUMBER;
+        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+            getDelegatedFrozenV2BalanceForEnergy());
+        hash = (37 * hash) + ACQUIRED_DELEGATED_FROZENV2_BALANCE_FOR_ENERGY_FIELD_NUMBER;
+        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+            getAcquiredDelegatedFrozenV2BalanceForEnergy());
         hash = (29 * hash) + unknownFields.hashCode();
         memoizedHashCode = hash;
         return hash;
@@ -22706,6 +23036,12 @@ public final class Response {
 
           latestExchangeStorageTime_ = 0L;
 
+          energyWindowSize_ = 0L;
+
+          delegatedFrozenV2BalanceForEnergy_ = 0L;
+
+          acquiredDelegatedFrozenV2BalanceForEnergy_ = 0L;
+
           return this;
         }
 
@@ -22744,6 +23080,9 @@ public final class Response {
           result.storageLimit_ = storageLimit_;
           result.storageUsage_ = storageUsage_;
           result.latestExchangeStorageTime_ = latestExchangeStorageTime_;
+          result.energyWindowSize_ = energyWindowSize_;
+          result.delegatedFrozenV2BalanceForEnergy_ = delegatedFrozenV2BalanceForEnergy_;
+          result.acquiredDelegatedFrozenV2BalanceForEnergy_ = acquiredDelegatedFrozenV2BalanceForEnergy_;
           onBuilt();
           return result;
         }
@@ -22815,6 +23154,15 @@ public final class Response {
           }
           if (other.getLatestExchangeStorageTime() != 0L) {
             setLatestExchangeStorageTime(other.getLatestExchangeStorageTime());
+          }
+          if (other.getEnergyWindowSize() != 0L) {
+            setEnergyWindowSize(other.getEnergyWindowSize());
+          }
+          if (other.getDelegatedFrozenV2BalanceForEnergy() != 0L) {
+            setDelegatedFrozenV2BalanceForEnergy(other.getDelegatedFrozenV2BalanceForEnergy());
+          }
+          if (other.getAcquiredDelegatedFrozenV2BalanceForEnergy() != 0L) {
+            setAcquiredDelegatedFrozenV2BalanceForEnergy(other.getAcquiredDelegatedFrozenV2BalanceForEnergy());
           }
           this.mergeUnknownFields(other.unknownFields);
           onChanged();
@@ -23264,6 +23612,99 @@ public final class Response {
           onChanged();
           return this;
         }
+
+        private long energyWindowSize_ ;
+        /**
+         * <code>int64 energy_window_size = 9;</code>
+         * @return The energyWindowSize.
+         */
+        @java.lang.Override
+        public long getEnergyWindowSize() {
+          return energyWindowSize_;
+        }
+        /**
+         * <code>int64 energy_window_size = 9;</code>
+         * @param value The energyWindowSize to set.
+         * @return This builder for chaining.
+         */
+        public Builder setEnergyWindowSize(long value) {
+          
+          energyWindowSize_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>int64 energy_window_size = 9;</code>
+         * @return This builder for chaining.
+         */
+        public Builder clearEnergyWindowSize() {
+          
+          energyWindowSize_ = 0L;
+          onChanged();
+          return this;
+        }
+
+        private long delegatedFrozenV2BalanceForEnergy_ ;
+        /**
+         * <code>int64 delegated_frozenV2_balance_for_energy = 10;</code>
+         * @return The delegatedFrozenV2BalanceForEnergy.
+         */
+        @java.lang.Override
+        public long getDelegatedFrozenV2BalanceForEnergy() {
+          return delegatedFrozenV2BalanceForEnergy_;
+        }
+        /**
+         * <code>int64 delegated_frozenV2_balance_for_energy = 10;</code>
+         * @param value The delegatedFrozenV2BalanceForEnergy to set.
+         * @return This builder for chaining.
+         */
+        public Builder setDelegatedFrozenV2BalanceForEnergy(long value) {
+          
+          delegatedFrozenV2BalanceForEnergy_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>int64 delegated_frozenV2_balance_for_energy = 10;</code>
+         * @return This builder for chaining.
+         */
+        public Builder clearDelegatedFrozenV2BalanceForEnergy() {
+          
+          delegatedFrozenV2BalanceForEnergy_ = 0L;
+          onChanged();
+          return this;
+        }
+
+        private long acquiredDelegatedFrozenV2BalanceForEnergy_ ;
+        /**
+         * <code>int64 acquired_delegated_frozenV2_balance_for_energy = 11;</code>
+         * @return The acquiredDelegatedFrozenV2BalanceForEnergy.
+         */
+        @java.lang.Override
+        public long getAcquiredDelegatedFrozenV2BalanceForEnergy() {
+          return acquiredDelegatedFrozenV2BalanceForEnergy_;
+        }
+        /**
+         * <code>int64 acquired_delegated_frozenV2_balance_for_energy = 11;</code>
+         * @param value The acquiredDelegatedFrozenV2BalanceForEnergy to set.
+         * @return This builder for chaining.
+         */
+        public Builder setAcquiredDelegatedFrozenV2BalanceForEnergy(long value) {
+          
+          acquiredDelegatedFrozenV2BalanceForEnergy_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>int64 acquired_delegated_frozenV2_balance_for_energy = 11;</code>
+         * @return This builder for chaining.
+         */
+        public Builder clearAcquiredDelegatedFrozenV2BalanceForEnergy() {
+          
+          acquiredDelegatedFrozenV2BalanceForEnergy_ = 0L;
+          onChanged();
+          return this;
+        }
         @java.lang.Override
         public final Builder setUnknownFields(
             final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -23312,6 +23753,1269 @@ public final class Response {
 
       @java.lang.Override
       public org.tron.trident.proto.Response.Account.AccountResource getDefaultInstanceForType() {
+        return DEFAULT_INSTANCE;
+      }
+
+    }
+
+    public interface FreezeV2OrBuilder extends
+        // @@protoc_insertion_point(interface_extends:protocol.Account.FreezeV2)
+        com.google.protobuf.MessageOrBuilder {
+
+      /**
+       * <code>.protocol.ResourceCode type = 1;</code>
+       * @return The enum numeric value on the wire for type.
+       */
+      int getTypeValue();
+      /**
+       * <code>.protocol.ResourceCode type = 1;</code>
+       * @return The type.
+       */
+      org.tron.trident.proto.Common.ResourceCode getType();
+
+      /**
+       * <code>int64 amount = 2;</code>
+       * @return The amount.
+       */
+      long getAmount();
+    }
+    /**
+     * Protobuf type {@code protocol.Account.FreezeV2}
+     */
+    public static final class FreezeV2 extends
+        com.google.protobuf.GeneratedMessageV3 implements
+        // @@protoc_insertion_point(message_implements:protocol.Account.FreezeV2)
+        FreezeV2OrBuilder {
+    private static final long serialVersionUID = 0L;
+      // Use FreezeV2.newBuilder() to construct.
+      private FreezeV2(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+        super(builder);
+      }
+      private FreezeV2() {
+        type_ = 0;
+      }
+
+      @java.lang.Override
+      @SuppressWarnings({"unused"})
+      protected java.lang.Object newInstance(
+          UnusedPrivateParameter unused) {
+        return new FreezeV2();
+      }
+
+      @java.lang.Override
+      public final com.google.protobuf.UnknownFieldSet
+      getUnknownFields() {
+        return this.unknownFields;
+      }
+      private FreezeV2(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        this();
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder();
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 8: {
+                int rawValue = input.readEnum();
+
+                type_ = rawValue;
+                break;
+              }
+              case 16: {
+
+                amount_ = input.readInt64();
+                break;
+              }
+              default: {
+                if (!parseUnknownField(
+                    input, unknownFields, extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
+              }
+            }
+          }
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(this);
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(
+              e).setUnfinishedMessage(this);
+        } finally {
+          this.unknownFields = unknownFields.build();
+          makeExtensionsImmutable();
+        }
+      }
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return org.tron.trident.proto.Response.internal_static_protocol_Account_FreezeV2_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return org.tron.trident.proto.Response.internal_static_protocol_Account_FreezeV2_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                org.tron.trident.proto.Response.Account.FreezeV2.class, org.tron.trident.proto.Response.Account.FreezeV2.Builder.class);
+      }
+
+      public static final int TYPE_FIELD_NUMBER = 1;
+      private int type_;
+      /**
+       * <code>.protocol.ResourceCode type = 1;</code>
+       * @return The enum numeric value on the wire for type.
+       */
+      @java.lang.Override public int getTypeValue() {
+        return type_;
+      }
+      /**
+       * <code>.protocol.ResourceCode type = 1;</code>
+       * @return The type.
+       */
+      @java.lang.Override public org.tron.trident.proto.Common.ResourceCode getType() {
+        @SuppressWarnings("deprecation")
+        org.tron.trident.proto.Common.ResourceCode result = org.tron.trident.proto.Common.ResourceCode.valueOf(type_);
+        return result == null ? org.tron.trident.proto.Common.ResourceCode.UNRECOGNIZED : result;
+      }
+
+      public static final int AMOUNT_FIELD_NUMBER = 2;
+      private long amount_;
+      /**
+       * <code>int64 amount = 2;</code>
+       * @return The amount.
+       */
+      @java.lang.Override
+      public long getAmount() {
+        return amount_;
+      }
+
+      private byte memoizedIsInitialized = -1;
+      @java.lang.Override
+      public final boolean isInitialized() {
+        byte isInitialized = memoizedIsInitialized;
+        if (isInitialized == 1) return true;
+        if (isInitialized == 0) return false;
+
+        memoizedIsInitialized = 1;
+        return true;
+      }
+
+      @java.lang.Override
+      public void writeTo(com.google.protobuf.CodedOutputStream output)
+                          throws java.io.IOException {
+        if (type_ != org.tron.trident.proto.Common.ResourceCode.BANDWIDTH.getNumber()) {
+          output.writeEnum(1, type_);
+        }
+        if (amount_ != 0L) {
+          output.writeInt64(2, amount_);
+        }
+        unknownFields.writeTo(output);
+      }
+
+      @java.lang.Override
+      public int getSerializedSize() {
+        int size = memoizedSize;
+        if (size != -1) return size;
+
+        size = 0;
+        if (type_ != org.tron.trident.proto.Common.ResourceCode.BANDWIDTH.getNumber()) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeEnumSize(1, type_);
+        }
+        if (amount_ != 0L) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeInt64Size(2, amount_);
+        }
+        size += unknownFields.getSerializedSize();
+        memoizedSize = size;
+        return size;
+      }
+
+      @java.lang.Override
+      public boolean equals(final java.lang.Object obj) {
+        if (obj == this) {
+         return true;
+        }
+        if (!(obj instanceof org.tron.trident.proto.Response.Account.FreezeV2)) {
+          return super.equals(obj);
+        }
+        org.tron.trident.proto.Response.Account.FreezeV2 other = (org.tron.trident.proto.Response.Account.FreezeV2) obj;
+
+        if (type_ != other.type_) return false;
+        if (getAmount()
+            != other.getAmount()) return false;
+        if (!unknownFields.equals(other.unknownFields)) return false;
+        return true;
+      }
+
+      @java.lang.Override
+      public int hashCode() {
+        if (memoizedHashCode != 0) {
+          return memoizedHashCode;
+        }
+        int hash = 41;
+        hash = (19 * hash) + getDescriptor().hashCode();
+        hash = (37 * hash) + TYPE_FIELD_NUMBER;
+        hash = (53 * hash) + type_;
+        hash = (37 * hash) + AMOUNT_FIELD_NUMBER;
+        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+            getAmount());
+        hash = (29 * hash) + unknownFields.hashCode();
+        memoizedHashCode = hash;
+        return hash;
+      }
+
+      public static org.tron.trident.proto.Response.Account.FreezeV2 parseFrom(
+          java.nio.ByteBuffer data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static org.tron.trident.proto.Response.Account.FreezeV2 parseFrom(
+          java.nio.ByteBuffer data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static org.tron.trident.proto.Response.Account.FreezeV2 parseFrom(
+          com.google.protobuf.ByteString data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static org.tron.trident.proto.Response.Account.FreezeV2 parseFrom(
+          com.google.protobuf.ByteString data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static org.tron.trident.proto.Response.Account.FreezeV2 parseFrom(byte[] data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static org.tron.trident.proto.Response.Account.FreezeV2 parseFrom(
+          byte[] data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static org.tron.trident.proto.Response.Account.FreezeV2 parseFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input);
+      }
+      public static org.tron.trident.proto.Response.Account.FreezeV2 parseFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input, extensionRegistry);
+      }
+      public static org.tron.trident.proto.Response.Account.FreezeV2 parseDelimitedFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseDelimitedWithIOException(PARSER, input);
+      }
+      public static org.tron.trident.proto.Response.Account.FreezeV2 parseDelimitedFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+      }
+      public static org.tron.trident.proto.Response.Account.FreezeV2 parseFrom(
+          com.google.protobuf.CodedInputStream input)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input);
+      }
+      public static org.tron.trident.proto.Response.Account.FreezeV2 parseFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input, extensionRegistry);
+      }
+
+      @java.lang.Override
+      public Builder newBuilderForType() { return newBuilder(); }
+      public static Builder newBuilder() {
+        return DEFAULT_INSTANCE.toBuilder();
+      }
+      public static Builder newBuilder(org.tron.trident.proto.Response.Account.FreezeV2 prototype) {
+        return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+      }
+      @java.lang.Override
+      public Builder toBuilder() {
+        return this == DEFAULT_INSTANCE
+            ? new Builder() : new Builder().mergeFrom(this);
+      }
+
+      @java.lang.Override
+      protected Builder newBuilderForType(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        Builder builder = new Builder(parent);
+        return builder;
+      }
+      /**
+       * Protobuf type {@code protocol.Account.FreezeV2}
+       */
+      public static final class Builder extends
+          com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+          // @@protoc_insertion_point(builder_implements:protocol.Account.FreezeV2)
+          org.tron.trident.proto.Response.Account.FreezeV2OrBuilder {
+        public static final com.google.protobuf.Descriptors.Descriptor
+            getDescriptor() {
+          return org.tron.trident.proto.Response.internal_static_protocol_Account_FreezeV2_descriptor;
+        }
+
+        @java.lang.Override
+        protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+            internalGetFieldAccessorTable() {
+          return org.tron.trident.proto.Response.internal_static_protocol_Account_FreezeV2_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                  org.tron.trident.proto.Response.Account.FreezeV2.class, org.tron.trident.proto.Response.Account.FreezeV2.Builder.class);
+        }
+
+        // Construct using org.tron.trident.proto.Response.Account.FreezeV2.newBuilder()
+        private Builder() {
+          maybeForceBuilderInitialization();
+        }
+
+        private Builder(
+            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          super(parent);
+          maybeForceBuilderInitialization();
+        }
+        private void maybeForceBuilderInitialization() {
+          if (com.google.protobuf.GeneratedMessageV3
+                  .alwaysUseFieldBuilders) {
+          }
+        }
+        @java.lang.Override
+        public Builder clear() {
+          super.clear();
+          type_ = 0;
+
+          amount_ = 0L;
+
+          return this;
+        }
+
+        @java.lang.Override
+        public com.google.protobuf.Descriptors.Descriptor
+            getDescriptorForType() {
+          return org.tron.trident.proto.Response.internal_static_protocol_Account_FreezeV2_descriptor;
+        }
+
+        @java.lang.Override
+        public org.tron.trident.proto.Response.Account.FreezeV2 getDefaultInstanceForType() {
+          return org.tron.trident.proto.Response.Account.FreezeV2.getDefaultInstance();
+        }
+
+        @java.lang.Override
+        public org.tron.trident.proto.Response.Account.FreezeV2 build() {
+          org.tron.trident.proto.Response.Account.FreezeV2 result = buildPartial();
+          if (!result.isInitialized()) {
+            throw newUninitializedMessageException(result);
+          }
+          return result;
+        }
+
+        @java.lang.Override
+        public org.tron.trident.proto.Response.Account.FreezeV2 buildPartial() {
+          org.tron.trident.proto.Response.Account.FreezeV2 result = new org.tron.trident.proto.Response.Account.FreezeV2(this);
+          result.type_ = type_;
+          result.amount_ = amount_;
+          onBuilt();
+          return result;
+        }
+
+        @java.lang.Override
+        public Builder clone() {
+          return super.clone();
+        }
+        @java.lang.Override
+        public Builder setField(
+            com.google.protobuf.Descriptors.FieldDescriptor field,
+            java.lang.Object value) {
+          return super.setField(field, value);
+        }
+        @java.lang.Override
+        public Builder clearField(
+            com.google.protobuf.Descriptors.FieldDescriptor field) {
+          return super.clearField(field);
+        }
+        @java.lang.Override
+        public Builder clearOneof(
+            com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+          return super.clearOneof(oneof);
+        }
+        @java.lang.Override
+        public Builder setRepeatedField(
+            com.google.protobuf.Descriptors.FieldDescriptor field,
+            int index, java.lang.Object value) {
+          return super.setRepeatedField(field, index, value);
+        }
+        @java.lang.Override
+        public Builder addRepeatedField(
+            com.google.protobuf.Descriptors.FieldDescriptor field,
+            java.lang.Object value) {
+          return super.addRepeatedField(field, value);
+        }
+        @java.lang.Override
+        public Builder mergeFrom(com.google.protobuf.Message other) {
+          if (other instanceof org.tron.trident.proto.Response.Account.FreezeV2) {
+            return mergeFrom((org.tron.trident.proto.Response.Account.FreezeV2)other);
+          } else {
+            super.mergeFrom(other);
+            return this;
+          }
+        }
+
+        public Builder mergeFrom(org.tron.trident.proto.Response.Account.FreezeV2 other) {
+          if (other == org.tron.trident.proto.Response.Account.FreezeV2.getDefaultInstance()) return this;
+          if (other.type_ != 0) {
+            setTypeValue(other.getTypeValue());
+          }
+          if (other.getAmount() != 0L) {
+            setAmount(other.getAmount());
+          }
+          this.mergeUnknownFields(other.unknownFields);
+          onChanged();
+          return this;
+        }
+
+        @java.lang.Override
+        public final boolean isInitialized() {
+          return true;
+        }
+
+        @java.lang.Override
+        public Builder mergeFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+          org.tron.trident.proto.Response.Account.FreezeV2 parsedMessage = null;
+          try {
+            parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            parsedMessage = (org.tron.trident.proto.Response.Account.FreezeV2) e.getUnfinishedMessage();
+            throw e.unwrapIOException();
+          } finally {
+            if (parsedMessage != null) {
+              mergeFrom(parsedMessage);
+            }
+          }
+          return this;
+        }
+
+        private int type_ = 0;
+        /**
+         * <code>.protocol.ResourceCode type = 1;</code>
+         * @return The enum numeric value on the wire for type.
+         */
+        @java.lang.Override public int getTypeValue() {
+          return type_;
+        }
+        /**
+         * <code>.protocol.ResourceCode type = 1;</code>
+         * @param value The enum numeric value on the wire for type to set.
+         * @return This builder for chaining.
+         */
+        public Builder setTypeValue(int value) {
+          
+          type_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>.protocol.ResourceCode type = 1;</code>
+         * @return The type.
+         */
+        @java.lang.Override
+        public org.tron.trident.proto.Common.ResourceCode getType() {
+          @SuppressWarnings("deprecation")
+          org.tron.trident.proto.Common.ResourceCode result = org.tron.trident.proto.Common.ResourceCode.valueOf(type_);
+          return result == null ? org.tron.trident.proto.Common.ResourceCode.UNRECOGNIZED : result;
+        }
+        /**
+         * <code>.protocol.ResourceCode type = 1;</code>
+         * @param value The type to set.
+         * @return This builder for chaining.
+         */
+        public Builder setType(org.tron.trident.proto.Common.ResourceCode value) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          
+          type_ = value.getNumber();
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>.protocol.ResourceCode type = 1;</code>
+         * @return This builder for chaining.
+         */
+        public Builder clearType() {
+          
+          type_ = 0;
+          onChanged();
+          return this;
+        }
+
+        private long amount_ ;
+        /**
+         * <code>int64 amount = 2;</code>
+         * @return The amount.
+         */
+        @java.lang.Override
+        public long getAmount() {
+          return amount_;
+        }
+        /**
+         * <code>int64 amount = 2;</code>
+         * @param value The amount to set.
+         * @return This builder for chaining.
+         */
+        public Builder setAmount(long value) {
+          
+          amount_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>int64 amount = 2;</code>
+         * @return This builder for chaining.
+         */
+        public Builder clearAmount() {
+          
+          amount_ = 0L;
+          onChanged();
+          return this;
+        }
+        @java.lang.Override
+        public final Builder setUnknownFields(
+            final com.google.protobuf.UnknownFieldSet unknownFields) {
+          return super.setUnknownFields(unknownFields);
+        }
+
+        @java.lang.Override
+        public final Builder mergeUnknownFields(
+            final com.google.protobuf.UnknownFieldSet unknownFields) {
+          return super.mergeUnknownFields(unknownFields);
+        }
+
+
+        // @@protoc_insertion_point(builder_scope:protocol.Account.FreezeV2)
+      }
+
+      // @@protoc_insertion_point(class_scope:protocol.Account.FreezeV2)
+      private static final org.tron.trident.proto.Response.Account.FreezeV2 DEFAULT_INSTANCE;
+      static {
+        DEFAULT_INSTANCE = new org.tron.trident.proto.Response.Account.FreezeV2();
+      }
+
+      public static org.tron.trident.proto.Response.Account.FreezeV2 getDefaultInstance() {
+        return DEFAULT_INSTANCE;
+      }
+
+      private static final com.google.protobuf.Parser<FreezeV2>
+          PARSER = new com.google.protobuf.AbstractParser<FreezeV2>() {
+        @java.lang.Override
+        public FreezeV2 parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new FreezeV2(input, extensionRegistry);
+        }
+      };
+
+      public static com.google.protobuf.Parser<FreezeV2> parser() {
+        return PARSER;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Parser<FreezeV2> getParserForType() {
+        return PARSER;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.proto.Response.Account.FreezeV2 getDefaultInstanceForType() {
+        return DEFAULT_INSTANCE;
+      }
+
+    }
+
+    public interface UnFreezeV2OrBuilder extends
+        // @@protoc_insertion_point(interface_extends:protocol.Account.UnFreezeV2)
+        com.google.protobuf.MessageOrBuilder {
+
+      /**
+       * <code>.protocol.ResourceCode type = 1;</code>
+       * @return The enum numeric value on the wire for type.
+       */
+      int getTypeValue();
+      /**
+       * <code>.protocol.ResourceCode type = 1;</code>
+       * @return The type.
+       */
+      org.tron.trident.proto.Common.ResourceCode getType();
+
+      /**
+       * <code>int64 unfreeze_amount = 3;</code>
+       * @return The unfreezeAmount.
+       */
+      long getUnfreezeAmount();
+
+      /**
+       * <code>int64 unfreeze_expire_time = 4;</code>
+       * @return The unfreezeExpireTime.
+       */
+      long getUnfreezeExpireTime();
+    }
+    /**
+     * Protobuf type {@code protocol.Account.UnFreezeV2}
+     */
+    public static final class UnFreezeV2 extends
+        com.google.protobuf.GeneratedMessageV3 implements
+        // @@protoc_insertion_point(message_implements:protocol.Account.UnFreezeV2)
+        UnFreezeV2OrBuilder {
+    private static final long serialVersionUID = 0L;
+      // Use UnFreezeV2.newBuilder() to construct.
+      private UnFreezeV2(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+        super(builder);
+      }
+      private UnFreezeV2() {
+        type_ = 0;
+      }
+
+      @java.lang.Override
+      @SuppressWarnings({"unused"})
+      protected java.lang.Object newInstance(
+          UnusedPrivateParameter unused) {
+        return new UnFreezeV2();
+      }
+
+      @java.lang.Override
+      public final com.google.protobuf.UnknownFieldSet
+      getUnknownFields() {
+        return this.unknownFields;
+      }
+      private UnFreezeV2(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        this();
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder();
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 8: {
+                int rawValue = input.readEnum();
+
+                type_ = rawValue;
+                break;
+              }
+              case 24: {
+
+                unfreezeAmount_ = input.readInt64();
+                break;
+              }
+              case 32: {
+
+                unfreezeExpireTime_ = input.readInt64();
+                break;
+              }
+              default: {
+                if (!parseUnknownField(
+                    input, unknownFields, extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
+              }
+            }
+          }
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(this);
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(
+              e).setUnfinishedMessage(this);
+        } finally {
+          this.unknownFields = unknownFields.build();
+          makeExtensionsImmutable();
+        }
+      }
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return org.tron.trident.proto.Response.internal_static_protocol_Account_UnFreezeV2_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return org.tron.trident.proto.Response.internal_static_protocol_Account_UnFreezeV2_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                org.tron.trident.proto.Response.Account.UnFreezeV2.class, org.tron.trident.proto.Response.Account.UnFreezeV2.Builder.class);
+      }
+
+      public static final int TYPE_FIELD_NUMBER = 1;
+      private int type_;
+      /**
+       * <code>.protocol.ResourceCode type = 1;</code>
+       * @return The enum numeric value on the wire for type.
+       */
+      @java.lang.Override public int getTypeValue() {
+        return type_;
+      }
+      /**
+       * <code>.protocol.ResourceCode type = 1;</code>
+       * @return The type.
+       */
+      @java.lang.Override public org.tron.trident.proto.Common.ResourceCode getType() {
+        @SuppressWarnings("deprecation")
+        org.tron.trident.proto.Common.ResourceCode result = org.tron.trident.proto.Common.ResourceCode.valueOf(type_);
+        return result == null ? org.tron.trident.proto.Common.ResourceCode.UNRECOGNIZED : result;
+      }
+
+      public static final int UNFREEZE_AMOUNT_FIELD_NUMBER = 3;
+      private long unfreezeAmount_;
+      /**
+       * <code>int64 unfreeze_amount = 3;</code>
+       * @return The unfreezeAmount.
+       */
+      @java.lang.Override
+      public long getUnfreezeAmount() {
+        return unfreezeAmount_;
+      }
+
+      public static final int UNFREEZE_EXPIRE_TIME_FIELD_NUMBER = 4;
+      private long unfreezeExpireTime_;
+      /**
+       * <code>int64 unfreeze_expire_time = 4;</code>
+       * @return The unfreezeExpireTime.
+       */
+      @java.lang.Override
+      public long getUnfreezeExpireTime() {
+        return unfreezeExpireTime_;
+      }
+
+      private byte memoizedIsInitialized = -1;
+      @java.lang.Override
+      public final boolean isInitialized() {
+        byte isInitialized = memoizedIsInitialized;
+        if (isInitialized == 1) return true;
+        if (isInitialized == 0) return false;
+
+        memoizedIsInitialized = 1;
+        return true;
+      }
+
+      @java.lang.Override
+      public void writeTo(com.google.protobuf.CodedOutputStream output)
+                          throws java.io.IOException {
+        if (type_ != org.tron.trident.proto.Common.ResourceCode.BANDWIDTH.getNumber()) {
+          output.writeEnum(1, type_);
+        }
+        if (unfreezeAmount_ != 0L) {
+          output.writeInt64(3, unfreezeAmount_);
+        }
+        if (unfreezeExpireTime_ != 0L) {
+          output.writeInt64(4, unfreezeExpireTime_);
+        }
+        unknownFields.writeTo(output);
+      }
+
+      @java.lang.Override
+      public int getSerializedSize() {
+        int size = memoizedSize;
+        if (size != -1) return size;
+
+        size = 0;
+        if (type_ != org.tron.trident.proto.Common.ResourceCode.BANDWIDTH.getNumber()) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeEnumSize(1, type_);
+        }
+        if (unfreezeAmount_ != 0L) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeInt64Size(3, unfreezeAmount_);
+        }
+        if (unfreezeExpireTime_ != 0L) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeInt64Size(4, unfreezeExpireTime_);
+        }
+        size += unknownFields.getSerializedSize();
+        memoizedSize = size;
+        return size;
+      }
+
+      @java.lang.Override
+      public boolean equals(final java.lang.Object obj) {
+        if (obj == this) {
+         return true;
+        }
+        if (!(obj instanceof org.tron.trident.proto.Response.Account.UnFreezeV2)) {
+          return super.equals(obj);
+        }
+        org.tron.trident.proto.Response.Account.UnFreezeV2 other = (org.tron.trident.proto.Response.Account.UnFreezeV2) obj;
+
+        if (type_ != other.type_) return false;
+        if (getUnfreezeAmount()
+            != other.getUnfreezeAmount()) return false;
+        if (getUnfreezeExpireTime()
+            != other.getUnfreezeExpireTime()) return false;
+        if (!unknownFields.equals(other.unknownFields)) return false;
+        return true;
+      }
+
+      @java.lang.Override
+      public int hashCode() {
+        if (memoizedHashCode != 0) {
+          return memoizedHashCode;
+        }
+        int hash = 41;
+        hash = (19 * hash) + getDescriptor().hashCode();
+        hash = (37 * hash) + TYPE_FIELD_NUMBER;
+        hash = (53 * hash) + type_;
+        hash = (37 * hash) + UNFREEZE_AMOUNT_FIELD_NUMBER;
+        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+            getUnfreezeAmount());
+        hash = (37 * hash) + UNFREEZE_EXPIRE_TIME_FIELD_NUMBER;
+        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+            getUnfreezeExpireTime());
+        hash = (29 * hash) + unknownFields.hashCode();
+        memoizedHashCode = hash;
+        return hash;
+      }
+
+      public static org.tron.trident.proto.Response.Account.UnFreezeV2 parseFrom(
+          java.nio.ByteBuffer data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static org.tron.trident.proto.Response.Account.UnFreezeV2 parseFrom(
+          java.nio.ByteBuffer data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static org.tron.trident.proto.Response.Account.UnFreezeV2 parseFrom(
+          com.google.protobuf.ByteString data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static org.tron.trident.proto.Response.Account.UnFreezeV2 parseFrom(
+          com.google.protobuf.ByteString data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static org.tron.trident.proto.Response.Account.UnFreezeV2 parseFrom(byte[] data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static org.tron.trident.proto.Response.Account.UnFreezeV2 parseFrom(
+          byte[] data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static org.tron.trident.proto.Response.Account.UnFreezeV2 parseFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input);
+      }
+      public static org.tron.trident.proto.Response.Account.UnFreezeV2 parseFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input, extensionRegistry);
+      }
+      public static org.tron.trident.proto.Response.Account.UnFreezeV2 parseDelimitedFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseDelimitedWithIOException(PARSER, input);
+      }
+      public static org.tron.trident.proto.Response.Account.UnFreezeV2 parseDelimitedFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+      }
+      public static org.tron.trident.proto.Response.Account.UnFreezeV2 parseFrom(
+          com.google.protobuf.CodedInputStream input)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input);
+      }
+      public static org.tron.trident.proto.Response.Account.UnFreezeV2 parseFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input, extensionRegistry);
+      }
+
+      @java.lang.Override
+      public Builder newBuilderForType() { return newBuilder(); }
+      public static Builder newBuilder() {
+        return DEFAULT_INSTANCE.toBuilder();
+      }
+      public static Builder newBuilder(org.tron.trident.proto.Response.Account.UnFreezeV2 prototype) {
+        return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+      }
+      @java.lang.Override
+      public Builder toBuilder() {
+        return this == DEFAULT_INSTANCE
+            ? new Builder() : new Builder().mergeFrom(this);
+      }
+
+      @java.lang.Override
+      protected Builder newBuilderForType(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        Builder builder = new Builder(parent);
+        return builder;
+      }
+      /**
+       * Protobuf type {@code protocol.Account.UnFreezeV2}
+       */
+      public static final class Builder extends
+          com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+          // @@protoc_insertion_point(builder_implements:protocol.Account.UnFreezeV2)
+          org.tron.trident.proto.Response.Account.UnFreezeV2OrBuilder {
+        public static final com.google.protobuf.Descriptors.Descriptor
+            getDescriptor() {
+          return org.tron.trident.proto.Response.internal_static_protocol_Account_UnFreezeV2_descriptor;
+        }
+
+        @java.lang.Override
+        protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+            internalGetFieldAccessorTable() {
+          return org.tron.trident.proto.Response.internal_static_protocol_Account_UnFreezeV2_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                  org.tron.trident.proto.Response.Account.UnFreezeV2.class, org.tron.trident.proto.Response.Account.UnFreezeV2.Builder.class);
+        }
+
+        // Construct using org.tron.trident.proto.Response.Account.UnFreezeV2.newBuilder()
+        private Builder() {
+          maybeForceBuilderInitialization();
+        }
+
+        private Builder(
+            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          super(parent);
+          maybeForceBuilderInitialization();
+        }
+        private void maybeForceBuilderInitialization() {
+          if (com.google.protobuf.GeneratedMessageV3
+                  .alwaysUseFieldBuilders) {
+          }
+        }
+        @java.lang.Override
+        public Builder clear() {
+          super.clear();
+          type_ = 0;
+
+          unfreezeAmount_ = 0L;
+
+          unfreezeExpireTime_ = 0L;
+
+          return this;
+        }
+
+        @java.lang.Override
+        public com.google.protobuf.Descriptors.Descriptor
+            getDescriptorForType() {
+          return org.tron.trident.proto.Response.internal_static_protocol_Account_UnFreezeV2_descriptor;
+        }
+
+        @java.lang.Override
+        public org.tron.trident.proto.Response.Account.UnFreezeV2 getDefaultInstanceForType() {
+          return org.tron.trident.proto.Response.Account.UnFreezeV2.getDefaultInstance();
+        }
+
+        @java.lang.Override
+        public org.tron.trident.proto.Response.Account.UnFreezeV2 build() {
+          org.tron.trident.proto.Response.Account.UnFreezeV2 result = buildPartial();
+          if (!result.isInitialized()) {
+            throw newUninitializedMessageException(result);
+          }
+          return result;
+        }
+
+        @java.lang.Override
+        public org.tron.trident.proto.Response.Account.UnFreezeV2 buildPartial() {
+          org.tron.trident.proto.Response.Account.UnFreezeV2 result = new org.tron.trident.proto.Response.Account.UnFreezeV2(this);
+          result.type_ = type_;
+          result.unfreezeAmount_ = unfreezeAmount_;
+          result.unfreezeExpireTime_ = unfreezeExpireTime_;
+          onBuilt();
+          return result;
+        }
+
+        @java.lang.Override
+        public Builder clone() {
+          return super.clone();
+        }
+        @java.lang.Override
+        public Builder setField(
+            com.google.protobuf.Descriptors.FieldDescriptor field,
+            java.lang.Object value) {
+          return super.setField(field, value);
+        }
+        @java.lang.Override
+        public Builder clearField(
+            com.google.protobuf.Descriptors.FieldDescriptor field) {
+          return super.clearField(field);
+        }
+        @java.lang.Override
+        public Builder clearOneof(
+            com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+          return super.clearOneof(oneof);
+        }
+        @java.lang.Override
+        public Builder setRepeatedField(
+            com.google.protobuf.Descriptors.FieldDescriptor field,
+            int index, java.lang.Object value) {
+          return super.setRepeatedField(field, index, value);
+        }
+        @java.lang.Override
+        public Builder addRepeatedField(
+            com.google.protobuf.Descriptors.FieldDescriptor field,
+            java.lang.Object value) {
+          return super.addRepeatedField(field, value);
+        }
+        @java.lang.Override
+        public Builder mergeFrom(com.google.protobuf.Message other) {
+          if (other instanceof org.tron.trident.proto.Response.Account.UnFreezeV2) {
+            return mergeFrom((org.tron.trident.proto.Response.Account.UnFreezeV2)other);
+          } else {
+            super.mergeFrom(other);
+            return this;
+          }
+        }
+
+        public Builder mergeFrom(org.tron.trident.proto.Response.Account.UnFreezeV2 other) {
+          if (other == org.tron.trident.proto.Response.Account.UnFreezeV2.getDefaultInstance()) return this;
+          if (other.type_ != 0) {
+            setTypeValue(other.getTypeValue());
+          }
+          if (other.getUnfreezeAmount() != 0L) {
+            setUnfreezeAmount(other.getUnfreezeAmount());
+          }
+          if (other.getUnfreezeExpireTime() != 0L) {
+            setUnfreezeExpireTime(other.getUnfreezeExpireTime());
+          }
+          this.mergeUnknownFields(other.unknownFields);
+          onChanged();
+          return this;
+        }
+
+        @java.lang.Override
+        public final boolean isInitialized() {
+          return true;
+        }
+
+        @java.lang.Override
+        public Builder mergeFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+          org.tron.trident.proto.Response.Account.UnFreezeV2 parsedMessage = null;
+          try {
+            parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            parsedMessage = (org.tron.trident.proto.Response.Account.UnFreezeV2) e.getUnfinishedMessage();
+            throw e.unwrapIOException();
+          } finally {
+            if (parsedMessage != null) {
+              mergeFrom(parsedMessage);
+            }
+          }
+          return this;
+        }
+
+        private int type_ = 0;
+        /**
+         * <code>.protocol.ResourceCode type = 1;</code>
+         * @return The enum numeric value on the wire for type.
+         */
+        @java.lang.Override public int getTypeValue() {
+          return type_;
+        }
+        /**
+         * <code>.protocol.ResourceCode type = 1;</code>
+         * @param value The enum numeric value on the wire for type to set.
+         * @return This builder for chaining.
+         */
+        public Builder setTypeValue(int value) {
+          
+          type_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>.protocol.ResourceCode type = 1;</code>
+         * @return The type.
+         */
+        @java.lang.Override
+        public org.tron.trident.proto.Common.ResourceCode getType() {
+          @SuppressWarnings("deprecation")
+          org.tron.trident.proto.Common.ResourceCode result = org.tron.trident.proto.Common.ResourceCode.valueOf(type_);
+          return result == null ? org.tron.trident.proto.Common.ResourceCode.UNRECOGNIZED : result;
+        }
+        /**
+         * <code>.protocol.ResourceCode type = 1;</code>
+         * @param value The type to set.
+         * @return This builder for chaining.
+         */
+        public Builder setType(org.tron.trident.proto.Common.ResourceCode value) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          
+          type_ = value.getNumber();
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>.protocol.ResourceCode type = 1;</code>
+         * @return This builder for chaining.
+         */
+        public Builder clearType() {
+          
+          type_ = 0;
+          onChanged();
+          return this;
+        }
+
+        private long unfreezeAmount_ ;
+        /**
+         * <code>int64 unfreeze_amount = 3;</code>
+         * @return The unfreezeAmount.
+         */
+        @java.lang.Override
+        public long getUnfreezeAmount() {
+          return unfreezeAmount_;
+        }
+        /**
+         * <code>int64 unfreeze_amount = 3;</code>
+         * @param value The unfreezeAmount to set.
+         * @return This builder for chaining.
+         */
+        public Builder setUnfreezeAmount(long value) {
+          
+          unfreezeAmount_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>int64 unfreeze_amount = 3;</code>
+         * @return This builder for chaining.
+         */
+        public Builder clearUnfreezeAmount() {
+          
+          unfreezeAmount_ = 0L;
+          onChanged();
+          return this;
+        }
+
+        private long unfreezeExpireTime_ ;
+        /**
+         * <code>int64 unfreeze_expire_time = 4;</code>
+         * @return The unfreezeExpireTime.
+         */
+        @java.lang.Override
+        public long getUnfreezeExpireTime() {
+          return unfreezeExpireTime_;
+        }
+        /**
+         * <code>int64 unfreeze_expire_time = 4;</code>
+         * @param value The unfreezeExpireTime to set.
+         * @return This builder for chaining.
+         */
+        public Builder setUnfreezeExpireTime(long value) {
+          
+          unfreezeExpireTime_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>int64 unfreeze_expire_time = 4;</code>
+         * @return This builder for chaining.
+         */
+        public Builder clearUnfreezeExpireTime() {
+          
+          unfreezeExpireTime_ = 0L;
+          onChanged();
+          return this;
+        }
+        @java.lang.Override
+        public final Builder setUnknownFields(
+            final com.google.protobuf.UnknownFieldSet unknownFields) {
+          return super.setUnknownFields(unknownFields);
+        }
+
+        @java.lang.Override
+        public final Builder mergeUnknownFields(
+            final com.google.protobuf.UnknownFieldSet unknownFields) {
+          return super.mergeUnknownFields(unknownFields);
+        }
+
+
+        // @@protoc_insertion_point(builder_scope:protocol.Account.UnFreezeV2)
+      }
+
+      // @@protoc_insertion_point(class_scope:protocol.Account.UnFreezeV2)
+      private static final org.tron.trident.proto.Response.Account.UnFreezeV2 DEFAULT_INSTANCE;
+      static {
+        DEFAULT_INSTANCE = new org.tron.trident.proto.Response.Account.UnFreezeV2();
+      }
+
+      public static org.tron.trident.proto.Response.Account.UnFreezeV2 getDefaultInstance() {
+        return DEFAULT_INSTANCE;
+      }
+
+      private static final com.google.protobuf.Parser<UnFreezeV2>
+          PARSER = new com.google.protobuf.AbstractParser<UnFreezeV2>() {
+        @java.lang.Override
+        public UnFreezeV2 parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new UnFreezeV2(input, extensionRegistry);
+        }
+      };
+
+      public static com.google.protobuf.Parser<UnFreezeV2> parser() {
+        return PARSER;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Parser<UnFreezeV2> getParserForType() {
+        return PARSER;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.proto.Response.Account.UnFreezeV2 getDefaultInstanceForType() {
         return DEFAULT_INSTANCE;
       }
 
@@ -23738,6 +25442,54 @@ public final class Response {
     @java.lang.Override
     public long getDelegatedFrozenBalanceForBandwidth() {
       return delegatedFrozenBalanceForBandwidth_;
+    }
+
+    public static final int OLD_TRON_POWER_FIELD_NUMBER = 46;
+    private long oldTronPower_;
+    /**
+     * <code>int64 old_tron_power = 46;</code>
+     * @return The oldTronPower.
+     */
+    @java.lang.Override
+    public long getOldTronPower() {
+      return oldTronPower_;
+    }
+
+    public static final int TRON_POWER_FIELD_NUMBER = 47;
+    private org.tron.trident.proto.Response.Account.Frozen tronPower_;
+    /**
+     * <code>.protocol.Account.Frozen tron_power = 47;</code>
+     * @return Whether the tronPower field is set.
+     */
+    @java.lang.Override
+    public boolean hasTronPower() {
+      return tronPower_ != null;
+    }
+    /**
+     * <code>.protocol.Account.Frozen tron_power = 47;</code>
+     * @return The tronPower.
+     */
+    @java.lang.Override
+    public org.tron.trident.proto.Response.Account.Frozen getTronPower() {
+      return tronPower_ == null ? org.tron.trident.proto.Response.Account.Frozen.getDefaultInstance() : tronPower_;
+    }
+    /**
+     * <code>.protocol.Account.Frozen tron_power = 47;</code>
+     */
+    @java.lang.Override
+    public org.tron.trident.proto.Response.Account.FrozenOrBuilder getTronPowerOrBuilder() {
+      return getTronPower();
+    }
+
+    public static final int ASSET_OPTIMIZED_FIELD_NUMBER = 60;
+    private boolean assetOptimized_;
+    /**
+     * <code>bool asset_optimized = 60;</code>
+     * @return The assetOptimized.
+     */
+    @java.lang.Override
+    public boolean getAssetOptimized() {
+      return assetOptimized_;
     }
 
     public static final int CREATE_TIME_FIELD_NUMBER = 9;
@@ -24296,6 +26048,17 @@ public final class Response {
       return accountId_;
     }
 
+    public static final int NET_WINDOW_SIZE_FIELD_NUMBER = 24;
+    private long netWindowSize_;
+    /**
+     * <code>int64 net_window_size = 24;</code>
+     * @return The netWindowSize.
+     */
+    @java.lang.Override
+    public long getNetWindowSize() {
+      return netWindowSize_;
+    }
+
     public static final int ACCOUNT_RESOURCE_FIELD_NUMBER = 26;
     private org.tron.trident.proto.Response.Account.AccountResource accountResource_;
     /**
@@ -24425,6 +26188,108 @@ public final class Response {
       return activePermission_.get(index);
     }
 
+    public static final int FROZENV2_FIELD_NUMBER = 34;
+    private java.util.List<org.tron.trident.proto.Response.Account.FreezeV2> frozenV2_;
+    /**
+     * <code>repeated .protocol.Account.FreezeV2 frozenV2 = 34;</code>
+     */
+    @java.lang.Override
+    public java.util.List<org.tron.trident.proto.Response.Account.FreezeV2> getFrozenV2List() {
+      return frozenV2_;
+    }
+    /**
+     * <code>repeated .protocol.Account.FreezeV2 frozenV2 = 34;</code>
+     */
+    @java.lang.Override
+    public java.util.List<? extends org.tron.trident.proto.Response.Account.FreezeV2OrBuilder> 
+        getFrozenV2OrBuilderList() {
+      return frozenV2_;
+    }
+    /**
+     * <code>repeated .protocol.Account.FreezeV2 frozenV2 = 34;</code>
+     */
+    @java.lang.Override
+    public int getFrozenV2Count() {
+      return frozenV2_.size();
+    }
+    /**
+     * <code>repeated .protocol.Account.FreezeV2 frozenV2 = 34;</code>
+     */
+    @java.lang.Override
+    public org.tron.trident.proto.Response.Account.FreezeV2 getFrozenV2(int index) {
+      return frozenV2_.get(index);
+    }
+    /**
+     * <code>repeated .protocol.Account.FreezeV2 frozenV2 = 34;</code>
+     */
+    @java.lang.Override
+    public org.tron.trident.proto.Response.Account.FreezeV2OrBuilder getFrozenV2OrBuilder(
+        int index) {
+      return frozenV2_.get(index);
+    }
+
+    public static final int UNFROZENV2_FIELD_NUMBER = 35;
+    private java.util.List<org.tron.trident.proto.Response.Account.UnFreezeV2> unfrozenV2_;
+    /**
+     * <code>repeated .protocol.Account.UnFreezeV2 unfrozenV2 = 35;</code>
+     */
+    @java.lang.Override
+    public java.util.List<org.tron.trident.proto.Response.Account.UnFreezeV2> getUnfrozenV2List() {
+      return unfrozenV2_;
+    }
+    /**
+     * <code>repeated .protocol.Account.UnFreezeV2 unfrozenV2 = 35;</code>
+     */
+    @java.lang.Override
+    public java.util.List<? extends org.tron.trident.proto.Response.Account.UnFreezeV2OrBuilder> 
+        getUnfrozenV2OrBuilderList() {
+      return unfrozenV2_;
+    }
+    /**
+     * <code>repeated .protocol.Account.UnFreezeV2 unfrozenV2 = 35;</code>
+     */
+    @java.lang.Override
+    public int getUnfrozenV2Count() {
+      return unfrozenV2_.size();
+    }
+    /**
+     * <code>repeated .protocol.Account.UnFreezeV2 unfrozenV2 = 35;</code>
+     */
+    @java.lang.Override
+    public org.tron.trident.proto.Response.Account.UnFreezeV2 getUnfrozenV2(int index) {
+      return unfrozenV2_.get(index);
+    }
+    /**
+     * <code>repeated .protocol.Account.UnFreezeV2 unfrozenV2 = 35;</code>
+     */
+    @java.lang.Override
+    public org.tron.trident.proto.Response.Account.UnFreezeV2OrBuilder getUnfrozenV2OrBuilder(
+        int index) {
+      return unfrozenV2_.get(index);
+    }
+
+    public static final int DELEGATED_FROZENV2_BALANCE_FOR_BANDWIDTH_FIELD_NUMBER = 36;
+    private long delegatedFrozenV2BalanceForBandwidth_;
+    /**
+     * <code>int64 delegated_frozenV2_balance_for_bandwidth = 36;</code>
+     * @return The delegatedFrozenV2BalanceForBandwidth.
+     */
+    @java.lang.Override
+    public long getDelegatedFrozenV2BalanceForBandwidth() {
+      return delegatedFrozenV2BalanceForBandwidth_;
+    }
+
+    public static final int ACQUIRED_DELEGATED_FROZENV2_BALANCE_FOR_BANDWIDTH_FIELD_NUMBER = 37;
+    private long acquiredDelegatedFrozenV2BalanceForBandwidth_;
+    /**
+     * <code>int64 acquired_delegated_frozenV2_balance_for_bandwidth = 37;</code>
+     * @return The acquiredDelegatedFrozenV2BalanceForBandwidth.
+     */
+    @java.lang.Override
+    public long getAcquiredDelegatedFrozenV2BalanceForBandwidth() {
+      return acquiredDelegatedFrozenV2BalanceForBandwidth_;
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -24517,6 +26382,9 @@ public final class Response {
       if (!accountId_.isEmpty()) {
         output.writeBytes(23, accountId_);
       }
+      if (netWindowSize_ != 0L) {
+        output.writeInt64(24, netWindowSize_);
+      }
       if (accountResource_ != null) {
         output.writeMessage(26, getAccountResource());
       }
@@ -24532,11 +26400,29 @@ public final class Response {
       for (int i = 0; i < activePermission_.size(); i++) {
         output.writeMessage(33, activePermission_.get(i));
       }
+      for (int i = 0; i < frozenV2_.size(); i++) {
+        output.writeMessage(34, frozenV2_.get(i));
+      }
+      for (int i = 0; i < unfrozenV2_.size(); i++) {
+        output.writeMessage(35, unfrozenV2_.get(i));
+      }
+      if (delegatedFrozenV2BalanceForBandwidth_ != 0L) {
+        output.writeInt64(36, delegatedFrozenV2BalanceForBandwidth_);
+      }
+      if (acquiredDelegatedFrozenV2BalanceForBandwidth_ != 0L) {
+        output.writeInt64(37, acquiredDelegatedFrozenV2BalanceForBandwidth_);
+      }
       if (acquiredDelegatedFrozenBalanceForBandwidth_ != 0L) {
         output.writeInt64(41, acquiredDelegatedFrozenBalanceForBandwidth_);
       }
       if (delegatedFrozenBalanceForBandwidth_ != 0L) {
         output.writeInt64(42, delegatedFrozenBalanceForBandwidth_);
+      }
+      if (oldTronPower_ != 0L) {
+        output.writeInt64(46, oldTronPower_);
+      }
+      if (tronPower_ != null) {
+        output.writeMessage(47, getTronPower());
       }
       com.google.protobuf.GeneratedMessageV3
         .serializeStringMapTo(
@@ -24559,6 +26445,9 @@ public final class Response {
           internalGetFreeAssetNetUsageV2(),
           FreeAssetNetUsageV2DefaultEntryHolder.defaultEntry,
           59);
+      if (assetOptimized_ != false) {
+        output.writeBool(60, assetOptimized_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -24678,6 +26567,10 @@ public final class Response {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(23, accountId_);
       }
+      if (netWindowSize_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(24, netWindowSize_);
+      }
       if (accountResource_ != null) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(26, getAccountResource());
@@ -24698,6 +26591,22 @@ public final class Response {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(33, activePermission_.get(i));
       }
+      for (int i = 0; i < frozenV2_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(34, frozenV2_.get(i));
+      }
+      for (int i = 0; i < unfrozenV2_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(35, unfrozenV2_.get(i));
+      }
+      if (delegatedFrozenV2BalanceForBandwidth_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(36, delegatedFrozenV2BalanceForBandwidth_);
+      }
+      if (acquiredDelegatedFrozenV2BalanceForBandwidth_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(37, acquiredDelegatedFrozenV2BalanceForBandwidth_);
+      }
       if (acquiredDelegatedFrozenBalanceForBandwidth_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt64Size(41, acquiredDelegatedFrozenBalanceForBandwidth_);
@@ -24705,6 +26614,14 @@ public final class Response {
       if (delegatedFrozenBalanceForBandwidth_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt64Size(42, delegatedFrozenBalanceForBandwidth_);
+      }
+      if (oldTronPower_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(46, oldTronPower_);
+      }
+      if (tronPower_ != null) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(47, getTronPower());
       }
       for (java.util.Map.Entry<java.lang.String, java.lang.Long> entry
            : internalGetAssetV2().getMap().entrySet()) {
@@ -24739,6 +26656,10 @@ public final class Response {
             .build();
         size += com.google.protobuf.CodedOutputStream
             .computeMessageSize(59, freeAssetNetUsageV2__);
+      }
+      if (assetOptimized_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(60, assetOptimized_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -24776,6 +26697,15 @@ public final class Response {
           != other.getAcquiredDelegatedFrozenBalanceForBandwidth()) return false;
       if (getDelegatedFrozenBalanceForBandwidth()
           != other.getDelegatedFrozenBalanceForBandwidth()) return false;
+      if (getOldTronPower()
+          != other.getOldTronPower()) return false;
+      if (hasTronPower() != other.hasTronPower()) return false;
+      if (hasTronPower()) {
+        if (!getTronPower()
+            .equals(other.getTronPower())) return false;
+      }
+      if (getAssetOptimized()
+          != other.getAssetOptimized()) return false;
       if (getCreateTime()
           != other.getCreateTime()) return false;
       if (getLatestOprationTime()
@@ -24812,6 +26742,8 @@ public final class Response {
           != other.getLatestConsumeFreeTime()) return false;
       if (!getAccountId()
           .equals(other.getAccountId())) return false;
+      if (getNetWindowSize()
+          != other.getNetWindowSize()) return false;
       if (hasAccountResource() != other.hasAccountResource()) return false;
       if (hasAccountResource()) {
         if (!getAccountResource()
@@ -24831,6 +26763,14 @@ public final class Response {
       }
       if (!getActivePermissionList()
           .equals(other.getActivePermissionList())) return false;
+      if (!getFrozenV2List()
+          .equals(other.getFrozenV2List())) return false;
+      if (!getUnfrozenV2List()
+          .equals(other.getUnfrozenV2List())) return false;
+      if (getDelegatedFrozenV2BalanceForBandwidth()
+          != other.getDelegatedFrozenV2BalanceForBandwidth()) return false;
+      if (getAcquiredDelegatedFrozenV2BalanceForBandwidth()
+          != other.getAcquiredDelegatedFrozenV2BalanceForBandwidth()) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -24876,6 +26816,16 @@ public final class Response {
       hash = (37 * hash) + DELEGATED_FROZEN_BALANCE_FOR_BANDWIDTH_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
           getDelegatedFrozenBalanceForBandwidth());
+      hash = (37 * hash) + OLD_TRON_POWER_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getOldTronPower());
+      if (hasTronPower()) {
+        hash = (37 * hash) + TRON_POWER_FIELD_NUMBER;
+        hash = (53 * hash) + getTronPower().hashCode();
+      }
+      hash = (37 * hash) + ASSET_OPTIMIZED_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getAssetOptimized());
       hash = (37 * hash) + CREATE_TIME_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
           getCreateTime());
@@ -24931,6 +26881,9 @@ public final class Response {
           getLatestConsumeFreeTime());
       hash = (37 * hash) + ACCOUNT_ID_FIELD_NUMBER;
       hash = (53 * hash) + getAccountId().hashCode();
+      hash = (37 * hash) + NET_WINDOW_SIZE_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getNetWindowSize());
       if (hasAccountResource()) {
         hash = (37 * hash) + ACCOUNT_RESOURCE_FIELD_NUMBER;
         hash = (53 * hash) + getAccountResource().hashCode();
@@ -24949,6 +26902,20 @@ public final class Response {
         hash = (37 * hash) + ACTIVE_PERMISSION_FIELD_NUMBER;
         hash = (53 * hash) + getActivePermissionList().hashCode();
       }
+      if (getFrozenV2Count() > 0) {
+        hash = (37 * hash) + FROZENV2_FIELD_NUMBER;
+        hash = (53 * hash) + getFrozenV2List().hashCode();
+      }
+      if (getUnfrozenV2Count() > 0) {
+        hash = (37 * hash) + UNFROZENV2_FIELD_NUMBER;
+        hash = (53 * hash) + getUnfrozenV2List().hashCode();
+      }
+      hash = (37 * hash) + DELEGATED_FROZENV2_BALANCE_FOR_BANDWIDTH_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getDelegatedFrozenV2BalanceForBandwidth());
+      hash = (37 * hash) + ACQUIRED_DELEGATED_FROZENV2_BALANCE_FOR_BANDWIDTH_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getAcquiredDelegatedFrozenV2BalanceForBandwidth());
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -25127,6 +27094,8 @@ public final class Response {
           getFrozenFieldBuilder();
           getFrozenSupplyFieldBuilder();
           getActivePermissionFieldBuilder();
+          getFrozenV2FieldBuilder();
+          getUnfrozenV2FieldBuilder();
         }
       }
       @java.lang.Override
@@ -25159,6 +27128,16 @@ public final class Response {
         acquiredDelegatedFrozenBalanceForBandwidth_ = 0L;
 
         delegatedFrozenBalanceForBandwidth_ = 0L;
+
+        oldTronPower_ = 0L;
+
+        if (tronPowerBuilder_ == null) {
+          tronPower_ = null;
+        } else {
+          tronPower_ = null;
+          tronPowerBuilder_ = null;
+        }
+        assetOptimized_ = false;
 
         createTime_ = 0L;
 
@@ -25196,6 +27175,8 @@ public final class Response {
 
         accountId_ = com.google.protobuf.ByteString.EMPTY;
 
+        netWindowSize_ = 0L;
+
         if (accountResourceBuilder_ == null) {
           accountResource_ = null;
         } else {
@@ -25222,6 +27203,22 @@ public final class Response {
         } else {
           activePermissionBuilder_.clear();
         }
+        if (frozenV2Builder_ == null) {
+          frozenV2_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000400);
+        } else {
+          frozenV2Builder_.clear();
+        }
+        if (unfrozenV2Builder_ == null) {
+          unfrozenV2_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000800);
+        } else {
+          unfrozenV2Builder_.clear();
+        }
+        delegatedFrozenV2BalanceForBandwidth_ = 0L;
+
+        acquiredDelegatedFrozenV2BalanceForBandwidth_ = 0L;
+
         return this;
       }
 
@@ -25278,6 +27275,13 @@ public final class Response {
         result.netUsage_ = netUsage_;
         result.acquiredDelegatedFrozenBalanceForBandwidth_ = acquiredDelegatedFrozenBalanceForBandwidth_;
         result.delegatedFrozenBalanceForBandwidth_ = delegatedFrozenBalanceForBandwidth_;
+        result.oldTronPower_ = oldTronPower_;
+        if (tronPowerBuilder_ == null) {
+          result.tronPower_ = tronPower_;
+        } else {
+          result.tronPower_ = tronPowerBuilder_.build();
+        }
+        result.assetOptimized_ = assetOptimized_;
         result.createTime_ = createTime_;
         result.latestOprationTime_ = latestOprationTime_;
         result.allowance_ = allowance_;
@@ -25308,6 +27312,7 @@ public final class Response {
         result.latestConsumeTime_ = latestConsumeTime_;
         result.latestConsumeFreeTime_ = latestConsumeFreeTime_;
         result.accountId_ = accountId_;
+        result.netWindowSize_ = netWindowSize_;
         if (accountResourceBuilder_ == null) {
           result.accountResource_ = accountResource_;
         } else {
@@ -25333,6 +27338,26 @@ public final class Response {
         } else {
           result.activePermission_ = activePermissionBuilder_.build();
         }
+        if (frozenV2Builder_ == null) {
+          if (((bitField0_ & 0x00000400) != 0)) {
+            frozenV2_ = java.util.Collections.unmodifiableList(frozenV2_);
+            bitField0_ = (bitField0_ & ~0x00000400);
+          }
+          result.frozenV2_ = frozenV2_;
+        } else {
+          result.frozenV2_ = frozenV2Builder_.build();
+        }
+        if (unfrozenV2Builder_ == null) {
+          if (((bitField0_ & 0x00000800) != 0)) {
+            unfrozenV2_ = java.util.Collections.unmodifiableList(unfrozenV2_);
+            bitField0_ = (bitField0_ & ~0x00000800);
+          }
+          result.unfrozenV2_ = unfrozenV2_;
+        } else {
+          result.unfrozenV2_ = unfrozenV2Builder_.build();
+        }
+        result.delegatedFrozenV2BalanceForBandwidth_ = delegatedFrozenV2BalanceForBandwidth_;
+        result.acquiredDelegatedFrozenV2BalanceForBandwidth_ = acquiredDelegatedFrozenV2BalanceForBandwidth_;
         onBuilt();
         return result;
       }
@@ -25458,6 +27483,15 @@ public final class Response {
         if (other.getDelegatedFrozenBalanceForBandwidth() != 0L) {
           setDelegatedFrozenBalanceForBandwidth(other.getDelegatedFrozenBalanceForBandwidth());
         }
+        if (other.getOldTronPower() != 0L) {
+          setOldTronPower(other.getOldTronPower());
+        }
+        if (other.hasTronPower()) {
+          mergeTronPower(other.getTronPower());
+        }
+        if (other.getAssetOptimized() != false) {
+          setAssetOptimized(other.getAssetOptimized());
+        }
         if (other.getCreateTime() != 0L) {
           setCreateTime(other.getCreateTime());
         }
@@ -25531,6 +27565,9 @@ public final class Response {
         if (other.getAccountId() != com.google.protobuf.ByteString.EMPTY) {
           setAccountId(other.getAccountId());
         }
+        if (other.getNetWindowSize() != 0L) {
+          setNetWindowSize(other.getNetWindowSize());
+        }
         if (other.hasAccountResource()) {
           mergeAccountResource(other.getAccountResource());
         }
@@ -25568,6 +27605,64 @@ public final class Response {
               activePermissionBuilder_.addAllMessages(other.activePermission_);
             }
           }
+        }
+        if (frozenV2Builder_ == null) {
+          if (!other.frozenV2_.isEmpty()) {
+            if (frozenV2_.isEmpty()) {
+              frozenV2_ = other.frozenV2_;
+              bitField0_ = (bitField0_ & ~0x00000400);
+            } else {
+              ensureFrozenV2IsMutable();
+              frozenV2_.addAll(other.frozenV2_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.frozenV2_.isEmpty()) {
+            if (frozenV2Builder_.isEmpty()) {
+              frozenV2Builder_.dispose();
+              frozenV2Builder_ = null;
+              frozenV2_ = other.frozenV2_;
+              bitField0_ = (bitField0_ & ~0x00000400);
+              frozenV2Builder_ = 
+                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
+                   getFrozenV2FieldBuilder() : null;
+            } else {
+              frozenV2Builder_.addAllMessages(other.frozenV2_);
+            }
+          }
+        }
+        if (unfrozenV2Builder_ == null) {
+          if (!other.unfrozenV2_.isEmpty()) {
+            if (unfrozenV2_.isEmpty()) {
+              unfrozenV2_ = other.unfrozenV2_;
+              bitField0_ = (bitField0_ & ~0x00000800);
+            } else {
+              ensureUnfrozenV2IsMutable();
+              unfrozenV2_.addAll(other.unfrozenV2_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.unfrozenV2_.isEmpty()) {
+            if (unfrozenV2Builder_.isEmpty()) {
+              unfrozenV2Builder_.dispose();
+              unfrozenV2Builder_ = null;
+              unfrozenV2_ = other.unfrozenV2_;
+              bitField0_ = (bitField0_ & ~0x00000800);
+              unfrozenV2Builder_ = 
+                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
+                   getUnfrozenV2FieldBuilder() : null;
+            } else {
+              unfrozenV2Builder_.addAllMessages(other.unfrozenV2_);
+            }
+          }
+        }
+        if (other.getDelegatedFrozenV2BalanceForBandwidth() != 0L) {
+          setDelegatedFrozenV2BalanceForBandwidth(other.getDelegatedFrozenV2BalanceForBandwidth());
+        }
+        if (other.getAcquiredDelegatedFrozenV2BalanceForBandwidth() != 0L) {
+          setAcquiredDelegatedFrozenV2BalanceForBandwidth(other.getAcquiredDelegatedFrozenV2BalanceForBandwidth());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -26849,6 +28944,187 @@ public final class Response {
       public Builder clearDelegatedFrozenBalanceForBandwidth() {
         
         delegatedFrozenBalanceForBandwidth_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private long oldTronPower_ ;
+      /**
+       * <code>int64 old_tron_power = 46;</code>
+       * @return The oldTronPower.
+       */
+      @java.lang.Override
+      public long getOldTronPower() {
+        return oldTronPower_;
+      }
+      /**
+       * <code>int64 old_tron_power = 46;</code>
+       * @param value The oldTronPower to set.
+       * @return This builder for chaining.
+       */
+      public Builder setOldTronPower(long value) {
+        
+        oldTronPower_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int64 old_tron_power = 46;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearOldTronPower() {
+        
+        oldTronPower_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private org.tron.trident.proto.Response.Account.Frozen tronPower_;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          org.tron.trident.proto.Response.Account.Frozen, org.tron.trident.proto.Response.Account.Frozen.Builder, org.tron.trident.proto.Response.Account.FrozenOrBuilder> tronPowerBuilder_;
+      /**
+       * <code>.protocol.Account.Frozen tron_power = 47;</code>
+       * @return Whether the tronPower field is set.
+       */
+      public boolean hasTronPower() {
+        return tronPowerBuilder_ != null || tronPower_ != null;
+      }
+      /**
+       * <code>.protocol.Account.Frozen tron_power = 47;</code>
+       * @return The tronPower.
+       */
+      public org.tron.trident.proto.Response.Account.Frozen getTronPower() {
+        if (tronPowerBuilder_ == null) {
+          return tronPower_ == null ? org.tron.trident.proto.Response.Account.Frozen.getDefaultInstance() : tronPower_;
+        } else {
+          return tronPowerBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>.protocol.Account.Frozen tron_power = 47;</code>
+       */
+      public Builder setTronPower(org.tron.trident.proto.Response.Account.Frozen value) {
+        if (tronPowerBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          tronPower_ = value;
+          onChanged();
+        } else {
+          tronPowerBuilder_.setMessage(value);
+        }
+
+        return this;
+      }
+      /**
+       * <code>.protocol.Account.Frozen tron_power = 47;</code>
+       */
+      public Builder setTronPower(
+          org.tron.trident.proto.Response.Account.Frozen.Builder builderForValue) {
+        if (tronPowerBuilder_ == null) {
+          tronPower_ = builderForValue.build();
+          onChanged();
+        } else {
+          tronPowerBuilder_.setMessage(builderForValue.build());
+        }
+
+        return this;
+      }
+      /**
+       * <code>.protocol.Account.Frozen tron_power = 47;</code>
+       */
+      public Builder mergeTronPower(org.tron.trident.proto.Response.Account.Frozen value) {
+        if (tronPowerBuilder_ == null) {
+          if (tronPower_ != null) {
+            tronPower_ =
+              org.tron.trident.proto.Response.Account.Frozen.newBuilder(tronPower_).mergeFrom(value).buildPartial();
+          } else {
+            tronPower_ = value;
+          }
+          onChanged();
+        } else {
+          tronPowerBuilder_.mergeFrom(value);
+        }
+
+        return this;
+      }
+      /**
+       * <code>.protocol.Account.Frozen tron_power = 47;</code>
+       */
+      public Builder clearTronPower() {
+        if (tronPowerBuilder_ == null) {
+          tronPower_ = null;
+          onChanged();
+        } else {
+          tronPower_ = null;
+          tronPowerBuilder_ = null;
+        }
+
+        return this;
+      }
+      /**
+       * <code>.protocol.Account.Frozen tron_power = 47;</code>
+       */
+      public org.tron.trident.proto.Response.Account.Frozen.Builder getTronPowerBuilder() {
+        
+        onChanged();
+        return getTronPowerFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>.protocol.Account.Frozen tron_power = 47;</code>
+       */
+      public org.tron.trident.proto.Response.Account.FrozenOrBuilder getTronPowerOrBuilder() {
+        if (tronPowerBuilder_ != null) {
+          return tronPowerBuilder_.getMessageOrBuilder();
+        } else {
+          return tronPower_ == null ?
+              org.tron.trident.proto.Response.Account.Frozen.getDefaultInstance() : tronPower_;
+        }
+      }
+      /**
+       * <code>.protocol.Account.Frozen tron_power = 47;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          org.tron.trident.proto.Response.Account.Frozen, org.tron.trident.proto.Response.Account.Frozen.Builder, org.tron.trident.proto.Response.Account.FrozenOrBuilder> 
+          getTronPowerFieldBuilder() {
+        if (tronPowerBuilder_ == null) {
+          tronPowerBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              org.tron.trident.proto.Response.Account.Frozen, org.tron.trident.proto.Response.Account.Frozen.Builder, org.tron.trident.proto.Response.Account.FrozenOrBuilder>(
+                  getTronPower(),
+                  getParentForChildren(),
+                  isClean());
+          tronPower_ = null;
+        }
+        return tronPowerBuilder_;
+      }
+
+      private boolean assetOptimized_ ;
+      /**
+       * <code>bool asset_optimized = 60;</code>
+       * @return The assetOptimized.
+       */
+      @java.lang.Override
+      public boolean getAssetOptimized() {
+        return assetOptimized_;
+      }
+      /**
+       * <code>bool asset_optimized = 60;</code>
+       * @param value The assetOptimized to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAssetOptimized(boolean value) {
+        
+        assetOptimized_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bool asset_optimized = 60;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearAssetOptimized() {
+        
+        assetOptimized_ = false;
         onChanged();
         return this;
       }
@@ -28179,6 +30455,37 @@ public final class Response {
         return this;
       }
 
+      private long netWindowSize_ ;
+      /**
+       * <code>int64 net_window_size = 24;</code>
+       * @return The netWindowSize.
+       */
+      @java.lang.Override
+      public long getNetWindowSize() {
+        return netWindowSize_;
+      }
+      /**
+       * <code>int64 net_window_size = 24;</code>
+       * @param value The netWindowSize to set.
+       * @return This builder for chaining.
+       */
+      public Builder setNetWindowSize(long value) {
+        
+        netWindowSize_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int64 net_window_size = 24;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearNetWindowSize() {
+        
+        netWindowSize_ = 0L;
+        onChanged();
+        return this;
+      }
+
       private org.tron.trident.proto.Response.Account.AccountResource accountResource_;
       private com.google.protobuf.SingleFieldBuilderV3<
           org.tron.trident.proto.Response.Account.AccountResource, org.tron.trident.proto.Response.Account.AccountResource.Builder, org.tron.trident.proto.Response.Account.AccountResourceOrBuilder> accountResourceBuilder_;
@@ -28808,6 +31115,548 @@ public final class Response {
           activePermission_ = null;
         }
         return activePermissionBuilder_;
+      }
+
+      private java.util.List<org.tron.trident.proto.Response.Account.FreezeV2> frozenV2_ =
+        java.util.Collections.emptyList();
+      private void ensureFrozenV2IsMutable() {
+        if (!((bitField0_ & 0x00000400) != 0)) {
+          frozenV2_ = new java.util.ArrayList<org.tron.trident.proto.Response.Account.FreezeV2>(frozenV2_);
+          bitField0_ |= 0x00000400;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          org.tron.trident.proto.Response.Account.FreezeV2, org.tron.trident.proto.Response.Account.FreezeV2.Builder, org.tron.trident.proto.Response.Account.FreezeV2OrBuilder> frozenV2Builder_;
+
+      /**
+       * <code>repeated .protocol.Account.FreezeV2 frozenV2 = 34;</code>
+       */
+      public java.util.List<org.tron.trident.proto.Response.Account.FreezeV2> getFrozenV2List() {
+        if (frozenV2Builder_ == null) {
+          return java.util.Collections.unmodifiableList(frozenV2_);
+        } else {
+          return frozenV2Builder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .protocol.Account.FreezeV2 frozenV2 = 34;</code>
+       */
+      public int getFrozenV2Count() {
+        if (frozenV2Builder_ == null) {
+          return frozenV2_.size();
+        } else {
+          return frozenV2Builder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .protocol.Account.FreezeV2 frozenV2 = 34;</code>
+       */
+      public org.tron.trident.proto.Response.Account.FreezeV2 getFrozenV2(int index) {
+        if (frozenV2Builder_ == null) {
+          return frozenV2_.get(index);
+        } else {
+          return frozenV2Builder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .protocol.Account.FreezeV2 frozenV2 = 34;</code>
+       */
+      public Builder setFrozenV2(
+          int index, org.tron.trident.proto.Response.Account.FreezeV2 value) {
+        if (frozenV2Builder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureFrozenV2IsMutable();
+          frozenV2_.set(index, value);
+          onChanged();
+        } else {
+          frozenV2Builder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .protocol.Account.FreezeV2 frozenV2 = 34;</code>
+       */
+      public Builder setFrozenV2(
+          int index, org.tron.trident.proto.Response.Account.FreezeV2.Builder builderForValue) {
+        if (frozenV2Builder_ == null) {
+          ensureFrozenV2IsMutable();
+          frozenV2_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          frozenV2Builder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .protocol.Account.FreezeV2 frozenV2 = 34;</code>
+       */
+      public Builder addFrozenV2(org.tron.trident.proto.Response.Account.FreezeV2 value) {
+        if (frozenV2Builder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureFrozenV2IsMutable();
+          frozenV2_.add(value);
+          onChanged();
+        } else {
+          frozenV2Builder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .protocol.Account.FreezeV2 frozenV2 = 34;</code>
+       */
+      public Builder addFrozenV2(
+          int index, org.tron.trident.proto.Response.Account.FreezeV2 value) {
+        if (frozenV2Builder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureFrozenV2IsMutable();
+          frozenV2_.add(index, value);
+          onChanged();
+        } else {
+          frozenV2Builder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .protocol.Account.FreezeV2 frozenV2 = 34;</code>
+       */
+      public Builder addFrozenV2(
+          org.tron.trident.proto.Response.Account.FreezeV2.Builder builderForValue) {
+        if (frozenV2Builder_ == null) {
+          ensureFrozenV2IsMutable();
+          frozenV2_.add(builderForValue.build());
+          onChanged();
+        } else {
+          frozenV2Builder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .protocol.Account.FreezeV2 frozenV2 = 34;</code>
+       */
+      public Builder addFrozenV2(
+          int index, org.tron.trident.proto.Response.Account.FreezeV2.Builder builderForValue) {
+        if (frozenV2Builder_ == null) {
+          ensureFrozenV2IsMutable();
+          frozenV2_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          frozenV2Builder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .protocol.Account.FreezeV2 frozenV2 = 34;</code>
+       */
+      public Builder addAllFrozenV2(
+          java.lang.Iterable<? extends org.tron.trident.proto.Response.Account.FreezeV2> values) {
+        if (frozenV2Builder_ == null) {
+          ensureFrozenV2IsMutable();
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, frozenV2_);
+          onChanged();
+        } else {
+          frozenV2Builder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .protocol.Account.FreezeV2 frozenV2 = 34;</code>
+       */
+      public Builder clearFrozenV2() {
+        if (frozenV2Builder_ == null) {
+          frozenV2_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000400);
+          onChanged();
+        } else {
+          frozenV2Builder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .protocol.Account.FreezeV2 frozenV2 = 34;</code>
+       */
+      public Builder removeFrozenV2(int index) {
+        if (frozenV2Builder_ == null) {
+          ensureFrozenV2IsMutable();
+          frozenV2_.remove(index);
+          onChanged();
+        } else {
+          frozenV2Builder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .protocol.Account.FreezeV2 frozenV2 = 34;</code>
+       */
+      public org.tron.trident.proto.Response.Account.FreezeV2.Builder getFrozenV2Builder(
+          int index) {
+        return getFrozenV2FieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .protocol.Account.FreezeV2 frozenV2 = 34;</code>
+       */
+      public org.tron.trident.proto.Response.Account.FreezeV2OrBuilder getFrozenV2OrBuilder(
+          int index) {
+        if (frozenV2Builder_ == null) {
+          return frozenV2_.get(index);  } else {
+          return frozenV2Builder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .protocol.Account.FreezeV2 frozenV2 = 34;</code>
+       */
+      public java.util.List<? extends org.tron.trident.proto.Response.Account.FreezeV2OrBuilder> 
+           getFrozenV2OrBuilderList() {
+        if (frozenV2Builder_ != null) {
+          return frozenV2Builder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(frozenV2_);
+        }
+      }
+      /**
+       * <code>repeated .protocol.Account.FreezeV2 frozenV2 = 34;</code>
+       */
+      public org.tron.trident.proto.Response.Account.FreezeV2.Builder addFrozenV2Builder() {
+        return getFrozenV2FieldBuilder().addBuilder(
+            org.tron.trident.proto.Response.Account.FreezeV2.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .protocol.Account.FreezeV2 frozenV2 = 34;</code>
+       */
+      public org.tron.trident.proto.Response.Account.FreezeV2.Builder addFrozenV2Builder(
+          int index) {
+        return getFrozenV2FieldBuilder().addBuilder(
+            index, org.tron.trident.proto.Response.Account.FreezeV2.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .protocol.Account.FreezeV2 frozenV2 = 34;</code>
+       */
+      public java.util.List<org.tron.trident.proto.Response.Account.FreezeV2.Builder> 
+           getFrozenV2BuilderList() {
+        return getFrozenV2FieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          org.tron.trident.proto.Response.Account.FreezeV2, org.tron.trident.proto.Response.Account.FreezeV2.Builder, org.tron.trident.proto.Response.Account.FreezeV2OrBuilder> 
+          getFrozenV2FieldBuilder() {
+        if (frozenV2Builder_ == null) {
+          frozenV2Builder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+              org.tron.trident.proto.Response.Account.FreezeV2, org.tron.trident.proto.Response.Account.FreezeV2.Builder, org.tron.trident.proto.Response.Account.FreezeV2OrBuilder>(
+                  frozenV2_,
+                  ((bitField0_ & 0x00000400) != 0),
+                  getParentForChildren(),
+                  isClean());
+          frozenV2_ = null;
+        }
+        return frozenV2Builder_;
+      }
+
+      private java.util.List<org.tron.trident.proto.Response.Account.UnFreezeV2> unfrozenV2_ =
+        java.util.Collections.emptyList();
+      private void ensureUnfrozenV2IsMutable() {
+        if (!((bitField0_ & 0x00000800) != 0)) {
+          unfrozenV2_ = new java.util.ArrayList<org.tron.trident.proto.Response.Account.UnFreezeV2>(unfrozenV2_);
+          bitField0_ |= 0x00000800;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          org.tron.trident.proto.Response.Account.UnFreezeV2, org.tron.trident.proto.Response.Account.UnFreezeV2.Builder, org.tron.trident.proto.Response.Account.UnFreezeV2OrBuilder> unfrozenV2Builder_;
+
+      /**
+       * <code>repeated .protocol.Account.UnFreezeV2 unfrozenV2 = 35;</code>
+       */
+      public java.util.List<org.tron.trident.proto.Response.Account.UnFreezeV2> getUnfrozenV2List() {
+        if (unfrozenV2Builder_ == null) {
+          return java.util.Collections.unmodifiableList(unfrozenV2_);
+        } else {
+          return unfrozenV2Builder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .protocol.Account.UnFreezeV2 unfrozenV2 = 35;</code>
+       */
+      public int getUnfrozenV2Count() {
+        if (unfrozenV2Builder_ == null) {
+          return unfrozenV2_.size();
+        } else {
+          return unfrozenV2Builder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .protocol.Account.UnFreezeV2 unfrozenV2 = 35;</code>
+       */
+      public org.tron.trident.proto.Response.Account.UnFreezeV2 getUnfrozenV2(int index) {
+        if (unfrozenV2Builder_ == null) {
+          return unfrozenV2_.get(index);
+        } else {
+          return unfrozenV2Builder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .protocol.Account.UnFreezeV2 unfrozenV2 = 35;</code>
+       */
+      public Builder setUnfrozenV2(
+          int index, org.tron.trident.proto.Response.Account.UnFreezeV2 value) {
+        if (unfrozenV2Builder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureUnfrozenV2IsMutable();
+          unfrozenV2_.set(index, value);
+          onChanged();
+        } else {
+          unfrozenV2Builder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .protocol.Account.UnFreezeV2 unfrozenV2 = 35;</code>
+       */
+      public Builder setUnfrozenV2(
+          int index, org.tron.trident.proto.Response.Account.UnFreezeV2.Builder builderForValue) {
+        if (unfrozenV2Builder_ == null) {
+          ensureUnfrozenV2IsMutable();
+          unfrozenV2_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          unfrozenV2Builder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .protocol.Account.UnFreezeV2 unfrozenV2 = 35;</code>
+       */
+      public Builder addUnfrozenV2(org.tron.trident.proto.Response.Account.UnFreezeV2 value) {
+        if (unfrozenV2Builder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureUnfrozenV2IsMutable();
+          unfrozenV2_.add(value);
+          onChanged();
+        } else {
+          unfrozenV2Builder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .protocol.Account.UnFreezeV2 unfrozenV2 = 35;</code>
+       */
+      public Builder addUnfrozenV2(
+          int index, org.tron.trident.proto.Response.Account.UnFreezeV2 value) {
+        if (unfrozenV2Builder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureUnfrozenV2IsMutable();
+          unfrozenV2_.add(index, value);
+          onChanged();
+        } else {
+          unfrozenV2Builder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .protocol.Account.UnFreezeV2 unfrozenV2 = 35;</code>
+       */
+      public Builder addUnfrozenV2(
+          org.tron.trident.proto.Response.Account.UnFreezeV2.Builder builderForValue) {
+        if (unfrozenV2Builder_ == null) {
+          ensureUnfrozenV2IsMutable();
+          unfrozenV2_.add(builderForValue.build());
+          onChanged();
+        } else {
+          unfrozenV2Builder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .protocol.Account.UnFreezeV2 unfrozenV2 = 35;</code>
+       */
+      public Builder addUnfrozenV2(
+          int index, org.tron.trident.proto.Response.Account.UnFreezeV2.Builder builderForValue) {
+        if (unfrozenV2Builder_ == null) {
+          ensureUnfrozenV2IsMutable();
+          unfrozenV2_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          unfrozenV2Builder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .protocol.Account.UnFreezeV2 unfrozenV2 = 35;</code>
+       */
+      public Builder addAllUnfrozenV2(
+          java.lang.Iterable<? extends org.tron.trident.proto.Response.Account.UnFreezeV2> values) {
+        if (unfrozenV2Builder_ == null) {
+          ensureUnfrozenV2IsMutable();
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, unfrozenV2_);
+          onChanged();
+        } else {
+          unfrozenV2Builder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .protocol.Account.UnFreezeV2 unfrozenV2 = 35;</code>
+       */
+      public Builder clearUnfrozenV2() {
+        if (unfrozenV2Builder_ == null) {
+          unfrozenV2_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000800);
+          onChanged();
+        } else {
+          unfrozenV2Builder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .protocol.Account.UnFreezeV2 unfrozenV2 = 35;</code>
+       */
+      public Builder removeUnfrozenV2(int index) {
+        if (unfrozenV2Builder_ == null) {
+          ensureUnfrozenV2IsMutable();
+          unfrozenV2_.remove(index);
+          onChanged();
+        } else {
+          unfrozenV2Builder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .protocol.Account.UnFreezeV2 unfrozenV2 = 35;</code>
+       */
+      public org.tron.trident.proto.Response.Account.UnFreezeV2.Builder getUnfrozenV2Builder(
+          int index) {
+        return getUnfrozenV2FieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .protocol.Account.UnFreezeV2 unfrozenV2 = 35;</code>
+       */
+      public org.tron.trident.proto.Response.Account.UnFreezeV2OrBuilder getUnfrozenV2OrBuilder(
+          int index) {
+        if (unfrozenV2Builder_ == null) {
+          return unfrozenV2_.get(index);  } else {
+          return unfrozenV2Builder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .protocol.Account.UnFreezeV2 unfrozenV2 = 35;</code>
+       */
+      public java.util.List<? extends org.tron.trident.proto.Response.Account.UnFreezeV2OrBuilder> 
+           getUnfrozenV2OrBuilderList() {
+        if (unfrozenV2Builder_ != null) {
+          return unfrozenV2Builder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(unfrozenV2_);
+        }
+      }
+      /**
+       * <code>repeated .protocol.Account.UnFreezeV2 unfrozenV2 = 35;</code>
+       */
+      public org.tron.trident.proto.Response.Account.UnFreezeV2.Builder addUnfrozenV2Builder() {
+        return getUnfrozenV2FieldBuilder().addBuilder(
+            org.tron.trident.proto.Response.Account.UnFreezeV2.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .protocol.Account.UnFreezeV2 unfrozenV2 = 35;</code>
+       */
+      public org.tron.trident.proto.Response.Account.UnFreezeV2.Builder addUnfrozenV2Builder(
+          int index) {
+        return getUnfrozenV2FieldBuilder().addBuilder(
+            index, org.tron.trident.proto.Response.Account.UnFreezeV2.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .protocol.Account.UnFreezeV2 unfrozenV2 = 35;</code>
+       */
+      public java.util.List<org.tron.trident.proto.Response.Account.UnFreezeV2.Builder> 
+           getUnfrozenV2BuilderList() {
+        return getUnfrozenV2FieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          org.tron.trident.proto.Response.Account.UnFreezeV2, org.tron.trident.proto.Response.Account.UnFreezeV2.Builder, org.tron.trident.proto.Response.Account.UnFreezeV2OrBuilder> 
+          getUnfrozenV2FieldBuilder() {
+        if (unfrozenV2Builder_ == null) {
+          unfrozenV2Builder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+              org.tron.trident.proto.Response.Account.UnFreezeV2, org.tron.trident.proto.Response.Account.UnFreezeV2.Builder, org.tron.trident.proto.Response.Account.UnFreezeV2OrBuilder>(
+                  unfrozenV2_,
+                  ((bitField0_ & 0x00000800) != 0),
+                  getParentForChildren(),
+                  isClean());
+          unfrozenV2_ = null;
+        }
+        return unfrozenV2Builder_;
+      }
+
+      private long delegatedFrozenV2BalanceForBandwidth_ ;
+      /**
+       * <code>int64 delegated_frozenV2_balance_for_bandwidth = 36;</code>
+       * @return The delegatedFrozenV2BalanceForBandwidth.
+       */
+      @java.lang.Override
+      public long getDelegatedFrozenV2BalanceForBandwidth() {
+        return delegatedFrozenV2BalanceForBandwidth_;
+      }
+      /**
+       * <code>int64 delegated_frozenV2_balance_for_bandwidth = 36;</code>
+       * @param value The delegatedFrozenV2BalanceForBandwidth to set.
+       * @return This builder for chaining.
+       */
+      public Builder setDelegatedFrozenV2BalanceForBandwidth(long value) {
+        
+        delegatedFrozenV2BalanceForBandwidth_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int64 delegated_frozenV2_balance_for_bandwidth = 36;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearDelegatedFrozenV2BalanceForBandwidth() {
+        
+        delegatedFrozenV2BalanceForBandwidth_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private long acquiredDelegatedFrozenV2BalanceForBandwidth_ ;
+      /**
+       * <code>int64 acquired_delegated_frozenV2_balance_for_bandwidth = 37;</code>
+       * @return The acquiredDelegatedFrozenV2BalanceForBandwidth.
+       */
+      @java.lang.Override
+      public long getAcquiredDelegatedFrozenV2BalanceForBandwidth() {
+        return acquiredDelegatedFrozenV2BalanceForBandwidth_;
+      }
+      /**
+       * <code>int64 acquired_delegated_frozenV2_balance_for_bandwidth = 37;</code>
+       * @param value The acquiredDelegatedFrozenV2BalanceForBandwidth to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAcquiredDelegatedFrozenV2BalanceForBandwidth(long value) {
+        
+        acquiredDelegatedFrozenV2BalanceForBandwidth_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int64 acquired_delegated_frozenV2_balance_for_bandwidth = 37;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearAcquiredDelegatedFrozenV2BalanceForBandwidth() {
+        
+        acquiredDelegatedFrozenV2BalanceForBandwidth_ = 0L;
+        onChanged();
+        return this;
       }
       @java.lang.Override
       public final Builder setUnknownFields(
@@ -64560,6 +67409,16 @@ public final class Response {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_protocol_Account_AccountResource_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_protocol_Account_FreezeV2_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_protocol_Account_FreezeV2_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_protocol_Account_UnFreezeV2_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_protocol_Account_UnFreezeV2_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_protocol_MarketOrderDetail_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -64816,7 +67675,7 @@ public final class Response {
       "\022\032\n\022energy_usage_total\030\004 \001(\003\022\021\n\tnet_usag" +
       "e\030\005 \001(\003\022\017\n\007net_fee\030\006 \001(\003\022;\n\006result\030\007 \001(\016" +
       "2+.protocol.Transaction.Result.contractR" +
-      "esult\"\360\005\n\017TransactionInfo\022\n\n\002id\030\001 \001(\014\022\013\n" +
+      "esult\"\220\006\n\017TransactionInfo\022\n\n\002id\030\001 \001(\014\022\013\n" +
       "\003fee\030\002 \001(\003\022\023\n\013blockNumber\030\003 \001(\003\022\026\n\016block" +
       "TimeStamp\030\004 \001(\003\022\026\n\016contractResult\030\005 \003(\014\022" +
       "\030\n\020contract_address\030\006 \001(\014\022*\n\007receipt\030\007 \001" +
@@ -64832,225 +67691,242 @@ public final class Response {
       "e_withdraw_another_amount\030\024 \001(\003\022\023\n\013excha" +
       "nge_id\030\025 \001(\003\022 \n\030shielded_transaction_fee" +
       "\030\026 \001(\003\022\017\n\007orderId\030\031 \001(\014\0221\n\014orderDetails\030" +
-      "\032 \003(\0132\033.protocol.MarketOrderDetail\0324\n\003Lo" +
-      "g\022\017\n\007address\030\001 \001(\014\022\016\n\006topics\030\002 \003(\014\022\014\n\004da" +
-      "ta\030\003 \001(\014\"\036\n\004code\022\n\n\006SUCESS\020\000\022\n\n\006FAILED\020\001" +
-      "\"\265\001\n\007Witness\022\017\n\007address\030\001 \001(\014\022\021\n\tvoteCou" +
-      "nt\030\002 \001(\003\022\016\n\006pubKey\030\003 \001(\014\022\013\n\003url\030\004 \001(\t\022\025\n" +
-      "\rtotalProduced\030\005 \001(\003\022\023\n\013totalMissed\030\006 \001(" +
-      "\003\022\026\n\016latestBlockNum\030\007 \001(\003\022\025\n\rlatestSlotN" +
-      "um\030\010 \001(\003\022\016\n\006isJobs\030\t \001(\010\"\360\017\n\007Account\022\024\n\014" +
-      "account_name\030\001 \001(\014\022#\n\004type\030\002 \001(\0162\025.proto" +
-      "col.AccountType\022\017\n\007address\030\003 \001(\014\022\017\n\007bala" +
-      "nce\030\004 \001(\003\022\035\n\005votes\030\005 \003(\0132\016.protocol.Vote" +
-      "\022+\n\005asset\030\006 \003(\0132\034.protocol.Account.Asset" +
-      "Entry\022/\n\007assetV2\0308 \003(\0132\036.protocol.Accoun" +
-      "t.AssetV2Entry\022(\n\006frozen\030\007 \003(\0132\030.protoco" +
-      "l.Account.Frozen\022\021\n\tnet_usage\030\010 \001(\003\0227\n/a" +
-      "cquired_delegated_frozen_balance_for_ban" +
-      "dwidth\030) \001(\003\022.\n&delegated_frozen_balance" +
-      "_for_bandwidth\030* \001(\003\022\023\n\013create_time\030\t \001(" +
-      "\003\022\034\n\024latest_opration_time\030\n \001(\003\022\021\n\tallow" +
-      "ance\030\013 \001(\003\022\034\n\024latest_withdraw_time\030\014 \001(\003" +
-      "\022\014\n\004code\030\r \001(\014\022\022\n\nis_witness\030\016 \001(\010\022\024\n\014is" +
-      "_committee\030\017 \001(\010\022/\n\rfrozen_supply\030\020 \003(\0132" +
-      "\030.protocol.Account.Frozen\022\031\n\021asset_issue" +
-      "d_name\030\021 \001(\014\022\027\n\017asset_issued_ID\0309 \001(\014\022T\n" +
-      "\033latest_asset_operation_time\030\022 \003(\0132/.pro" +
-      "tocol.Account.LatestAssetOperationTimeEn" +
-      "try\022X\n\035latest_asset_operation_timeV2\030: \003" +
-      "(\01321.protocol.Account.LatestAssetOperati" +
-      "onTimeV2Entry\022\026\n\016free_net_usage\030\023 \001(\003\022F\n" +
-      "\024free_asset_net_usage\030\024 \003(\0132(.protocol.A" +
-      "ccount.FreeAssetNetUsageEntry\022J\n\026free_as" +
-      "set_net_usageV2\030; \003(\0132*.protocol.Account" +
-      ".FreeAssetNetUsageV2Entry\022\033\n\023latest_cons" +
-      "ume_time\030\025 \001(\003\022 \n\030latest_consume_free_ti" +
-      "me\030\026 \001(\003\022\022\n\naccount_id\030\027 \001(\014\022;\n\020account_" +
-      "resource\030\032 \001(\0132!.protocol.Account.Accoun" +
-      "tResource\022\020\n\010codeHash\030\036 \001(\014\022.\n\020owner_per" +
-      "mission\030\037 \001(\0132\024.protocol.Permission\0220\n\022w" +
-      "itness_permission\030  \001(\0132\024.protocol.Permi" +
-      "ssion\022/\n\021active_permission\030! \003(\0132\024.proto" +
-      "col.Permission\0325\n\006Frozen\022\026\n\016frozen_balan" +
-      "ce\030\001 \001(\003\022\023\n\013expire_time\030\002 \001(\003\032,\n\nAssetEn" +
-      "try\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001\032.\n\014A" +
-      "ssetV2Entry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:" +
-      "\0028\001\032?\n\035LatestAssetOperationTimeEntry\022\013\n\003" +
-      "key\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001\032A\n\037LatestAs" +
-      "setOperationTimeV2Entry\022\013\n\003key\030\001 \001(\t\022\r\n\005" +
-      "value\030\002 \001(\003:\0028\001\0328\n\026FreeAssetNetUsageEntr" +
-      "y\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001\032:\n\030Fre" +
-      "eAssetNetUsageV2Entry\022\013\n\003key\030\001 \001(\t\022\r\n\005va" +
-      "lue\030\002 \001(\003:\0028\001\032\303\002\n\017AccountResource\022\024\n\014ene" +
-      "rgy_usage\030\001 \001(\003\022;\n\031frozen_balance_for_en" +
-      "ergy\030\002 \001(\0132\030.protocol.Account.Frozen\022&\n\036" +
-      "latest_consume_time_for_energy\030\003 \001(\003\0224\n," +
-      "acquired_delegated_frozen_balance_for_en" +
-      "ergy\030\004 \001(\003\022+\n#delegated_frozen_balance_f" +
-      "or_energy\030\005 \001(\003\022\025\n\rstorage_limit\030\006 \001(\003\022\025" +
-      "\n\rstorage_usage\030\007 \001(\003\022$\n\034latest_exchange" +
-      "_storage_time\030\010 \001(\003\"r\n\021MarketOrderDetail" +
-      "\022\024\n\014makerOrderId\030\001 \001(\014\022\024\n\014takerOrderId\030\002" +
-      " \001(\014\022\030\n\020fillSellQuantity\030\003 \001(\003\022\027\n\017fillBu" +
-      "yQuantity\030\004 \001(\003\"\321\002\n\010Proposal\022\023\n\013proposal" +
-      "_id\030\001 \001(\003\022\030\n\020proposer_address\030\002 \001(\014\0226\n\np" +
-      "arameters\030\003 \003(\0132\".protocol.Proposal.Para" +
-      "metersEntry\022\027\n\017expiration_time\030\004 \001(\003\022\023\n\013" +
-      "create_time\030\005 \001(\003\022\021\n\tapprovals\030\006 \003(\014\022\'\n\005" +
-      "state\030\007 \001(\0162\030.protocol.Proposal.State\0321\n" +
-      "\017ParametersEntry\022\013\n\003key\030\001 \001(\003\022\r\n\005value\030\002" +
-      " \001(\003:\0028\001\"A\n\005State\022\013\n\007PENDING\020\000\022\017\n\013DISAPP" +
-      "ROVED\020\001\022\014\n\010APPROVED\020\002\022\014\n\010CANCELED\020\003\"\271\001\n\010" +
-      "Exchange\022\023\n\013exchange_id\030\001 \001(\003\022\027\n\017creator" +
-      "_address\030\002 \001(\014\022\023\n\013create_time\030\003 \001(\003\022\026\n\016f" +
-      "irst_token_id\030\006 \001(\014\022\033\n\023first_token_balan" +
-      "ce\030\007 \001(\003\022\027\n\017second_token_id\030\010 \001(\014\022\034\n\024sec" +
-      "ond_token_balance\030\t \001(\003\"\271\001\n\021DelegatedRes" +
-      "ource\022\014\n\004from\030\001 \001(\014\022\n\n\002to\030\002 \001(\014\022$\n\034froze" +
-      "n_balance_for_bandwidth\030\003 \001(\003\022!\n\031frozen_" +
-      "balance_for_energy\030\004 \001(\003\022!\n\031expire_time_" +
-      "for_bandwidth\030\005 \001(\003\022\036\n\026expire_time_for_e" +
-      "nergy\030\006 \001(\003\"Z\n\035DelegatedResourceAccountI" +
-      "ndex\022\017\n\007account\030\001 \001(\014\022\024\n\014fromAccounts\030\002 " +
-      "\003(\014\022\022\n\ntoAccounts\030\003 \003(\014\"Q\n\017TransactionSi" +
-      "gn\022*\n\013transaction\030\001 \001(\0132\025.protocol.Trans" +
-      "action\022\022\n\nprivateKey\030\002 \001(\014\"\201\001\n\017ChainPara" +
-      "meters\022@\n\016chainParameter\030\001 \003(\0132(.protoco" +
-      "l.ChainParameters.ChainParameter\032,\n\016Chai" +
-      "nParameter\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\003\"\240" +
-      "\021\n\010NodeInfo\022\024\n\014beginSyncNum\030\001 \001(\003\022\r\n\005blo" +
-      "ck\030\002 \001(\t\022\025\n\rsolidityBlock\030\003 \001(\t\022\033\n\023curre" +
-      "ntConnectCount\030\004 \001(\005\022\032\n\022activeConnectCou" +
-      "nt\030\005 \001(\005\022\033\n\023passiveConnectCount\030\006 \001(\005\022\021\n" +
-      "\ttotalFlow\030\007 \001(\003\0221\n\014peerInfoList\030\010 \003(\0132\033" +
-      ".protocol.NodeInfo.PeerInfo\0229\n\016configNod" +
-      "eInfo\030\t \001(\0132!.protocol.NodeInfo.ConfigNo" +
-      "deInfo\0223\n\013machineInfo\030\n \001(\0132\036.protocol.N" +
-      "odeInfo.MachineInfo\022H\n\023cheatWitnessInfoM" +
-      "ap\030\013 \003(\0132+.protocol.NodeInfo.CheatWitnes" +
-      "sInfoMapEntry\032:\n\030CheatWitnessInfoMapEntr" +
-      "y\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\032\315\004\n\010Pe" +
-      "erInfo\022\025\n\rlastSyncBlock\030\001 \001(\t\022\021\n\tremainN" +
-      "um\030\002 \001(\003\022\033\n\023lastBlockUpdateTime\030\003 \001(\003\022\020\n" +
-      "\010syncFlag\030\004 \001(\010\022\037\n\027headBlockTimeWeBothHa" +
-      "ve\030\005 \001(\003\022\030\n\020needSyncFromPeer\030\006 \001(\010\022\026\n\016ne" +
-      "edSyncFromUs\030\007 \001(\010\022\014\n\004host\030\010 \001(\t\022\014\n\004port" +
-      "\030\t \001(\005\022\016\n\006nodeId\030\n \001(\t\022\023\n\013connectTime\030\013 " +
-      "\001(\003\022\022\n\navgLatency\030\014 \001(\001\022\027\n\017syncToFetchSi" +
-      "ze\030\r \001(\005\022\036\n\026syncToFetchSizePeekNum\030\016 \001(\003" +
-      "\022\036\n\026syncBlockRequestedSize\030\017 \001(\005\022\025\n\runFe" +
-      "tchSynNum\030\020 \001(\003\022\027\n\017blockInPorcSize\030\021 \001(\005" +
-      "\022\033\n\023headBlockWeBothHave\030\022 \001(\t\022\020\n\010isActiv" +
-      "e\030\023 \001(\010\022\r\n\005score\030\024 \001(\005\022\021\n\tnodeCount\030\025 \001(" +
-      "\005\022\016\n\006inFlow\030\026 \001(\003\022\027\n\017disconnectTimes\030\027 \001" +
-      "(\005\022\035\n\025localDisconnectReason\030\030 \001(\t\022\036\n\026rem" +
-      "oteDisconnectReason\030\031 \001(\t\032\345\003\n\016ConfigNode" +
-      "Info\022\023\n\013codeVersion\030\001 \001(\t\022\022\n\np2pVersion\030" +
-      "\002 \001(\t\022\022\n\nlistenPort\030\003 \001(\005\022\026\n\016discoverEna" +
-      "ble\030\004 \001(\010\022\026\n\016activeNodeSize\030\005 \001(\005\022\027\n\017pas" +
-      "siveNodeSize\030\006 \001(\005\022\024\n\014sendNodeSize\030\007 \001(\005" +
-      "\022\027\n\017maxConnectCount\030\010 \001(\005\022\035\n\025sameIpMaxCo" +
-      "nnectCount\030\t \001(\005\022\030\n\020backupListenPort\030\n \001" +
-      "(\005\022\030\n\020backupMemberSize\030\013 \001(\005\022\026\n\016backupPr" +
-      "iority\030\014 \001(\005\022\021\n\tdbVersion\030\r \001(\005\022\034\n\024minPa" +
-      "rticipationRate\030\016 \001(\005\022\027\n\017supportConstant" +
-      "\030\017 \001(\010\022\024\n\014minTimeRatio\030\020 \001(\001\022\024\n\014maxTimeR" +
-      "atio\030\021 \001(\001\022 \n\030allowCreationOfContracts\030\022" +
-      " \001(\003\022\033\n\023allowAdaptiveEnergy\030\023 \001(\003\032\215\005\n\013Ma" +
-      "chineInfo\022\023\n\013threadCount\030\001 \001(\005\022\033\n\023deadLo" +
-      "ckThreadCount\030\002 \001(\005\022\020\n\010cpuCount\030\003 \001(\005\022\023\n" +
-      "\013totalMemory\030\004 \001(\003\022\022\n\nfreeMemory\030\005 \001(\003\022\017" +
-      "\n\007cpuRate\030\006 \001(\001\022\023\n\013javaVersion\030\007 \001(\t\022\016\n\006" +
-      "osName\030\010 \001(\t\022\027\n\017jvmTotalMemoery\030\t \001(\003\022\025\n" +
-      "\rjvmFreeMemory\030\n \001(\003\022\026\n\016processCpuRate\030\013" +
-      " \001(\001\022I\n\022memoryDescInfoList\030\014 \003(\0132-.proto" +
-      "col.NodeInfo.MachineInfo.MemoryDescInfo\022" +
-      "Q\n\026deadLockThreadInfoList\030\r \003(\01321.protoc" +
-      "ol.NodeInfo.MachineInfo.DeadLockThreadIn" +
-      "fo\032c\n\016MemoryDescInfo\022\014\n\004name\030\001 \001(\t\022\020\n\010in" +
-      "itSize\030\002 \001(\003\022\017\n\007useSize\030\003 \001(\003\022\017\n\007maxSize" +
-      "\030\004 \001(\003\022\017\n\007useRate\030\005 \001(\001\032\217\001\n\022DeadLockThre" +
-      "adInfo\022\014\n\004name\030\001 \001(\t\022\020\n\010lockName\030\002 \001(\t\022\021" +
-      "\n\tlockOwner\030\003 \001(\t\022\r\n\005state\030\004 \001(\t\022\021\n\tbloc" +
-      "kTime\030\005 \001(\003\022\020\n\010waitTime\030\006 \001(\003\022\022\n\nstackTr" +
-      "ace\030\007 \001(\t\"\362\002\n\013MarketOrder\022\020\n\010order_id\030\001 " +
-      "\001(\014\022\025\n\rowner_address\030\002 \001(\014\022\023\n\013create_tim" +
-      "e\030\003 \001(\003\022\025\n\rsell_token_id\030\004 \001(\014\022\033\n\023sell_t" +
-      "oken_quantity\030\005 \001(\003\022\024\n\014buy_token_id\030\006 \001(" +
-      "\014\022\032\n\022buy_token_quantity\030\007 \001(\003\022\"\n\032sell_to" +
-      "ken_quantity_remain\030\t \001(\003\022\"\n\032sell_token_" +
-      "quantity_return\030\n \001(\003\022*\n\005state\030\013 \001(\0162\033.p" +
-      "rotocol.MarketOrder.State\022\014\n\004prev\030\014 \001(\014\022" +
-      "\014\n\004next\030\r \001(\014\"/\n\005State\022\n\n\006ACTIVE\020\000\022\014\n\010IN" +
-      "ACTIVE\020\001\022\014\n\010CANCELED\020\002\"8\n\017MarketOrderLis" +
-      "t\022%\n\006orders\030\001 \003(\0132\025.protocol.MarketOrder" +
-      "\">\n\017MarketOrderPair\022\025\n\rsell_token_id\030\001 \001" +
-      "(\014\022\024\n\014buy_token_id\030\002 \001(\014\"C\n\023MarketOrderP" +
-      "airList\022,\n\torderPair\030\001 \003(\0132\031.protocol.Ma" +
-      "rketOrderPair\"F\n\013MarketPrice\022\033\n\023sell_tok" +
-      "en_quantity\030\001 \001(\003\022\032\n\022buy_token_quantity\030" +
-      "\002 \001(\003\"e\n\017MarketPriceList\022\025\n\rsell_token_i" +
-      "d\030\001 \001(\014\022\024\n\014buy_token_id\030\002 \001(\014\022%\n\006prices\030" +
-      "\003 \003(\0132\025.protocol.MarketPrice\"#\n\017Nullifie" +
-      "rResult\022\020\n\010is_spent\030\001 \001(\010\"\345\001\n\021DecryptNot" +
-      "esTRC20\0223\n\007noteTxs\030\001 \003(\0132\".protocol.Decr" +
-      "yptNotesTRC20.NoteTx\032\232\001\n\006NoteTx\022\034\n\004note\030" +
-      "\001 \001(\0132\016.protocol.Note\022\020\n\010position\030\002 \001(\003\022" +
-      "\020\n\010is_spent\030\003 \001(\010\022\014\n\004txid\030\004 \001(\014\022\r\n\005index" +
-      "\030\005 \001(\005\022\021\n\tto_amount\030\006 \001(\t\022\036\n\026transparent" +
-      "_to_address\030\007 \001(\014\"I\n\023TransactionInfoList" +
-      "\0222\n\017transactionInfo\030\001 \003(\0132\031.protocol.Tra" +
-      "nsactionInfo\"\347\002\n\027TransactionApprovedList" +
-      "\022\025\n\rapproved_list\030\002 \003(\014\0228\n\006result\030\004 \001(\0132" +
-      "(.protocol.TransactionApprovedList.Resul" +
-      "t\0223\n\013transaction\030\005 \001(\0132\036.protocol.Transa" +
-      "ctionExtention\032\305\001\n\006Result\022D\n\004code\030\001 \001(\0162" +
-      "6.protocol.TransactionApprovedList.Resul" +
-      "t.response_code\022\017\n\007message\030\002 \001(\t\"d\n\rresp" +
-      "onse_code\022\013\n\007SUCCESS\020\000\022\032\n\026SIGNATURE_FORM" +
-      "AT_ERROR\020\001\022\031\n\025COMPUTE_ADDRESS_ERROR\020\002\022\017\n" +
-      "\013OTHER_ERROR\020\024\"\337\003\n\025TransactionSignWeight" +
-      "\022(\n\npermission\030\001 \001(\0132\024.protocol.Permissi" +
-      "on\022\025\n\rapproved_list\030\002 \003(\014\022\026\n\016current_wei" +
-      "ght\030\003 \001(\003\0226\n\006result\030\004 \001(\0132&.protocol.Tra" +
-      "nsactionSignWeight.Result\0223\n\013transaction" +
-      "\030\005 \001(\0132\036.protocol.TransactionExtention\032\377" +
-      "\001\n\006Result\022B\n\004code\030\001 \001(\01624.protocol.Trans" +
-      "actionSignWeight.Result.response_code\022\017\n" +
-      "\007message\030\002 \001(\t\"\237\001\n\rresponse_code\022\025\n\021ENOU" +
-      "GH_PERMISSION\020\000\022\031\n\025NOT_ENOUGH_PERMISSION" +
-      "\020\001\022\032\n\026SIGNATURE_FORMAT_ERROR\020\002\022\031\n\025COMPUT" +
-      "E_ADDRESS_ERROR\020\003\022\024\n\020PERMISSION_ERROR\020\004\022" +
-      "\017\n\013OTHER_ERROR\020\024\"\223\001\n\010NodeList\022&\n\005nodes\030\001" +
-      " \003(\0132\027.protocol.NodeList.Node\032_\n\004Node\0220\n" +
-      "\007address\030\001 \001(\0132\037.protocol.NodeList.Node." +
-      "Address\032%\n\007Address\022\014\n\004host\030\001 \001(\014\022\014\n\004port" +
-      "\030\002 \001(\005\"\207\003\n\021AccountNetMessage\022\023\n\013freeNetU" +
-      "sed\030\001 \001(\003\022\024\n\014freeNetLimit\030\002 \001(\003\022\017\n\007NetUs" +
-      "ed\030\003 \001(\003\022\020\n\010NetLimit\030\004 \001(\003\022C\n\014assetNetUs" +
-      "ed\030\005 \003(\0132-.protocol.AccountNetMessage.As" +
-      "setNetUsedEntry\022E\n\rassetNetLimit\030\006 \003(\0132." +
-      ".protocol.AccountNetMessage.AssetNetLimi" +
-      "tEntry\022\025\n\rTotalNetLimit\030\007 \001(\003\022\026\n\016TotalNe" +
-      "tWeight\030\010 \001(\003\0323\n\021AssetNetUsedEntry\022\013\n\003ke" +
-      "y\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001\0324\n\022AssetNetLi" +
-      "mitEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001" +
-      "\"\237\004\n\026AccountResourceMessage\022\023\n\013freeNetUs" +
-      "ed\030\001 \001(\003\022\024\n\014freeNetLimit\030\002 \001(\003\022\017\n\007NetUse" +
-      "d\030\003 \001(\003\022\020\n\010NetLimit\030\004 \001(\003\022H\n\014assetNetUse" +
-      "d\030\005 \003(\01322.protocol.AccountResourceMessag" +
-      "e.AssetNetUsedEntry\022J\n\rassetNetLimit\030\006 \003" +
-      "(\01323.protocol.AccountResourceMessage.Ass" +
-      "etNetLimitEntry\022\025\n\rTotalNetLimit\030\007 \001(\003\022\026" +
-      "\n\016TotalNetWeight\030\010 \001(\003\022\022\n\nEnergyUsed\030\r \001" +
-      "(\003\022\023\n\013EnergyLimit\030\016 \001(\003\022\030\n\020TotalEnergyLi" +
-      "mit\030\017 \001(\003\022\031\n\021TotalEnergyWeight\030\020 \001(\003\022\023\n\013" +
-      "storageUsed\030\025 \001(\003\022\024\n\014storageLimit\030\026 \001(\003\032" +
-      "3\n\021AssetNetUsedEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005val" +
-      "ue\030\002 \001(\003:\0028\001\0324\n\022AssetNetLimitEntry\022\013\n\003ke" +
-      "y\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001B\030\n\026org.tron.t" +
-      "rident.protob\006proto3"
+      "\032 \003(\0132\033.protocol.MarketOrderDetail\022\036\n\026wi" +
+      "thdraw_expire_amount\030\034 \001(\003\0324\n\003Log\022\017\n\007add" +
+      "ress\030\001 \001(\014\022\016\n\006topics\030\002 \003(\014\022\014\n\004data\030\003 \001(\014" +
+      "\"\036\n\004code\022\n\n\006SUCESS\020\000\022\n\n\006FAILED\020\001\"\265\001\n\007Wit" +
+      "ness\022\017\n\007address\030\001 \001(\014\022\021\n\tvoteCount\030\002 \001(\003" +
+      "\022\016\n\006pubKey\030\003 \001(\014\022\013\n\003url\030\004 \001(\t\022\025\n\rtotalPr" +
+      "oduced\030\005 \001(\003\022\023\n\013totalMissed\030\006 \001(\003\022\026\n\016lat" +
+      "estBlockNum\030\007 \001(\003\022\025\n\rlatestSlotNum\030\010 \001(\003" +
+      "\022\016\n\006isJobs\030\t \001(\010\"\345\024\n\007Account\022\024\n\014account_" +
+      "name\030\001 \001(\014\022#\n\004type\030\002 \001(\0162\025.protocol.Acco" +
+      "untType\022\017\n\007address\030\003 \001(\014\022\017\n\007balance\030\004 \001(" +
+      "\003\022\035\n\005votes\030\005 \003(\0132\016.protocol.Vote\022+\n\005asse" +
+      "t\030\006 \003(\0132\034.protocol.Account.AssetEntry\022/\n" +
+      "\007assetV2\0308 \003(\0132\036.protocol.Account.AssetV" +
+      "2Entry\022(\n\006frozen\030\007 \003(\0132\030.protocol.Accoun" +
+      "t.Frozen\022\021\n\tnet_usage\030\010 \001(\003\0227\n/acquired_" +
+      "delegated_frozen_balance_for_bandwidth\030)" +
+      " \001(\003\022.\n&delegated_frozen_balance_for_ban" +
+      "dwidth\030* \001(\003\022\026\n\016old_tron_power\030. \001(\003\022,\n\n" +
+      "tron_power\030/ \001(\0132\030.protocol.Account.Froz" +
+      "en\022\027\n\017asset_optimized\030< \001(\010\022\023\n\013create_ti" +
+      "me\030\t \001(\003\022\034\n\024latest_opration_time\030\n \001(\003\022\021" +
+      "\n\tallowance\030\013 \001(\003\022\034\n\024latest_withdraw_tim" +
+      "e\030\014 \001(\003\022\014\n\004code\030\r \001(\014\022\022\n\nis_witness\030\016 \001(" +
+      "\010\022\024\n\014is_committee\030\017 \001(\010\022/\n\rfrozen_supply" +
+      "\030\020 \003(\0132\030.protocol.Account.Frozen\022\031\n\021asse" +
+      "t_issued_name\030\021 \001(\014\022\027\n\017asset_issued_ID\0309" +
+      " \001(\014\022T\n\033latest_asset_operation_time\030\022 \003(" +
+      "\0132/.protocol.Account.LatestAssetOperatio" +
+      "nTimeEntry\022X\n\035latest_asset_operation_tim" +
+      "eV2\030: \003(\01321.protocol.Account.LatestAsset" +
+      "OperationTimeV2Entry\022\026\n\016free_net_usage\030\023" +
+      " \001(\003\022F\n\024free_asset_net_usage\030\024 \003(\0132(.pro" +
+      "tocol.Account.FreeAssetNetUsageEntry\022J\n\026" +
+      "free_asset_net_usageV2\030; \003(\0132*.protocol." +
+      "Account.FreeAssetNetUsageV2Entry\022\033\n\023late" +
+      "st_consume_time\030\025 \001(\003\022 \n\030latest_consume_" +
+      "free_time\030\026 \001(\003\022\022\n\naccount_id\030\027 \001(\014\022\027\n\017n" +
+      "et_window_size\030\030 \001(\003\022;\n\020account_resource" +
+      "\030\032 \001(\0132!.protocol.Account.AccountResourc" +
+      "e\022\020\n\010codeHash\030\036 \001(\014\022.\n\020owner_permission\030" +
+      "\037 \001(\0132\024.protocol.Permission\0220\n\022witness_p" +
+      "ermission\030  \001(\0132\024.protocol.Permission\022/\n" +
+      "\021active_permission\030! \003(\0132\024.protocol.Perm" +
+      "ission\022,\n\010frozenV2\030\" \003(\0132\032.protocol.Acco" +
+      "unt.FreezeV2\0220\n\nunfrozenV2\030# \003(\0132\034.proto" +
+      "col.Account.UnFreezeV2\0220\n(delegated_froz" +
+      "enV2_balance_for_bandwidth\030$ \001(\003\0229\n1acqu" +
+      "ired_delegated_frozenV2_balance_for_band" +
+      "width\030% \001(\003\0325\n\006Frozen\022\026\n\016frozen_balance\030" +
+      "\001 \001(\003\022\023\n\013expire_time\030\002 \001(\003\032,\n\nAssetEntry" +
+      "\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001\032.\n\014Asse" +
+      "tV2Entry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001" +
+      "\032?\n\035LatestAssetOperationTimeEntry\022\013\n\003key" +
+      "\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001\032A\n\037LatestAsset" +
+      "OperationTimeV2Entry\022\013\n\003key\030\001 \001(\t\022\r\n\005val" +
+      "ue\030\002 \001(\003:\0028\001\0328\n\026FreeAssetNetUsageEntry\022\013" +
+      "\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001\032:\n\030FreeAs" +
+      "setNetUsageV2Entry\022\013\n\003key\030\001 \001(\t\022\r\n\005value" +
+      "\030\002 \001(\003:\0028\001\032\306\003\n\017AccountResource\022\024\n\014energy" +
+      "_usage\030\001 \001(\003\022;\n\031frozen_balance_for_energ" +
+      "y\030\002 \001(\0132\030.protocol.Account.Frozen\022&\n\036lat" +
+      "est_consume_time_for_energy\030\003 \001(\003\0224\n,acq" +
+      "uired_delegated_frozen_balance_for_energ" +
+      "y\030\004 \001(\003\022+\n#delegated_frozen_balance_for_" +
+      "energy\030\005 \001(\003\022\025\n\rstorage_limit\030\006 \001(\003\022\025\n\rs" +
+      "torage_usage\030\007 \001(\003\022$\n\034latest_exchange_st" +
+      "orage_time\030\010 \001(\003\022\032\n\022energy_window_size\030\t" +
+      " \001(\003\022-\n%delegated_frozenV2_balance_for_e" +
+      "nergy\030\n \001(\003\0226\n.acquired_delegated_frozen" +
+      "V2_balance_for_energy\030\013 \001(\003\032@\n\010FreezeV2\022" +
+      "$\n\004type\030\001 \001(\0162\026.protocol.ResourceCode\022\016\n" +
+      "\006amount\030\002 \001(\003\032i\n\nUnFreezeV2\022$\n\004type\030\001 \001(" +
+      "\0162\026.protocol.ResourceCode\022\027\n\017unfreeze_am" +
+      "ount\030\003 \001(\003\022\034\n\024unfreeze_expire_time\030\004 \001(\003" +
+      "\"r\n\021MarketOrderDetail\022\024\n\014makerOrderId\030\001 " +
+      "\001(\014\022\024\n\014takerOrderId\030\002 \001(\014\022\030\n\020fillSellQua" +
+      "ntity\030\003 \001(\003\022\027\n\017fillBuyQuantity\030\004 \001(\003\"\321\002\n" +
+      "\010Proposal\022\023\n\013proposal_id\030\001 \001(\003\022\030\n\020propos" +
+      "er_address\030\002 \001(\014\0226\n\nparameters\030\003 \003(\0132\".p" +
+      "rotocol.Proposal.ParametersEntry\022\027\n\017expi" +
+      "ration_time\030\004 \001(\003\022\023\n\013create_time\030\005 \001(\003\022\021" +
+      "\n\tapprovals\030\006 \003(\014\022\'\n\005state\030\007 \001(\0162\030.proto" +
+      "col.Proposal.State\0321\n\017ParametersEntry\022\013\n" +
+      "\003key\030\001 \001(\003\022\r\n\005value\030\002 \001(\003:\0028\001\"A\n\005State\022\013" +
+      "\n\007PENDING\020\000\022\017\n\013DISAPPROVED\020\001\022\014\n\010APPROVED" +
+      "\020\002\022\014\n\010CANCELED\020\003\"\271\001\n\010Exchange\022\023\n\013exchang" +
+      "e_id\030\001 \001(\003\022\027\n\017creator_address\030\002 \001(\014\022\023\n\013c" +
+      "reate_time\030\003 \001(\003\022\026\n\016first_token_id\030\006 \001(\014" +
+      "\022\033\n\023first_token_balance\030\007 \001(\003\022\027\n\017second_" +
+      "token_id\030\010 \001(\014\022\034\n\024second_token_balance\030\t" +
+      " \001(\003\"\271\001\n\021DelegatedResource\022\014\n\004from\030\001 \001(\014" +
+      "\022\n\n\002to\030\002 \001(\014\022$\n\034frozen_balance_for_bandw" +
+      "idth\030\003 \001(\003\022!\n\031frozen_balance_for_energy\030" +
+      "\004 \001(\003\022!\n\031expire_time_for_bandwidth\030\005 \001(\003" +
+      "\022\036\n\026expire_time_for_energy\030\006 \001(\003\"Z\n\035Dele" +
+      "gatedResourceAccountIndex\022\017\n\007account\030\001 \001" +
+      "(\014\022\024\n\014fromAccounts\030\002 \003(\014\022\022\n\ntoAccounts\030\003" +
+      " \003(\014\"Q\n\017TransactionSign\022*\n\013transaction\030\001" +
+      " \001(\0132\025.protocol.Transaction\022\022\n\nprivateKe" +
+      "y\030\002 \001(\014\"\201\001\n\017ChainParameters\022@\n\016chainPara" +
+      "meter\030\001 \003(\0132(.protocol.ChainParameters.C" +
+      "hainParameter\032,\n\016ChainParameter\022\013\n\003key\030\001" +
+      " \001(\t\022\r\n\005value\030\002 \001(\003\"\240\021\n\010NodeInfo\022\024\n\014begi" +
+      "nSyncNum\030\001 \001(\003\022\r\n\005block\030\002 \001(\t\022\025\n\rsolidit" +
+      "yBlock\030\003 \001(\t\022\033\n\023currentConnectCount\030\004 \001(" +
+      "\005\022\032\n\022activeConnectCount\030\005 \001(\005\022\033\n\023passive" +
+      "ConnectCount\030\006 \001(\005\022\021\n\ttotalFlow\030\007 \001(\003\0221\n" +
+      "\014peerInfoList\030\010 \003(\0132\033.protocol.NodeInfo." +
+      "PeerInfo\0229\n\016configNodeInfo\030\t \001(\0132!.proto" +
+      "col.NodeInfo.ConfigNodeInfo\0223\n\013machineIn" +
+      "fo\030\n \001(\0132\036.protocol.NodeInfo.MachineInfo" +
+      "\022H\n\023cheatWitnessInfoMap\030\013 \003(\0132+.protocol" +
+      ".NodeInfo.CheatWitnessInfoMapEntry\032:\n\030Ch" +
+      "eatWitnessInfoMapEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005v" +
+      "alue\030\002 \001(\t:\0028\001\032\315\004\n\010PeerInfo\022\025\n\rlastSyncB" +
+      "lock\030\001 \001(\t\022\021\n\tremainNum\030\002 \001(\003\022\033\n\023lastBlo" +
+      "ckUpdateTime\030\003 \001(\003\022\020\n\010syncFlag\030\004 \001(\010\022\037\n\027" +
+      "headBlockTimeWeBothHave\030\005 \001(\003\022\030\n\020needSyn" +
+      "cFromPeer\030\006 \001(\010\022\026\n\016needSyncFromUs\030\007 \001(\010\022" +
+      "\014\n\004host\030\010 \001(\t\022\014\n\004port\030\t \001(\005\022\016\n\006nodeId\030\n " +
+      "\001(\t\022\023\n\013connectTime\030\013 \001(\003\022\022\n\navgLatency\030\014" +
+      " \001(\001\022\027\n\017syncToFetchSize\030\r \001(\005\022\036\n\026syncToF" +
+      "etchSizePeekNum\030\016 \001(\003\022\036\n\026syncBlockReques" +
+      "tedSize\030\017 \001(\005\022\025\n\runFetchSynNum\030\020 \001(\003\022\027\n\017" +
+      "blockInPorcSize\030\021 \001(\005\022\033\n\023headBlockWeBoth" +
+      "Have\030\022 \001(\t\022\020\n\010isActive\030\023 \001(\010\022\r\n\005score\030\024 " +
+      "\001(\005\022\021\n\tnodeCount\030\025 \001(\005\022\016\n\006inFlow\030\026 \001(\003\022\027" +
+      "\n\017disconnectTimes\030\027 \001(\005\022\035\n\025localDisconne" +
+      "ctReason\030\030 \001(\t\022\036\n\026remoteDisconnectReason" +
+      "\030\031 \001(\t\032\345\003\n\016ConfigNodeInfo\022\023\n\013codeVersion" +
+      "\030\001 \001(\t\022\022\n\np2pVersion\030\002 \001(\t\022\022\n\nlistenPort" +
+      "\030\003 \001(\005\022\026\n\016discoverEnable\030\004 \001(\010\022\026\n\016active" +
+      "NodeSize\030\005 \001(\005\022\027\n\017passiveNodeSize\030\006 \001(\005\022" +
+      "\024\n\014sendNodeSize\030\007 \001(\005\022\027\n\017maxConnectCount" +
+      "\030\010 \001(\005\022\035\n\025sameIpMaxConnectCount\030\t \001(\005\022\030\n" +
+      "\020backupListenPort\030\n \001(\005\022\030\n\020backupMemberS" +
+      "ize\030\013 \001(\005\022\026\n\016backupPriority\030\014 \001(\005\022\021\n\tdbV" +
+      "ersion\030\r \001(\005\022\034\n\024minParticipationRate\030\016 \001" +
+      "(\005\022\027\n\017supportConstant\030\017 \001(\010\022\024\n\014minTimeRa" +
+      "tio\030\020 \001(\001\022\024\n\014maxTimeRatio\030\021 \001(\001\022 \n\030allow" +
+      "CreationOfContracts\030\022 \001(\003\022\033\n\023allowAdapti" +
+      "veEnergy\030\023 \001(\003\032\215\005\n\013MachineInfo\022\023\n\013thread" +
+      "Count\030\001 \001(\005\022\033\n\023deadLockThreadCount\030\002 \001(\005" +
+      "\022\020\n\010cpuCount\030\003 \001(\005\022\023\n\013totalMemory\030\004 \001(\003\022" +
+      "\022\n\nfreeMemory\030\005 \001(\003\022\017\n\007cpuRate\030\006 \001(\001\022\023\n\013" +
+      "javaVersion\030\007 \001(\t\022\016\n\006osName\030\010 \001(\t\022\027\n\017jvm" +
+      "TotalMemoery\030\t \001(\003\022\025\n\rjvmFreeMemory\030\n \001(" +
+      "\003\022\026\n\016processCpuRate\030\013 \001(\001\022I\n\022memoryDescI" +
+      "nfoList\030\014 \003(\0132-.protocol.NodeInfo.Machin" +
+      "eInfo.MemoryDescInfo\022Q\n\026deadLockThreadIn" +
+      "foList\030\r \003(\01321.protocol.NodeInfo.Machine" +
+      "Info.DeadLockThreadInfo\032c\n\016MemoryDescInf" +
+      "o\022\014\n\004name\030\001 \001(\t\022\020\n\010initSize\030\002 \001(\003\022\017\n\007use" +
+      "Size\030\003 \001(\003\022\017\n\007maxSize\030\004 \001(\003\022\017\n\007useRate\030\005" +
+      " \001(\001\032\217\001\n\022DeadLockThreadInfo\022\014\n\004name\030\001 \001(" +
+      "\t\022\020\n\010lockName\030\002 \001(\t\022\021\n\tlockOwner\030\003 \001(\t\022\r" +
+      "\n\005state\030\004 \001(\t\022\021\n\tblockTime\030\005 \001(\003\022\020\n\010wait" +
+      "Time\030\006 \001(\003\022\022\n\nstackTrace\030\007 \001(\t\"\362\002\n\013Marke" +
+      "tOrder\022\020\n\010order_id\030\001 \001(\014\022\025\n\rowner_addres" +
+      "s\030\002 \001(\014\022\023\n\013create_time\030\003 \001(\003\022\025\n\rsell_tok" +
+      "en_id\030\004 \001(\014\022\033\n\023sell_token_quantity\030\005 \001(\003" +
+      "\022\024\n\014buy_token_id\030\006 \001(\014\022\032\n\022buy_token_quan" +
+      "tity\030\007 \001(\003\022\"\n\032sell_token_quantity_remain" +
+      "\030\t \001(\003\022\"\n\032sell_token_quantity_return\030\n \001" +
+      "(\003\022*\n\005state\030\013 \001(\0162\033.protocol.MarketOrder" +
+      ".State\022\014\n\004prev\030\014 \001(\014\022\014\n\004next\030\r \001(\014\"/\n\005St" +
+      "ate\022\n\n\006ACTIVE\020\000\022\014\n\010INACTIVE\020\001\022\014\n\010CANCELE" +
+      "D\020\002\"8\n\017MarketOrderList\022%\n\006orders\030\001 \003(\0132\025" +
+      ".protocol.MarketOrder\">\n\017MarketOrderPair" +
+      "\022\025\n\rsell_token_id\030\001 \001(\014\022\024\n\014buy_token_id\030" +
+      "\002 \001(\014\"C\n\023MarketOrderPairList\022,\n\torderPai" +
+      "r\030\001 \003(\0132\031.protocol.MarketOrderPair\"F\n\013Ma" +
+      "rketPrice\022\033\n\023sell_token_quantity\030\001 \001(\003\022\032" +
+      "\n\022buy_token_quantity\030\002 \001(\003\"e\n\017MarketPric" +
+      "eList\022\025\n\rsell_token_id\030\001 \001(\014\022\024\n\014buy_toke" +
+      "n_id\030\002 \001(\014\022%\n\006prices\030\003 \003(\0132\025.protocol.Ma" +
+      "rketPrice\"#\n\017NullifierResult\022\020\n\010is_spent" +
+      "\030\001 \001(\010\"\345\001\n\021DecryptNotesTRC20\0223\n\007noteTxs\030" +
+      "\001 \003(\0132\".protocol.DecryptNotesTRC20.NoteT" +
+      "x\032\232\001\n\006NoteTx\022\034\n\004note\030\001 \001(\0132\016.protocol.No" +
+      "te\022\020\n\010position\030\002 \001(\003\022\020\n\010is_spent\030\003 \001(\010\022\014" +
+      "\n\004txid\030\004 \001(\014\022\r\n\005index\030\005 \001(\005\022\021\n\tto_amount" +
+      "\030\006 \001(\t\022\036\n\026transparent_to_address\030\007 \001(\014\"I" +
+      "\n\023TransactionInfoList\0222\n\017transactionInfo" +
+      "\030\001 \003(\0132\031.protocol.TransactionInfo\"\347\002\n\027Tr" +
+      "ansactionApprovedList\022\025\n\rapproved_list\030\002" +
+      " \003(\014\0228\n\006result\030\004 \001(\0132(.protocol.Transact" +
+      "ionApprovedList.Result\0223\n\013transaction\030\005 " +
+      "\001(\0132\036.protocol.TransactionExtention\032\305\001\n\006" +
+      "Result\022D\n\004code\030\001 \001(\01626.protocol.Transact" +
+      "ionApprovedList.Result.response_code\022\017\n\007" +
+      "message\030\002 \001(\t\"d\n\rresponse_code\022\013\n\007SUCCES" +
+      "S\020\000\022\032\n\026SIGNATURE_FORMAT_ERROR\020\001\022\031\n\025COMPU" +
+      "TE_ADDRESS_ERROR\020\002\022\017\n\013OTHER_ERROR\020\024\"\337\003\n\025" +
+      "TransactionSignWeight\022(\n\npermission\030\001 \001(" +
+      "\0132\024.protocol.Permission\022\025\n\rapproved_list" +
+      "\030\002 \003(\014\022\026\n\016current_weight\030\003 \001(\003\0226\n\006result" +
+      "\030\004 \001(\0132&.protocol.TransactionSignWeight." +
+      "Result\0223\n\013transaction\030\005 \001(\0132\036.protocol.T" +
+      "ransactionExtention\032\377\001\n\006Result\022B\n\004code\030\001" +
+      " \001(\01624.protocol.TransactionSignWeight.Re" +
+      "sult.response_code\022\017\n\007message\030\002 \001(\t\"\237\001\n\r" +
+      "response_code\022\025\n\021ENOUGH_PERMISSION\020\000\022\031\n\025" +
+      "NOT_ENOUGH_PERMISSION\020\001\022\032\n\026SIGNATURE_FOR" +
+      "MAT_ERROR\020\002\022\031\n\025COMPUTE_ADDRESS_ERROR\020\003\022\024" +
+      "\n\020PERMISSION_ERROR\020\004\022\017\n\013OTHER_ERROR\020\024\"\223\001" +
+      "\n\010NodeList\022&\n\005nodes\030\001 \003(\0132\027.protocol.Nod" +
+      "eList.Node\032_\n\004Node\0220\n\007address\030\001 \001(\0132\037.pr" +
+      "otocol.NodeList.Node.Address\032%\n\007Address\022" +
+      "\014\n\004host\030\001 \001(\014\022\014\n\004port\030\002 \001(\005\"\207\003\n\021AccountN" +
+      "etMessage\022\023\n\013freeNetUsed\030\001 \001(\003\022\024\n\014freeNe" +
+      "tLimit\030\002 \001(\003\022\017\n\007NetUsed\030\003 \001(\003\022\020\n\010NetLimi" +
+      "t\030\004 \001(\003\022C\n\014assetNetUsed\030\005 \003(\0132-.protocol" +
+      ".AccountNetMessage.AssetNetUsedEntry\022E\n\r" +
+      "assetNetLimit\030\006 \003(\0132..protocol.AccountNe" +
+      "tMessage.AssetNetLimitEntry\022\025\n\rTotalNetL" +
+      "imit\030\007 \001(\003\022\026\n\016TotalNetWeight\030\010 \001(\003\0323\n\021As" +
+      "setNetUsedEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 " +
+      "\001(\003:\0028\001\0324\n\022AssetNetLimitEntry\022\013\n\003key\030\001 \001" +
+      "(\t\022\r\n\005value\030\002 \001(\003:\0028\001\"\237\004\n\026AccountResourc" +
+      "eMessage\022\023\n\013freeNetUsed\030\001 \001(\003\022\024\n\014freeNet" +
+      "Limit\030\002 \001(\003\022\017\n\007NetUsed\030\003 \001(\003\022\020\n\010NetLimit" +
+      "\030\004 \001(\003\022H\n\014assetNetUsed\030\005 \003(\01322.protocol." +
+      "AccountResourceMessage.AssetNetUsedEntry" +
+      "\022J\n\rassetNetLimit\030\006 \003(\01323.protocol.Accou" +
+      "ntResourceMessage.AssetNetLimitEntry\022\025\n\r" +
+      "TotalNetLimit\030\007 \001(\003\022\026\n\016TotalNetWeight\030\010 " +
+      "\001(\003\022\022\n\nEnergyUsed\030\r \001(\003\022\023\n\013EnergyLimit\030\016" +
+      " \001(\003\022\030\n\020TotalEnergyLimit\030\017 \001(\003\022\031\n\021TotalE" +
+      "nergyWeight\030\020 \001(\003\022\023\n\013storageUsed\030\025 \001(\003\022\024" +
+      "\n\014storageLimit\030\026 \001(\003\0323\n\021AssetNetUsedEntr" +
+      "y\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001\0324\n\022Ass" +
+      "etNetLimitEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 " +
+      "\001(\003:\0028\001B\030\n\026org.tron.trident.protob\006proto" +
+      "3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -65172,7 +68048,7 @@ public final class Response {
     internal_static_protocol_TransactionInfo_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_TransactionInfo_descriptor,
-        new java.lang.String[] { "Id", "Fee", "BlockNumber", "BlockTimeStamp", "ContractResult", "ContractAddress", "Receipt", "Log", "Result", "ResMessage", "AssetIssueID", "WithdrawAmount", "UnfreezeAmount", "InternalTransactions", "ExchangeReceivedAmount", "ExchangeInjectAnotherAmount", "ExchangeWithdrawAnotherAmount", "ExchangeId", "ShieldedTransactionFee", "OrderId", "OrderDetails", });
+        new java.lang.String[] { "Id", "Fee", "BlockNumber", "BlockTimeStamp", "ContractResult", "ContractAddress", "Receipt", "Log", "Result", "ResMessage", "AssetIssueID", "WithdrawAmount", "UnfreezeAmount", "InternalTransactions", "ExchangeReceivedAmount", "ExchangeInjectAnotherAmount", "ExchangeWithdrawAnotherAmount", "ExchangeId", "ShieldedTransactionFee", "OrderId", "OrderDetails", "WithdrawExpireAmount", });
     internal_static_protocol_TransactionInfo_Log_descriptor =
       internal_static_protocol_TransactionInfo_descriptor.getNestedTypes().get(0);
     internal_static_protocol_TransactionInfo_Log_fieldAccessorTable = new
@@ -65190,7 +68066,7 @@ public final class Response {
     internal_static_protocol_Account_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_Account_descriptor,
-        new java.lang.String[] { "AccountName", "Type", "Address", "Balance", "Votes", "Asset", "AssetV2", "Frozen", "NetUsage", "AcquiredDelegatedFrozenBalanceForBandwidth", "DelegatedFrozenBalanceForBandwidth", "CreateTime", "LatestOprationTime", "Allowance", "LatestWithdrawTime", "Code", "IsWitness", "IsCommittee", "FrozenSupply", "AssetIssuedName", "AssetIssuedID", "LatestAssetOperationTime", "LatestAssetOperationTimeV2", "FreeNetUsage", "FreeAssetNetUsage", "FreeAssetNetUsageV2", "LatestConsumeTime", "LatestConsumeFreeTime", "AccountId", "AccountResource", "CodeHash", "OwnerPermission", "WitnessPermission", "ActivePermission", });
+        new java.lang.String[] { "AccountName", "Type", "Address", "Balance", "Votes", "Asset", "AssetV2", "Frozen", "NetUsage", "AcquiredDelegatedFrozenBalanceForBandwidth", "DelegatedFrozenBalanceForBandwidth", "OldTronPower", "TronPower", "AssetOptimized", "CreateTime", "LatestOprationTime", "Allowance", "LatestWithdrawTime", "Code", "IsWitness", "IsCommittee", "FrozenSupply", "AssetIssuedName", "AssetIssuedID", "LatestAssetOperationTime", "LatestAssetOperationTimeV2", "FreeNetUsage", "FreeAssetNetUsage", "FreeAssetNetUsageV2", "LatestConsumeTime", "LatestConsumeFreeTime", "AccountId", "NetWindowSize", "AccountResource", "CodeHash", "OwnerPermission", "WitnessPermission", "ActivePermission", "FrozenV2", "UnfrozenV2", "DelegatedFrozenV2BalanceForBandwidth", "AcquiredDelegatedFrozenV2BalanceForBandwidth", });
     internal_static_protocol_Account_Frozen_descriptor =
       internal_static_protocol_Account_descriptor.getNestedTypes().get(0);
     internal_static_protocol_Account_Frozen_fieldAccessorTable = new
@@ -65238,7 +68114,19 @@ public final class Response {
     internal_static_protocol_Account_AccountResource_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_Account_AccountResource_descriptor,
-        new java.lang.String[] { "EnergyUsage", "FrozenBalanceForEnergy", "LatestConsumeTimeForEnergy", "AcquiredDelegatedFrozenBalanceForEnergy", "DelegatedFrozenBalanceForEnergy", "StorageLimit", "StorageUsage", "LatestExchangeStorageTime", });
+        new java.lang.String[] { "EnergyUsage", "FrozenBalanceForEnergy", "LatestConsumeTimeForEnergy", "AcquiredDelegatedFrozenBalanceForEnergy", "DelegatedFrozenBalanceForEnergy", "StorageLimit", "StorageUsage", "LatestExchangeStorageTime", "EnergyWindowSize", "DelegatedFrozenV2BalanceForEnergy", "AcquiredDelegatedFrozenV2BalanceForEnergy", });
+    internal_static_protocol_Account_FreezeV2_descriptor =
+      internal_static_protocol_Account_descriptor.getNestedTypes().get(8);
+    internal_static_protocol_Account_FreezeV2_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_protocol_Account_FreezeV2_descriptor,
+        new java.lang.String[] { "Type", "Amount", });
+    internal_static_protocol_Account_UnFreezeV2_descriptor =
+      internal_static_protocol_Account_descriptor.getNestedTypes().get(9);
+    internal_static_protocol_Account_UnFreezeV2_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_protocol_Account_UnFreezeV2_descriptor,
+        new java.lang.String[] { "Type", "UnfreezeAmount", "UnfreezeExpireTime", });
     internal_static_protocol_MarketOrderDetail_descriptor =
       getDescriptor().getMessageTypes().get(20);
     internal_static_protocol_MarketOrderDetail_fieldAccessorTable = new
