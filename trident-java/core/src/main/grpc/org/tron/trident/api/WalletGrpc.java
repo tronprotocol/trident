@@ -58,6 +58,99 @@ public final class WalletGrpc {
     return getBroadcastTransactionMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<org.tron.trident.proto.Contract.CreateSmartContract,
+      org.tron.trident.proto.Response.TransactionExtention> getDeployContractMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "DeployContract",
+      requestType = org.tron.trident.proto.Contract.CreateSmartContract.class,
+      responseType = org.tron.trident.proto.Response.TransactionExtention.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<org.tron.trident.proto.Contract.CreateSmartContract,
+      org.tron.trident.proto.Response.TransactionExtention> getDeployContractMethod() {
+    io.grpc.MethodDescriptor<org.tron.trident.proto.Contract.CreateSmartContract, org.tron.trident.proto.Response.TransactionExtention> getDeployContractMethod;
+    if ((getDeployContractMethod = WalletGrpc.getDeployContractMethod) == null) {
+      synchronized (WalletGrpc.class) {
+        if ((getDeployContractMethod = WalletGrpc.getDeployContractMethod) == null) {
+          WalletGrpc.getDeployContractMethod = getDeployContractMethod =
+              io.grpc.MethodDescriptor.<org.tron.trident.proto.Contract.CreateSmartContract, org.tron.trident.proto.Response.TransactionExtention>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "DeployContract"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.proto.Contract.CreateSmartContract.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.proto.Response.TransactionExtention.getDefaultInstance()))
+              .setSchemaDescriptor(new WalletMethodDescriptorSupplier("DeployContract"))
+              .build();
+        }
+      }
+    }
+    return getDeployContractMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<org.tron.trident.proto.Contract.TriggerSmartContract,
+      org.tron.trident.proto.Response.TransactionExtention> getTriggerContractMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "TriggerContract",
+      requestType = org.tron.trident.proto.Contract.TriggerSmartContract.class,
+      responseType = org.tron.trident.proto.Response.TransactionExtention.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<org.tron.trident.proto.Contract.TriggerSmartContract,
+      org.tron.trident.proto.Response.TransactionExtention> getTriggerContractMethod() {
+    io.grpc.MethodDescriptor<org.tron.trident.proto.Contract.TriggerSmartContract, org.tron.trident.proto.Response.TransactionExtention> getTriggerContractMethod;
+    if ((getTriggerContractMethod = WalletGrpc.getTriggerContractMethod) == null) {
+      synchronized (WalletGrpc.class) {
+        if ((getTriggerContractMethod = WalletGrpc.getTriggerContractMethod) == null) {
+          WalletGrpc.getTriggerContractMethod = getTriggerContractMethod =
+              io.grpc.MethodDescriptor.<org.tron.trident.proto.Contract.TriggerSmartContract, org.tron.trident.proto.Response.TransactionExtention>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "TriggerContract"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.proto.Contract.TriggerSmartContract.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.proto.Response.TransactionExtention.getDefaultInstance()))
+              .setSchemaDescriptor(new WalletMethodDescriptorSupplier("TriggerContract"))
+              .build();
+        }
+      }
+    }
+    return getTriggerContractMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<org.tron.trident.proto.Contract.TriggerSmartContract,
+      org.tron.trident.proto.Response.TransactionExtention> getTriggerConstantContractMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "TriggerConstantContract",
+      requestType = org.tron.trident.proto.Contract.TriggerSmartContract.class,
+      responseType = org.tron.trident.proto.Response.TransactionExtention.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<org.tron.trident.proto.Contract.TriggerSmartContract,
+      org.tron.trident.proto.Response.TransactionExtention> getTriggerConstantContractMethod() {
+    io.grpc.MethodDescriptor<org.tron.trident.proto.Contract.TriggerSmartContract, org.tron.trident.proto.Response.TransactionExtention> getTriggerConstantContractMethod;
+    if ((getTriggerConstantContractMethod = WalletGrpc.getTriggerConstantContractMethod) == null) {
+      synchronized (WalletGrpc.class) {
+        if ((getTriggerConstantContractMethod = WalletGrpc.getTriggerConstantContractMethod) == null) {
+          WalletGrpc.getTriggerConstantContractMethod = getTriggerConstantContractMethod =
+              io.grpc.MethodDescriptor.<org.tron.trident.proto.Contract.TriggerSmartContract, org.tron.trident.proto.Response.TransactionExtention>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "TriggerConstantContract"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.proto.Contract.TriggerSmartContract.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.proto.Response.TransactionExtention.getDefaultInstance()))
+              .setSchemaDescriptor(new WalletMethodDescriptorSupplier("TriggerConstantContract"))
+              .build();
+        }
+      }
+    }
+    return getTriggerConstantContractMethod;
+  }
+
   private static volatile io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.EmptyMessage,
       org.tron.trident.proto.Response.NodeInfo> getGetNodeInfoMethod;
 
@@ -2505,6 +2598,69 @@ public final class WalletGrpc {
 
     /**
      * <pre>
+     *  rpc CreateCommonTransaction(Transaction) returns (TransactionExtention) {}
+     *  rpc CreateAccount(AccountCreateContract) returns (Transaction) {}
+     *  rpc CreateAccount2(AccountCreateContract) returns (TransactionExtention) {}
+     *  rpc UpdateAccount(AccountUpdateContract) returns (Transaction) {}
+     *  rpc UpdateAccount2(AccountUpdateContract) returns (TransactionExtention) {}
+     *  rpc SetAccountId(SetAccountIdContract) returns (Transaction) {}
+     *  rpc AccountPermissionUpdate(AccountPermissionUpdateContract) returns (TransactionExtention) {}
+     *  rpc CreateTransaction(TransferContract) returns (Transaction) {}
+     *  rpc CreateTransaction2(TransferContract) returns (TransactionExtention) {}
+     *  rpc CreateAssetIssue(AssetIssueContract) returns (Transaction) {}
+     *  rpc CreateAssetIssue2(AssetIssueContract) returns (TransactionExtention) {}
+     *  rpc UpdateAsset(UpdateAssetContract) returns (Transaction) {}
+     *  rpc UpdateAsset2(UpdateAssetContract) returns (TransactionExtention) {}
+     *  rpc TransferAsset(TransferAssetContract) returns (Transaction) {}
+     *  rpc TransferAsset2(TransferAssetContract) returns (TransactionExtention) {}
+     *  rpc ParticipateAssetIssue(ParticipateAssetIssueContract) returns (Transaction) {}
+     *  rpc ParticipateAssetIssue2(ParticipateAssetIssueContract) returns (TransactionExtention) {}
+     *  rpc UnfreezeAsset(UnfreezeAssetContract) returns (Transaction) {}
+     *  rpc UnfreezeAsset2(UnfreezeAssetContract) returns (TransactionExtention) {}
+     *  rpc CreateWitness(WitnessCreateContract) returns (Transaction) {}
+     *  rpc CreateWitness2(WitnessCreateContract) returns (TransactionExtention) {}
+     *  rpc UpdateWitness(WitnessUpdateContract) returns (Transaction) {}
+     *  rpc UpdateWitness2(WitnessUpdateContract) returns (TransactionExtention) {}
+     *  rpc UpdateBrokerage(UpdateBrokerageContract) returns (TransactionExtention) {}
+     *  rpc VoteWitnessAccount(VoteWitnessContract) returns (Transaction) {}
+     *  rpc VoteWitnessAccount2(VoteWitnessContract) returns (TransactionExtention) {}
+     *  rpc FreezeBalance(FreezeBalanceContract) returns (Transaction) {}
+     *  rpc FreezeBalance2(FreezeBalanceContract) returns (TransactionExtention) {}
+     *  rpc UnfreezeBalance(UnfreezeBalanceContract) returns (Transaction) {}
+     *  rpc UnfreezeBalance2(UnfreezeBalanceContract) returns (TransactionExtention) {}
+     *  rpc WithdrawBalance(WithdrawBalanceContract) returns (Transaction) {}
+     *  rpc WithdrawBalance2(WithdrawBalanceContract) returns (TransactionExtention) {}
+     *  rpc ProposalCreate(ProposalCreateContract) returns (TransactionExtention) {}
+     *  rpc ProposalApprove(ProposalApproveContract) returns (TransactionExtention) {}
+     *  rpc ProposalDelete(ProposalDeleteContract) returns (TransactionExtention) {}
+     * </pre>
+     */
+    public void deployContract(org.tron.trident.proto.Contract.CreateSmartContract request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.TransactionExtention> responseObserver) {
+      asyncUnimplementedUnaryCall(getDeployContractMethod(), responseObserver);
+    }
+
+    /**
+     * <pre>
+     *  rpc UpdateSetting(UpdateSettingContract) returns (TransactionExtention) {}          // consume_user_resource_percent
+     *  rpc UpdateEnergyLimit(UpdateEnergyLimitContract) returns (TransactionExtention) {}  // origin_energy_limit
+     *  rpc ClearContractABI(ClearABIContract) returns (TransactionExtention) {}
+     * </pre>
+     */
+    public void triggerContract(org.tron.trident.proto.Contract.TriggerSmartContract request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.TransactionExtention> responseObserver) {
+      asyncUnimplementedUnaryCall(getTriggerContractMethod(), responseObserver);
+    }
+
+    /**
+     */
+    public void triggerConstantContract(org.tron.trident.proto.Contract.TriggerSmartContract request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.TransactionExtention> responseObserver) {
+      asyncUnimplementedUnaryCall(getTriggerConstantContractMethod(), responseObserver);
+    }
+
+    /**
+     * <pre>
      * The real APIs:
      * </pre>
      */
@@ -2643,6 +2799,9 @@ public final class WalletGrpc {
     }
 
     /**
+     * <pre>
+     *deprecated
+     * </pre>
      */
     public void getBlockByNum(org.tron.trident.api.GrpcAPI.NumberMessage request,
         io.grpc.stub.StreamObserver<org.tron.trident.proto.Chain.Block> responseObserver) {
@@ -2650,6 +2809,9 @@ public final class WalletGrpc {
     }
 
     /**
+     * <pre>
+     *Use this function instead of GetBlockByNum.
+     * </pre>
      */
     public void getBlockByNum2(org.tron.trident.api.GrpcAPI.NumberMessage request,
         io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.BlockExtention> responseObserver) {
@@ -3082,6 +3244,27 @@ public final class WalletGrpc {
                 org.tron.trident.proto.Chain.Transaction,
                 org.tron.trident.proto.Response.TransactionReturn>(
                   this, METHODID_BROADCAST_TRANSACTION)))
+          .addMethod(
+            getDeployContractMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                org.tron.trident.proto.Contract.CreateSmartContract,
+                org.tron.trident.proto.Response.TransactionExtention>(
+                  this, METHODID_DEPLOY_CONTRACT)))
+          .addMethod(
+            getTriggerContractMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                org.tron.trident.proto.Contract.TriggerSmartContract,
+                org.tron.trident.proto.Response.TransactionExtention>(
+                  this, METHODID_TRIGGER_CONTRACT)))
+          .addMethod(
+            getTriggerConstantContractMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                org.tron.trident.proto.Contract.TriggerSmartContract,
+                org.tron.trident.proto.Response.TransactionExtention>(
+                  this, METHODID_TRIGGER_CONSTANT_CONTRACT)))
           .addMethod(
             getGetNodeInfoMethod(),
             asyncUnaryCall(
@@ -3652,6 +3835,72 @@ public final class WalletGrpc {
 
     /**
      * <pre>
+     *  rpc CreateCommonTransaction(Transaction) returns (TransactionExtention) {}
+     *  rpc CreateAccount(AccountCreateContract) returns (Transaction) {}
+     *  rpc CreateAccount2(AccountCreateContract) returns (TransactionExtention) {}
+     *  rpc UpdateAccount(AccountUpdateContract) returns (Transaction) {}
+     *  rpc UpdateAccount2(AccountUpdateContract) returns (TransactionExtention) {}
+     *  rpc SetAccountId(SetAccountIdContract) returns (Transaction) {}
+     *  rpc AccountPermissionUpdate(AccountPermissionUpdateContract) returns (TransactionExtention) {}
+     *  rpc CreateTransaction(TransferContract) returns (Transaction) {}
+     *  rpc CreateTransaction2(TransferContract) returns (TransactionExtention) {}
+     *  rpc CreateAssetIssue(AssetIssueContract) returns (Transaction) {}
+     *  rpc CreateAssetIssue2(AssetIssueContract) returns (TransactionExtention) {}
+     *  rpc UpdateAsset(UpdateAssetContract) returns (Transaction) {}
+     *  rpc UpdateAsset2(UpdateAssetContract) returns (TransactionExtention) {}
+     *  rpc TransferAsset(TransferAssetContract) returns (Transaction) {}
+     *  rpc TransferAsset2(TransferAssetContract) returns (TransactionExtention) {}
+     *  rpc ParticipateAssetIssue(ParticipateAssetIssueContract) returns (Transaction) {}
+     *  rpc ParticipateAssetIssue2(ParticipateAssetIssueContract) returns (TransactionExtention) {}
+     *  rpc UnfreezeAsset(UnfreezeAssetContract) returns (Transaction) {}
+     *  rpc UnfreezeAsset2(UnfreezeAssetContract) returns (TransactionExtention) {}
+     *  rpc CreateWitness(WitnessCreateContract) returns (Transaction) {}
+     *  rpc CreateWitness2(WitnessCreateContract) returns (TransactionExtention) {}
+     *  rpc UpdateWitness(WitnessUpdateContract) returns (Transaction) {}
+     *  rpc UpdateWitness2(WitnessUpdateContract) returns (TransactionExtention) {}
+     *  rpc UpdateBrokerage(UpdateBrokerageContract) returns (TransactionExtention) {}
+     *  rpc VoteWitnessAccount(VoteWitnessContract) returns (Transaction) {}
+     *  rpc VoteWitnessAccount2(VoteWitnessContract) returns (TransactionExtention) {}
+     *  rpc FreezeBalance(FreezeBalanceContract) returns (Transaction) {}
+     *  rpc FreezeBalance2(FreezeBalanceContract) returns (TransactionExtention) {}
+     *  rpc UnfreezeBalance(UnfreezeBalanceContract) returns (Transaction) {}
+     *  rpc UnfreezeBalance2(UnfreezeBalanceContract) returns (TransactionExtention) {}
+     *  rpc WithdrawBalance(WithdrawBalanceContract) returns (Transaction) {}
+     *  rpc WithdrawBalance2(WithdrawBalanceContract) returns (TransactionExtention) {}
+     *  rpc ProposalCreate(ProposalCreateContract) returns (TransactionExtention) {}
+     *  rpc ProposalApprove(ProposalApproveContract) returns (TransactionExtention) {}
+     *  rpc ProposalDelete(ProposalDeleteContract) returns (TransactionExtention) {}
+     * </pre>
+     */
+    public void deployContract(org.tron.trident.proto.Contract.CreateSmartContract request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.TransactionExtention> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getDeployContractMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     * <pre>
+     *  rpc UpdateSetting(UpdateSettingContract) returns (TransactionExtention) {}          // consume_user_resource_percent
+     *  rpc UpdateEnergyLimit(UpdateEnergyLimitContract) returns (TransactionExtention) {}  // origin_energy_limit
+     *  rpc ClearContractABI(ClearABIContract) returns (TransactionExtention) {}
+     * </pre>
+     */
+    public void triggerContract(org.tron.trident.proto.Contract.TriggerSmartContract request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.TransactionExtention> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getTriggerContractMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
+    public void triggerConstantContract(org.tron.trident.proto.Contract.TriggerSmartContract request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.TransactionExtention> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getTriggerConstantContractMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     * <pre>
      * The real APIs:
      * </pre>
      */
@@ -3809,6 +4058,9 @@ public final class WalletGrpc {
     }
 
     /**
+     * <pre>
+     *deprecated
+     * </pre>
      */
     public void getBlockByNum(org.tron.trident.api.GrpcAPI.NumberMessage request,
         io.grpc.stub.StreamObserver<org.tron.trident.proto.Chain.Block> responseObserver) {
@@ -3817,6 +4069,9 @@ public final class WalletGrpc {
     }
 
     /**
+     * <pre>
+     *Use this function instead of GetBlockByNum.
+     * </pre>
      */
     public void getBlockByNum2(org.tron.trident.api.GrpcAPI.NumberMessage request,
         io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.BlockExtention> responseObserver) {
@@ -4324,6 +4579,69 @@ public final class WalletGrpc {
 
     /**
      * <pre>
+     *  rpc CreateCommonTransaction(Transaction) returns (TransactionExtention) {}
+     *  rpc CreateAccount(AccountCreateContract) returns (Transaction) {}
+     *  rpc CreateAccount2(AccountCreateContract) returns (TransactionExtention) {}
+     *  rpc UpdateAccount(AccountUpdateContract) returns (Transaction) {}
+     *  rpc UpdateAccount2(AccountUpdateContract) returns (TransactionExtention) {}
+     *  rpc SetAccountId(SetAccountIdContract) returns (Transaction) {}
+     *  rpc AccountPermissionUpdate(AccountPermissionUpdateContract) returns (TransactionExtention) {}
+     *  rpc CreateTransaction(TransferContract) returns (Transaction) {}
+     *  rpc CreateTransaction2(TransferContract) returns (TransactionExtention) {}
+     *  rpc CreateAssetIssue(AssetIssueContract) returns (Transaction) {}
+     *  rpc CreateAssetIssue2(AssetIssueContract) returns (TransactionExtention) {}
+     *  rpc UpdateAsset(UpdateAssetContract) returns (Transaction) {}
+     *  rpc UpdateAsset2(UpdateAssetContract) returns (TransactionExtention) {}
+     *  rpc TransferAsset(TransferAssetContract) returns (Transaction) {}
+     *  rpc TransferAsset2(TransferAssetContract) returns (TransactionExtention) {}
+     *  rpc ParticipateAssetIssue(ParticipateAssetIssueContract) returns (Transaction) {}
+     *  rpc ParticipateAssetIssue2(ParticipateAssetIssueContract) returns (TransactionExtention) {}
+     *  rpc UnfreezeAsset(UnfreezeAssetContract) returns (Transaction) {}
+     *  rpc UnfreezeAsset2(UnfreezeAssetContract) returns (TransactionExtention) {}
+     *  rpc CreateWitness(WitnessCreateContract) returns (Transaction) {}
+     *  rpc CreateWitness2(WitnessCreateContract) returns (TransactionExtention) {}
+     *  rpc UpdateWitness(WitnessUpdateContract) returns (Transaction) {}
+     *  rpc UpdateWitness2(WitnessUpdateContract) returns (TransactionExtention) {}
+     *  rpc UpdateBrokerage(UpdateBrokerageContract) returns (TransactionExtention) {}
+     *  rpc VoteWitnessAccount(VoteWitnessContract) returns (Transaction) {}
+     *  rpc VoteWitnessAccount2(VoteWitnessContract) returns (TransactionExtention) {}
+     *  rpc FreezeBalance(FreezeBalanceContract) returns (Transaction) {}
+     *  rpc FreezeBalance2(FreezeBalanceContract) returns (TransactionExtention) {}
+     *  rpc UnfreezeBalance(UnfreezeBalanceContract) returns (Transaction) {}
+     *  rpc UnfreezeBalance2(UnfreezeBalanceContract) returns (TransactionExtention) {}
+     *  rpc WithdrawBalance(WithdrawBalanceContract) returns (Transaction) {}
+     *  rpc WithdrawBalance2(WithdrawBalanceContract) returns (TransactionExtention) {}
+     *  rpc ProposalCreate(ProposalCreateContract) returns (TransactionExtention) {}
+     *  rpc ProposalApprove(ProposalApproveContract) returns (TransactionExtention) {}
+     *  rpc ProposalDelete(ProposalDeleteContract) returns (TransactionExtention) {}
+     * </pre>
+     */
+    public org.tron.trident.proto.Response.TransactionExtention deployContract(org.tron.trident.proto.Contract.CreateSmartContract request) {
+      return blockingUnaryCall(
+          getChannel(), getDeployContractMethod(), getCallOptions(), request);
+    }
+
+    /**
+     * <pre>
+     *  rpc UpdateSetting(UpdateSettingContract) returns (TransactionExtention) {}          // consume_user_resource_percent
+     *  rpc UpdateEnergyLimit(UpdateEnergyLimitContract) returns (TransactionExtention) {}  // origin_energy_limit
+     *  rpc ClearContractABI(ClearABIContract) returns (TransactionExtention) {}
+     * </pre>
+     */
+    public org.tron.trident.proto.Response.TransactionExtention triggerContract(org.tron.trident.proto.Contract.TriggerSmartContract request) {
+      return blockingUnaryCall(
+          getChannel(), getTriggerContractMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public org.tron.trident.proto.Response.TransactionExtention triggerConstantContract(org.tron.trident.proto.Contract.TriggerSmartContract request) {
+      return blockingUnaryCall(
+          getChannel(), getTriggerConstantContractMethod(), getCallOptions(), request);
+    }
+
+    /**
+     * <pre>
      * The real APIs:
      * </pre>
      */
@@ -4462,6 +4780,9 @@ public final class WalletGrpc {
     }
 
     /**
+     * <pre>
+     *deprecated
+     * </pre>
      */
     public org.tron.trident.proto.Chain.Block getBlockByNum(org.tron.trident.api.GrpcAPI.NumberMessage request) {
       return blockingUnaryCall(
@@ -4469,6 +4790,9 @@ public final class WalletGrpc {
     }
 
     /**
+     * <pre>
+     *Use this function instead of GetBlockByNum.
+     * </pre>
      */
     public org.tron.trident.proto.Response.BlockExtention getBlockByNum2(org.tron.trident.api.GrpcAPI.NumberMessage request) {
       return blockingUnaryCall(
@@ -4920,6 +5244,72 @@ public final class WalletGrpc {
 
     /**
      * <pre>
+     *  rpc CreateCommonTransaction(Transaction) returns (TransactionExtention) {}
+     *  rpc CreateAccount(AccountCreateContract) returns (Transaction) {}
+     *  rpc CreateAccount2(AccountCreateContract) returns (TransactionExtention) {}
+     *  rpc UpdateAccount(AccountUpdateContract) returns (Transaction) {}
+     *  rpc UpdateAccount2(AccountUpdateContract) returns (TransactionExtention) {}
+     *  rpc SetAccountId(SetAccountIdContract) returns (Transaction) {}
+     *  rpc AccountPermissionUpdate(AccountPermissionUpdateContract) returns (TransactionExtention) {}
+     *  rpc CreateTransaction(TransferContract) returns (Transaction) {}
+     *  rpc CreateTransaction2(TransferContract) returns (TransactionExtention) {}
+     *  rpc CreateAssetIssue(AssetIssueContract) returns (Transaction) {}
+     *  rpc CreateAssetIssue2(AssetIssueContract) returns (TransactionExtention) {}
+     *  rpc UpdateAsset(UpdateAssetContract) returns (Transaction) {}
+     *  rpc UpdateAsset2(UpdateAssetContract) returns (TransactionExtention) {}
+     *  rpc TransferAsset(TransferAssetContract) returns (Transaction) {}
+     *  rpc TransferAsset2(TransferAssetContract) returns (TransactionExtention) {}
+     *  rpc ParticipateAssetIssue(ParticipateAssetIssueContract) returns (Transaction) {}
+     *  rpc ParticipateAssetIssue2(ParticipateAssetIssueContract) returns (TransactionExtention) {}
+     *  rpc UnfreezeAsset(UnfreezeAssetContract) returns (Transaction) {}
+     *  rpc UnfreezeAsset2(UnfreezeAssetContract) returns (TransactionExtention) {}
+     *  rpc CreateWitness(WitnessCreateContract) returns (Transaction) {}
+     *  rpc CreateWitness2(WitnessCreateContract) returns (TransactionExtention) {}
+     *  rpc UpdateWitness(WitnessUpdateContract) returns (Transaction) {}
+     *  rpc UpdateWitness2(WitnessUpdateContract) returns (TransactionExtention) {}
+     *  rpc UpdateBrokerage(UpdateBrokerageContract) returns (TransactionExtention) {}
+     *  rpc VoteWitnessAccount(VoteWitnessContract) returns (Transaction) {}
+     *  rpc VoteWitnessAccount2(VoteWitnessContract) returns (TransactionExtention) {}
+     *  rpc FreezeBalance(FreezeBalanceContract) returns (Transaction) {}
+     *  rpc FreezeBalance2(FreezeBalanceContract) returns (TransactionExtention) {}
+     *  rpc UnfreezeBalance(UnfreezeBalanceContract) returns (Transaction) {}
+     *  rpc UnfreezeBalance2(UnfreezeBalanceContract) returns (TransactionExtention) {}
+     *  rpc WithdrawBalance(WithdrawBalanceContract) returns (Transaction) {}
+     *  rpc WithdrawBalance2(WithdrawBalanceContract) returns (TransactionExtention) {}
+     *  rpc ProposalCreate(ProposalCreateContract) returns (TransactionExtention) {}
+     *  rpc ProposalApprove(ProposalApproveContract) returns (TransactionExtention) {}
+     *  rpc ProposalDelete(ProposalDeleteContract) returns (TransactionExtention) {}
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<org.tron.trident.proto.Response.TransactionExtention> deployContract(
+        org.tron.trident.proto.Contract.CreateSmartContract request) {
+      return futureUnaryCall(
+          getChannel().newCall(getDeployContractMethod(), getCallOptions()), request);
+    }
+
+    /**
+     * <pre>
+     *  rpc UpdateSetting(UpdateSettingContract) returns (TransactionExtention) {}          // consume_user_resource_percent
+     *  rpc UpdateEnergyLimit(UpdateEnergyLimitContract) returns (TransactionExtention) {}  // origin_energy_limit
+     *  rpc ClearContractABI(ClearABIContract) returns (TransactionExtention) {}
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<org.tron.trident.proto.Response.TransactionExtention> triggerContract(
+        org.tron.trident.proto.Contract.TriggerSmartContract request) {
+      return futureUnaryCall(
+          getChannel().newCall(getTriggerContractMethod(), getCallOptions()), request);
+    }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<org.tron.trident.proto.Response.TransactionExtention> triggerConstantContract(
+        org.tron.trident.proto.Contract.TriggerSmartContract request) {
+      return futureUnaryCall(
+          getChannel().newCall(getTriggerConstantContractMethod(), getCallOptions()), request);
+    }
+
+    /**
+     * <pre>
      * The real APIs:
      * </pre>
      */
@@ -5077,6 +5467,9 @@ public final class WalletGrpc {
     }
 
     /**
+     * <pre>
+     *deprecated
+     * </pre>
      */
     public com.google.common.util.concurrent.ListenableFuture<org.tron.trident.proto.Chain.Block> getBlockByNum(
         org.tron.trident.api.GrpcAPI.NumberMessage request) {
@@ -5085,6 +5478,9 @@ public final class WalletGrpc {
     }
 
     /**
+     * <pre>
+     *Use this function instead of GetBlockByNum.
+     * </pre>
      */
     public com.google.common.util.concurrent.ListenableFuture<org.tron.trident.proto.Response.BlockExtention> getBlockByNum2(
         org.tron.trident.api.GrpcAPI.NumberMessage request) {
@@ -5567,83 +5963,86 @@ public final class WalletGrpc {
   }
 
   private static final int METHODID_BROADCAST_TRANSACTION = 0;
-  private static final int METHODID_GET_NODE_INFO = 1;
-  private static final int METHODID_LIST_NODES = 2;
-  private static final int METHODID_GET_CHAIN_PARAMETERS = 3;
-  private static final int METHODID_TOTAL_TRANSACTION = 4;
-  private static final int METHODID_GET_NEXT_MAINTENANCE_TIME = 5;
-  private static final int METHODID_GET_TRANSACTION_SIGN_WEIGHT = 6;
-  private static final int METHODID_GET_TRANSACTION_APPROVED_LIST = 7;
-  private static final int METHODID_GET_ACCOUNT = 8;
-  private static final int METHODID_GET_ACCOUNT_BY_ID = 9;
-  private static final int METHODID_GET_ACCOUNT_NET = 10;
-  private static final int METHODID_GET_ACCOUNT_RESOURCE = 11;
-  private static final int METHODID_GET_ASSET_ISSUE_BY_ACCOUNT = 12;
-  private static final int METHODID_GET_ASSET_ISSUE_BY_NAME = 13;
-  private static final int METHODID_GET_ASSET_ISSUE_LIST_BY_NAME = 14;
-  private static final int METHODID_GET_ASSET_ISSUE_BY_ID = 15;
-  private static final int METHODID_GET_ASSET_ISSUE_LIST = 16;
-  private static final int METHODID_GET_PAGINATED_ASSET_ISSUE_LIST = 17;
-  private static final int METHODID_GET_NOW_BLOCK = 18;
-  private static final int METHODID_GET_NOW_BLOCK2 = 19;
-  private static final int METHODID_GET_BLOCK_BY_NUM = 20;
-  private static final int METHODID_GET_BLOCK_BY_NUM2 = 21;
-  private static final int METHODID_GET_BLOCK_BY_ID = 22;
-  private static final int METHODID_GET_BLOCK_BY_LIMIT_NEXT = 23;
-  private static final int METHODID_GET_BLOCK_BY_LIMIT_NEXT2 = 24;
-  private static final int METHODID_GET_BLOCK_BY_LATEST_NUM = 25;
-  private static final int METHODID_GET_BLOCK_BY_LATEST_NUM2 = 26;
-  private static final int METHODID_GET_TRANSACTION_COUNT_BY_BLOCK_NUM = 27;
-  private static final int METHODID_GET_TRANSACTION_BY_ID = 28;
-  private static final int METHODID_GET_TRANSACTION_INFO_BY_ID = 29;
-  private static final int METHODID_GET_TRANSACTION_INFO_BY_BLOCK_NUM = 30;
-  private static final int METHODID_GET_CONTRACT = 31;
-  private static final int METHODID_GET_CONTRACT_INFO = 32;
-  private static final int METHODID_LIST_WITNESSES = 33;
-  private static final int METHODID_GET_BROKERAGE_INFO = 34;
-  private static final int METHODID_GET_REWARD_INFO = 35;
-  private static final int METHODID_GET_DELEGATED_RESOURCE = 36;
-  private static final int METHODID_GET_DELEGATED_RESOURCE_ACCOUNT_INDEX = 37;
-  private static final int METHODID_LIST_PROPOSALS = 38;
-  private static final int METHODID_GET_PROPOSAL_BY_ID = 39;
-  private static final int METHODID_GET_PAGINATED_PROPOSAL_LIST = 40;
-  private static final int METHODID_LIST_EXCHANGES = 41;
-  private static final int METHODID_GET_EXCHANGE_BY_ID = 42;
-  private static final int METHODID_GET_PAGINATED_EXCHANGE_LIST = 43;
-  private static final int METHODID_SCAN_SHIELDED_TRC20NOTES_BY_IVK = 44;
-  private static final int METHODID_SCAN_SHIELDED_TRC20NOTES_BY_OVK = 45;
-  private static final int METHODID_IS_SHIELDED_TRC20CONTRACT_NOTE_SPENT = 46;
-  private static final int METHODID_GET_MARKET_ORDER_BY_ACCOUNT = 47;
-  private static final int METHODID_GET_MARKET_ORDER_BY_ID = 48;
-  private static final int METHODID_GET_MARKET_PRICE_BY_PAIR = 49;
-  private static final int METHODID_GET_MARKET_ORDER_LIST_BY_PAIR = 50;
-  private static final int METHODID_GET_MARKET_PAIR_LIST = 51;
-  private static final int METHODID_GET_TRANSACTION_SIGN = 52;
-  private static final int METHODID_GET_TRANSACTION_SIGN2 = 53;
-  private static final int METHODID_EASY_TRANSFER_ASSET = 54;
-  private static final int METHODID_EASY_TRANSFER_ASSET_BY_PRIVATE = 55;
-  private static final int METHODID_EASY_TRANSFER = 56;
-  private static final int METHODID_EASY_TRANSFER_BY_PRIVATE = 57;
-  private static final int METHODID_CREATE_ADDRESS = 58;
-  private static final int METHODID_GENERATE_ADDRESS = 59;
-  private static final int METHODID_ADD_SIGN = 60;
-  private static final int METHODID_GET_SPENDING_KEY = 61;
-  private static final int METHODID_GET_EXPANDED_SPENDING_KEY = 62;
-  private static final int METHODID_GET_AK_FROM_ASK = 63;
-  private static final int METHODID_GET_NK_FROM_NSK = 64;
-  private static final int METHODID_GET_INCOMING_VIEWING_KEY = 65;
-  private static final int METHODID_GET_DIVERSIFIER = 66;
-  private static final int METHODID_GET_ZEN_PAYMENT_ADDRESS = 67;
-  private static final int METHODID_GET_NEW_SHIELDED_ADDRESS = 68;
-  private static final int METHODID_GET_RCM = 69;
-  private static final int METHODID_CREATE_SHIELDED_CONTRACT_PARAMETERS = 70;
-  private static final int METHODID_CREATE_SHIELDED_CONTRACT_PARAMETERS_WITHOUT_ASK = 71;
-  private static final int METHODID_GET_TRIGGER_INPUT_FOR_SHIELDED_TRC20CONTRACT = 72;
-  private static final int METHODID_GET_AVAILABLE_UNFREEZE_COUNT = 73;
-  private static final int METHODID_GET_CAN_WITHDRAW_UNFREEZE_AMOUNT = 74;
-  private static final int METHODID_GET_CAN_DELEGATED_MAX_SIZE = 75;
-  private static final int METHODID_GET_DELEGATED_RESOURCE_V2 = 76;
-  private static final int METHODID_GET_DELEGATED_RESOURCE_ACCOUNT_INDEX_V2 = 77;
+  private static final int METHODID_DEPLOY_CONTRACT = 1;
+  private static final int METHODID_TRIGGER_CONTRACT = 2;
+  private static final int METHODID_TRIGGER_CONSTANT_CONTRACT = 3;
+  private static final int METHODID_GET_NODE_INFO = 4;
+  private static final int METHODID_LIST_NODES = 5;
+  private static final int METHODID_GET_CHAIN_PARAMETERS = 6;
+  private static final int METHODID_TOTAL_TRANSACTION = 7;
+  private static final int METHODID_GET_NEXT_MAINTENANCE_TIME = 8;
+  private static final int METHODID_GET_TRANSACTION_SIGN_WEIGHT = 9;
+  private static final int METHODID_GET_TRANSACTION_APPROVED_LIST = 10;
+  private static final int METHODID_GET_ACCOUNT = 11;
+  private static final int METHODID_GET_ACCOUNT_BY_ID = 12;
+  private static final int METHODID_GET_ACCOUNT_NET = 13;
+  private static final int METHODID_GET_ACCOUNT_RESOURCE = 14;
+  private static final int METHODID_GET_ASSET_ISSUE_BY_ACCOUNT = 15;
+  private static final int METHODID_GET_ASSET_ISSUE_BY_NAME = 16;
+  private static final int METHODID_GET_ASSET_ISSUE_LIST_BY_NAME = 17;
+  private static final int METHODID_GET_ASSET_ISSUE_BY_ID = 18;
+  private static final int METHODID_GET_ASSET_ISSUE_LIST = 19;
+  private static final int METHODID_GET_PAGINATED_ASSET_ISSUE_LIST = 20;
+  private static final int METHODID_GET_NOW_BLOCK = 21;
+  private static final int METHODID_GET_NOW_BLOCK2 = 22;
+  private static final int METHODID_GET_BLOCK_BY_NUM = 23;
+  private static final int METHODID_GET_BLOCK_BY_NUM2 = 24;
+  private static final int METHODID_GET_BLOCK_BY_ID = 25;
+  private static final int METHODID_GET_BLOCK_BY_LIMIT_NEXT = 26;
+  private static final int METHODID_GET_BLOCK_BY_LIMIT_NEXT2 = 27;
+  private static final int METHODID_GET_BLOCK_BY_LATEST_NUM = 28;
+  private static final int METHODID_GET_BLOCK_BY_LATEST_NUM2 = 29;
+  private static final int METHODID_GET_TRANSACTION_COUNT_BY_BLOCK_NUM = 30;
+  private static final int METHODID_GET_TRANSACTION_BY_ID = 31;
+  private static final int METHODID_GET_TRANSACTION_INFO_BY_ID = 32;
+  private static final int METHODID_GET_TRANSACTION_INFO_BY_BLOCK_NUM = 33;
+  private static final int METHODID_GET_CONTRACT = 34;
+  private static final int METHODID_GET_CONTRACT_INFO = 35;
+  private static final int METHODID_LIST_WITNESSES = 36;
+  private static final int METHODID_GET_BROKERAGE_INFO = 37;
+  private static final int METHODID_GET_REWARD_INFO = 38;
+  private static final int METHODID_GET_DELEGATED_RESOURCE = 39;
+  private static final int METHODID_GET_DELEGATED_RESOURCE_ACCOUNT_INDEX = 40;
+  private static final int METHODID_LIST_PROPOSALS = 41;
+  private static final int METHODID_GET_PROPOSAL_BY_ID = 42;
+  private static final int METHODID_GET_PAGINATED_PROPOSAL_LIST = 43;
+  private static final int METHODID_LIST_EXCHANGES = 44;
+  private static final int METHODID_GET_EXCHANGE_BY_ID = 45;
+  private static final int METHODID_GET_PAGINATED_EXCHANGE_LIST = 46;
+  private static final int METHODID_SCAN_SHIELDED_TRC20NOTES_BY_IVK = 47;
+  private static final int METHODID_SCAN_SHIELDED_TRC20NOTES_BY_OVK = 48;
+  private static final int METHODID_IS_SHIELDED_TRC20CONTRACT_NOTE_SPENT = 49;
+  private static final int METHODID_GET_MARKET_ORDER_BY_ACCOUNT = 50;
+  private static final int METHODID_GET_MARKET_ORDER_BY_ID = 51;
+  private static final int METHODID_GET_MARKET_PRICE_BY_PAIR = 52;
+  private static final int METHODID_GET_MARKET_ORDER_LIST_BY_PAIR = 53;
+  private static final int METHODID_GET_MARKET_PAIR_LIST = 54;
+  private static final int METHODID_GET_TRANSACTION_SIGN = 55;
+  private static final int METHODID_GET_TRANSACTION_SIGN2 = 56;
+  private static final int METHODID_EASY_TRANSFER_ASSET = 57;
+  private static final int METHODID_EASY_TRANSFER_ASSET_BY_PRIVATE = 58;
+  private static final int METHODID_EASY_TRANSFER = 59;
+  private static final int METHODID_EASY_TRANSFER_BY_PRIVATE = 60;
+  private static final int METHODID_CREATE_ADDRESS = 61;
+  private static final int METHODID_GENERATE_ADDRESS = 62;
+  private static final int METHODID_ADD_SIGN = 63;
+  private static final int METHODID_GET_SPENDING_KEY = 64;
+  private static final int METHODID_GET_EXPANDED_SPENDING_KEY = 65;
+  private static final int METHODID_GET_AK_FROM_ASK = 66;
+  private static final int METHODID_GET_NK_FROM_NSK = 67;
+  private static final int METHODID_GET_INCOMING_VIEWING_KEY = 68;
+  private static final int METHODID_GET_DIVERSIFIER = 69;
+  private static final int METHODID_GET_ZEN_PAYMENT_ADDRESS = 70;
+  private static final int METHODID_GET_NEW_SHIELDED_ADDRESS = 71;
+  private static final int METHODID_GET_RCM = 72;
+  private static final int METHODID_CREATE_SHIELDED_CONTRACT_PARAMETERS = 73;
+  private static final int METHODID_CREATE_SHIELDED_CONTRACT_PARAMETERS_WITHOUT_ASK = 74;
+  private static final int METHODID_GET_TRIGGER_INPUT_FOR_SHIELDED_TRC20CONTRACT = 75;
+  private static final int METHODID_GET_AVAILABLE_UNFREEZE_COUNT = 76;
+  private static final int METHODID_GET_CAN_WITHDRAW_UNFREEZE_AMOUNT = 77;
+  private static final int METHODID_GET_CAN_DELEGATED_MAX_SIZE = 78;
+  private static final int METHODID_GET_DELEGATED_RESOURCE_V2 = 79;
+  private static final int METHODID_GET_DELEGATED_RESOURCE_ACCOUNT_INDEX_V2 = 80;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -5665,6 +6064,18 @@ public final class WalletGrpc {
         case METHODID_BROADCAST_TRANSACTION:
           serviceImpl.broadcastTransaction((org.tron.trident.proto.Chain.Transaction) request,
               (io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.TransactionReturn>) responseObserver);
+          break;
+        case METHODID_DEPLOY_CONTRACT:
+          serviceImpl.deployContract((org.tron.trident.proto.Contract.CreateSmartContract) request,
+              (io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.TransactionExtention>) responseObserver);
+          break;
+        case METHODID_TRIGGER_CONTRACT:
+          serviceImpl.triggerContract((org.tron.trident.proto.Contract.TriggerSmartContract) request,
+              (io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.TransactionExtention>) responseObserver);
+          break;
+        case METHODID_TRIGGER_CONSTANT_CONTRACT:
+          serviceImpl.triggerConstantContract((org.tron.trident.proto.Contract.TriggerSmartContract) request,
+              (io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.TransactionExtention>) responseObserver);
           break;
         case METHODID_GET_NODE_INFO:
           serviceImpl.getNodeInfo((org.tron.trident.api.GrpcAPI.EmptyMessage) request,
@@ -6036,6 +6447,9 @@ public final class WalletGrpc {
           serviceDescriptor = result = io.grpc.ServiceDescriptor.newBuilder(SERVICE_NAME)
               .setSchemaDescriptor(new WalletFileDescriptorSupplier())
               .addMethod(getBroadcastTransactionMethod())
+              .addMethod(getDeployContractMethod())
+              .addMethod(getTriggerContractMethod())
+              .addMethod(getTriggerConstantContractMethod())
               .addMethod(getGetNodeInfoMethod())
               .addMethod(getListNodesMethod())
               .addMethod(getGetChainParametersMethod())
