@@ -18,7 +18,7 @@ Functions include:
 
 - Offline address generation
 
-- Offline transaction build
+- Offline transaction construct
 
 - Offline transaction signature 
 

@@ -787,7 +787,7 @@ public class ApiWrapper {
     /**
      * Returns the Block Object corresponding to the 'Block Height' specified (number of blocks preceding it)
      * @param blockNum The block height
-     * @return Block
+     * @return BlockExtention block details
      * @throws IllegalException if the parameters are not correct
      */
     public BlockExtention getBlockByNum(long blockNum) throws IllegalException {
