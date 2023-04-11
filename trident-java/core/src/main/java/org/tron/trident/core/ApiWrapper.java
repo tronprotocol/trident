@@ -282,12 +282,12 @@ public class ApiWrapper {
         }
         //build transaction
         trx.setTransactionCreate(false);
-        BlockExtention solidHeadBlock = blockingStub.getNowBlock2(EmptyMessage.getDefaultInstance());
-        //get solid head blockId
-        byte[] blockHash = Utils.getBlockId(solidHeadBlock).getBytes();
-        trx.setReference(solidHeadBlock.getBlockHeader().getRawData().getNumber(), blockHash);
+        BlockExtention headBlock = blockingStub.getNowBlock2(EmptyMessage.getDefaultInstance());
+        //get head blockId
+        byte[] blockHash = Utils.getBlockId(headBlock).getBytes();
+        trx.setReference(headBlock.getBlockHeader().getRawData().getNumber(), blockHash);
 
-        long expiration = solidHeadBlock.getBlockHeader().getRawData().getTimestamp() + TRANSACTION_DEFAULT_EXPIRATION_TIME;
+        long expiration = headBlock.getBlockHeader().getRawData().getTimestamp() + TRANSACTION_DEFAULT_EXPIRATION_TIME;
         trx.setExpiration(expiration);
         trx.setTimestamp();
 
