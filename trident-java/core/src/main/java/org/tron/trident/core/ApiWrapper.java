@@ -105,7 +105,7 @@ import static org.tron.trident.proto.Response.TransactionReturn.response_code.SU
  */
 
 public class ApiWrapper {
-    public static final long TRANSACTION_DEFAULT_EXPIRATION_TIME = 60 * 1_000L; //60 seconds
+    public static final long TRANSACTION_DEFAULT_EXPIRATION_TIME = 300 * 1_000L; //300 seconds
 
     public final WalletGrpc.WalletBlockingStub blockingStub;
     public final WalletSolidityGrpc.WalletSolidityBlockingStub blockingStubSolidity;
