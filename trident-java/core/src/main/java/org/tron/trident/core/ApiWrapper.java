@@ -89,8 +89,6 @@ import org.tron.trident.proto.Response.ExchangeList;
 import org.tron.trident.proto.Response.TransactionSignWeight;
 import org.tron.trident.proto.Response.TransactionApprovedList;
 
-import static org.tron.trident.proto.Response.TransactionReturn.response_code.SUCCESS;
-
 /**
  * A {@code ApiWrapper} object is the entry point for calling the functions.
  *
@@ -986,6 +984,18 @@ public class ApiWrapper {
         Transaction transaction = createTransactionExtention(contract, Transaction.Contract.ContractType.SetAccountIdContract).getTransaction();
 
         return transaction;
+    }
+
+    //use this method instead of setAccountId
+    public TransactionExtention setAccountId2(String id, String address) throws IllegalException {
+        ByteString bsId = ByteString.copyFrom(id.getBytes());
+        ByteString bsAddress = parseAddress(address);
+
+        SetAccountIdContract contract = createSetAccountIdContract(bsId, bsAddress);
+
+        TransactionExtention extention = createTransactionExtention(contract, Transaction.Contract.ContractType.SetAccountIdContract);
+
+        return extention;
     }
 
     /**
