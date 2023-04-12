@@ -285,7 +285,9 @@ public class ApiWrapper {
         byte[] blockHash = Utils.getBlockId(solidHeadBlock).getBytes();
         trx.setReference(solidHeadBlock.getBlockHeader().getRawData().getNumber(), blockHash);
 
-        long expiration = solidHeadBlock.getBlockHeader().getRawData().getTimestamp() + TRANSACTION_DEFAULT_EXPIRATION_TIME;
+        //get expiration time from head block timestamp
+        BlockExtention headBlock = blockingStub.getNowBlock2(EmptyMessage.getDefaultInstance());
+        long expiration = headBlock.getBlockHeader().getRawData().getTimestamp() + TRANSACTION_DEFAULT_EXPIRATION_TIME;
         trx.setExpiration(expiration);
         trx.setTimestamp();
 
