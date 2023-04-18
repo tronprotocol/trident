@@ -1,20 +1,22 @@
 package org.tron.trident.core;
 
 import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.Message;
 import org.tron.trident.abi.FunctionEncoder;
 import org.tron.trident.abi.datatypes.Function;
 import org.tron.trident.api.GrpcAPI;
 import org.tron.trident.api.GrpcAPI.BytesMessage;
 
 import org.tron.trident.core.contract.Contract;
-import org.tron.trident.core.Constant;
 import org.tron.trident.api.WalletGrpc;
 import org.tron.trident.api.WalletSolidityGrpc;
 import org.tron.trident.core.contract.ContractFunction;
 import org.tron.trident.core.exceptions.IllegalException;
 import org.tron.trident.core.key.KeyPair;
 import org.tron.trident.core.transaction.TransactionBuilder;
-import org.tron.trident.crypto.SECP256K1;
+import org.tron.trident.core.utils.Sha256Hash;
+import org.tron.trident.core.transaction.TransactionCapsule;
+import org.tron.trident.core.utils.Utils;
 import org.tron.trident.proto.Chain.Transaction;
 
 import org.tron.trident.proto.Chain.Block;
@@ -87,8 +89,6 @@ import org.tron.trident.proto.Response.ExchangeList;
 import org.tron.trident.proto.Response.TransactionSignWeight;
 import org.tron.trident.proto.Response.TransactionApprovedList;
 
-import static org.tron.trident.proto.Response.TransactionReturn.response_code.SUCCESS;
-
 /**
  * A {@code ApiWrapper} object is the entry point for calling the functions.
  *
@@ -103,6 +103,8 @@ import static org.tron.trident.proto.Response.TransactionReturn.response_code.SU
  */
 
 public class ApiWrapper {
+    public static final long TRANSACTION_DEFAULT_EXPIRATION_TIME = 60 * 1_000L; //60 seconds
+
     public final WalletGrpc.WalletBlockingStub blockingStub;
     public final WalletSolidityGrpc.WalletSolidityBlockingStub blockingStubSolidity;
     public final KeyPair keyPair;
@@ -263,6 +265,55 @@ public class ApiWrapper {
         return signTransaction(txn, keyPair);
     }
 
+
+    private TransactionCapsule createTransactionCapsuleWithoutValidate(
+        Message message, Transaction.Contract.ContractType contractType) throws Exception {
+        TransactionCapsule trx = new TransactionCapsule(message, contractType);
+
+        if (contractType == Transaction.Contract.ContractType.CreateSmartContract) {
+            trx.setTransactionCreate(true);
+            org.tron.trident.proto.Contract.CreateSmartContract contract = Utils.getSmartContractFromTransaction(trx.getTransaction());
+            long percent = contract.getNewContract().getConsumeUserResourcePercent();
+            if (percent < 0 || percent > 100) {
+                throw new Exception("percent must be >= 0 and <= 100");
+            }
+        }
+        //build transaction
+        trx.setTransactionCreate(false);
+        BlockExtention solidHeadBlock = blockingStubSolidity.getNowBlock2(EmptyMessage.getDefaultInstance());
+        //get solid head blockId
+        byte[] blockHash = Utils.getBlockId(solidHeadBlock).getBytes();
+        trx.setReference(solidHeadBlock.getBlockHeader().getRawData().getNumber(), blockHash);
+
+        //get expiration time from head block timestamp
+        BlockExtention headBlock = blockingStub.getNowBlock2(EmptyMessage.getDefaultInstance());
+        long expiration = headBlock.getBlockHeader().getRawData().getTimestamp() + TRANSACTION_DEFAULT_EXPIRATION_TIME;
+        trx.setExpiration(expiration);
+        trx.setTimestamp();
+
+        return trx;
+    }
+    /**
+     * build Transaction Extention in local.
+     * @param contractType transaction type.
+     * @param request transaction message object.
+     */
+    public TransactionExtention createTransactionExtention(Message request, Transaction.Contract.ContractType contractType) throws IllegalException {
+        TransactionExtention.Builder trxExtBuilder = TransactionExtention.newBuilder();
+
+        try {
+            TransactionCapsule trx = createTransactionCapsuleWithoutValidate(request, contractType);
+            trxExtBuilder.setTransaction(trx.getTransaction());
+            trxExtBuilder.setTxid(ByteString.copyFrom(Sha256Hash.hash(true, trx.getTransaction().getRawData().toByteArray())));
+        } catch (Exception e) {
+            throw new IllegalException("createTransactionExtention error,"+e.getMessage());
+        }
+
+        return trxExtBuilder.build();
+    }
+
+
+
     /**
      * Estimate the bandwidth consumption of the transaction.
      * Please note that bandwidth estimations are based on signed transactions.
@@ -346,11 +397,7 @@ public class ApiWrapper {
                 .setToAddress(rawTo)
                 .setAmount(amount)
                 .build();
-        TransactionExtention txnExt = blockingStub.createTransaction2(req);
-
-        if(SUCCESS != txnExt.getResult().getCode()){
-            throw new IllegalException(txnExt.getResult().getMessage().toStringUtf8());
-        }
+        TransactionExtention txnExt = createTransactionExtention(req, Transaction.Contract.ContractType.TransferContract);
 
         return txnExt;
     }
@@ -377,11 +424,7 @@ public class ApiWrapper {
                 .setAmount(amount)
                 .build();
 
-        TransactionExtention txnExt = blockingStub.transferAsset2(req);
-
-        if(SUCCESS != txnExt.getResult().getCode()){
-            throw new IllegalException(txnExt.getResult().getMessage().toStringUtf8());
-        }
+        TransactionExtention txnExt = createTransactionExtention(req, Transaction.Contract.ContractType.TransferAssetContract);
 
         return txnExt;
     }
@@ -421,11 +464,7 @@ public class ApiWrapper {
                         .setResourceValue(resourceCode)
                         .setReceiverAddress(rawReceiveFrom)
                         .build();
-        TransactionExtention txnExt = blockingStub.freezeBalance2(freezeBalanceContract);
-
-        if(SUCCESS != txnExt.getResult().getCode()){
-            throw new IllegalException(txnExt.getResult().getMessage().toStringUtf8());
-        }
+        TransactionExtention txnExt = createTransactionExtention(freezeBalanceContract, Transaction.Contract.ContractType.FreezeBalanceContract);
 
         return txnExt;
     }
@@ -447,11 +486,7 @@ public class ApiWrapper {
                 .setFrozenBalance(frozenBalance)
                 .setResourceValue(resourceCode)
                 .build();
-        TransactionExtention txnExt = blockingStub.freezeBalanceV2(freezeBalanceContract);
-
-        if(SUCCESS != txnExt.getResult().getCode()){
-            throw new IllegalException(txnExt.getResult().getMessage().toStringUtf8());
-        }
+        TransactionExtention txnExt = createTransactionExtention(freezeBalanceContract, Transaction.Contract.ContractType.FreezeBalanceV2Contract);
 
         return txnExt;
     }
@@ -486,11 +521,7 @@ public class ApiWrapper {
                         .setReceiverAddress(parseAddress(receiveAddress))
                         .build();
 
-        TransactionExtention txnExt = blockingStub.unfreezeBalance2(unfreeze);
-
-        if(SUCCESS != txnExt.getResult().getCode()){
-            throw new IllegalException(txnExt.getResult().getMessage().toStringUtf8());
-        }
+        TransactionExtention txnExt = createTransactionExtention(unfreeze, Transaction.Contract.ContractType.UnfreezeBalanceContract);
 
         return txnExt;
     }
@@ -513,11 +544,7 @@ public class ApiWrapper {
                 .setUnfreezeBalance(unfreezeBalance)
                 .build();
 
-        TransactionExtention txnExt = blockingStub.unfreezeBalanceV2(unfreeze);
-
-        if(SUCCESS != txnExt.getResult().getCode()){
-            throw new IllegalException(txnExt.getResult().getMessage().toStringUtf8());
-        }
+        TransactionExtention txnExt = createTransactionExtention(unfreeze, Transaction.Contract.ContractType.UnfreezeBalanceV2Contract);
 
         return txnExt;
     }
@@ -548,11 +575,7 @@ public class ApiWrapper {
                 .setLock(lock)
                 .setResourceValue(resourceCode)
                 .build();
-        TransactionExtention txnExt = blockingStub.delegateResource(delegateResourceContract);
-
-        if(SUCCESS != txnExt.getResult().getCode()){
-            throw new IllegalException(txnExt.getResult().getMessage().toStringUtf8());
-        }
+        TransactionExtention txnExt = createTransactionExtention(delegateResourceContract, Transaction.Contract.ContractType.DelegateResourceContract);
 
         return txnExt;
     }
@@ -577,11 +600,7 @@ public class ApiWrapper {
                 .setReceiverAddress(rawReciever)
                 .setResourceValue(resourceCode)
                 .build();
-        TransactionExtention txnExt = blockingStub.unDelegateResource(unDelegateResourceContract);
-
-        if(SUCCESS != txnExt.getResult().getCode()){
-            throw new IllegalException(txnExt.getResult().getMessage().toStringUtf8());
-        }
+        TransactionExtention txnExt = createTransactionExtention(unDelegateResourceContract, Transaction.Contract.ContractType.UnDelegateResourceContract);
 
         return txnExt;
     }
@@ -600,11 +619,7 @@ public class ApiWrapper {
             WithdrawExpireUnfreezeContract.newBuilder()
                 .setOwnerAddress(rawOwner)
                 .build();
-        TransactionExtention txnExt = blockingStub.withdrawExpireUnfreeze(withdrawExpireUnfreezeContract);
-
-        if(SUCCESS != txnExt.getResult().getCode()){
-            throw new IllegalException(txnExt.getResult().getMessage().toStringUtf8());
-        }
+        TransactionExtention txnExt = createTransactionExtention(withdrawExpireUnfreezeContract, Transaction.Contract.ContractType.WithdrawExpireUnfreezeContract);
 
         return txnExt;
     }
@@ -710,11 +725,7 @@ public class ApiWrapper {
     public TransactionExtention voteWitness(String ownerAddress, HashMap<String, String> votes) throws IllegalException {
         ByteString rawFrom = parseAddress(ownerAddress);
         VoteWitnessContract voteWitnessContract = createVoteWitnessContract(rawFrom, votes);
-        TransactionExtention txnExt = blockingStub.voteWitnessAccount2(voteWitnessContract);
-
-        if(SUCCESS != txnExt.getResult().getCode()){
-            throw new IllegalException(txnExt.getResult().getMessage().toStringUtf8());
-        }
+        TransactionExtention txnExt = createTransactionExtention(voteWitnessContract, Transaction.Contract.ContractType.VoteWitnessContract);
 
         return txnExt;
     }
@@ -733,11 +744,7 @@ public class ApiWrapper {
         AccountCreateContract contract = createAccountCreateContract(bsOwnerAddress,
                 bsAccountAddress);
 
-        TransactionExtention transactionExtention= blockingStub.createAccount2(contract);
-
-        if(SUCCESS != transactionExtention.getResult().getCode()){
-            throw new IllegalException(transactionExtention.getResult().getMessage().toStringUtf8());
-        }
+        TransactionExtention transactionExtention = createTransactionExtention(contract, Transaction.Contract.ContractType.AccountCreateContract);
 
         return transactionExtention;
     }
@@ -758,11 +765,7 @@ public class ApiWrapper {
         AccountUpdateContract contract = createAccountUpdateContract(bsAccountName,
                 bsAddress);
 
-        TransactionExtention transactionExtention= blockingStub.updateAccount2(contract);
-
-        if(SUCCESS != transactionExtention.getResult().getCode()){
-            throw new IllegalException(transactionExtention.getResult().getMessage().toStringUtf8());
-        }
+        TransactionExtention transactionExtention = createTransactionExtention(contract, Transaction.Contract.ContractType.AccountUpdateContract);
 
         return transactionExtention;
     }
@@ -784,13 +787,13 @@ public class ApiWrapper {
     /**
      * Returns the Block Object corresponding to the 'Block Height' specified (number of blocks preceding it)
      * @param blockNum The block height
-     * @return Block
+     * @return BlockExtention block details
      * @throws IllegalException if the parameters are not correct
      */
-    public Block getBlockByNum(long blockNum) throws IllegalException {
+    public BlockExtention getBlockByNum(long blockNum) throws IllegalException {
         NumberMessage.Builder builder = NumberMessage.newBuilder();
         builder.setNum(blockNum);
-        Block block = blockingStub.getBlockByNum(builder.build());
+        BlockExtention block = blockingStub.getBlockByNum2(builder.build());
 
         if(!block.hasBlockHeader()){
             throw new IllegalException();
@@ -980,9 +983,21 @@ public class ApiWrapper {
 
         SetAccountIdContract contract = createSetAccountIdContract(bsId, bsAddress);
 
-        Transaction transaction= blockingStub.setAccountId(contract);
+        Transaction transaction = createTransactionExtention(contract, Transaction.Contract.ContractType.SetAccountIdContract).getTransaction();
 
         return transaction;
+    }
+
+    //use this method instead of setAccountId
+    public TransactionExtention setAccountId2(String id, String address) throws IllegalException {
+        ByteString bsId = ByteString.copyFrom(id.getBytes());
+        ByteString bsAddress = parseAddress(address);
+
+        SetAccountIdContract contract = createSetAccountIdContract(bsId, bsAddress);
+
+        TransactionExtention extention = createTransactionExtention(contract, Transaction.Contract.ContractType.SetAccountIdContract);
+
+        return extention;
     }
 
     /**
@@ -1144,10 +1159,8 @@ public class ApiWrapper {
                 .setAmount(amount)
                 .build();
 
-        TransactionExtention transactionExtention = blockingStub.participateAssetIssue2(builder);
-        if(SUCCESS != transactionExtention.getResult().getCode()){
-            throw new IllegalException(transactionExtention.getResult().getMessage().toStringUtf8());
-        }
+        TransactionExtention transactionExtention = createTransactionExtention(builder, Transaction.Contract.ContractType.ParticipateAssetIssueContract);
+
         return transactionExtention;
     }
 
@@ -1262,11 +1275,8 @@ public class ApiWrapper {
             builder.addFrozenSupply(frozenBuilder.build());
         }
 
-        TransactionExtention transactionExtention = blockingStub.createAssetIssue2(builder.build());
+        TransactionExtention transactionExtention = createTransactionExtention(builder.build(), Transaction.Contract.ContractType.AssetIssueContract);
 
-        if(SUCCESS != transactionExtention.getResult().getCode()){
-            throw new IllegalException(transactionExtention.getResult().getMessage().toStringUtf8());
-        }
         return transactionExtention;
     }
 
@@ -1297,11 +1307,8 @@ public class ApiWrapper {
         AssetIssueContract.Builder builder = assetIssueContractBuilder(ownerAddress, name, abbr, totalSupply, trxNum, icoNum, startTime, endTime, url, freeAssetNetLimit,
                 publicFreeAssetNetLimit, precision, description);
 
-        TransactionExtention transactionExtention = blockingStub.createAssetIssue2(builder.build());
+        TransactionExtention transactionExtention = createTransactionExtention(builder.build(), Transaction.Contract.ContractType.AssetIssueContract);
 
-        if(SUCCESS != transactionExtention.getResult().getCode()){
-            throw new IllegalException(transactionExtention.getResult().getMessage().toStringUtf8());
-        }
         return transactionExtention;
     }
 
@@ -1347,11 +1354,7 @@ public class ApiWrapper {
         UpdateAssetContract contract = createUpdateAssetContract(bsOwnerAddress,
                 bsDescription,bsUrl,newLimit,newPublicLimit);
 
-        TransactionExtention transactionExtention= blockingStub.updateAsset2(contract);
-
-        if(SUCCESS != transactionExtention.getResult().getCode()){
-            throw new IllegalException(transactionExtention.getResult().getMessage().toStringUtf8());
-        }
+        TransactionExtention transactionExtention = createTransactionExtention(contract, Transaction.Contract.ContractType.UpdateAssetContract);
 
         return transactionExtention;
     }
@@ -1367,11 +1370,7 @@ public class ApiWrapper {
 
         UnfreezeAssetContract contract = createUnfreezeAssetContract(bsOwnerAddress);
 
-        TransactionExtention transactionExtention= blockingStub.unfreezeAsset2(contract);
-
-        if(SUCCESS != transactionExtention.getResult().getCode()){
-            throw new IllegalException(transactionExtention.getResult().getMessage().toStringUtf8());
-        }
+        TransactionExtention transactionExtention = createTransactionExtention(contract, Transaction.Contract.ContractType.UnfreezeAssetContract);
 
         return transactionExtention;
     }
@@ -1384,11 +1383,8 @@ public class ApiWrapper {
      */
     public TransactionExtention accountPermissionUpdate(AccountPermissionUpdateContract contract) throws IllegalException {
 
-        TransactionExtention transactionExtention = blockingStub.accountPermissionUpdate(contract);
+        TransactionExtention transactionExtention = createTransactionExtention(contract, Transaction.Contract.ContractType.AccountPermissionUpdateContract);
 
-        if(SUCCESS != transactionExtention.getResult().getCode()){
-            throw new IllegalException(transactionExtention.getResult().getMessage().toStringUtf8());
-        }
         return transactionExtention;
     }
 
@@ -1409,7 +1405,7 @@ public class ApiWrapper {
      * @param trx transaction object
      * @return TransactionApprovedList
      */
-    public TransactionApprovedList getTransactionApprovedList(Transaction trx) throws InvalidProtocolBufferException {
+    public TransactionApprovedList getTransactionApprovedList(Transaction trx)  {
 
         TransactionApprovedList transactionApprovedList = blockingStub.getTransactionApprovedList(trx);
 
@@ -1470,7 +1466,7 @@ public class ApiWrapper {
      * @param address address, default hexString
      * @return NumberMessage
      */
-    public NumberMessage getRewardSolidity(String address) throws IllegalException {
+    public NumberMessage getRewardSolidity(String address)  {
         ByteString bsAddress = parseAddress(address);
         BytesMessage bytesMessage = BytesMessage.newBuilder()
                 .setValue(bsAddress)
@@ -1555,7 +1551,9 @@ public class ApiWrapper {
                                         .setOwnerAddress(ownerAddr)
                                         .setBrokerage(brokerage)
                                         .build();
-        return blockingStub.updateBrokerage(upContract);
+        TransactionExtention transactionExtention = createTransactionExtention(upContract, Transaction.Contract.ContractType.UpdateBrokerageContract);
+
+        return transactionExtention;
     }
 
     public long getBrokerageInfo(String address) {

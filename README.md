@@ -18,6 +18,8 @@ Functions include:
 
 - Offline address generation
 
+- Offline transaction construct
+
 - Offline transaction signature 
 
 - java-tron full node API support

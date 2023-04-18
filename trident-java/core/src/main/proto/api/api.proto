@@ -13,75 +13,77 @@ import "core/response.proto";
 service Wallet {
   // Transactions:
   rpc BroadcastTransaction(Transaction) returns (TransactionReturn) {}
-
-  rpc CreateCommonTransaction(Transaction) returns (TransactionExtention) {}
-
-  rpc CreateAccount(AccountCreateContract) returns (Transaction) {}
-  rpc CreateAccount2(AccountCreateContract) returns (TransactionExtention) {}
-
-  rpc UpdateAccount(AccountUpdateContract) returns (Transaction) {}
-  rpc UpdateAccount2(AccountUpdateContract) returns (TransactionExtention) {}
-
-  rpc SetAccountId(SetAccountIdContract) returns (Transaction) {}
-
-  rpc AccountPermissionUpdate(AccountPermissionUpdateContract) returns (TransactionExtention) {}
-
-  rpc CreateTransaction(TransferContract) returns (Transaction) {}
-  rpc CreateTransaction2(TransferContract) returns (TransactionExtention) {}
-
-  rpc CreateAssetIssue(AssetIssueContract) returns (Transaction) {}
-  rpc CreateAssetIssue2(AssetIssueContract) returns (TransactionExtention) {}
-
-  rpc UpdateAsset(UpdateAssetContract) returns (Transaction) {}
-  rpc UpdateAsset2(UpdateAssetContract) returns (TransactionExtention) {}
-
-  rpc TransferAsset(TransferAssetContract) returns (Transaction) {}
-  rpc TransferAsset2(TransferAssetContract) returns (TransactionExtention) {}
-
-  rpc ParticipateAssetIssue(ParticipateAssetIssueContract) returns (Transaction) {}
-  rpc ParticipateAssetIssue2(ParticipateAssetIssueContract) returns (TransactionExtention) {}
-
-  rpc UnfreezeAsset(UnfreezeAssetContract) returns (Transaction) {}
-  rpc UnfreezeAsset2(UnfreezeAssetContract) returns (TransactionExtention) {}
-
-  rpc CreateWitness(WitnessCreateContract) returns (Transaction) {}
-  rpc CreateWitness2(WitnessCreateContract) returns (TransactionExtention) {}
-
-  rpc UpdateWitness(WitnessUpdateContract) returns (Transaction) {}
-  rpc UpdateWitness2(WitnessUpdateContract) returns (TransactionExtention) {}
-
-  rpc UpdateBrokerage(UpdateBrokerageContract) returns (TransactionExtention) {}
-
-  rpc VoteWitnessAccount(VoteWitnessContract) returns (Transaction) {}
-  rpc VoteWitnessAccount2(VoteWitnessContract) returns (TransactionExtention) {}
-
-  rpc FreezeBalance(FreezeBalanceContract) returns (Transaction) {}
-  rpc FreezeBalance2(FreezeBalanceContract) returns (TransactionExtention) {}
-
-  rpc UnfreezeBalance(UnfreezeBalanceContract) returns (Transaction) {}
-  rpc UnfreezeBalance2(UnfreezeBalanceContract) returns (TransactionExtention) {}
-
-  rpc WithdrawBalance(WithdrawBalanceContract) returns (Transaction) {}
-  rpc WithdrawBalance2(WithdrawBalanceContract) returns (TransactionExtention) {}
-
-  rpc ProposalCreate(ProposalCreateContract) returns (TransactionExtention) {}
-  rpc ProposalApprove(ProposalApproveContract) returns (TransactionExtention) {}
-  rpc ProposalDelete(ProposalDeleteContract) returns (TransactionExtention) {}
-
+/*
+ *  change to local build instead of remote build
+ */
+//  rpc CreateCommonTransaction(Transaction) returns (TransactionExtention) {}
+//
+//  rpc CreateAccount(AccountCreateContract) returns (Transaction) {}
+//  rpc CreateAccount2(AccountCreateContract) returns (TransactionExtention) {}
+//
+//  rpc UpdateAccount(AccountUpdateContract) returns (Transaction) {}
+//  rpc UpdateAccount2(AccountUpdateContract) returns (TransactionExtention) {}
+//
+//  rpc SetAccountId(SetAccountIdContract) returns (Transaction) {}
+//
+//  rpc AccountPermissionUpdate(AccountPermissionUpdateContract) returns (TransactionExtention) {}
+//
+//  rpc CreateTransaction(TransferContract) returns (Transaction) {}
+//  rpc CreateTransaction2(TransferContract) returns (TransactionExtention) {}
+//
+//  rpc CreateAssetIssue(AssetIssueContract) returns (Transaction) {}
+//  rpc CreateAssetIssue2(AssetIssueContract) returns (TransactionExtention) {}
+//
+//  rpc UpdateAsset(UpdateAssetContract) returns (Transaction) {}
+//  rpc UpdateAsset2(UpdateAssetContract) returns (TransactionExtention) {}
+//
+//  rpc TransferAsset(TransferAssetContract) returns (Transaction) {}
+//  rpc TransferAsset2(TransferAssetContract) returns (TransactionExtention) {}
+//
+//  rpc ParticipateAssetIssue(ParticipateAssetIssueContract) returns (Transaction) {}
+//  rpc ParticipateAssetIssue2(ParticipateAssetIssueContract) returns (TransactionExtention) {}
+//
+//  rpc UnfreezeAsset(UnfreezeAssetContract) returns (Transaction) {}
+//  rpc UnfreezeAsset2(UnfreezeAssetContract) returns (TransactionExtention) {}
+//
+//  rpc CreateWitness(WitnessCreateContract) returns (Transaction) {}
+//  rpc CreateWitness2(WitnessCreateContract) returns (TransactionExtention) {}
+//
+//  rpc UpdateWitness(WitnessUpdateContract) returns (Transaction) {}
+//  rpc UpdateWitness2(WitnessUpdateContract) returns (TransactionExtention) {}
+//
+//  rpc UpdateBrokerage(UpdateBrokerageContract) returns (TransactionExtention) {}
+//
+//  rpc VoteWitnessAccount(VoteWitnessContract) returns (Transaction) {}
+//  rpc VoteWitnessAccount2(VoteWitnessContract) returns (TransactionExtention) {}
+//
+//  rpc FreezeBalance(FreezeBalanceContract) returns (Transaction) {}
+//  rpc FreezeBalance2(FreezeBalanceContract) returns (TransactionExtention) {}
+//
+//  rpc UnfreezeBalance(UnfreezeBalanceContract) returns (Transaction) {}
+//  rpc UnfreezeBalance2(UnfreezeBalanceContract) returns (TransactionExtention) {}
+//
+//  rpc WithdrawBalance(WithdrawBalanceContract) returns (Transaction) {}
+//  rpc WithdrawBalance2(WithdrawBalanceContract) returns (TransactionExtention) {}
+//
+//  rpc ProposalCreate(ProposalCreateContract) returns (TransactionExtention) {}
+//  rpc ProposalApprove(ProposalApproveContract) returns (TransactionExtention) {}
+//  rpc ProposalDelete(ProposalDeleteContract) returns (TransactionExtention) {}
+//
   rpc DeployContract(CreateSmartContract) returns (TransactionExtention) {}
-  rpc UpdateSetting(UpdateSettingContract) returns (TransactionExtention) {}          // consume_user_resource_percent
-  rpc UpdateEnergyLimit(UpdateEnergyLimitContract) returns (TransactionExtention) {}  // origin_energy_limit
-  rpc ClearContractABI(ClearABIContract) returns (TransactionExtention) {}
+//  rpc UpdateSetting(UpdateSettingContract) returns (TransactionExtention) {}          // consume_user_resource_percent
+//  rpc UpdateEnergyLimit(UpdateEnergyLimitContract) returns (TransactionExtention) {}  // origin_energy_limit
+//  rpc ClearContractABI(ClearABIContract) returns (TransactionExtention) {}
   rpc TriggerContract(TriggerSmartContract) returns (TransactionExtention) {}
   rpc TriggerConstantContract(TriggerSmartContract) returns (TransactionExtention) {}  // not a txn type
-
-  rpc ExchangeCreate(ExchangeCreateContract) returns (TransactionExtention) {}
-  rpc ExchangeInject(ExchangeInjectContract) returns (TransactionExtention) {}
-  rpc ExchangeWithdraw(ExchangeWithdrawContract) returns (TransactionExtention) {}
-  rpc ExchangeTransaction(ExchangeTransactionContract) returns (TransactionExtention) {}
-
-  rpc MarketSellAsset(MarketSellAssetContract) returns (TransactionExtention) {}
-  rpc MarketCancelOrder(MarketCancelOrderContract) returns (TransactionExtention) {}
+//
+//  rpc ExchangeCreate(ExchangeCreateContract) returns (TransactionExtention) {}
+//  rpc ExchangeInject(ExchangeInjectContract) returns (TransactionExtention) {}
+//  rpc ExchangeWithdraw(ExchangeWithdrawContract) returns (TransactionExtention) {}
+//  rpc ExchangeTransaction(ExchangeTransactionContract) returns (TransactionExtention) {}
+//
+//  rpc MarketSellAsset(MarketSellAssetContract) returns (TransactionExtention) {}
+//  rpc MarketCancelOrder(MarketCancelOrderContract) returns (TransactionExtention) {}
 
   // The real APIs:
   rpc GetNodeInfo(EmptyMessage) returns (NodeInfo) {}
@@ -110,8 +112,9 @@ service Wallet {
 
   rpc GetNowBlock(EmptyMessage) returns (Block) {}
   rpc GetNowBlock2(EmptyMessage) returns (BlockExtention) {}
-
+  //deprecated
   rpc GetBlockByNum(NumberMessage) returns (Block) {}
+  //Use this function instead of GetBlockByNum.
   rpc GetBlockByNum2(NumberMessage) returns (BlockExtention) {}
 
   // NOTE: `GetBlockById2` is missing. The closest is `GetBlockByLatestNum2`.
@@ -188,12 +191,15 @@ service Wallet {
   rpc GetTriggerInputForShieldedTRC20Contract(ShieldedTRC20TriggerContractParameters) returns (BytesMessage) {}
 
   // Stake 2.0
-  rpc FreezeBalanceV2 (FreezeBalanceV2Contract) returns (TransactionExtention) {}
-  rpc UnfreezeBalanceV2 (UnfreezeBalanceV2Contract) returns (TransactionExtention) {}
-  rpc DelegateResource (DelegateResourceContract) returns (TransactionExtention) {}
-
-  rpc UnDelegateResource (UnDelegateResourceContract) returns (TransactionExtention) {}
-  rpc WithdrawExpireUnfreeze (WithdrawExpireUnfreezeContract) returns (TransactionExtention) {}
+  /*
+  *  change to local build instead of remote build
+  */
+//  rpc FreezeBalanceV2 (FreezeBalanceV2Contract) returns (TransactionExtention) {}
+//  rpc UnfreezeBalanceV2 (UnfreezeBalanceV2Contract) returns (TransactionExtention) {}
+//  rpc DelegateResource (DelegateResourceContract) returns (TransactionExtention) {}
+//  rpc UnDelegateResource (UnDelegateResourceContract) returns (TransactionExtention) {}
+//  rpc WithdrawExpireUnfreeze (WithdrawExpireUnfreezeContract) returns (TransactionExtention) {}
+//
   rpc GetAvailableUnfreezeCount (GetAvailableUnfreezeCountRequestMessage)
       returns (GetAvailableUnfreezeCountResponseMessage) {}
   rpc GetCanWithdrawUnfreezeAmount (CanWithdrawUnfreezeAmountRequestMessage)
