@@ -267,11 +267,11 @@ public class ApiWrapper {
 
 
     private TransactionCapsule createTransactionCapsuleWithoutValidate(
-        Message message, Transaction.Contract.ContractType contractType) throws Exception {
+        Message message, Transaction.Contract.ContractType contractType,BlockExtention solidHeadBlock, BlockExtention headBlock) throws Exception {
         TransactionCapsule trx = new TransactionCapsule(message, contractType);
 
         if (contractType == Transaction.Contract.ContractType.CreateSmartContract) {
-            trx.setTransactionCreate(true);
+            //trx.setTransactionCreate(true);
             org.tron.trident.proto.Contract.CreateSmartContract contract = Utils.getSmartContractFromTransaction(trx.getTransaction());
             long percent = contract.getNewContract().getConsumeUserResourcePercent();
             if (percent < 0 || percent > 100) {
@@ -280,19 +280,27 @@ public class ApiWrapper {
         }
         //build transaction
         trx.setTransactionCreate(false);
-        BlockExtention solidHeadBlock = blockingStubSolidity.getNowBlock2(EmptyMessage.getDefaultInstance());
         //get solid head blockId
         byte[] blockHash = Utils.getBlockId(solidHeadBlock).getBytes();
         trx.setReference(solidHeadBlock.getBlockHeader().getRawData().getNumber(), blockHash);
 
         //get expiration time from head block timestamp
-        BlockExtention headBlock = blockingStub.getNowBlock2(EmptyMessage.getDefaultInstance());
         long expiration = headBlock.getBlockHeader().getRawData().getTimestamp() + TRANSACTION_DEFAULT_EXPIRATION_TIME;
         trx.setExpiration(expiration);
         trx.setTimestamp();
 
         return trx;
     }
+
+    private TransactionCapsule createTransaction(
+        Message message, Transaction.Contract.ContractType contractType) throws Exception {
+        BlockExtention solidHeadBlock = blockingStubSolidity.getNowBlock2(EmptyMessage.getDefaultInstance());
+        BlockExtention headBlock = blockingStub.getNowBlock2(EmptyMessage.getDefaultInstance());
+
+        return createTransactionCapsuleWithoutValidate(message,contractType,solidHeadBlock,headBlock);
+    }
+
+
     /**
      * build Transaction Extention in local.
      * @param contractType transaction type.
@@ -302,7 +310,7 @@ public class ApiWrapper {
         TransactionExtention.Builder trxExtBuilder = TransactionExtention.newBuilder();
 
         try {
-            TransactionCapsule trx = createTransactionCapsuleWithoutValidate(request, contractType);
+            TransactionCapsule trx = createTransaction(request, contractType);
             trxExtBuilder.setTransaction(trx.getTransaction());
             trxExtBuilder.setTxid(ByteString.copyFrom(Sha256Hash.hash(true, trx.getTransaction().getRawData().toByteArray())));
         } catch (Exception e) {
@@ -438,7 +446,7 @@ public class ApiWrapper {
      * @return TransactionExtention
      * @throws IllegalException if fail to freeze balance
      */
-    public TransactionExtention freezeBalance(String ownerAddress, long frozenBalance, long frozenDuration, int resourceCode) throws IllegalException {
+    public TransactionExtention freezeBalance(String ownerAddress, long frozenBalance, int frozenDuration, int resourceCode) throws IllegalException {
 
         return freezeBalance(ownerAddress,frozenBalance,frozenDuration,resourceCode,"");
     }
@@ -453,7 +461,7 @@ public class ApiWrapper {
      * @return TransactionExtention
      * @throws IllegalException if fail to freeze balance
      */
-    public TransactionExtention freezeBalance(String ownerAddress, long frozenBalance, long frozenDuration, int resourceCode, String receiveAddress) throws IllegalException {
+    public TransactionExtention freezeBalance(String ownerAddress, long frozenBalance, int frozenDuration, int resourceCode, String receiveAddress) throws IllegalException {
         ByteString rawFrom = parseAddress(ownerAddress);
         ByteString rawReceiveFrom = parseAddress(receiveAddress);
         FreezeBalanceContract freezeBalanceContract=
@@ -1346,7 +1354,7 @@ public class ApiWrapper {
          * @return TransactionExtention
          * @throws IllegalException if fail to update asset
          */
-    public TransactionExtention updateAsset(String ownerAddress, String description, String url, int newLimit, int newPublicLimit) throws IllegalException {
+    public TransactionExtention updateAsset(String ownerAddress, String description, String url, long newLimit, long newPublicLimit) throws IllegalException {
         ByteString bsOwnerAddress = parseAddress(ownerAddress);
         ByteString bsDescription = ByteString.copyFrom(description.getBytes());
         ByteString bsUrl = ByteString.copyFrom(url.getBytes());
