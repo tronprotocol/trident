@@ -15,6 +15,7 @@ import org.tron.trident.core.exceptions.IllegalException;
 import org.tron.trident.core.key.KeyPair;
 import org.tron.trident.core.transaction.BlockId;
 import org.tron.trident.core.transaction.TransactionBuilder;
+import org.tron.trident.core.utils.ByteArray;
 import org.tron.trident.core.utils.Sha256Hash;
 import org.tron.trident.core.transaction.TransactionCapsule;
 import org.tron.trident.core.utils.Utils;
@@ -1914,15 +1915,12 @@ public class ApiWrapper {
      * @throws IllegalException if fail to get transaction from pending
      */
     public Transaction getTransactionFromPending(String txId) throws IllegalException {
-        ByteString bsTxid = parseAddress(txId);
+        ByteString bsTxid = ByteString.copyFrom(ByteArray.fromHexString(txId));
         BytesMessage request = BytesMessage.newBuilder()
             .setValue(bsTxid)
             .build();
 
-        Transaction transaction = blockingStubSolidity.getTransactionById(request);
-        if(transaction.getRetCount() == 0){
-            throw new IllegalException();
-        }
+        Transaction transaction = blockingStub.getTransactionFromPending(request);
         return transaction;
     }
 
