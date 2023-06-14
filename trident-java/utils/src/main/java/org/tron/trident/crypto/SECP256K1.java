@@ -66,7 +66,9 @@ public class SECP256K1 {
     private static final BigInteger CURVE_ORDER;
 
     static {
-        Security.addProvider(new BouncyCastleProvider());
+        //support android platform
+        Security.removeProvider(BouncyCastleProvider.PROVIDER_NAME);
+        Security.insertProviderAt(new BouncyCastleProvider(), 1);
 
         final X9ECParameters params = SECNamedCurves.getByName(CURVE_NAME);
         CURVE = new ECDomainParameters(params.getCurve(), params.getG(), params.getN(), params.getH());

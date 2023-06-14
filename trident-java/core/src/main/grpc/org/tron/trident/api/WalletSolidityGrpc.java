@@ -154,6 +154,37 @@ public final class WalletSolidityGrpc {
     return getGetRewardInfoMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.BytesMessage,
+      org.tron.trident.proto.Chain.Transaction> getGetTransactionFromPendingMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "GetTransactionFromPending",
+      requestType = org.tron.trident.api.GrpcAPI.BytesMessage.class,
+      responseType = org.tron.trident.proto.Chain.Transaction.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.BytesMessage,
+      org.tron.trident.proto.Chain.Transaction> getGetTransactionFromPendingMethod() {
+    io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.BytesMessage, org.tron.trident.proto.Chain.Transaction> getGetTransactionFromPendingMethod;
+    if ((getGetTransactionFromPendingMethod = WalletSolidityGrpc.getGetTransactionFromPendingMethod) == null) {
+      synchronized (WalletSolidityGrpc.class) {
+        if ((getGetTransactionFromPendingMethod = WalletSolidityGrpc.getGetTransactionFromPendingMethod) == null) {
+          WalletSolidityGrpc.getGetTransactionFromPendingMethod = getGetTransactionFromPendingMethod =
+              io.grpc.MethodDescriptor.<org.tron.trident.api.GrpcAPI.BytesMessage, org.tron.trident.proto.Chain.Transaction>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "GetTransactionFromPending"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.api.GrpcAPI.BytesMessage.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.proto.Chain.Transaction.getDefaultInstance()))
+              .setSchemaDescriptor(new WalletSolidityMethodDescriptorSupplier("GetTransactionFromPending"))
+              .build();
+        }
+      }
+    }
+    return getGetTransactionFromPendingMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -236,6 +267,13 @@ public final class WalletSolidityGrpc {
       asyncUnimplementedUnaryCall(getGetRewardInfoMethod(), responseObserver);
     }
 
+    /**
+     */
+    public void getTransactionFromPending(org.tron.trident.api.GrpcAPI.BytesMessage request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Chain.Transaction> responseObserver) {
+      asyncUnimplementedUnaryCall(getGetTransactionFromPendingMethod(), responseObserver);
+    }
+
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -266,6 +304,13 @@ public final class WalletSolidityGrpc {
                 org.tron.trident.api.GrpcAPI.BytesMessage,
                 org.tron.trident.api.GrpcAPI.NumberMessage>(
                   this, METHODID_GET_REWARD_INFO)))
+          .addMethod(
+            getGetTransactionFromPendingMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                org.tron.trident.api.GrpcAPI.BytesMessage,
+                org.tron.trident.proto.Chain.Transaction>(
+                  this, METHODID_GET_TRANSACTION_FROM_PENDING)))
           .build();
     }
   }
@@ -321,6 +366,14 @@ public final class WalletSolidityGrpc {
       asyncUnaryCall(
           getChannel().newCall(getGetRewardInfoMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void getTransactionFromPending(org.tron.trident.api.GrpcAPI.BytesMessage request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Chain.Transaction> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getGetTransactionFromPendingMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -369,6 +422,13 @@ public final class WalletSolidityGrpc {
     public org.tron.trident.api.GrpcAPI.NumberMessage getRewardInfo(org.tron.trident.api.GrpcAPI.BytesMessage request) {
       return blockingUnaryCall(
           getChannel(), getGetRewardInfoMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public org.tron.trident.proto.Chain.Transaction getTransactionFromPending(org.tron.trident.api.GrpcAPI.BytesMessage request) {
+      return blockingUnaryCall(
+          getChannel(), getGetTransactionFromPendingMethod(), getCallOptions(), request);
     }
   }
 
@@ -423,12 +483,21 @@ public final class WalletSolidityGrpc {
       return futureUnaryCall(
           getChannel().newCall(getGetRewardInfoMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<org.tron.trident.proto.Chain.Transaction> getTransactionFromPending(
+        org.tron.trident.api.GrpcAPI.BytesMessage request) {
+      return futureUnaryCall(
+          getChannel().newCall(getGetTransactionFromPendingMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_GET_ACCOUNT = 0;
   private static final int METHODID_GET_NOW_BLOCK2 = 1;
   private static final int METHODID_GET_TRANSACTION_BY_ID = 2;
   private static final int METHODID_GET_REWARD_INFO = 3;
+  private static final int METHODID_GET_TRANSACTION_FROM_PENDING = 4;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -462,6 +531,10 @@ public final class WalletSolidityGrpc {
         case METHODID_GET_REWARD_INFO:
           serviceImpl.getRewardInfo((org.tron.trident.api.GrpcAPI.BytesMessage) request,
               (io.grpc.stub.StreamObserver<org.tron.trident.api.GrpcAPI.NumberMessage>) responseObserver);
+          break;
+        case METHODID_GET_TRANSACTION_FROM_PENDING:
+          serviceImpl.getTransactionFromPending((org.tron.trident.api.GrpcAPI.BytesMessage) request,
+              (io.grpc.stub.StreamObserver<org.tron.trident.proto.Chain.Transaction>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -528,6 +601,7 @@ public final class WalletSolidityGrpc {
               .addMethod(getGetNowBlock2Method())
               .addMethod(getGetTransactionByIdMethod())
               .addMethod(getGetRewardInfoMethod())
+              .addMethod(getGetTransactionFromPendingMethod())
               .build();
         }
       }

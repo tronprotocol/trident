@@ -199,14 +199,26 @@ service Wallet {
 //  rpc DelegateResource (DelegateResourceContract) returns (TransactionExtention) {}
 //  rpc UnDelegateResource (UnDelegateResourceContract) returns (TransactionExtention) {}
 //  rpc WithdrawExpireUnfreeze (WithdrawExpireUnfreezeContract) returns (TransactionExtention) {}
-//
+
   rpc GetAvailableUnfreezeCount (GetAvailableUnfreezeCountRequestMessage)
       returns (GetAvailableUnfreezeCountResponseMessage) {}
   rpc GetCanWithdrawUnfreezeAmount (CanWithdrawUnfreezeAmountRequestMessage)
       returns (CanWithdrawUnfreezeAmountResponseMessage) {}
-  rpc GetCanDelegatedMaxSize (CanDelegatedMaxSizeRequestMessage) returns (CanDelegatedMaxSizeResponseMessage) {};
+  rpc GetCanDelegatedMaxSize (CanDelegatedMaxSizeRequestMessage) returns (CanDelegatedMaxSizeResponseMessage) {}
   rpc GetDelegatedResourceV2 (DelegatedResourceMessage) returns (DelegatedResourceList) {}
   rpc GetDelegatedResourceAccountIndexV2 (BytesMessage) returns (DelegatedResourceAccountIndex) {}
+  //query the network
+  rpc GetBurnTrx (EmptyMessage) returns (NumberMessage) {}
+  rpc GetBlockBalanceTrace (BlockIdentifier) returns (BlockBalanceTrace) {}
+
+  //voting&SRs
+  rpc CreateWitness2 (WitnessCreateContract) returns (TransactionExtention) {}
+  rpc WithdrawBalance2 (WithdrawBalanceContract) returns (TransactionExtention) {}
+
+  //pending pool
+  rpc GetTransactionListFromPending (EmptyMessage) returns (TransactionIdList) {}
+  rpc GetTransactionFromPending (BytesMessage) returns (Transaction) {}
+  rpc GetPendingSize (EmptyMessage) returns (NumberMessage) {}
 };
 
 // NOTE: All other solidified APIs are useless.
@@ -216,6 +228,7 @@ service WalletSolidity {
   // rpc GetBlockByLatestNum2(NumberMessage) returns (BlockListExtention) {}
   rpc GetTransactionById(BytesMessage) returns (Transaction) {}
   rpc GetRewardInfo(BytesMessage) returns (NumberMessage) {}     // ???
+  rpc GetTransactionFromPending (BytesMessage) returns (Transaction) {}
 };
 
 message EmptyMessage {}
@@ -433,3 +446,8 @@ message CanDelegatedMaxSizeRequestMessage {
 message CanDelegatedMaxSizeResponseMessage {
   int64 max_size = 1;
 }
+
+message TransactionIdList {
+  repeated string txId = 1;
+}
+

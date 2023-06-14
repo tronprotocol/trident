@@ -13,7 +13,9 @@ import org.tron.trident.api.WalletSolidityGrpc;
 import org.tron.trident.core.contract.ContractFunction;
 import org.tron.trident.core.exceptions.IllegalException;
 import org.tron.trident.core.key.KeyPair;
+import org.tron.trident.core.transaction.BlockId;
 import org.tron.trident.core.transaction.TransactionBuilder;
+import org.tron.trident.core.utils.ByteArray;
 import org.tron.trident.core.utils.Sha256Hash;
 import org.tron.trident.core.transaction.TransactionCapsule;
 import org.tron.trident.core.utils.Utils;
@@ -55,6 +57,11 @@ import org.tron.trident.api.GrpcAPI.AccountAddressMessage;
 import org.tron.trident.api.GrpcAPI.AccountIdMessage;
 import org.tron.trident.api.GrpcAPI.BlockLimit;
 import org.tron.trident.api.GrpcAPI.PaginatedMessage;
+import org.tron.trident.proto.Contract.WitnessCreateContract;
+import org.tron.trident.proto.Contract.WitnessUpdateContract;
+import org.tron.trident.proto.Contract.ProposalCreateContract;
+import org.tron.trident.proto.Contract.ProposalApproveContract;
+import org.tron.trident.proto.Contract.ProposalDeleteContract;
 import org.tron.trident.utils.Base58Check;
 
 import org.tron.trident.proto.Contract.FreezeBalanceV2Contract;
@@ -62,7 +69,9 @@ import org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract;
 import org.tron.trident.proto.Contract.DelegateResourceContract;
 import org.tron.trident.proto.Contract.UnDelegateResourceContract;
 import org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract;
-
+import org.tron.trident.proto.Contract.WithdrawBalanceContract;
+import org.tron.trident.proto.Response.BlockBalanceTrace;
+import org.tron.trident.proto.Response.BlockIdentifier;
 import com.google.protobuf.ByteString;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -267,11 +276,11 @@ public class ApiWrapper {
 
 
     private TransactionCapsule createTransactionCapsuleWithoutValidate(
-        Message message, Transaction.Contract.ContractType contractType) throws Exception {
+        Message message, Transaction.Contract.ContractType contractType,BlockExtention solidHeadBlock, BlockExtention headBlock) throws Exception {
         TransactionCapsule trx = new TransactionCapsule(message, contractType);
 
         if (contractType == Transaction.Contract.ContractType.CreateSmartContract) {
-            trx.setTransactionCreate(true);
+            //trx.setTransactionCreate(true);
             org.tron.trident.proto.Contract.CreateSmartContract contract = Utils.getSmartContractFromTransaction(trx.getTransaction());
             long percent = contract.getNewContract().getConsumeUserResourcePercent();
             if (percent < 0 || percent > 100) {
@@ -280,19 +289,27 @@ public class ApiWrapper {
         }
         //build transaction
         trx.setTransactionCreate(false);
-        BlockExtention solidHeadBlock = blockingStubSolidity.getNowBlock2(EmptyMessage.getDefaultInstance());
         //get solid head blockId
         byte[] blockHash = Utils.getBlockId(solidHeadBlock).getBytes();
         trx.setReference(solidHeadBlock.getBlockHeader().getRawData().getNumber(), blockHash);
 
         //get expiration time from head block timestamp
-        BlockExtention headBlock = blockingStub.getNowBlock2(EmptyMessage.getDefaultInstance());
         long expiration = headBlock.getBlockHeader().getRawData().getTimestamp() + TRANSACTION_DEFAULT_EXPIRATION_TIME;
         trx.setExpiration(expiration);
         trx.setTimestamp();
 
         return trx;
     }
+
+    private TransactionCapsule createTransaction(
+        Message message, Transaction.Contract.ContractType contractType) throws Exception {
+        BlockExtention solidHeadBlock = blockingStubSolidity.getNowBlock2(EmptyMessage.getDefaultInstance());
+        BlockExtention headBlock = blockingStub.getNowBlock2(EmptyMessage.getDefaultInstance());
+
+        return createTransactionCapsuleWithoutValidate(message,contractType,solidHeadBlock,headBlock);
+    }
+
+
     /**
      * build Transaction Extention in local.
      * @param contractType transaction type.
@@ -302,7 +319,7 @@ public class ApiWrapper {
         TransactionExtention.Builder trxExtBuilder = TransactionExtention.newBuilder();
 
         try {
-            TransactionCapsule trx = createTransactionCapsuleWithoutValidate(request, contractType);
+            TransactionCapsule trx = createTransaction(request, contractType);
             trxExtBuilder.setTransaction(trx.getTransaction());
             trxExtBuilder.setTxid(ByteString.copyFrom(Sha256Hash.hash(true, trx.getTransaction().getRawData().toByteArray())));
         } catch (Exception e) {
@@ -438,7 +455,7 @@ public class ApiWrapper {
      * @return TransactionExtention
      * @throws IllegalException if fail to freeze balance
      */
-    public TransactionExtention freezeBalance(String ownerAddress, long frozenBalance, long frozenDuration, int resourceCode) throws IllegalException {
+    public TransactionExtention freezeBalance(String ownerAddress, long frozenBalance, int frozenDuration, int resourceCode) throws IllegalException {
 
         return freezeBalance(ownerAddress,frozenBalance,frozenDuration,resourceCode,"");
     }
@@ -453,7 +470,7 @@ public class ApiWrapper {
      * @return TransactionExtention
      * @throws IllegalException if fail to freeze balance
      */
-    public TransactionExtention freezeBalance(String ownerAddress, long frozenBalance, long frozenDuration, int resourceCode, String receiveAddress) throws IllegalException {
+    public TransactionExtention freezeBalance(String ownerAddress, long frozenBalance, int frozenDuration, int resourceCode, String receiveAddress) throws IllegalException {
         ByteString rawFrom = parseAddress(ownerAddress);
         ByteString rawReceiveFrom = parseAddress(receiveAddress);
         FreezeBalanceContract freezeBalanceContract=
@@ -1346,7 +1363,7 @@ public class ApiWrapper {
          * @return TransactionExtention
          * @throws IllegalException if fail to update asset
          */
-    public TransactionExtention updateAsset(String ownerAddress, String description, String url, int newLimit, int newPublicLimit) throws IllegalException {
+    public TransactionExtention updateAsset(String ownerAddress, String description, String url, long newLimit, long newPublicLimit) throws IllegalException {
         ByteString bsOwnerAddress = parseAddress(ownerAddress);
         ByteString bsDescription = ByteString.copyFrom(description.getBytes());
         ByteString bsUrl = ByteString.copyFrom(url.getBytes());
@@ -1701,5 +1718,228 @@ public class ApiWrapper {
 
         return new TransactionBuilder(txnExt.getTransaction());
     }
+
+
+    /**
+     * GetBlockBalance
+     * Get all balance change operations in a block(Note: At present, the interface data can only be queried through the following official nodes
+     * 47.241.20.47 & 161.117.85.97 &161.117.224.116 &161.117.83.38)
+     * @param blockId tx Id.eg:"000000000309c3c40be03c04615856fc6672b08af6d2cdbbf500a7cf9920fbdb"
+     * @param blockNum block number
+     * @return BlockBalanceTrace
+     */
+    public BlockBalanceTrace getBlockBalance(String blockId, long blockNum) {
+        ByteString bsId = parseAddress(blockId);
+        BlockIdentifier blockIdentifier=
+            BlockIdentifier.newBuilder()
+                .setHash(bsId)
+                .setNumber(blockNum)
+                .build();
+        BlockBalanceTrace blockBalanceTrace = blockingStub.getBlockBalanceTrace(blockIdentifier);
+
+        return blockBalanceTrace;
+    }
+
+    /**
+     * GetBurnTRX
+     * Query the amount of TRX burned due to on-chain transaction fees since No. 54 Committee Proposal took effect
+     * @return burn trx amount
+     */
+    public long getBurnTRX() {
+        GrpcAPI.NumberMessage numberMessage = blockingStub.getBurnTrx(EmptyMessage.getDefaultInstance());
+        return numberMessage.getNum();
+    }
+
+    /**
+     * CreateWitness
+     * Apply to become a witness.
+     * @param ownerAddress owner address
+     * @param url The website URL of the SR node
+     * @return TransactionExtention
+     * @throws IllegalException if fail to create witness
+     */
+    public TransactionExtention createWitness(String ownerAddress, String url) throws IllegalException {
+        ByteString rawOwner = parseAddress(ownerAddress);
+        WitnessCreateContract witnessCreateContract=
+            WitnessCreateContract.newBuilder()
+                .setOwnerAddress(rawOwner)
+                .setUrl(ByteString.copyFromUtf8(url))
+                .build();
+        TransactionExtention txnExt = createTransactionExtention(witnessCreateContract, Transaction.Contract.ContractType.WitnessCreateContract);
+
+        return txnExt;
+    }
+
+
+    /**
+     * UpdateWitness
+     * Edit the URL of the witness's official website.
+     * @param ownerAddress owner address
+     * @param updateUrl Updated URL
+     * @return TransactionExtention
+     * @throws IllegalException if fail to update witness
+     */
+    public TransactionExtention updateWitness(String ownerAddress, String updateUrl) throws IllegalException {
+        ByteString rawOwner = parseAddress(ownerAddress);
+        WitnessUpdateContract witnessUpdateContract=
+            WitnessUpdateContract.newBuilder()
+                .setOwnerAddress(rawOwner)
+                .setUpdateUrl(ByteString.copyFromUtf8(updateUrl))
+                .build();
+        TransactionExtention txnExt = createTransactionExtention(witnessUpdateContract, Transaction.Contract.ContractType.WitnessUpdateContract);
+
+        return txnExt;
+    }
+
+    /**
+     * WithdrawBalance
+     * Super Representative or user withdraw rewards, usable every 24 hours.
+     * Super representatives can withdraw the balance from the account allowance into the account balance,
+     * Users can claim the voting reward from the SRs and deposit into his account balance.
+     * @param ownerAddress owner address
+     * @return TransactionExtention
+     * @throws IllegalException if fail to withdraw balance
+     */
+    public TransactionExtention withdrawBalance(String ownerAddress) throws IllegalException {
+        ByteString rawOwner = parseAddress(ownerAddress);
+        WithdrawBalanceContract withdrawBalanceContract=
+            WithdrawBalanceContract.newBuilder()
+                .setOwnerAddress(rawOwner)
+                .build();
+        TransactionExtention txnExt = createTransactionExtention(withdrawBalanceContract, Transaction.Contract.ContractType.WithdrawBalanceContract);
+
+        return txnExt;
+    }
+
+
+    /**
+     * GetNextMaintenanceTime
+     * Returns the timestamp of the next voting time in milliseconds.
+     * @return get next maintenance time
+     */
+    public long getNextMaintenanceTime() {
+        GrpcAPI.NumberMessage numberMessage = blockingStub.getNextMaintenanceTime(EmptyMessage.getDefaultInstance());
+        return numberMessage.getNum();
+    }
+
+
+    /**
+     * ProposalCreate
+     * Creates a proposal transaction.
+     * @param ownerAddress owner address
+     * @param parameters  Parameters proposed to be modified and their values
+     * @return TransactionExtention
+     * @throws IllegalException if fail to proposal create
+     */
+    public TransactionExtention proposalCreate(String ownerAddress,HashMap<Long,Long> parameters) throws IllegalException {
+        ByteString rawOwner = parseAddress(ownerAddress);
+        ProposalCreateContract proposalCreateContract=
+            ProposalCreateContract.newBuilder()
+                .setOwnerAddress(rawOwner)
+                .putAllParameters(parameters)
+                .build();
+        TransactionExtention txnExt = createTransactionExtention(proposalCreateContract, Transaction.Contract.ContractType.ProposalCreateContract);
+
+        return txnExt;
+    }
+
+    /**
+     * ProposalApprove
+     * Approves proposed transaction.
+     * @param ownerAddress owner address
+     * @param proposalId  Proposal id
+     * @param isAddApproval  Whether to agree with the proposal
+     * @return TransactionExtention
+     * @throws IllegalException if fail to approve proposal
+     */
+    public TransactionExtention approveProposal(String ownerAddress,long proposalId,boolean isAddApproval) throws IllegalException {
+        ByteString rawOwner = parseAddress(ownerAddress);
+        ProposalApproveContract proposalApproveContract=
+            ProposalApproveContract.newBuilder()
+                .setOwnerAddress(rawOwner)
+                .setIsAddApproval(isAddApproval)
+                .setProposalId(proposalId)
+                .build();
+        TransactionExtention txnExt = createTransactionExtention(proposalApproveContract, Transaction.Contract.ContractType.ProposalApproveContract);
+
+        return txnExt;
+    }
+
+    /**
+     * ProposalDelete
+     * Deletes Proposal Transaction.
+     * @param ownerAddress owner address
+     * @param proposalId  Proposal id
+     * @return TransactionExtention
+     * @throws IllegalException if fail to delete proposal
+     */
+    public TransactionExtention deleteProposal(String ownerAddress,long proposalId) throws IllegalException {
+        ByteString rawOwner = parseAddress(ownerAddress);
+        ProposalDeleteContract proposalDeleteContract=
+            ProposalDeleteContract.newBuilder()
+                .setOwnerAddress(rawOwner)
+                .setProposalId(proposalId)
+                .build();
+        TransactionExtention txnExt = createTransactionExtention(proposalDeleteContract, Transaction.Contract.ContractType.ProposalDeleteContract);
+
+        return txnExt;
+    }
+
+    /**
+     * GetTransactionListFromPending
+     * Get transaction list information from pending pool
+     * @return transaction list information from pending pool
+     */
+    public GrpcAPI.TransactionIdList getTransactionListFromPending() {
+        GrpcAPI.TransactionIdList transactionIdList = blockingStub.getTransactionListFromPending(EmptyMessage.getDefaultInstance());
+        return transactionIdList;
+    }
+
+    /**
+     * GetPendingSize
+     * Get the size of the pending pool queue
+     * @return  the size of the pending pool queue
+     */
+    public long getPendingSize() {
+        GrpcAPI.NumberMessage pendingSize = blockingStub.getPendingSize(EmptyMessage.getDefaultInstance());
+        return pendingSize.getNum();
+    }
+
+
+
+    /**
+     * GetTransactionFromPending
+     * Get transaction details from the pending pool
+     * @param txId Transaction ID
+     * @return Transaction
+     * @throws IllegalException if fail to get transaction from pending
+     */
+    public Transaction getTransactionFromPending(String txId) throws IllegalException {
+        ByteString bsTxid = ByteString.copyFrom(ByteArray.fromHexString(txId));
+        BytesMessage request = BytesMessage.newBuilder()
+            .setValue(bsTxid)
+            .build();
+
+        Transaction transaction = blockingStub.getTransactionFromPending(request);
+        return transaction;
+    }
+
+
+    /**
+     * GetBlockById
+     * Query block by ID(block hash).
+     * @param blockID block hash.eg:"00000000000f424013e51b18e0782a32fa079ddafdb2f4c343468cf8896dc887"
+     * @return  the size of the pending pool queue
+     */
+    public Block getBlockById(String blockID) {
+        ByteString bsBlockid = parseAddress(blockID);
+        BytesMessage request = BytesMessage.newBuilder()
+            .setValue(bsBlockid)
+            .build();
+        Block block = blockingStub.getBlockById(request);
+        return block;
+    }
+
+
 
 }

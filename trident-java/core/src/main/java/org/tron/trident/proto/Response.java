@@ -67542,6 +67542,3549 @@ public final class Response {
 
   }
 
+  public interface BlockIdentifierOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:protocol.BlockIdentifier)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>bytes hash = 1;</code>
+     * @return The hash.
+     */
+    com.google.protobuf.ByteString getHash();
+
+    /**
+     * <code>int64 number = 2;</code>
+     * @return The number.
+     */
+    long getNumber();
+  }
+  /**
+   * Protobuf type {@code protocol.BlockIdentifier}
+   */
+  public static final class BlockIdentifier extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:protocol.BlockIdentifier)
+      BlockIdentifierOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use BlockIdentifier.newBuilder() to construct.
+    private BlockIdentifier(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private BlockIdentifier() {
+      hash_ = com.google.protobuf.ByteString.EMPTY;
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new BlockIdentifier();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private BlockIdentifier(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+
+              hash_ = input.readBytes();
+              break;
+            }
+            case 16: {
+
+              number_ = input.readInt64();
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return org.tron.trident.proto.Response.internal_static_protocol_BlockIdentifier_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return org.tron.trident.proto.Response.internal_static_protocol_BlockIdentifier_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              org.tron.trident.proto.Response.BlockIdentifier.class, org.tron.trident.proto.Response.BlockIdentifier.Builder.class);
+    }
+
+    public static final int HASH_FIELD_NUMBER = 1;
+    private com.google.protobuf.ByteString hash_;
+    /**
+     * <code>bytes hash = 1;</code>
+     * @return The hash.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString getHash() {
+      return hash_;
+    }
+
+    public static final int NUMBER_FIELD_NUMBER = 2;
+    private long number_;
+    /**
+     * <code>int64 number = 2;</code>
+     * @return The number.
+     */
+    @java.lang.Override
+    public long getNumber() {
+      return number_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!hash_.isEmpty()) {
+        output.writeBytes(1, hash_);
+      }
+      if (number_ != 0L) {
+        output.writeInt64(2, number_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!hash_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, hash_);
+      }
+      if (number_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(2, number_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof org.tron.trident.proto.Response.BlockIdentifier)) {
+        return super.equals(obj);
+      }
+      org.tron.trident.proto.Response.BlockIdentifier other = (org.tron.trident.proto.Response.BlockIdentifier) obj;
+
+      if (!getHash()
+          .equals(other.getHash())) return false;
+      if (getNumber()
+          != other.getNumber()) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + HASH_FIELD_NUMBER;
+      hash = (53 * hash) + getHash().hashCode();
+      hash = (37 * hash) + NUMBER_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getNumber());
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static org.tron.trident.proto.Response.BlockIdentifier parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.proto.Response.BlockIdentifier parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Response.BlockIdentifier parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.proto.Response.BlockIdentifier parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Response.BlockIdentifier parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.proto.Response.BlockIdentifier parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Response.BlockIdentifier parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.proto.Response.BlockIdentifier parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Response.BlockIdentifier parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.proto.Response.BlockIdentifier parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Response.BlockIdentifier parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.proto.Response.BlockIdentifier parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(org.tron.trident.proto.Response.BlockIdentifier prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code protocol.BlockIdentifier}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:protocol.BlockIdentifier)
+        org.tron.trident.proto.Response.BlockIdentifierOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return org.tron.trident.proto.Response.internal_static_protocol_BlockIdentifier_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return org.tron.trident.proto.Response.internal_static_protocol_BlockIdentifier_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                org.tron.trident.proto.Response.BlockIdentifier.class, org.tron.trident.proto.Response.BlockIdentifier.Builder.class);
+      }
+
+      // Construct using org.tron.trident.proto.Response.BlockIdentifier.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        hash_ = com.google.protobuf.ByteString.EMPTY;
+
+        number_ = 0L;
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return org.tron.trident.proto.Response.internal_static_protocol_BlockIdentifier_descriptor;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.proto.Response.BlockIdentifier getDefaultInstanceForType() {
+        return org.tron.trident.proto.Response.BlockIdentifier.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public org.tron.trident.proto.Response.BlockIdentifier build() {
+        org.tron.trident.proto.Response.BlockIdentifier result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.proto.Response.BlockIdentifier buildPartial() {
+        org.tron.trident.proto.Response.BlockIdentifier result = new org.tron.trident.proto.Response.BlockIdentifier(this);
+        result.hash_ = hash_;
+        result.number_ = number_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof org.tron.trident.proto.Response.BlockIdentifier) {
+          return mergeFrom((org.tron.trident.proto.Response.BlockIdentifier)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(org.tron.trident.proto.Response.BlockIdentifier other) {
+        if (other == org.tron.trident.proto.Response.BlockIdentifier.getDefaultInstance()) return this;
+        if (other.getHash() != com.google.protobuf.ByteString.EMPTY) {
+          setHash(other.getHash());
+        }
+        if (other.getNumber() != 0L) {
+          setNumber(other.getNumber());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        org.tron.trident.proto.Response.BlockIdentifier parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (org.tron.trident.proto.Response.BlockIdentifier) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private com.google.protobuf.ByteString hash_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <code>bytes hash = 1;</code>
+       * @return The hash.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString getHash() {
+        return hash_;
+      }
+      /**
+       * <code>bytes hash = 1;</code>
+       * @param value The hash to set.
+       * @return This builder for chaining.
+       */
+      public Builder setHash(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        hash_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bytes hash = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearHash() {
+        
+        hash_ = getDefaultInstance().getHash();
+        onChanged();
+        return this;
+      }
+
+      private long number_ ;
+      /**
+       * <code>int64 number = 2;</code>
+       * @return The number.
+       */
+      @java.lang.Override
+      public long getNumber() {
+        return number_;
+      }
+      /**
+       * <code>int64 number = 2;</code>
+       * @param value The number to set.
+       * @return This builder for chaining.
+       */
+      public Builder setNumber(long value) {
+        
+        number_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int64 number = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearNumber() {
+        
+        number_ = 0L;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:protocol.BlockIdentifier)
+    }
+
+    // @@protoc_insertion_point(class_scope:protocol.BlockIdentifier)
+    private static final org.tron.trident.proto.Response.BlockIdentifier DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new org.tron.trident.proto.Response.BlockIdentifier();
+    }
+
+    public static org.tron.trident.proto.Response.BlockIdentifier getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<BlockIdentifier>
+        PARSER = new com.google.protobuf.AbstractParser<BlockIdentifier>() {
+      @java.lang.Override
+      public BlockIdentifier parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new BlockIdentifier(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<BlockIdentifier> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<BlockIdentifier> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public org.tron.trident.proto.Response.BlockIdentifier getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface BlockBalanceTraceOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:protocol.BlockBalanceTrace)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>.protocol.BlockIdentifier block_identifier = 1;</code>
+     * @return Whether the blockIdentifier field is set.
+     */
+    boolean hasBlockIdentifier();
+    /**
+     * <code>.protocol.BlockIdentifier block_identifier = 1;</code>
+     * @return The blockIdentifier.
+     */
+    org.tron.trident.proto.Response.BlockIdentifier getBlockIdentifier();
+    /**
+     * <code>.protocol.BlockIdentifier block_identifier = 1;</code>
+     */
+    org.tron.trident.proto.Response.BlockIdentifierOrBuilder getBlockIdentifierOrBuilder();
+
+    /**
+     * <code>int64 timestamp = 2;</code>
+     * @return The timestamp.
+     */
+    long getTimestamp();
+
+    /**
+     * <pre>
+     *  BlockIdentifier parent_block_identifier = 4;
+     * </pre>
+     *
+     * <code>repeated .protocol.TransactionBalanceTrace transaction_balance_trace = 3;</code>
+     */
+    java.util.List<org.tron.trident.proto.Response.TransactionBalanceTrace> 
+        getTransactionBalanceTraceList();
+    /**
+     * <pre>
+     *  BlockIdentifier parent_block_identifier = 4;
+     * </pre>
+     *
+     * <code>repeated .protocol.TransactionBalanceTrace transaction_balance_trace = 3;</code>
+     */
+    org.tron.trident.proto.Response.TransactionBalanceTrace getTransactionBalanceTrace(int index);
+    /**
+     * <pre>
+     *  BlockIdentifier parent_block_identifier = 4;
+     * </pre>
+     *
+     * <code>repeated .protocol.TransactionBalanceTrace transaction_balance_trace = 3;</code>
+     */
+    int getTransactionBalanceTraceCount();
+    /**
+     * <pre>
+     *  BlockIdentifier parent_block_identifier = 4;
+     * </pre>
+     *
+     * <code>repeated .protocol.TransactionBalanceTrace transaction_balance_trace = 3;</code>
+     */
+    java.util.List<? extends org.tron.trident.proto.Response.TransactionBalanceTraceOrBuilder> 
+        getTransactionBalanceTraceOrBuilderList();
+    /**
+     * <pre>
+     *  BlockIdentifier parent_block_identifier = 4;
+     * </pre>
+     *
+     * <code>repeated .protocol.TransactionBalanceTrace transaction_balance_trace = 3;</code>
+     */
+    org.tron.trident.proto.Response.TransactionBalanceTraceOrBuilder getTransactionBalanceTraceOrBuilder(
+        int index);
+  }
+  /**
+   * Protobuf type {@code protocol.BlockBalanceTrace}
+   */
+  public static final class BlockBalanceTrace extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:protocol.BlockBalanceTrace)
+      BlockBalanceTraceOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use BlockBalanceTrace.newBuilder() to construct.
+    private BlockBalanceTrace(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private BlockBalanceTrace() {
+      transactionBalanceTrace_ = java.util.Collections.emptyList();
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new BlockBalanceTrace();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private BlockBalanceTrace(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+              org.tron.trident.proto.Response.BlockIdentifier.Builder subBuilder = null;
+              if (blockIdentifier_ != null) {
+                subBuilder = blockIdentifier_.toBuilder();
+              }
+              blockIdentifier_ = input.readMessage(org.tron.trident.proto.Response.BlockIdentifier.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(blockIdentifier_);
+                blockIdentifier_ = subBuilder.buildPartial();
+              }
+
+              break;
+            }
+            case 16: {
+
+              timestamp_ = input.readInt64();
+              break;
+            }
+            case 26: {
+              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
+                transactionBalanceTrace_ = new java.util.ArrayList<org.tron.trident.proto.Response.TransactionBalanceTrace>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              transactionBalanceTrace_.add(
+                  input.readMessage(org.tron.trident.proto.Response.TransactionBalanceTrace.parser(), extensionRegistry));
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000001) != 0)) {
+          transactionBalanceTrace_ = java.util.Collections.unmodifiableList(transactionBalanceTrace_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return org.tron.trident.proto.Response.internal_static_protocol_BlockBalanceTrace_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return org.tron.trident.proto.Response.internal_static_protocol_BlockBalanceTrace_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              org.tron.trident.proto.Response.BlockBalanceTrace.class, org.tron.trident.proto.Response.BlockBalanceTrace.Builder.class);
+    }
+
+    public static final int BLOCK_IDENTIFIER_FIELD_NUMBER = 1;
+    private org.tron.trident.proto.Response.BlockIdentifier blockIdentifier_;
+    /**
+     * <code>.protocol.BlockIdentifier block_identifier = 1;</code>
+     * @return Whether the blockIdentifier field is set.
+     */
+    @java.lang.Override
+    public boolean hasBlockIdentifier() {
+      return blockIdentifier_ != null;
+    }
+    /**
+     * <code>.protocol.BlockIdentifier block_identifier = 1;</code>
+     * @return The blockIdentifier.
+     */
+    @java.lang.Override
+    public org.tron.trident.proto.Response.BlockIdentifier getBlockIdentifier() {
+      return blockIdentifier_ == null ? org.tron.trident.proto.Response.BlockIdentifier.getDefaultInstance() : blockIdentifier_;
+    }
+    /**
+     * <code>.protocol.BlockIdentifier block_identifier = 1;</code>
+     */
+    @java.lang.Override
+    public org.tron.trident.proto.Response.BlockIdentifierOrBuilder getBlockIdentifierOrBuilder() {
+      return getBlockIdentifier();
+    }
+
+    public static final int TIMESTAMP_FIELD_NUMBER = 2;
+    private long timestamp_;
+    /**
+     * <code>int64 timestamp = 2;</code>
+     * @return The timestamp.
+     */
+    @java.lang.Override
+    public long getTimestamp() {
+      return timestamp_;
+    }
+
+    public static final int TRANSACTION_BALANCE_TRACE_FIELD_NUMBER = 3;
+    private java.util.List<org.tron.trident.proto.Response.TransactionBalanceTrace> transactionBalanceTrace_;
+    /**
+     * <pre>
+     *  BlockIdentifier parent_block_identifier = 4;
+     * </pre>
+     *
+     * <code>repeated .protocol.TransactionBalanceTrace transaction_balance_trace = 3;</code>
+     */
+    @java.lang.Override
+    public java.util.List<org.tron.trident.proto.Response.TransactionBalanceTrace> getTransactionBalanceTraceList() {
+      return transactionBalanceTrace_;
+    }
+    /**
+     * <pre>
+     *  BlockIdentifier parent_block_identifier = 4;
+     * </pre>
+     *
+     * <code>repeated .protocol.TransactionBalanceTrace transaction_balance_trace = 3;</code>
+     */
+    @java.lang.Override
+    public java.util.List<? extends org.tron.trident.proto.Response.TransactionBalanceTraceOrBuilder> 
+        getTransactionBalanceTraceOrBuilderList() {
+      return transactionBalanceTrace_;
+    }
+    /**
+     * <pre>
+     *  BlockIdentifier parent_block_identifier = 4;
+     * </pre>
+     *
+     * <code>repeated .protocol.TransactionBalanceTrace transaction_balance_trace = 3;</code>
+     */
+    @java.lang.Override
+    public int getTransactionBalanceTraceCount() {
+      return transactionBalanceTrace_.size();
+    }
+    /**
+     * <pre>
+     *  BlockIdentifier parent_block_identifier = 4;
+     * </pre>
+     *
+     * <code>repeated .protocol.TransactionBalanceTrace transaction_balance_trace = 3;</code>
+     */
+    @java.lang.Override
+    public org.tron.trident.proto.Response.TransactionBalanceTrace getTransactionBalanceTrace(int index) {
+      return transactionBalanceTrace_.get(index);
+    }
+    /**
+     * <pre>
+     *  BlockIdentifier parent_block_identifier = 4;
+     * </pre>
+     *
+     * <code>repeated .protocol.TransactionBalanceTrace transaction_balance_trace = 3;</code>
+     */
+    @java.lang.Override
+    public org.tron.trident.proto.Response.TransactionBalanceTraceOrBuilder getTransactionBalanceTraceOrBuilder(
+        int index) {
+      return transactionBalanceTrace_.get(index);
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (blockIdentifier_ != null) {
+        output.writeMessage(1, getBlockIdentifier());
+      }
+      if (timestamp_ != 0L) {
+        output.writeInt64(2, timestamp_);
+      }
+      for (int i = 0; i < transactionBalanceTrace_.size(); i++) {
+        output.writeMessage(3, transactionBalanceTrace_.get(i));
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (blockIdentifier_ != null) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, getBlockIdentifier());
+      }
+      if (timestamp_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(2, timestamp_);
+      }
+      for (int i = 0; i < transactionBalanceTrace_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(3, transactionBalanceTrace_.get(i));
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof org.tron.trident.proto.Response.BlockBalanceTrace)) {
+        return super.equals(obj);
+      }
+      org.tron.trident.proto.Response.BlockBalanceTrace other = (org.tron.trident.proto.Response.BlockBalanceTrace) obj;
+
+      if (hasBlockIdentifier() != other.hasBlockIdentifier()) return false;
+      if (hasBlockIdentifier()) {
+        if (!getBlockIdentifier()
+            .equals(other.getBlockIdentifier())) return false;
+      }
+      if (getTimestamp()
+          != other.getTimestamp()) return false;
+      if (!getTransactionBalanceTraceList()
+          .equals(other.getTransactionBalanceTraceList())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      if (hasBlockIdentifier()) {
+        hash = (37 * hash) + BLOCK_IDENTIFIER_FIELD_NUMBER;
+        hash = (53 * hash) + getBlockIdentifier().hashCode();
+      }
+      hash = (37 * hash) + TIMESTAMP_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getTimestamp());
+      if (getTransactionBalanceTraceCount() > 0) {
+        hash = (37 * hash) + TRANSACTION_BALANCE_TRACE_FIELD_NUMBER;
+        hash = (53 * hash) + getTransactionBalanceTraceList().hashCode();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static org.tron.trident.proto.Response.BlockBalanceTrace parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.proto.Response.BlockBalanceTrace parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Response.BlockBalanceTrace parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.proto.Response.BlockBalanceTrace parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Response.BlockBalanceTrace parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.proto.Response.BlockBalanceTrace parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Response.BlockBalanceTrace parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.proto.Response.BlockBalanceTrace parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Response.BlockBalanceTrace parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.proto.Response.BlockBalanceTrace parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Response.BlockBalanceTrace parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.proto.Response.BlockBalanceTrace parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(org.tron.trident.proto.Response.BlockBalanceTrace prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code protocol.BlockBalanceTrace}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:protocol.BlockBalanceTrace)
+        org.tron.trident.proto.Response.BlockBalanceTraceOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return org.tron.trident.proto.Response.internal_static_protocol_BlockBalanceTrace_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return org.tron.trident.proto.Response.internal_static_protocol_BlockBalanceTrace_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                org.tron.trident.proto.Response.BlockBalanceTrace.class, org.tron.trident.proto.Response.BlockBalanceTrace.Builder.class);
+      }
+
+      // Construct using org.tron.trident.proto.Response.BlockBalanceTrace.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+          getTransactionBalanceTraceFieldBuilder();
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        if (blockIdentifierBuilder_ == null) {
+          blockIdentifier_ = null;
+        } else {
+          blockIdentifier_ = null;
+          blockIdentifierBuilder_ = null;
+        }
+        timestamp_ = 0L;
+
+        if (transactionBalanceTraceBuilder_ == null) {
+          transactionBalanceTrace_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+        } else {
+          transactionBalanceTraceBuilder_.clear();
+        }
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return org.tron.trident.proto.Response.internal_static_protocol_BlockBalanceTrace_descriptor;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.proto.Response.BlockBalanceTrace getDefaultInstanceForType() {
+        return org.tron.trident.proto.Response.BlockBalanceTrace.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public org.tron.trident.proto.Response.BlockBalanceTrace build() {
+        org.tron.trident.proto.Response.BlockBalanceTrace result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.proto.Response.BlockBalanceTrace buildPartial() {
+        org.tron.trident.proto.Response.BlockBalanceTrace result = new org.tron.trident.proto.Response.BlockBalanceTrace(this);
+        int from_bitField0_ = bitField0_;
+        if (blockIdentifierBuilder_ == null) {
+          result.blockIdentifier_ = blockIdentifier_;
+        } else {
+          result.blockIdentifier_ = blockIdentifierBuilder_.build();
+        }
+        result.timestamp_ = timestamp_;
+        if (transactionBalanceTraceBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) != 0)) {
+            transactionBalanceTrace_ = java.util.Collections.unmodifiableList(transactionBalanceTrace_);
+            bitField0_ = (bitField0_ & ~0x00000001);
+          }
+          result.transactionBalanceTrace_ = transactionBalanceTrace_;
+        } else {
+          result.transactionBalanceTrace_ = transactionBalanceTraceBuilder_.build();
+        }
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof org.tron.trident.proto.Response.BlockBalanceTrace) {
+          return mergeFrom((org.tron.trident.proto.Response.BlockBalanceTrace)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(org.tron.trident.proto.Response.BlockBalanceTrace other) {
+        if (other == org.tron.trident.proto.Response.BlockBalanceTrace.getDefaultInstance()) return this;
+        if (other.hasBlockIdentifier()) {
+          mergeBlockIdentifier(other.getBlockIdentifier());
+        }
+        if (other.getTimestamp() != 0L) {
+          setTimestamp(other.getTimestamp());
+        }
+        if (transactionBalanceTraceBuilder_ == null) {
+          if (!other.transactionBalanceTrace_.isEmpty()) {
+            if (transactionBalanceTrace_.isEmpty()) {
+              transactionBalanceTrace_ = other.transactionBalanceTrace_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+            } else {
+              ensureTransactionBalanceTraceIsMutable();
+              transactionBalanceTrace_.addAll(other.transactionBalanceTrace_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.transactionBalanceTrace_.isEmpty()) {
+            if (transactionBalanceTraceBuilder_.isEmpty()) {
+              transactionBalanceTraceBuilder_.dispose();
+              transactionBalanceTraceBuilder_ = null;
+              transactionBalanceTrace_ = other.transactionBalanceTrace_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+              transactionBalanceTraceBuilder_ = 
+                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
+                   getTransactionBalanceTraceFieldBuilder() : null;
+            } else {
+              transactionBalanceTraceBuilder_.addAllMessages(other.transactionBalanceTrace_);
+            }
+          }
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        org.tron.trident.proto.Response.BlockBalanceTrace parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (org.tron.trident.proto.Response.BlockBalanceTrace) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private org.tron.trident.proto.Response.BlockIdentifier blockIdentifier_;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          org.tron.trident.proto.Response.BlockIdentifier, org.tron.trident.proto.Response.BlockIdentifier.Builder, org.tron.trident.proto.Response.BlockIdentifierOrBuilder> blockIdentifierBuilder_;
+      /**
+       * <code>.protocol.BlockIdentifier block_identifier = 1;</code>
+       * @return Whether the blockIdentifier field is set.
+       */
+      public boolean hasBlockIdentifier() {
+        return blockIdentifierBuilder_ != null || blockIdentifier_ != null;
+      }
+      /**
+       * <code>.protocol.BlockIdentifier block_identifier = 1;</code>
+       * @return The blockIdentifier.
+       */
+      public org.tron.trident.proto.Response.BlockIdentifier getBlockIdentifier() {
+        if (blockIdentifierBuilder_ == null) {
+          return blockIdentifier_ == null ? org.tron.trident.proto.Response.BlockIdentifier.getDefaultInstance() : blockIdentifier_;
+        } else {
+          return blockIdentifierBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>.protocol.BlockIdentifier block_identifier = 1;</code>
+       */
+      public Builder setBlockIdentifier(org.tron.trident.proto.Response.BlockIdentifier value) {
+        if (blockIdentifierBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          blockIdentifier_ = value;
+          onChanged();
+        } else {
+          blockIdentifierBuilder_.setMessage(value);
+        }
+
+        return this;
+      }
+      /**
+       * <code>.protocol.BlockIdentifier block_identifier = 1;</code>
+       */
+      public Builder setBlockIdentifier(
+          org.tron.trident.proto.Response.BlockIdentifier.Builder builderForValue) {
+        if (blockIdentifierBuilder_ == null) {
+          blockIdentifier_ = builderForValue.build();
+          onChanged();
+        } else {
+          blockIdentifierBuilder_.setMessage(builderForValue.build());
+        }
+
+        return this;
+      }
+      /**
+       * <code>.protocol.BlockIdentifier block_identifier = 1;</code>
+       */
+      public Builder mergeBlockIdentifier(org.tron.trident.proto.Response.BlockIdentifier value) {
+        if (blockIdentifierBuilder_ == null) {
+          if (blockIdentifier_ != null) {
+            blockIdentifier_ =
+              org.tron.trident.proto.Response.BlockIdentifier.newBuilder(blockIdentifier_).mergeFrom(value).buildPartial();
+          } else {
+            blockIdentifier_ = value;
+          }
+          onChanged();
+        } else {
+          blockIdentifierBuilder_.mergeFrom(value);
+        }
+
+        return this;
+      }
+      /**
+       * <code>.protocol.BlockIdentifier block_identifier = 1;</code>
+       */
+      public Builder clearBlockIdentifier() {
+        if (blockIdentifierBuilder_ == null) {
+          blockIdentifier_ = null;
+          onChanged();
+        } else {
+          blockIdentifier_ = null;
+          blockIdentifierBuilder_ = null;
+        }
+
+        return this;
+      }
+      /**
+       * <code>.protocol.BlockIdentifier block_identifier = 1;</code>
+       */
+      public org.tron.trident.proto.Response.BlockIdentifier.Builder getBlockIdentifierBuilder() {
+        
+        onChanged();
+        return getBlockIdentifierFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>.protocol.BlockIdentifier block_identifier = 1;</code>
+       */
+      public org.tron.trident.proto.Response.BlockIdentifierOrBuilder getBlockIdentifierOrBuilder() {
+        if (blockIdentifierBuilder_ != null) {
+          return blockIdentifierBuilder_.getMessageOrBuilder();
+        } else {
+          return blockIdentifier_ == null ?
+              org.tron.trident.proto.Response.BlockIdentifier.getDefaultInstance() : blockIdentifier_;
+        }
+      }
+      /**
+       * <code>.protocol.BlockIdentifier block_identifier = 1;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          org.tron.trident.proto.Response.BlockIdentifier, org.tron.trident.proto.Response.BlockIdentifier.Builder, org.tron.trident.proto.Response.BlockIdentifierOrBuilder> 
+          getBlockIdentifierFieldBuilder() {
+        if (blockIdentifierBuilder_ == null) {
+          blockIdentifierBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              org.tron.trident.proto.Response.BlockIdentifier, org.tron.trident.proto.Response.BlockIdentifier.Builder, org.tron.trident.proto.Response.BlockIdentifierOrBuilder>(
+                  getBlockIdentifier(),
+                  getParentForChildren(),
+                  isClean());
+          blockIdentifier_ = null;
+        }
+        return blockIdentifierBuilder_;
+      }
+
+      private long timestamp_ ;
+      /**
+       * <code>int64 timestamp = 2;</code>
+       * @return The timestamp.
+       */
+      @java.lang.Override
+      public long getTimestamp() {
+        return timestamp_;
+      }
+      /**
+       * <code>int64 timestamp = 2;</code>
+       * @param value The timestamp to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTimestamp(long value) {
+        
+        timestamp_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int64 timestamp = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearTimestamp() {
+        
+        timestamp_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private java.util.List<org.tron.trident.proto.Response.TransactionBalanceTrace> transactionBalanceTrace_ =
+        java.util.Collections.emptyList();
+      private void ensureTransactionBalanceTraceIsMutable() {
+        if (!((bitField0_ & 0x00000001) != 0)) {
+          transactionBalanceTrace_ = new java.util.ArrayList<org.tron.trident.proto.Response.TransactionBalanceTrace>(transactionBalanceTrace_);
+          bitField0_ |= 0x00000001;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          org.tron.trident.proto.Response.TransactionBalanceTrace, org.tron.trident.proto.Response.TransactionBalanceTrace.Builder, org.tron.trident.proto.Response.TransactionBalanceTraceOrBuilder> transactionBalanceTraceBuilder_;
+
+      /**
+       * <pre>
+       *  BlockIdentifier parent_block_identifier = 4;
+       * </pre>
+       *
+       * <code>repeated .protocol.TransactionBalanceTrace transaction_balance_trace = 3;</code>
+       */
+      public java.util.List<org.tron.trident.proto.Response.TransactionBalanceTrace> getTransactionBalanceTraceList() {
+        if (transactionBalanceTraceBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(transactionBalanceTrace_);
+        } else {
+          return transactionBalanceTraceBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <pre>
+       *  BlockIdentifier parent_block_identifier = 4;
+       * </pre>
+       *
+       * <code>repeated .protocol.TransactionBalanceTrace transaction_balance_trace = 3;</code>
+       */
+      public int getTransactionBalanceTraceCount() {
+        if (transactionBalanceTraceBuilder_ == null) {
+          return transactionBalanceTrace_.size();
+        } else {
+          return transactionBalanceTraceBuilder_.getCount();
+        }
+      }
+      /**
+       * <pre>
+       *  BlockIdentifier parent_block_identifier = 4;
+       * </pre>
+       *
+       * <code>repeated .protocol.TransactionBalanceTrace transaction_balance_trace = 3;</code>
+       */
+      public org.tron.trident.proto.Response.TransactionBalanceTrace getTransactionBalanceTrace(int index) {
+        if (transactionBalanceTraceBuilder_ == null) {
+          return transactionBalanceTrace_.get(index);
+        } else {
+          return transactionBalanceTraceBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <pre>
+       *  BlockIdentifier parent_block_identifier = 4;
+       * </pre>
+       *
+       * <code>repeated .protocol.TransactionBalanceTrace transaction_balance_trace = 3;</code>
+       */
+      public Builder setTransactionBalanceTrace(
+          int index, org.tron.trident.proto.Response.TransactionBalanceTrace value) {
+        if (transactionBalanceTraceBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureTransactionBalanceTraceIsMutable();
+          transactionBalanceTrace_.set(index, value);
+          onChanged();
+        } else {
+          transactionBalanceTraceBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       *  BlockIdentifier parent_block_identifier = 4;
+       * </pre>
+       *
+       * <code>repeated .protocol.TransactionBalanceTrace transaction_balance_trace = 3;</code>
+       */
+      public Builder setTransactionBalanceTrace(
+          int index, org.tron.trident.proto.Response.TransactionBalanceTrace.Builder builderForValue) {
+        if (transactionBalanceTraceBuilder_ == null) {
+          ensureTransactionBalanceTraceIsMutable();
+          transactionBalanceTrace_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          transactionBalanceTraceBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       *  BlockIdentifier parent_block_identifier = 4;
+       * </pre>
+       *
+       * <code>repeated .protocol.TransactionBalanceTrace transaction_balance_trace = 3;</code>
+       */
+      public Builder addTransactionBalanceTrace(org.tron.trident.proto.Response.TransactionBalanceTrace value) {
+        if (transactionBalanceTraceBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureTransactionBalanceTraceIsMutable();
+          transactionBalanceTrace_.add(value);
+          onChanged();
+        } else {
+          transactionBalanceTraceBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       *  BlockIdentifier parent_block_identifier = 4;
+       * </pre>
+       *
+       * <code>repeated .protocol.TransactionBalanceTrace transaction_balance_trace = 3;</code>
+       */
+      public Builder addTransactionBalanceTrace(
+          int index, org.tron.trident.proto.Response.TransactionBalanceTrace value) {
+        if (transactionBalanceTraceBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureTransactionBalanceTraceIsMutable();
+          transactionBalanceTrace_.add(index, value);
+          onChanged();
+        } else {
+          transactionBalanceTraceBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       *  BlockIdentifier parent_block_identifier = 4;
+       * </pre>
+       *
+       * <code>repeated .protocol.TransactionBalanceTrace transaction_balance_trace = 3;</code>
+       */
+      public Builder addTransactionBalanceTrace(
+          org.tron.trident.proto.Response.TransactionBalanceTrace.Builder builderForValue) {
+        if (transactionBalanceTraceBuilder_ == null) {
+          ensureTransactionBalanceTraceIsMutable();
+          transactionBalanceTrace_.add(builderForValue.build());
+          onChanged();
+        } else {
+          transactionBalanceTraceBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       *  BlockIdentifier parent_block_identifier = 4;
+       * </pre>
+       *
+       * <code>repeated .protocol.TransactionBalanceTrace transaction_balance_trace = 3;</code>
+       */
+      public Builder addTransactionBalanceTrace(
+          int index, org.tron.trident.proto.Response.TransactionBalanceTrace.Builder builderForValue) {
+        if (transactionBalanceTraceBuilder_ == null) {
+          ensureTransactionBalanceTraceIsMutable();
+          transactionBalanceTrace_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          transactionBalanceTraceBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       *  BlockIdentifier parent_block_identifier = 4;
+       * </pre>
+       *
+       * <code>repeated .protocol.TransactionBalanceTrace transaction_balance_trace = 3;</code>
+       */
+      public Builder addAllTransactionBalanceTrace(
+          java.lang.Iterable<? extends org.tron.trident.proto.Response.TransactionBalanceTrace> values) {
+        if (transactionBalanceTraceBuilder_ == null) {
+          ensureTransactionBalanceTraceIsMutable();
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, transactionBalanceTrace_);
+          onChanged();
+        } else {
+          transactionBalanceTraceBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       *  BlockIdentifier parent_block_identifier = 4;
+       * </pre>
+       *
+       * <code>repeated .protocol.TransactionBalanceTrace transaction_balance_trace = 3;</code>
+       */
+      public Builder clearTransactionBalanceTrace() {
+        if (transactionBalanceTraceBuilder_ == null) {
+          transactionBalanceTrace_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+          onChanged();
+        } else {
+          transactionBalanceTraceBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       *  BlockIdentifier parent_block_identifier = 4;
+       * </pre>
+       *
+       * <code>repeated .protocol.TransactionBalanceTrace transaction_balance_trace = 3;</code>
+       */
+      public Builder removeTransactionBalanceTrace(int index) {
+        if (transactionBalanceTraceBuilder_ == null) {
+          ensureTransactionBalanceTraceIsMutable();
+          transactionBalanceTrace_.remove(index);
+          onChanged();
+        } else {
+          transactionBalanceTraceBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       *  BlockIdentifier parent_block_identifier = 4;
+       * </pre>
+       *
+       * <code>repeated .protocol.TransactionBalanceTrace transaction_balance_trace = 3;</code>
+       */
+      public org.tron.trident.proto.Response.TransactionBalanceTrace.Builder getTransactionBalanceTraceBuilder(
+          int index) {
+        return getTransactionBalanceTraceFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <pre>
+       *  BlockIdentifier parent_block_identifier = 4;
+       * </pre>
+       *
+       * <code>repeated .protocol.TransactionBalanceTrace transaction_balance_trace = 3;</code>
+       */
+      public org.tron.trident.proto.Response.TransactionBalanceTraceOrBuilder getTransactionBalanceTraceOrBuilder(
+          int index) {
+        if (transactionBalanceTraceBuilder_ == null) {
+          return transactionBalanceTrace_.get(index);  } else {
+          return transactionBalanceTraceBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <pre>
+       *  BlockIdentifier parent_block_identifier = 4;
+       * </pre>
+       *
+       * <code>repeated .protocol.TransactionBalanceTrace transaction_balance_trace = 3;</code>
+       */
+      public java.util.List<? extends org.tron.trident.proto.Response.TransactionBalanceTraceOrBuilder> 
+           getTransactionBalanceTraceOrBuilderList() {
+        if (transactionBalanceTraceBuilder_ != null) {
+          return transactionBalanceTraceBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(transactionBalanceTrace_);
+        }
+      }
+      /**
+       * <pre>
+       *  BlockIdentifier parent_block_identifier = 4;
+       * </pre>
+       *
+       * <code>repeated .protocol.TransactionBalanceTrace transaction_balance_trace = 3;</code>
+       */
+      public org.tron.trident.proto.Response.TransactionBalanceTrace.Builder addTransactionBalanceTraceBuilder() {
+        return getTransactionBalanceTraceFieldBuilder().addBuilder(
+            org.tron.trident.proto.Response.TransactionBalanceTrace.getDefaultInstance());
+      }
+      /**
+       * <pre>
+       *  BlockIdentifier parent_block_identifier = 4;
+       * </pre>
+       *
+       * <code>repeated .protocol.TransactionBalanceTrace transaction_balance_trace = 3;</code>
+       */
+      public org.tron.trident.proto.Response.TransactionBalanceTrace.Builder addTransactionBalanceTraceBuilder(
+          int index) {
+        return getTransactionBalanceTraceFieldBuilder().addBuilder(
+            index, org.tron.trident.proto.Response.TransactionBalanceTrace.getDefaultInstance());
+      }
+      /**
+       * <pre>
+       *  BlockIdentifier parent_block_identifier = 4;
+       * </pre>
+       *
+       * <code>repeated .protocol.TransactionBalanceTrace transaction_balance_trace = 3;</code>
+       */
+      public java.util.List<org.tron.trident.proto.Response.TransactionBalanceTrace.Builder> 
+           getTransactionBalanceTraceBuilderList() {
+        return getTransactionBalanceTraceFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          org.tron.trident.proto.Response.TransactionBalanceTrace, org.tron.trident.proto.Response.TransactionBalanceTrace.Builder, org.tron.trident.proto.Response.TransactionBalanceTraceOrBuilder> 
+          getTransactionBalanceTraceFieldBuilder() {
+        if (transactionBalanceTraceBuilder_ == null) {
+          transactionBalanceTraceBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+              org.tron.trident.proto.Response.TransactionBalanceTrace, org.tron.trident.proto.Response.TransactionBalanceTrace.Builder, org.tron.trident.proto.Response.TransactionBalanceTraceOrBuilder>(
+                  transactionBalanceTrace_,
+                  ((bitField0_ & 0x00000001) != 0),
+                  getParentForChildren(),
+                  isClean());
+          transactionBalanceTrace_ = null;
+        }
+        return transactionBalanceTraceBuilder_;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:protocol.BlockBalanceTrace)
+    }
+
+    // @@protoc_insertion_point(class_scope:protocol.BlockBalanceTrace)
+    private static final org.tron.trident.proto.Response.BlockBalanceTrace DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new org.tron.trident.proto.Response.BlockBalanceTrace();
+    }
+
+    public static org.tron.trident.proto.Response.BlockBalanceTrace getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<BlockBalanceTrace>
+        PARSER = new com.google.protobuf.AbstractParser<BlockBalanceTrace>() {
+      @java.lang.Override
+      public BlockBalanceTrace parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new BlockBalanceTrace(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<BlockBalanceTrace> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<BlockBalanceTrace> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public org.tron.trident.proto.Response.BlockBalanceTrace getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface TransactionBalanceTraceOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:protocol.TransactionBalanceTrace)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>bytes transaction_identifier = 1;</code>
+     * @return The transactionIdentifier.
+     */
+    com.google.protobuf.ByteString getTransactionIdentifier();
+
+    /**
+     * <code>repeated .protocol.TransactionBalanceTrace.Operation operation = 2;</code>
+     */
+    java.util.List<org.tron.trident.proto.Response.TransactionBalanceTrace.Operation> 
+        getOperationList();
+    /**
+     * <code>repeated .protocol.TransactionBalanceTrace.Operation operation = 2;</code>
+     */
+    org.tron.trident.proto.Response.TransactionBalanceTrace.Operation getOperation(int index);
+    /**
+     * <code>repeated .protocol.TransactionBalanceTrace.Operation operation = 2;</code>
+     */
+    int getOperationCount();
+    /**
+     * <code>repeated .protocol.TransactionBalanceTrace.Operation operation = 2;</code>
+     */
+    java.util.List<? extends org.tron.trident.proto.Response.TransactionBalanceTrace.OperationOrBuilder> 
+        getOperationOrBuilderList();
+    /**
+     * <code>repeated .protocol.TransactionBalanceTrace.Operation operation = 2;</code>
+     */
+    org.tron.trident.proto.Response.TransactionBalanceTrace.OperationOrBuilder getOperationOrBuilder(
+        int index);
+
+    /**
+     * <code>string type = 3;</code>
+     * @return The type.
+     */
+    java.lang.String getType();
+    /**
+     * <code>string type = 3;</code>
+     * @return The bytes for type.
+     */
+    com.google.protobuf.ByteString
+        getTypeBytes();
+
+    /**
+     * <code>string status = 4;</code>
+     * @return The status.
+     */
+    java.lang.String getStatus();
+    /**
+     * <code>string status = 4;</code>
+     * @return The bytes for status.
+     */
+    com.google.protobuf.ByteString
+        getStatusBytes();
+  }
+  /**
+   * Protobuf type {@code protocol.TransactionBalanceTrace}
+   */
+  public static final class TransactionBalanceTrace extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:protocol.TransactionBalanceTrace)
+      TransactionBalanceTraceOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use TransactionBalanceTrace.newBuilder() to construct.
+    private TransactionBalanceTrace(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private TransactionBalanceTrace() {
+      transactionIdentifier_ = com.google.protobuf.ByteString.EMPTY;
+      operation_ = java.util.Collections.emptyList();
+      type_ = "";
+      status_ = "";
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new TransactionBalanceTrace();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private TransactionBalanceTrace(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+
+              transactionIdentifier_ = input.readBytes();
+              break;
+            }
+            case 18: {
+              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
+                operation_ = new java.util.ArrayList<org.tron.trident.proto.Response.TransactionBalanceTrace.Operation>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              operation_.add(
+                  input.readMessage(org.tron.trident.proto.Response.TransactionBalanceTrace.Operation.parser(), extensionRegistry));
+              break;
+            }
+            case 26: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              type_ = s;
+              break;
+            }
+            case 34: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              status_ = s;
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000001) != 0)) {
+          operation_ = java.util.Collections.unmodifiableList(operation_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return org.tron.trident.proto.Response.internal_static_protocol_TransactionBalanceTrace_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return org.tron.trident.proto.Response.internal_static_protocol_TransactionBalanceTrace_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              org.tron.trident.proto.Response.TransactionBalanceTrace.class, org.tron.trident.proto.Response.TransactionBalanceTrace.Builder.class);
+    }
+
+    public interface OperationOrBuilder extends
+        // @@protoc_insertion_point(interface_extends:protocol.TransactionBalanceTrace.Operation)
+        com.google.protobuf.MessageOrBuilder {
+
+      /**
+       * <code>int64 operation_identifier = 1;</code>
+       * @return The operationIdentifier.
+       */
+      long getOperationIdentifier();
+
+      /**
+       * <code>bytes address = 2;</code>
+       * @return The address.
+       */
+      com.google.protobuf.ByteString getAddress();
+
+      /**
+       * <code>int64 amount = 3;</code>
+       * @return The amount.
+       */
+      long getAmount();
+    }
+    /**
+     * Protobuf type {@code protocol.TransactionBalanceTrace.Operation}
+     */
+    public static final class Operation extends
+        com.google.protobuf.GeneratedMessageV3 implements
+        // @@protoc_insertion_point(message_implements:protocol.TransactionBalanceTrace.Operation)
+        OperationOrBuilder {
+    private static final long serialVersionUID = 0L;
+      // Use Operation.newBuilder() to construct.
+      private Operation(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+        super(builder);
+      }
+      private Operation() {
+        address_ = com.google.protobuf.ByteString.EMPTY;
+      }
+
+      @java.lang.Override
+      @SuppressWarnings({"unused"})
+      protected java.lang.Object newInstance(
+          UnusedPrivateParameter unused) {
+        return new Operation();
+      }
+
+      @java.lang.Override
+      public final com.google.protobuf.UnknownFieldSet
+      getUnknownFields() {
+        return this.unknownFields;
+      }
+      private Operation(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        this();
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder();
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 8: {
+
+                operationIdentifier_ = input.readInt64();
+                break;
+              }
+              case 18: {
+
+                address_ = input.readBytes();
+                break;
+              }
+              case 24: {
+
+                amount_ = input.readInt64();
+                break;
+              }
+              default: {
+                if (!parseUnknownField(
+                    input, unknownFields, extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
+              }
+            }
+          }
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(this);
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(
+              e).setUnfinishedMessage(this);
+        } finally {
+          this.unknownFields = unknownFields.build();
+          makeExtensionsImmutable();
+        }
+      }
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return org.tron.trident.proto.Response.internal_static_protocol_TransactionBalanceTrace_Operation_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return org.tron.trident.proto.Response.internal_static_protocol_TransactionBalanceTrace_Operation_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                org.tron.trident.proto.Response.TransactionBalanceTrace.Operation.class, org.tron.trident.proto.Response.TransactionBalanceTrace.Operation.Builder.class);
+      }
+
+      public static final int OPERATION_IDENTIFIER_FIELD_NUMBER = 1;
+      private long operationIdentifier_;
+      /**
+       * <code>int64 operation_identifier = 1;</code>
+       * @return The operationIdentifier.
+       */
+      @java.lang.Override
+      public long getOperationIdentifier() {
+        return operationIdentifier_;
+      }
+
+      public static final int ADDRESS_FIELD_NUMBER = 2;
+      private com.google.protobuf.ByteString address_;
+      /**
+       * <code>bytes address = 2;</code>
+       * @return The address.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString getAddress() {
+        return address_;
+      }
+
+      public static final int AMOUNT_FIELD_NUMBER = 3;
+      private long amount_;
+      /**
+       * <code>int64 amount = 3;</code>
+       * @return The amount.
+       */
+      @java.lang.Override
+      public long getAmount() {
+        return amount_;
+      }
+
+      private byte memoizedIsInitialized = -1;
+      @java.lang.Override
+      public final boolean isInitialized() {
+        byte isInitialized = memoizedIsInitialized;
+        if (isInitialized == 1) return true;
+        if (isInitialized == 0) return false;
+
+        memoizedIsInitialized = 1;
+        return true;
+      }
+
+      @java.lang.Override
+      public void writeTo(com.google.protobuf.CodedOutputStream output)
+                          throws java.io.IOException {
+        if (operationIdentifier_ != 0L) {
+          output.writeInt64(1, operationIdentifier_);
+        }
+        if (!address_.isEmpty()) {
+          output.writeBytes(2, address_);
+        }
+        if (amount_ != 0L) {
+          output.writeInt64(3, amount_);
+        }
+        unknownFields.writeTo(output);
+      }
+
+      @java.lang.Override
+      public int getSerializedSize() {
+        int size = memoizedSize;
+        if (size != -1) return size;
+
+        size = 0;
+        if (operationIdentifier_ != 0L) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeInt64Size(1, operationIdentifier_);
+        }
+        if (!address_.isEmpty()) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeBytesSize(2, address_);
+        }
+        if (amount_ != 0L) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeInt64Size(3, amount_);
+        }
+        size += unknownFields.getSerializedSize();
+        memoizedSize = size;
+        return size;
+      }
+
+      @java.lang.Override
+      public boolean equals(final java.lang.Object obj) {
+        if (obj == this) {
+         return true;
+        }
+        if (!(obj instanceof org.tron.trident.proto.Response.TransactionBalanceTrace.Operation)) {
+          return super.equals(obj);
+        }
+        org.tron.trident.proto.Response.TransactionBalanceTrace.Operation other = (org.tron.trident.proto.Response.TransactionBalanceTrace.Operation) obj;
+
+        if (getOperationIdentifier()
+            != other.getOperationIdentifier()) return false;
+        if (!getAddress()
+            .equals(other.getAddress())) return false;
+        if (getAmount()
+            != other.getAmount()) return false;
+        if (!unknownFields.equals(other.unknownFields)) return false;
+        return true;
+      }
+
+      @java.lang.Override
+      public int hashCode() {
+        if (memoizedHashCode != 0) {
+          return memoizedHashCode;
+        }
+        int hash = 41;
+        hash = (19 * hash) + getDescriptor().hashCode();
+        hash = (37 * hash) + OPERATION_IDENTIFIER_FIELD_NUMBER;
+        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+            getOperationIdentifier());
+        hash = (37 * hash) + ADDRESS_FIELD_NUMBER;
+        hash = (53 * hash) + getAddress().hashCode();
+        hash = (37 * hash) + AMOUNT_FIELD_NUMBER;
+        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+            getAmount());
+        hash = (29 * hash) + unknownFields.hashCode();
+        memoizedHashCode = hash;
+        return hash;
+      }
+
+      public static org.tron.trident.proto.Response.TransactionBalanceTrace.Operation parseFrom(
+          java.nio.ByteBuffer data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static org.tron.trident.proto.Response.TransactionBalanceTrace.Operation parseFrom(
+          java.nio.ByteBuffer data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static org.tron.trident.proto.Response.TransactionBalanceTrace.Operation parseFrom(
+          com.google.protobuf.ByteString data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static org.tron.trident.proto.Response.TransactionBalanceTrace.Operation parseFrom(
+          com.google.protobuf.ByteString data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static org.tron.trident.proto.Response.TransactionBalanceTrace.Operation parseFrom(byte[] data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static org.tron.trident.proto.Response.TransactionBalanceTrace.Operation parseFrom(
+          byte[] data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static org.tron.trident.proto.Response.TransactionBalanceTrace.Operation parseFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input);
+      }
+      public static org.tron.trident.proto.Response.TransactionBalanceTrace.Operation parseFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input, extensionRegistry);
+      }
+      public static org.tron.trident.proto.Response.TransactionBalanceTrace.Operation parseDelimitedFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseDelimitedWithIOException(PARSER, input);
+      }
+      public static org.tron.trident.proto.Response.TransactionBalanceTrace.Operation parseDelimitedFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+      }
+      public static org.tron.trident.proto.Response.TransactionBalanceTrace.Operation parseFrom(
+          com.google.protobuf.CodedInputStream input)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input);
+      }
+      public static org.tron.trident.proto.Response.TransactionBalanceTrace.Operation parseFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input, extensionRegistry);
+      }
+
+      @java.lang.Override
+      public Builder newBuilderForType() { return newBuilder(); }
+      public static Builder newBuilder() {
+        return DEFAULT_INSTANCE.toBuilder();
+      }
+      public static Builder newBuilder(org.tron.trident.proto.Response.TransactionBalanceTrace.Operation prototype) {
+        return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+      }
+      @java.lang.Override
+      public Builder toBuilder() {
+        return this == DEFAULT_INSTANCE
+            ? new Builder() : new Builder().mergeFrom(this);
+      }
+
+      @java.lang.Override
+      protected Builder newBuilderForType(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        Builder builder = new Builder(parent);
+        return builder;
+      }
+      /**
+       * Protobuf type {@code protocol.TransactionBalanceTrace.Operation}
+       */
+      public static final class Builder extends
+          com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+          // @@protoc_insertion_point(builder_implements:protocol.TransactionBalanceTrace.Operation)
+          org.tron.trident.proto.Response.TransactionBalanceTrace.OperationOrBuilder {
+        public static final com.google.protobuf.Descriptors.Descriptor
+            getDescriptor() {
+          return org.tron.trident.proto.Response.internal_static_protocol_TransactionBalanceTrace_Operation_descriptor;
+        }
+
+        @java.lang.Override
+        protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+            internalGetFieldAccessorTable() {
+          return org.tron.trident.proto.Response.internal_static_protocol_TransactionBalanceTrace_Operation_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                  org.tron.trident.proto.Response.TransactionBalanceTrace.Operation.class, org.tron.trident.proto.Response.TransactionBalanceTrace.Operation.Builder.class);
+        }
+
+        // Construct using org.tron.trident.proto.Response.TransactionBalanceTrace.Operation.newBuilder()
+        private Builder() {
+          maybeForceBuilderInitialization();
+        }
+
+        private Builder(
+            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          super(parent);
+          maybeForceBuilderInitialization();
+        }
+        private void maybeForceBuilderInitialization() {
+          if (com.google.protobuf.GeneratedMessageV3
+                  .alwaysUseFieldBuilders) {
+          }
+        }
+        @java.lang.Override
+        public Builder clear() {
+          super.clear();
+          operationIdentifier_ = 0L;
+
+          address_ = com.google.protobuf.ByteString.EMPTY;
+
+          amount_ = 0L;
+
+          return this;
+        }
+
+        @java.lang.Override
+        public com.google.protobuf.Descriptors.Descriptor
+            getDescriptorForType() {
+          return org.tron.trident.proto.Response.internal_static_protocol_TransactionBalanceTrace_Operation_descriptor;
+        }
+
+        @java.lang.Override
+        public org.tron.trident.proto.Response.TransactionBalanceTrace.Operation getDefaultInstanceForType() {
+          return org.tron.trident.proto.Response.TransactionBalanceTrace.Operation.getDefaultInstance();
+        }
+
+        @java.lang.Override
+        public org.tron.trident.proto.Response.TransactionBalanceTrace.Operation build() {
+          org.tron.trident.proto.Response.TransactionBalanceTrace.Operation result = buildPartial();
+          if (!result.isInitialized()) {
+            throw newUninitializedMessageException(result);
+          }
+          return result;
+        }
+
+        @java.lang.Override
+        public org.tron.trident.proto.Response.TransactionBalanceTrace.Operation buildPartial() {
+          org.tron.trident.proto.Response.TransactionBalanceTrace.Operation result = new org.tron.trident.proto.Response.TransactionBalanceTrace.Operation(this);
+          result.operationIdentifier_ = operationIdentifier_;
+          result.address_ = address_;
+          result.amount_ = amount_;
+          onBuilt();
+          return result;
+        }
+
+        @java.lang.Override
+        public Builder clone() {
+          return super.clone();
+        }
+        @java.lang.Override
+        public Builder setField(
+            com.google.protobuf.Descriptors.FieldDescriptor field,
+            java.lang.Object value) {
+          return super.setField(field, value);
+        }
+        @java.lang.Override
+        public Builder clearField(
+            com.google.protobuf.Descriptors.FieldDescriptor field) {
+          return super.clearField(field);
+        }
+        @java.lang.Override
+        public Builder clearOneof(
+            com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+          return super.clearOneof(oneof);
+        }
+        @java.lang.Override
+        public Builder setRepeatedField(
+            com.google.protobuf.Descriptors.FieldDescriptor field,
+            int index, java.lang.Object value) {
+          return super.setRepeatedField(field, index, value);
+        }
+        @java.lang.Override
+        public Builder addRepeatedField(
+            com.google.protobuf.Descriptors.FieldDescriptor field,
+            java.lang.Object value) {
+          return super.addRepeatedField(field, value);
+        }
+        @java.lang.Override
+        public Builder mergeFrom(com.google.protobuf.Message other) {
+          if (other instanceof org.tron.trident.proto.Response.TransactionBalanceTrace.Operation) {
+            return mergeFrom((org.tron.trident.proto.Response.TransactionBalanceTrace.Operation)other);
+          } else {
+            super.mergeFrom(other);
+            return this;
+          }
+        }
+
+        public Builder mergeFrom(org.tron.trident.proto.Response.TransactionBalanceTrace.Operation other) {
+          if (other == org.tron.trident.proto.Response.TransactionBalanceTrace.Operation.getDefaultInstance()) return this;
+          if (other.getOperationIdentifier() != 0L) {
+            setOperationIdentifier(other.getOperationIdentifier());
+          }
+          if (other.getAddress() != com.google.protobuf.ByteString.EMPTY) {
+            setAddress(other.getAddress());
+          }
+          if (other.getAmount() != 0L) {
+            setAmount(other.getAmount());
+          }
+          this.mergeUnknownFields(other.unknownFields);
+          onChanged();
+          return this;
+        }
+
+        @java.lang.Override
+        public final boolean isInitialized() {
+          return true;
+        }
+
+        @java.lang.Override
+        public Builder mergeFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+          org.tron.trident.proto.Response.TransactionBalanceTrace.Operation parsedMessage = null;
+          try {
+            parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            parsedMessage = (org.tron.trident.proto.Response.TransactionBalanceTrace.Operation) e.getUnfinishedMessage();
+            throw e.unwrapIOException();
+          } finally {
+            if (parsedMessage != null) {
+              mergeFrom(parsedMessage);
+            }
+          }
+          return this;
+        }
+
+        private long operationIdentifier_ ;
+        /**
+         * <code>int64 operation_identifier = 1;</code>
+         * @return The operationIdentifier.
+         */
+        @java.lang.Override
+        public long getOperationIdentifier() {
+          return operationIdentifier_;
+        }
+        /**
+         * <code>int64 operation_identifier = 1;</code>
+         * @param value The operationIdentifier to set.
+         * @return This builder for chaining.
+         */
+        public Builder setOperationIdentifier(long value) {
+          
+          operationIdentifier_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>int64 operation_identifier = 1;</code>
+         * @return This builder for chaining.
+         */
+        public Builder clearOperationIdentifier() {
+          
+          operationIdentifier_ = 0L;
+          onChanged();
+          return this;
+        }
+
+        private com.google.protobuf.ByteString address_ = com.google.protobuf.ByteString.EMPTY;
+        /**
+         * <code>bytes address = 2;</code>
+         * @return The address.
+         */
+        @java.lang.Override
+        public com.google.protobuf.ByteString getAddress() {
+          return address_;
+        }
+        /**
+         * <code>bytes address = 2;</code>
+         * @param value The address to set.
+         * @return This builder for chaining.
+         */
+        public Builder setAddress(com.google.protobuf.ByteString value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  
+          address_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>bytes address = 2;</code>
+         * @return This builder for chaining.
+         */
+        public Builder clearAddress() {
+          
+          address_ = getDefaultInstance().getAddress();
+          onChanged();
+          return this;
+        }
+
+        private long amount_ ;
+        /**
+         * <code>int64 amount = 3;</code>
+         * @return The amount.
+         */
+        @java.lang.Override
+        public long getAmount() {
+          return amount_;
+        }
+        /**
+         * <code>int64 amount = 3;</code>
+         * @param value The amount to set.
+         * @return This builder for chaining.
+         */
+        public Builder setAmount(long value) {
+          
+          amount_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>int64 amount = 3;</code>
+         * @return This builder for chaining.
+         */
+        public Builder clearAmount() {
+          
+          amount_ = 0L;
+          onChanged();
+          return this;
+        }
+        @java.lang.Override
+        public final Builder setUnknownFields(
+            final com.google.protobuf.UnknownFieldSet unknownFields) {
+          return super.setUnknownFields(unknownFields);
+        }
+
+        @java.lang.Override
+        public final Builder mergeUnknownFields(
+            final com.google.protobuf.UnknownFieldSet unknownFields) {
+          return super.mergeUnknownFields(unknownFields);
+        }
+
+
+        // @@protoc_insertion_point(builder_scope:protocol.TransactionBalanceTrace.Operation)
+      }
+
+      // @@protoc_insertion_point(class_scope:protocol.TransactionBalanceTrace.Operation)
+      private static final org.tron.trident.proto.Response.TransactionBalanceTrace.Operation DEFAULT_INSTANCE;
+      static {
+        DEFAULT_INSTANCE = new org.tron.trident.proto.Response.TransactionBalanceTrace.Operation();
+      }
+
+      public static org.tron.trident.proto.Response.TransactionBalanceTrace.Operation getDefaultInstance() {
+        return DEFAULT_INSTANCE;
+      }
+
+      private static final com.google.protobuf.Parser<Operation>
+          PARSER = new com.google.protobuf.AbstractParser<Operation>() {
+        @java.lang.Override
+        public Operation parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new Operation(input, extensionRegistry);
+        }
+      };
+
+      public static com.google.protobuf.Parser<Operation> parser() {
+        return PARSER;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Parser<Operation> getParserForType() {
+        return PARSER;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.proto.Response.TransactionBalanceTrace.Operation getDefaultInstanceForType() {
+        return DEFAULT_INSTANCE;
+      }
+
+    }
+
+    public static final int TRANSACTION_IDENTIFIER_FIELD_NUMBER = 1;
+    private com.google.protobuf.ByteString transactionIdentifier_;
+    /**
+     * <code>bytes transaction_identifier = 1;</code>
+     * @return The transactionIdentifier.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString getTransactionIdentifier() {
+      return transactionIdentifier_;
+    }
+
+    public static final int OPERATION_FIELD_NUMBER = 2;
+    private java.util.List<org.tron.trident.proto.Response.TransactionBalanceTrace.Operation> operation_;
+    /**
+     * <code>repeated .protocol.TransactionBalanceTrace.Operation operation = 2;</code>
+     */
+    @java.lang.Override
+    public java.util.List<org.tron.trident.proto.Response.TransactionBalanceTrace.Operation> getOperationList() {
+      return operation_;
+    }
+    /**
+     * <code>repeated .protocol.TransactionBalanceTrace.Operation operation = 2;</code>
+     */
+    @java.lang.Override
+    public java.util.List<? extends org.tron.trident.proto.Response.TransactionBalanceTrace.OperationOrBuilder> 
+        getOperationOrBuilderList() {
+      return operation_;
+    }
+    /**
+     * <code>repeated .protocol.TransactionBalanceTrace.Operation operation = 2;</code>
+     */
+    @java.lang.Override
+    public int getOperationCount() {
+      return operation_.size();
+    }
+    /**
+     * <code>repeated .protocol.TransactionBalanceTrace.Operation operation = 2;</code>
+     */
+    @java.lang.Override
+    public org.tron.trident.proto.Response.TransactionBalanceTrace.Operation getOperation(int index) {
+      return operation_.get(index);
+    }
+    /**
+     * <code>repeated .protocol.TransactionBalanceTrace.Operation operation = 2;</code>
+     */
+    @java.lang.Override
+    public org.tron.trident.proto.Response.TransactionBalanceTrace.OperationOrBuilder getOperationOrBuilder(
+        int index) {
+      return operation_.get(index);
+    }
+
+    public static final int TYPE_FIELD_NUMBER = 3;
+    private volatile java.lang.Object type_;
+    /**
+     * <code>string type = 3;</code>
+     * @return The type.
+     */
+    @java.lang.Override
+    public java.lang.String getType() {
+      java.lang.Object ref = type_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        type_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string type = 3;</code>
+     * @return The bytes for type.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getTypeBytes() {
+      java.lang.Object ref = type_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        type_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int STATUS_FIELD_NUMBER = 4;
+    private volatile java.lang.Object status_;
+    /**
+     * <code>string status = 4;</code>
+     * @return The status.
+     */
+    @java.lang.Override
+    public java.lang.String getStatus() {
+      java.lang.Object ref = status_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        status_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string status = 4;</code>
+     * @return The bytes for status.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getStatusBytes() {
+      java.lang.Object ref = status_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        status_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!transactionIdentifier_.isEmpty()) {
+        output.writeBytes(1, transactionIdentifier_);
+      }
+      for (int i = 0; i < operation_.size(); i++) {
+        output.writeMessage(2, operation_.get(i));
+      }
+      if (!getTypeBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, type_);
+      }
+      if (!getStatusBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, status_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!transactionIdentifier_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, transactionIdentifier_);
+      }
+      for (int i = 0; i < operation_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(2, operation_.get(i));
+      }
+      if (!getTypeBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, type_);
+      }
+      if (!getStatusBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, status_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof org.tron.trident.proto.Response.TransactionBalanceTrace)) {
+        return super.equals(obj);
+      }
+      org.tron.trident.proto.Response.TransactionBalanceTrace other = (org.tron.trident.proto.Response.TransactionBalanceTrace) obj;
+
+      if (!getTransactionIdentifier()
+          .equals(other.getTransactionIdentifier())) return false;
+      if (!getOperationList()
+          .equals(other.getOperationList())) return false;
+      if (!getType()
+          .equals(other.getType())) return false;
+      if (!getStatus()
+          .equals(other.getStatus())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + TRANSACTION_IDENTIFIER_FIELD_NUMBER;
+      hash = (53 * hash) + getTransactionIdentifier().hashCode();
+      if (getOperationCount() > 0) {
+        hash = (37 * hash) + OPERATION_FIELD_NUMBER;
+        hash = (53 * hash) + getOperationList().hashCode();
+      }
+      hash = (37 * hash) + TYPE_FIELD_NUMBER;
+      hash = (53 * hash) + getType().hashCode();
+      hash = (37 * hash) + STATUS_FIELD_NUMBER;
+      hash = (53 * hash) + getStatus().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static org.tron.trident.proto.Response.TransactionBalanceTrace parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.proto.Response.TransactionBalanceTrace parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Response.TransactionBalanceTrace parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.proto.Response.TransactionBalanceTrace parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Response.TransactionBalanceTrace parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.proto.Response.TransactionBalanceTrace parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Response.TransactionBalanceTrace parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.proto.Response.TransactionBalanceTrace parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Response.TransactionBalanceTrace parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.proto.Response.TransactionBalanceTrace parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Response.TransactionBalanceTrace parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.proto.Response.TransactionBalanceTrace parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(org.tron.trident.proto.Response.TransactionBalanceTrace prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code protocol.TransactionBalanceTrace}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:protocol.TransactionBalanceTrace)
+        org.tron.trident.proto.Response.TransactionBalanceTraceOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return org.tron.trident.proto.Response.internal_static_protocol_TransactionBalanceTrace_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return org.tron.trident.proto.Response.internal_static_protocol_TransactionBalanceTrace_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                org.tron.trident.proto.Response.TransactionBalanceTrace.class, org.tron.trident.proto.Response.TransactionBalanceTrace.Builder.class);
+      }
+
+      // Construct using org.tron.trident.proto.Response.TransactionBalanceTrace.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+          getOperationFieldBuilder();
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        transactionIdentifier_ = com.google.protobuf.ByteString.EMPTY;
+
+        if (operationBuilder_ == null) {
+          operation_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+        } else {
+          operationBuilder_.clear();
+        }
+        type_ = "";
+
+        status_ = "";
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return org.tron.trident.proto.Response.internal_static_protocol_TransactionBalanceTrace_descriptor;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.proto.Response.TransactionBalanceTrace getDefaultInstanceForType() {
+        return org.tron.trident.proto.Response.TransactionBalanceTrace.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public org.tron.trident.proto.Response.TransactionBalanceTrace build() {
+        org.tron.trident.proto.Response.TransactionBalanceTrace result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.proto.Response.TransactionBalanceTrace buildPartial() {
+        org.tron.trident.proto.Response.TransactionBalanceTrace result = new org.tron.trident.proto.Response.TransactionBalanceTrace(this);
+        int from_bitField0_ = bitField0_;
+        result.transactionIdentifier_ = transactionIdentifier_;
+        if (operationBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) != 0)) {
+            operation_ = java.util.Collections.unmodifiableList(operation_);
+            bitField0_ = (bitField0_ & ~0x00000001);
+          }
+          result.operation_ = operation_;
+        } else {
+          result.operation_ = operationBuilder_.build();
+        }
+        result.type_ = type_;
+        result.status_ = status_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof org.tron.trident.proto.Response.TransactionBalanceTrace) {
+          return mergeFrom((org.tron.trident.proto.Response.TransactionBalanceTrace)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(org.tron.trident.proto.Response.TransactionBalanceTrace other) {
+        if (other == org.tron.trident.proto.Response.TransactionBalanceTrace.getDefaultInstance()) return this;
+        if (other.getTransactionIdentifier() != com.google.protobuf.ByteString.EMPTY) {
+          setTransactionIdentifier(other.getTransactionIdentifier());
+        }
+        if (operationBuilder_ == null) {
+          if (!other.operation_.isEmpty()) {
+            if (operation_.isEmpty()) {
+              operation_ = other.operation_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+            } else {
+              ensureOperationIsMutable();
+              operation_.addAll(other.operation_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.operation_.isEmpty()) {
+            if (operationBuilder_.isEmpty()) {
+              operationBuilder_.dispose();
+              operationBuilder_ = null;
+              operation_ = other.operation_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+              operationBuilder_ = 
+                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
+                   getOperationFieldBuilder() : null;
+            } else {
+              operationBuilder_.addAllMessages(other.operation_);
+            }
+          }
+        }
+        if (!other.getType().isEmpty()) {
+          type_ = other.type_;
+          onChanged();
+        }
+        if (!other.getStatus().isEmpty()) {
+          status_ = other.status_;
+          onChanged();
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        org.tron.trident.proto.Response.TransactionBalanceTrace parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (org.tron.trident.proto.Response.TransactionBalanceTrace) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private com.google.protobuf.ByteString transactionIdentifier_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <code>bytes transaction_identifier = 1;</code>
+       * @return The transactionIdentifier.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString getTransactionIdentifier() {
+        return transactionIdentifier_;
+      }
+      /**
+       * <code>bytes transaction_identifier = 1;</code>
+       * @param value The transactionIdentifier to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTransactionIdentifier(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        transactionIdentifier_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bytes transaction_identifier = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearTransactionIdentifier() {
+        
+        transactionIdentifier_ = getDefaultInstance().getTransactionIdentifier();
+        onChanged();
+        return this;
+      }
+
+      private java.util.List<org.tron.trident.proto.Response.TransactionBalanceTrace.Operation> operation_ =
+        java.util.Collections.emptyList();
+      private void ensureOperationIsMutable() {
+        if (!((bitField0_ & 0x00000001) != 0)) {
+          operation_ = new java.util.ArrayList<org.tron.trident.proto.Response.TransactionBalanceTrace.Operation>(operation_);
+          bitField0_ |= 0x00000001;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          org.tron.trident.proto.Response.TransactionBalanceTrace.Operation, org.tron.trident.proto.Response.TransactionBalanceTrace.Operation.Builder, org.tron.trident.proto.Response.TransactionBalanceTrace.OperationOrBuilder> operationBuilder_;
+
+      /**
+       * <code>repeated .protocol.TransactionBalanceTrace.Operation operation = 2;</code>
+       */
+      public java.util.List<org.tron.trident.proto.Response.TransactionBalanceTrace.Operation> getOperationList() {
+        if (operationBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(operation_);
+        } else {
+          return operationBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .protocol.TransactionBalanceTrace.Operation operation = 2;</code>
+       */
+      public int getOperationCount() {
+        if (operationBuilder_ == null) {
+          return operation_.size();
+        } else {
+          return operationBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .protocol.TransactionBalanceTrace.Operation operation = 2;</code>
+       */
+      public org.tron.trident.proto.Response.TransactionBalanceTrace.Operation getOperation(int index) {
+        if (operationBuilder_ == null) {
+          return operation_.get(index);
+        } else {
+          return operationBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .protocol.TransactionBalanceTrace.Operation operation = 2;</code>
+       */
+      public Builder setOperation(
+          int index, org.tron.trident.proto.Response.TransactionBalanceTrace.Operation value) {
+        if (operationBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureOperationIsMutable();
+          operation_.set(index, value);
+          onChanged();
+        } else {
+          operationBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .protocol.TransactionBalanceTrace.Operation operation = 2;</code>
+       */
+      public Builder setOperation(
+          int index, org.tron.trident.proto.Response.TransactionBalanceTrace.Operation.Builder builderForValue) {
+        if (operationBuilder_ == null) {
+          ensureOperationIsMutable();
+          operation_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          operationBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .protocol.TransactionBalanceTrace.Operation operation = 2;</code>
+       */
+      public Builder addOperation(org.tron.trident.proto.Response.TransactionBalanceTrace.Operation value) {
+        if (operationBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureOperationIsMutable();
+          operation_.add(value);
+          onChanged();
+        } else {
+          operationBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .protocol.TransactionBalanceTrace.Operation operation = 2;</code>
+       */
+      public Builder addOperation(
+          int index, org.tron.trident.proto.Response.TransactionBalanceTrace.Operation value) {
+        if (operationBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureOperationIsMutable();
+          operation_.add(index, value);
+          onChanged();
+        } else {
+          operationBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .protocol.TransactionBalanceTrace.Operation operation = 2;</code>
+       */
+      public Builder addOperation(
+          org.tron.trident.proto.Response.TransactionBalanceTrace.Operation.Builder builderForValue) {
+        if (operationBuilder_ == null) {
+          ensureOperationIsMutable();
+          operation_.add(builderForValue.build());
+          onChanged();
+        } else {
+          operationBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .protocol.TransactionBalanceTrace.Operation operation = 2;</code>
+       */
+      public Builder addOperation(
+          int index, org.tron.trident.proto.Response.TransactionBalanceTrace.Operation.Builder builderForValue) {
+        if (operationBuilder_ == null) {
+          ensureOperationIsMutable();
+          operation_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          operationBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .protocol.TransactionBalanceTrace.Operation operation = 2;</code>
+       */
+      public Builder addAllOperation(
+          java.lang.Iterable<? extends org.tron.trident.proto.Response.TransactionBalanceTrace.Operation> values) {
+        if (operationBuilder_ == null) {
+          ensureOperationIsMutable();
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, operation_);
+          onChanged();
+        } else {
+          operationBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .protocol.TransactionBalanceTrace.Operation operation = 2;</code>
+       */
+      public Builder clearOperation() {
+        if (operationBuilder_ == null) {
+          operation_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+          onChanged();
+        } else {
+          operationBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .protocol.TransactionBalanceTrace.Operation operation = 2;</code>
+       */
+      public Builder removeOperation(int index) {
+        if (operationBuilder_ == null) {
+          ensureOperationIsMutable();
+          operation_.remove(index);
+          onChanged();
+        } else {
+          operationBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .protocol.TransactionBalanceTrace.Operation operation = 2;</code>
+       */
+      public org.tron.trident.proto.Response.TransactionBalanceTrace.Operation.Builder getOperationBuilder(
+          int index) {
+        return getOperationFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .protocol.TransactionBalanceTrace.Operation operation = 2;</code>
+       */
+      public org.tron.trident.proto.Response.TransactionBalanceTrace.OperationOrBuilder getOperationOrBuilder(
+          int index) {
+        if (operationBuilder_ == null) {
+          return operation_.get(index);  } else {
+          return operationBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .protocol.TransactionBalanceTrace.Operation operation = 2;</code>
+       */
+      public java.util.List<? extends org.tron.trident.proto.Response.TransactionBalanceTrace.OperationOrBuilder> 
+           getOperationOrBuilderList() {
+        if (operationBuilder_ != null) {
+          return operationBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(operation_);
+        }
+      }
+      /**
+       * <code>repeated .protocol.TransactionBalanceTrace.Operation operation = 2;</code>
+       */
+      public org.tron.trident.proto.Response.TransactionBalanceTrace.Operation.Builder addOperationBuilder() {
+        return getOperationFieldBuilder().addBuilder(
+            org.tron.trident.proto.Response.TransactionBalanceTrace.Operation.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .protocol.TransactionBalanceTrace.Operation operation = 2;</code>
+       */
+      public org.tron.trident.proto.Response.TransactionBalanceTrace.Operation.Builder addOperationBuilder(
+          int index) {
+        return getOperationFieldBuilder().addBuilder(
+            index, org.tron.trident.proto.Response.TransactionBalanceTrace.Operation.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .protocol.TransactionBalanceTrace.Operation operation = 2;</code>
+       */
+      public java.util.List<org.tron.trident.proto.Response.TransactionBalanceTrace.Operation.Builder> 
+           getOperationBuilderList() {
+        return getOperationFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          org.tron.trident.proto.Response.TransactionBalanceTrace.Operation, org.tron.trident.proto.Response.TransactionBalanceTrace.Operation.Builder, org.tron.trident.proto.Response.TransactionBalanceTrace.OperationOrBuilder> 
+          getOperationFieldBuilder() {
+        if (operationBuilder_ == null) {
+          operationBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+              org.tron.trident.proto.Response.TransactionBalanceTrace.Operation, org.tron.trident.proto.Response.TransactionBalanceTrace.Operation.Builder, org.tron.trident.proto.Response.TransactionBalanceTrace.OperationOrBuilder>(
+                  operation_,
+                  ((bitField0_ & 0x00000001) != 0),
+                  getParentForChildren(),
+                  isClean());
+          operation_ = null;
+        }
+        return operationBuilder_;
+      }
+
+      private java.lang.Object type_ = "";
+      /**
+       * <code>string type = 3;</code>
+       * @return The type.
+       */
+      public java.lang.String getType() {
+        java.lang.Object ref = type_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          type_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string type = 3;</code>
+       * @return The bytes for type.
+       */
+      public com.google.protobuf.ByteString
+          getTypeBytes() {
+        java.lang.Object ref = type_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          type_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string type = 3;</code>
+       * @param value The type to set.
+       * @return This builder for chaining.
+       */
+      public Builder setType(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        type_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string type = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearType() {
+        
+        type_ = getDefaultInstance().getType();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string type = 3;</code>
+       * @param value The bytes for type to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTypeBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        type_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object status_ = "";
+      /**
+       * <code>string status = 4;</code>
+       * @return The status.
+       */
+      public java.lang.String getStatus() {
+        java.lang.Object ref = status_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          status_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string status = 4;</code>
+       * @return The bytes for status.
+       */
+      public com.google.protobuf.ByteString
+          getStatusBytes() {
+        java.lang.Object ref = status_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          status_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string status = 4;</code>
+       * @param value The status to set.
+       * @return This builder for chaining.
+       */
+      public Builder setStatus(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        status_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string status = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearStatus() {
+        
+        status_ = getDefaultInstance().getStatus();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string status = 4;</code>
+       * @param value The bytes for status to set.
+       * @return This builder for chaining.
+       */
+      public Builder setStatusBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        status_ = value;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:protocol.TransactionBalanceTrace)
+    }
+
+    // @@protoc_insertion_point(class_scope:protocol.TransactionBalanceTrace)
+    private static final org.tron.trident.proto.Response.TransactionBalanceTrace DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new org.tron.trident.proto.Response.TransactionBalanceTrace();
+    }
+
+    public static org.tron.trident.proto.Response.TransactionBalanceTrace getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<TransactionBalanceTrace>
+        PARSER = new com.google.protobuf.AbstractParser<TransactionBalanceTrace>() {
+      @java.lang.Override
+      public TransactionBalanceTrace parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new TransactionBalanceTrace(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<TransactionBalanceTrace> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<TransactionBalanceTrace> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public org.tron.trident.proto.Response.TransactionBalanceTrace getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_protocol_BlockExtention_descriptor;
   private static final 
@@ -67897,6 +71440,26 @@ public final class Response {
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_protocol_AccountResourceMessage_AssetNetLimitEntry_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_protocol_BlockIdentifier_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_protocol_BlockIdentifier_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_protocol_BlockBalanceTrace_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_protocol_BlockBalanceTrace_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_protocol_TransactionBalanceTrace_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_protocol_TransactionBalanceTrace_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_protocol_TransactionBalanceTrace_Operation_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_protocol_TransactionBalanceTrace_Operation_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -68211,8 +71774,19 @@ public final class Response {
       "rageUsed\030\025 \001(\003\022\024\n\014storageLimit\030\026 \001(\003\0323\n\021" +
       "AssetNetUsedEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030" +
       "\002 \001(\003:\0028\001\0324\n\022AssetNetLimitEntry\022\013\n\003key\030\001" +
-      " \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001B\030\n\026org.tron.trid" +
-      "ent.protob\006proto3"
+      " \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001\"/\n\017BlockIdentifi" +
+      "er\022\014\n\004hash\030\001 \001(\014\022\016\n\006number\030\002 \001(\003\"\241\001\n\021Blo" +
+      "ckBalanceTrace\0223\n\020block_identifier\030\001 \001(\013" +
+      "2\031.protocol.BlockIdentifier\022\021\n\ttimestamp" +
+      "\030\002 \001(\003\022D\n\031transaction_balance_trace\030\003 \003(" +
+      "\0132!.protocol.TransactionBalanceTrace\"\343\001\n" +
+      "\027TransactionBalanceTrace\022\036\n\026transaction_" +
+      "identifier\030\001 \001(\014\022>\n\toperation\030\002 \003(\0132+.pr" +
+      "otocol.TransactionBalanceTrace.Operation" +
+      "\022\014\n\004type\030\003 \001(\t\022\016\n\006status\030\004 \001(\t\032J\n\tOperat" +
+      "ion\022\034\n\024operation_identifier\030\001 \001(\003\022\017\n\007add" +
+      "ress\030\002 \001(\014\022\016\n\006amount\030\003 \001(\003B\030\n\026org.tron.t" +
+      "rident.protob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -68647,6 +72221,30 @@ public final class Response {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_AccountResourceMessage_AssetNetLimitEntry_descriptor,
         new java.lang.String[] { "Key", "Value", });
+    internal_static_protocol_BlockIdentifier_descriptor =
+      getDescriptor().getMessageTypes().get(42);
+    internal_static_protocol_BlockIdentifier_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_protocol_BlockIdentifier_descriptor,
+        new java.lang.String[] { "Hash", "Number", });
+    internal_static_protocol_BlockBalanceTrace_descriptor =
+      getDescriptor().getMessageTypes().get(43);
+    internal_static_protocol_BlockBalanceTrace_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_protocol_BlockBalanceTrace_descriptor,
+        new java.lang.String[] { "BlockIdentifier", "Timestamp", "TransactionBalanceTrace", });
+    internal_static_protocol_TransactionBalanceTrace_descriptor =
+      getDescriptor().getMessageTypes().get(44);
+    internal_static_protocol_TransactionBalanceTrace_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_protocol_TransactionBalanceTrace_descriptor,
+        new java.lang.String[] { "TransactionIdentifier", "Operation", "Type", "Status", });
+    internal_static_protocol_TransactionBalanceTrace_Operation_descriptor =
+      internal_static_protocol_TransactionBalanceTrace_descriptor.getNestedTypes().get(0);
+    internal_static_protocol_TransactionBalanceTrace_Operation_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_protocol_TransactionBalanceTrace_Operation_descriptor,
+        new java.lang.String[] { "OperationIdentifier", "Address", "Amount", });
     org.tron.trident.proto.Common.getDescriptor();
     org.tron.trident.proto.Chain.getDescriptor();
     org.tron.trident.proto.Contract.getDescriptor();
