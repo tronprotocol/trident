@@ -2,6 +2,7 @@ package org.tron.trident.core;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
+import io.grpc.ClientInterceptor;
 import org.tron.trident.abi.FunctionEncoder;
 import org.tron.trident.abi.datatypes.Function;
 import org.tron.trident.api.GrpcAPI;
@@ -144,6 +145,18 @@ public class ApiWrapper {
 
         keyPair = new KeyPair(hexPrivateKey);
     }
+
+    public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey, List<ClientInterceptor> clientInterceptors) {
+        channel = ManagedChannelBuilder.forTarget(grpcEndpoint)
+            .intercept(clientInterceptors)
+            .usePlaintext()
+            .build();
+        channelSolidity = ManagedChannelBuilder.forTarget(grpcEndpointSolidity).usePlaintext().build();
+        blockingStub = WalletGrpc.newBlockingStub(channel);
+        blockingStubSolidity = WalletSolidityGrpc.newBlockingStub(channelSolidity);
+        keyPair = new KeyPair(hexPrivateKey);
+    }
+
 
     public void close() {
         channel.shutdown();
