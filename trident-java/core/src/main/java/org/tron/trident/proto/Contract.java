@@ -26897,6 +26897,12 @@ public final class Contract {
      * @return The lock.
      */
     boolean getLock();
+
+    /**
+     * <code>int64 lock_period = 6;</code>
+     * @return The lockPeriod.
+     */
+    long getLockPeriod();
   }
   /**
    * Protobuf type {@code protocol.DelegateResourceContract}
@@ -26970,6 +26976,11 @@ public final class Contract {
             case 40: {
 
               lock_ = input.readBool();
+              break;
+            }
+            case 48: {
+
+              lockPeriod_ = input.readInt64();
               break;
             }
             default: {
@@ -27067,6 +27078,17 @@ public final class Contract {
       return lock_;
     }
 
+    public static final int LOCK_PERIOD_FIELD_NUMBER = 6;
+    private long lockPeriod_;
+    /**
+     * <code>int64 lock_period = 6;</code>
+     * @return The lockPeriod.
+     */
+    @java.lang.Override
+    public long getLockPeriod() {
+      return lockPeriod_;
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -27095,6 +27117,9 @@ public final class Contract {
       }
       if (lock_ != false) {
         output.writeBool(5, lock_);
+      }
+      if (lockPeriod_ != 0L) {
+        output.writeInt64(6, lockPeriod_);
       }
       unknownFields.writeTo(output);
     }
@@ -27125,6 +27150,10 @@ public final class Contract {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(5, lock_);
       }
+      if (lockPeriod_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(6, lockPeriod_);
+      }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
@@ -27149,6 +27178,8 @@ public final class Contract {
           .equals(other.getReceiverAddress())) return false;
       if (getLock()
           != other.getLock()) return false;
+      if (getLockPeriod()
+          != other.getLockPeriod()) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -27172,6 +27203,9 @@ public final class Contract {
       hash = (37 * hash) + LOCK_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
           getLock());
+      hash = (37 * hash) + LOCK_PERIOD_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getLockPeriod());
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -27315,6 +27349,8 @@ public final class Contract {
 
         lock_ = false;
 
+        lockPeriod_ = 0L;
+
         return this;
       }
 
@@ -27346,6 +27382,7 @@ public final class Contract {
         result.balance_ = balance_;
         result.receiverAddress_ = receiverAddress_;
         result.lock_ = lock_;
+        result.lockPeriod_ = lockPeriod_;
         onBuilt();
         return result;
       }
@@ -27408,6 +27445,9 @@ public final class Contract {
         }
         if (other.getLock() != false) {
           setLock(other.getLock());
+        }
+        if (other.getLockPeriod() != 0L) {
+          setLockPeriod(other.getLockPeriod());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -27618,6 +27658,37 @@ public final class Contract {
       public Builder clearLock() {
         
         lock_ = false;
+        onChanged();
+        return this;
+      }
+
+      private long lockPeriod_ ;
+      /**
+       * <code>int64 lock_period = 6;</code>
+       * @return The lockPeriod.
+       */
+      @java.lang.Override
+      public long getLockPeriod() {
+        return lockPeriod_;
+      }
+      /**
+       * <code>int64 lock_period = 6;</code>
+       * @param value The lockPeriod to set.
+       * @return This builder for chaining.
+       */
+      public Builder setLockPeriod(long value) {
+        
+        lockPeriod_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int64 lock_period = 6;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearLockPeriod() {
+        
+        lockPeriod_ = 0L;
         onChanged();
         return this;
       }
@@ -28910,6 +28981,498 @@ public final class Contract {
 
   }
 
+  public interface CancelAllUnfreezeV2ContractOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:protocol.CancelAllUnfreezeV2Contract)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>bytes owner_address = 1;</code>
+     * @return The ownerAddress.
+     */
+    com.google.protobuf.ByteString getOwnerAddress();
+  }
+  /**
+   * Protobuf type {@code protocol.CancelAllUnfreezeV2Contract}
+   */
+  public static final class CancelAllUnfreezeV2Contract extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:protocol.CancelAllUnfreezeV2Contract)
+      CancelAllUnfreezeV2ContractOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use CancelAllUnfreezeV2Contract.newBuilder() to construct.
+    private CancelAllUnfreezeV2Contract(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private CancelAllUnfreezeV2Contract() {
+      ownerAddress_ = com.google.protobuf.ByteString.EMPTY;
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new CancelAllUnfreezeV2Contract();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private CancelAllUnfreezeV2Contract(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+
+              ownerAddress_ = input.readBytes();
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return org.tron.trident.proto.Contract.internal_static_protocol_CancelAllUnfreezeV2Contract_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return org.tron.trident.proto.Contract.internal_static_protocol_CancelAllUnfreezeV2Contract_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract.class, org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract.Builder.class);
+    }
+
+    public static final int OWNER_ADDRESS_FIELD_NUMBER = 1;
+    private com.google.protobuf.ByteString ownerAddress_;
+    /**
+     * <code>bytes owner_address = 1;</code>
+     * @return The ownerAddress.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString getOwnerAddress() {
+      return ownerAddress_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!ownerAddress_.isEmpty()) {
+        output.writeBytes(1, ownerAddress_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!ownerAddress_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, ownerAddress_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract)) {
+        return super.equals(obj);
+      }
+      org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract other = (org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract) obj;
+
+      if (!getOwnerAddress()
+          .equals(other.getOwnerAddress())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + OWNER_ADDRESS_FIELD_NUMBER;
+      hash = (53 * hash) + getOwnerAddress().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code protocol.CancelAllUnfreezeV2Contract}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:protocol.CancelAllUnfreezeV2Contract)
+        org.tron.trident.proto.Contract.CancelAllUnfreezeV2ContractOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return org.tron.trident.proto.Contract.internal_static_protocol_CancelAllUnfreezeV2Contract_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return org.tron.trident.proto.Contract.internal_static_protocol_CancelAllUnfreezeV2Contract_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract.class, org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract.Builder.class);
+      }
+
+      // Construct using org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        ownerAddress_ = com.google.protobuf.ByteString.EMPTY;
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return org.tron.trident.proto.Contract.internal_static_protocol_CancelAllUnfreezeV2Contract_descriptor;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract getDefaultInstanceForType() {
+        return org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract build() {
+        org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract buildPartial() {
+        org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract result = new org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract(this);
+        result.ownerAddress_ = ownerAddress_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract) {
+          return mergeFrom((org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract other) {
+        if (other == org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract.getDefaultInstance()) return this;
+        if (other.getOwnerAddress() != com.google.protobuf.ByteString.EMPTY) {
+          setOwnerAddress(other.getOwnerAddress());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private com.google.protobuf.ByteString ownerAddress_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <code>bytes owner_address = 1;</code>
+       * @return The ownerAddress.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString getOwnerAddress() {
+        return ownerAddress_;
+      }
+      /**
+       * <code>bytes owner_address = 1;</code>
+       * @param value The ownerAddress to set.
+       * @return This builder for chaining.
+       */
+      public Builder setOwnerAddress(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        ownerAddress_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bytes owner_address = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearOwnerAddress() {
+        
+        ownerAddress_ = getDefaultInstance().getOwnerAddress();
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:protocol.CancelAllUnfreezeV2Contract)
+    }
+
+    // @@protoc_insertion_point(class_scope:protocol.CancelAllUnfreezeV2Contract)
+    private static final org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract();
+    }
+
+    public static org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<CancelAllUnfreezeV2Contract>
+        PARSER = new com.google.protobuf.AbstractParser<CancelAllUnfreezeV2Contract>() {
+      @java.lang.Override
+      public CancelAllUnfreezeV2Contract parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new CancelAllUnfreezeV2Contract(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<CancelAllUnfreezeV2Contract> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<CancelAllUnfreezeV2Contract> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_protocol_AccountCreateContract_descriptor;
   private static final 
@@ -29110,6 +29673,11 @@ public final class Contract {
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_protocol_WithdrawExpireUnfreezeContract_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_protocol_CancelAllUnfreezeV2Contract_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_protocol_CancelAllUnfreezeV2Contract_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -29222,17 +29790,19 @@ public final class Contract {
       "ource\030\003 \001(\0162\026.protocol.ResourceCode\"v\n\031U" +
       "nfreezeBalanceV2Contract\022\025\n\rowner_addres" +
       "s\030\001 \001(\014\022\030\n\020unfreeze_balance\030\002 \001(\003\022(\n\010res" +
-      "ource\030\003 \001(\0162\026.protocol.ResourceCode\"\224\001\n\030" +
+      "ource\030\003 \001(\0162\026.protocol.ResourceCode\"\251\001\n\030" +
       "DelegateResourceContract\022\025\n\rowner_addres" +
       "s\030\001 \001(\014\022(\n\010resource\030\002 \001(\0162\026.protocol.Res" +
       "ourceCode\022\017\n\007balance\030\003 \001(\003\022\030\n\020receiver_a" +
-      "ddress\030\004 \001(\014\022\014\n\004lock\030\005 \001(\010\"\210\001\n\032UnDelegat" +
-      "eResourceContract\022\025\n\rowner_address\030\001 \001(\014" +
-      "\022(\n\010resource\030\002 \001(\0162\026.protocol.ResourceCo" +
-      "de\022\017\n\007balance\030\003 \001(\003\022\030\n\020receiver_address\030" +
-      "\004 \001(\014\"7\n\036WithdrawExpireUnfreezeContract\022" +
-      "\025\n\rowner_address\030\001 \001(\014B\030\n\026org.tron.tride" +
-      "nt.protob\006proto3"
+      "ddress\030\004 \001(\014\022\014\n\004lock\030\005 \001(\010\022\023\n\013lock_perio" +
+      "d\030\006 \001(\003\"\210\001\n\032UnDelegateResourceContract\022\025" +
+      "\n\rowner_address\030\001 \001(\014\022(\n\010resource\030\002 \001(\0162" +
+      "\026.protocol.ResourceCode\022\017\n\007balance\030\003 \001(\003" +
+      "\022\030\n\020receiver_address\030\004 \001(\014\"7\n\036WithdrawEx" +
+      "pireUnfreezeContract\022\025\n\rowner_address\030\001 " +
+      "\001(\014\"4\n\033CancelAllUnfreezeV2Contract\022\025\n\row" +
+      "ner_address\030\001 \001(\014B\030\n\026org.tron.trident.pr" +
+      "otob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -29466,7 +30036,7 @@ public final class Contract {
     internal_static_protocol_DelegateResourceContract_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_DelegateResourceContract_descriptor,
-        new java.lang.String[] { "OwnerAddress", "Resource", "Balance", "ReceiverAddress", "Lock", });
+        new java.lang.String[] { "OwnerAddress", "Resource", "Balance", "ReceiverAddress", "Lock", "LockPeriod", });
     internal_static_protocol_UnDelegateResourceContract_descriptor =
       getDescriptor().getMessageTypes().get(35);
     internal_static_protocol_UnDelegateResourceContract_fieldAccessorTable = new
@@ -29478,6 +30048,12 @@ public final class Contract {
     internal_static_protocol_WithdrawExpireUnfreezeContract_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_WithdrawExpireUnfreezeContract_descriptor,
+        new java.lang.String[] { "OwnerAddress", });
+    internal_static_protocol_CancelAllUnfreezeV2Contract_descriptor =
+      getDescriptor().getMessageTypes().get(37);
+    internal_static_protocol_CancelAllUnfreezeV2Contract_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_protocol_CancelAllUnfreezeV2Contract_descriptor,
         new java.lang.String[] { "OwnerAddress", });
     org.tron.trident.proto.Common.getDescriptor();
   }

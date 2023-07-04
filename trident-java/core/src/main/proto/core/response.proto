@@ -39,6 +39,11 @@ message TransactionReturn {
     bytes message = 3;
 }
 
+message EstimateEnergyMessage {
+    TransactionReturn result = 1;
+    int64 energy_required = 2;
+}
+
 message TransactionExtention {
     Transaction transaction = 1;
     bytes txid = 2;  // transaction id = sha256(transaction.raw_data)
@@ -152,6 +157,7 @@ message TransactionInfo {
     bytes orderId = 25;
     repeated MarketOrderDetail orderDetails = 26;
     int64 withdraw_expire_amount = 28;
+    map<string, int64> cancel_unfreezeV2_amount = 29;
 }
 
 // Witness

@@ -529,6 +529,10 @@ public final class Chain {
          * <code>UnDelegateResourceContract = 58;</code>
          */
         UnDelegateResourceContract(58),
+        /**
+         * <code>CancelAllUnfreezeV2Contract = 59;</code>
+         */
+        CancelAllUnfreezeV2Contract(59),
         UNRECOGNIZED(-1),
         ;
 
@@ -692,6 +696,10 @@ public final class Chain {
          * <code>UnDelegateResourceContract = 58;</code>
          */
         public static final int UnDelegateResourceContract_VALUE = 58;
+        /**
+         * <code>CancelAllUnfreezeV2Contract = 59;</code>
+         */
+        public static final int CancelAllUnfreezeV2Contract_VALUE = 59;
 
 
         public final int getNumber() {
@@ -758,6 +766,7 @@ public final class Chain {
             case 56: return WithdrawExpireUnfreezeContract;
             case 57: return DelegateResourceContract;
             case 58: return UnDelegateResourceContract;
+            case 59: return CancelAllUnfreezeV2Contract;
             default: return null;
           }
         }
@@ -9051,15 +9060,15 @@ public final class Chain {
   static {
     java.lang.String[] descriptorData = {
       "\n\020core/chain.proto\022\010protocol\032\031google/pro" +
-      "tobuf/any.proto\032\021core/common.proto\"\202\023\n\013T" +
+      "tobuf/any.proto\032\021core/common.proto\"\243\023\n\013T" +
       "ransaction\022+\n\010raw_data\030\001 \001(\0132\031.protocol." +
       "Transaction.raw\022\021\n\tsignature\030\002 \003(\014\022)\n\003re" +
-      "t\030\005 \003(\0132\034.protocol.Transaction.Result\032\227\n" +
+      "t\030\005 \003(\0132\034.protocol.Transaction.Result\032\270\n" +
       "\n\010Contract\0229\n\004type\030\001 \001(\0162+.protocol.Tran" +
       "saction.Contract.ContractType\022\'\n\tparamet" +
       "er\030\002 \001(\0132\024.google.protobuf.Any\022\020\n\010provid" +
       "er\030\003 \001(\014\022\024\n\014ContractName\030\004 \001(\014\022\025\n\rPermis" +
-      "sion_id\030\005 \001(\005\"\347\010\n\014ContractType\022\031\n\025Accoun" +
+      "sion_id\030\005 \001(\005\"\210\t\n\014ContractType\022\031\n\025Accoun" +
       "tCreateContract\020\000\022\024\n\020TransferContract\020\001\022" +
       "\031\n\025TransferAssetContract\020\002\022\025\n\021VoteAssetC" +
       "ontract\020\003\022\027\n\023VoteWitnessContract\020\004\022\031\n\025Wi" +
@@ -9087,42 +9096,43 @@ public final class Chain {
       "ceV2Contract\0206\022\035\n\031UnfreezeBalanceV2Contr" +
       "act\0207\022\"\n\036WithdrawExpireUnfreezeContract\020" +
       "8\022\034\n\030DelegateResourceContract\0209\022\036\n\032UnDel" +
-      "egateResourceContract\020:\032\356\005\n\006Result\022\013\n\003fe" +
-      "e\030\001 \001(\003\022.\n\003ret\030\002 \001(\0162!.protocol.Transact" +
-      "ion.Result.code\022@\n\013contractRet\030\003 \001(\0162+.p" +
-      "rotocol.Transaction.Result.contractResul" +
-      "t\022\024\n\014assetIssueID\030\016 \001(\t\022\027\n\017withdraw_amou" +
-      "nt\030\017 \001(\003\022\027\n\017unfreeze_amount\030\020 \001(\003\022 \n\030exc" +
-      "hange_received_amount\030\022 \001(\003\022&\n\036exchange_" +
-      "inject_another_amount\030\023 \001(\003\022(\n exchange_" +
-      "withdraw_another_amount\030\024 \001(\003\022\023\n\013exchang" +
-      "e_id\030\025 \001(\003\022 \n\030shielded_transaction_fee\030\026" +
-      " \001(\003\022\036\n\026withdraw_expire_amount\030\033 \001(\003\"\036\n\004" +
-      "code\022\n\n\006SUCESS\020\000\022\n\n\006FAILED\020\001\"\261\002\n\016contrac" +
-      "tResult\022\013\n\007DEFAULT\020\000\022\013\n\007SUCCESS\020\001\022\n\n\006REV" +
-      "ERT\020\002\022\030\n\024BAD_JUMP_DESTINATION\020\003\022\021\n\rOUT_O" +
-      "F_MEMORY\020\004\022\030\n\024PRECOMPILED_CONTRACT\020\005\022\023\n\017" +
-      "STACK_TOO_SMALL\020\006\022\023\n\017STACK_TOO_LARGE\020\007\022\025" +
-      "\n\021ILLEGAL_OPERATION\020\010\022\022\n\016STACK_OVERFLOW\020" +
-      "\t\022\021\n\rOUT_OF_ENERGY\020\n\022\017\n\013OUT_OF_TIME\020\013\022\027\n" +
-      "\023JVM_STACK_OVER_FLOW\020\014\022\013\n\007UNKNOWN\020\r\022\023\n\017T" +
-      "RANSFER_FAILED\020\016\032\374\001\n\003raw\022\027\n\017ref_block_by" +
-      "tes\030\001 \001(\014\022\025\n\rref_block_num\030\003 \001(\003\022\026\n\016ref_" +
-      "block_hash\030\004 \001(\014\022\022\n\nexpiration\030\010 \001(\003\022\"\n\005" +
-      "auths\030\t \003(\0132\023.protocol.authority\022\014\n\004data" +
-      "\030\n \001(\014\0220\n\010contract\030\013 \003(\0132\036.protocol.Tran" +
-      "saction.Contract\022\017\n\007scripts\030\014 \001(\014\022\021\n\ttim" +
-      "estamp\030\016 \001(\003\022\021\n\tfee_limit\030\022 \001(\003\"\200\002\n\013Bloc" +
-      "kHeader\022+\n\010raw_data\030\001 \001(\0132\031.protocol.Blo" +
-      "ckHeader.raw\022\031\n\021witness_signature\030\002 \001(\014\032" +
-      "\250\001\n\003raw\022\021\n\ttimestamp\030\001 \001(\003\022\022\n\ntxTrieRoot" +
-      "\030\002 \001(\014\022\022\n\nparentHash\030\003 \001(\014\022\016\n\006number\030\007 \001" +
-      "(\003\022\022\n\nwitness_id\030\010 \001(\003\022\027\n\017witness_addres" +
-      "s\030\t \001(\014\022\017\n\007version\030\n \001(\005\022\030\n\020accountState" +
-      "Root\030\013 \001(\014\"a\n\005Block\022+\n\014transactions\030\001 \003(" +
-      "\0132\025.protocol.Transaction\022+\n\014block_header" +
-      "\030\002 \001(\0132\025.protocol.BlockHeaderB\030\n\026org.tro" +
-      "n.trident.protob\006proto3"
+      "egateResourceContract\020:\022\037\n\033CancelAllUnfr" +
+      "eezeV2Contract\020;\032\356\005\n\006Result\022\013\n\003fee\030\001 \001(\003" +
+      "\022.\n\003ret\030\002 \001(\0162!.protocol.Transaction.Res" +
+      "ult.code\022@\n\013contractRet\030\003 \001(\0162+.protocol" +
+      ".Transaction.Result.contractResult\022\024\n\014as" +
+      "setIssueID\030\016 \001(\t\022\027\n\017withdraw_amount\030\017 \001(" +
+      "\003\022\027\n\017unfreeze_amount\030\020 \001(\003\022 \n\030exchange_r" +
+      "eceived_amount\030\022 \001(\003\022&\n\036exchange_inject_" +
+      "another_amount\030\023 \001(\003\022(\n exchange_withdra" +
+      "w_another_amount\030\024 \001(\003\022\023\n\013exchange_id\030\025 " +
+      "\001(\003\022 \n\030shielded_transaction_fee\030\026 \001(\003\022\036\n" +
+      "\026withdraw_expire_amount\030\033 \001(\003\"\036\n\004code\022\n\n" +
+      "\006SUCESS\020\000\022\n\n\006FAILED\020\001\"\261\002\n\016contractResult" +
+      "\022\013\n\007DEFAULT\020\000\022\013\n\007SUCCESS\020\001\022\n\n\006REVERT\020\002\022\030" +
+      "\n\024BAD_JUMP_DESTINATION\020\003\022\021\n\rOUT_OF_MEMOR" +
+      "Y\020\004\022\030\n\024PRECOMPILED_CONTRACT\020\005\022\023\n\017STACK_T" +
+      "OO_SMALL\020\006\022\023\n\017STACK_TOO_LARGE\020\007\022\025\n\021ILLEG" +
+      "AL_OPERATION\020\010\022\022\n\016STACK_OVERFLOW\020\t\022\021\n\rOU" +
+      "T_OF_ENERGY\020\n\022\017\n\013OUT_OF_TIME\020\013\022\027\n\023JVM_ST" +
+      "ACK_OVER_FLOW\020\014\022\013\n\007UNKNOWN\020\r\022\023\n\017TRANSFER" +
+      "_FAILED\020\016\032\374\001\n\003raw\022\027\n\017ref_block_bytes\030\001 \001" +
+      "(\014\022\025\n\rref_block_num\030\003 \001(\003\022\026\n\016ref_block_h" +
+      "ash\030\004 \001(\014\022\022\n\nexpiration\030\010 \001(\003\022\"\n\005auths\030\t" +
+      " \003(\0132\023.protocol.authority\022\014\n\004data\030\n \001(\014\022" +
+      "0\n\010contract\030\013 \003(\0132\036.protocol.Transaction" +
+      ".Contract\022\017\n\007scripts\030\014 \001(\014\022\021\n\ttimestamp\030" +
+      "\016 \001(\003\022\021\n\tfee_limit\030\022 \001(\003\"\200\002\n\013BlockHeader" +
+      "\022+\n\010raw_data\030\001 \001(\0132\031.protocol.BlockHeade" +
+      "r.raw\022\031\n\021witness_signature\030\002 \001(\014\032\250\001\n\003raw" +
+      "\022\021\n\ttimestamp\030\001 \001(\003\022\022\n\ntxTrieRoot\030\002 \001(\014\022" +
+      "\022\n\nparentHash\030\003 \001(\014\022\016\n\006number\030\007 \001(\003\022\022\n\nw" +
+      "itness_id\030\010 \001(\003\022\027\n\017witness_address\030\t \001(\014" +
+      "\022\017\n\007version\030\n \001(\005\022\030\n\020accountStateRoot\030\013 " +
+      "\001(\014\"a\n\005Block\022+\n\014transactions\030\001 \003(\0132\025.pro" +
+      "tocol.Transaction\022+\n\014block_header\030\002 \001(\0132" +
+      "\025.protocol.BlockHeaderB\030\n\026org.tron.tride" +
+      "nt.protob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,

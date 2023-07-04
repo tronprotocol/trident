@@ -229,6 +229,7 @@ service WalletSolidity {
   rpc GetTransactionById(BytesMessage) returns (Transaction) {}
   rpc GetRewardInfo(BytesMessage) returns (NumberMessage) {}     // ???
   rpc GetTransactionFromPending (BytesMessage) returns (Transaction) {}
+  rpc EstimateEnergy (TriggerSmartContract) returns (EstimateEnergyMessage) {}
 };
 
 message EmptyMessage {}

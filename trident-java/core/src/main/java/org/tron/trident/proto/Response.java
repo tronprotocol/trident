@@ -2762,6 +2762,698 @@ public final class Response {
 
   }
 
+  public interface EstimateEnergyMessageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:protocol.EstimateEnergyMessage)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>.protocol.TransactionReturn result = 1;</code>
+     * @return Whether the result field is set.
+     */
+    boolean hasResult();
+    /**
+     * <code>.protocol.TransactionReturn result = 1;</code>
+     * @return The result.
+     */
+    org.tron.trident.proto.Response.TransactionReturn getResult();
+    /**
+     * <code>.protocol.TransactionReturn result = 1;</code>
+     */
+    org.tron.trident.proto.Response.TransactionReturnOrBuilder getResultOrBuilder();
+
+    /**
+     * <code>int64 energy_required = 2;</code>
+     * @return The energyRequired.
+     */
+    long getEnergyRequired();
+  }
+  /**
+   * Protobuf type {@code protocol.EstimateEnergyMessage}
+   */
+  public static final class EstimateEnergyMessage extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:protocol.EstimateEnergyMessage)
+      EstimateEnergyMessageOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use EstimateEnergyMessage.newBuilder() to construct.
+    private EstimateEnergyMessage(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private EstimateEnergyMessage() {
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new EstimateEnergyMessage();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private EstimateEnergyMessage(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+              org.tron.trident.proto.Response.TransactionReturn.Builder subBuilder = null;
+              if (result_ != null) {
+                subBuilder = result_.toBuilder();
+              }
+              result_ = input.readMessage(org.tron.trident.proto.Response.TransactionReturn.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(result_);
+                result_ = subBuilder.buildPartial();
+              }
+
+              break;
+            }
+            case 16: {
+
+              energyRequired_ = input.readInt64();
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return org.tron.trident.proto.Response.internal_static_protocol_EstimateEnergyMessage_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return org.tron.trident.proto.Response.internal_static_protocol_EstimateEnergyMessage_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              org.tron.trident.proto.Response.EstimateEnergyMessage.class, org.tron.trident.proto.Response.EstimateEnergyMessage.Builder.class);
+    }
+
+    public static final int RESULT_FIELD_NUMBER = 1;
+    private org.tron.trident.proto.Response.TransactionReturn result_;
+    /**
+     * <code>.protocol.TransactionReturn result = 1;</code>
+     * @return Whether the result field is set.
+     */
+    @java.lang.Override
+    public boolean hasResult() {
+      return result_ != null;
+    }
+    /**
+     * <code>.protocol.TransactionReturn result = 1;</code>
+     * @return The result.
+     */
+    @java.lang.Override
+    public org.tron.trident.proto.Response.TransactionReturn getResult() {
+      return result_ == null ? org.tron.trident.proto.Response.TransactionReturn.getDefaultInstance() : result_;
+    }
+    /**
+     * <code>.protocol.TransactionReturn result = 1;</code>
+     */
+    @java.lang.Override
+    public org.tron.trident.proto.Response.TransactionReturnOrBuilder getResultOrBuilder() {
+      return getResult();
+    }
+
+    public static final int ENERGY_REQUIRED_FIELD_NUMBER = 2;
+    private long energyRequired_;
+    /**
+     * <code>int64 energy_required = 2;</code>
+     * @return The energyRequired.
+     */
+    @java.lang.Override
+    public long getEnergyRequired() {
+      return energyRequired_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (result_ != null) {
+        output.writeMessage(1, getResult());
+      }
+      if (energyRequired_ != 0L) {
+        output.writeInt64(2, energyRequired_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (result_ != null) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, getResult());
+      }
+      if (energyRequired_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(2, energyRequired_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof org.tron.trident.proto.Response.EstimateEnergyMessage)) {
+        return super.equals(obj);
+      }
+      org.tron.trident.proto.Response.EstimateEnergyMessage other = (org.tron.trident.proto.Response.EstimateEnergyMessage) obj;
+
+      if (hasResult() != other.hasResult()) return false;
+      if (hasResult()) {
+        if (!getResult()
+            .equals(other.getResult())) return false;
+      }
+      if (getEnergyRequired()
+          != other.getEnergyRequired()) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      if (hasResult()) {
+        hash = (37 * hash) + RESULT_FIELD_NUMBER;
+        hash = (53 * hash) + getResult().hashCode();
+      }
+      hash = (37 * hash) + ENERGY_REQUIRED_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getEnergyRequired());
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static org.tron.trident.proto.Response.EstimateEnergyMessage parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.proto.Response.EstimateEnergyMessage parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Response.EstimateEnergyMessage parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.proto.Response.EstimateEnergyMessage parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Response.EstimateEnergyMessage parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.proto.Response.EstimateEnergyMessage parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Response.EstimateEnergyMessage parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.proto.Response.EstimateEnergyMessage parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Response.EstimateEnergyMessage parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.proto.Response.EstimateEnergyMessage parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.tron.trident.proto.Response.EstimateEnergyMessage parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.proto.Response.EstimateEnergyMessage parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(org.tron.trident.proto.Response.EstimateEnergyMessage prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code protocol.EstimateEnergyMessage}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:protocol.EstimateEnergyMessage)
+        org.tron.trident.proto.Response.EstimateEnergyMessageOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return org.tron.trident.proto.Response.internal_static_protocol_EstimateEnergyMessage_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return org.tron.trident.proto.Response.internal_static_protocol_EstimateEnergyMessage_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                org.tron.trident.proto.Response.EstimateEnergyMessage.class, org.tron.trident.proto.Response.EstimateEnergyMessage.Builder.class);
+      }
+
+      // Construct using org.tron.trident.proto.Response.EstimateEnergyMessage.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        if (resultBuilder_ == null) {
+          result_ = null;
+        } else {
+          result_ = null;
+          resultBuilder_ = null;
+        }
+        energyRequired_ = 0L;
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return org.tron.trident.proto.Response.internal_static_protocol_EstimateEnergyMessage_descriptor;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.proto.Response.EstimateEnergyMessage getDefaultInstanceForType() {
+        return org.tron.trident.proto.Response.EstimateEnergyMessage.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public org.tron.trident.proto.Response.EstimateEnergyMessage build() {
+        org.tron.trident.proto.Response.EstimateEnergyMessage result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.proto.Response.EstimateEnergyMessage buildPartial() {
+        org.tron.trident.proto.Response.EstimateEnergyMessage result = new org.tron.trident.proto.Response.EstimateEnergyMessage(this);
+        if (resultBuilder_ == null) {
+          result.result_ = result_;
+        } else {
+          result.result_ = resultBuilder_.build();
+        }
+        result.energyRequired_ = energyRequired_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof org.tron.trident.proto.Response.EstimateEnergyMessage) {
+          return mergeFrom((org.tron.trident.proto.Response.EstimateEnergyMessage)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(org.tron.trident.proto.Response.EstimateEnergyMessage other) {
+        if (other == org.tron.trident.proto.Response.EstimateEnergyMessage.getDefaultInstance()) return this;
+        if (other.hasResult()) {
+          mergeResult(other.getResult());
+        }
+        if (other.getEnergyRequired() != 0L) {
+          setEnergyRequired(other.getEnergyRequired());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        org.tron.trident.proto.Response.EstimateEnergyMessage parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (org.tron.trident.proto.Response.EstimateEnergyMessage) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private org.tron.trident.proto.Response.TransactionReturn result_;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          org.tron.trident.proto.Response.TransactionReturn, org.tron.trident.proto.Response.TransactionReturn.Builder, org.tron.trident.proto.Response.TransactionReturnOrBuilder> resultBuilder_;
+      /**
+       * <code>.protocol.TransactionReturn result = 1;</code>
+       * @return Whether the result field is set.
+       */
+      public boolean hasResult() {
+        return resultBuilder_ != null || result_ != null;
+      }
+      /**
+       * <code>.protocol.TransactionReturn result = 1;</code>
+       * @return The result.
+       */
+      public org.tron.trident.proto.Response.TransactionReturn getResult() {
+        if (resultBuilder_ == null) {
+          return result_ == null ? org.tron.trident.proto.Response.TransactionReturn.getDefaultInstance() : result_;
+        } else {
+          return resultBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>.protocol.TransactionReturn result = 1;</code>
+       */
+      public Builder setResult(org.tron.trident.proto.Response.TransactionReturn value) {
+        if (resultBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          result_ = value;
+          onChanged();
+        } else {
+          resultBuilder_.setMessage(value);
+        }
+
+        return this;
+      }
+      /**
+       * <code>.protocol.TransactionReturn result = 1;</code>
+       */
+      public Builder setResult(
+          org.tron.trident.proto.Response.TransactionReturn.Builder builderForValue) {
+        if (resultBuilder_ == null) {
+          result_ = builderForValue.build();
+          onChanged();
+        } else {
+          resultBuilder_.setMessage(builderForValue.build());
+        }
+
+        return this;
+      }
+      /**
+       * <code>.protocol.TransactionReturn result = 1;</code>
+       */
+      public Builder mergeResult(org.tron.trident.proto.Response.TransactionReturn value) {
+        if (resultBuilder_ == null) {
+          if (result_ != null) {
+            result_ =
+              org.tron.trident.proto.Response.TransactionReturn.newBuilder(result_).mergeFrom(value).buildPartial();
+          } else {
+            result_ = value;
+          }
+          onChanged();
+        } else {
+          resultBuilder_.mergeFrom(value);
+        }
+
+        return this;
+      }
+      /**
+       * <code>.protocol.TransactionReturn result = 1;</code>
+       */
+      public Builder clearResult() {
+        if (resultBuilder_ == null) {
+          result_ = null;
+          onChanged();
+        } else {
+          result_ = null;
+          resultBuilder_ = null;
+        }
+
+        return this;
+      }
+      /**
+       * <code>.protocol.TransactionReturn result = 1;</code>
+       */
+      public org.tron.trident.proto.Response.TransactionReturn.Builder getResultBuilder() {
+        
+        onChanged();
+        return getResultFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>.protocol.TransactionReturn result = 1;</code>
+       */
+      public org.tron.trident.proto.Response.TransactionReturnOrBuilder getResultOrBuilder() {
+        if (resultBuilder_ != null) {
+          return resultBuilder_.getMessageOrBuilder();
+        } else {
+          return result_ == null ?
+              org.tron.trident.proto.Response.TransactionReturn.getDefaultInstance() : result_;
+        }
+      }
+      /**
+       * <code>.protocol.TransactionReturn result = 1;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          org.tron.trident.proto.Response.TransactionReturn, org.tron.trident.proto.Response.TransactionReturn.Builder, org.tron.trident.proto.Response.TransactionReturnOrBuilder> 
+          getResultFieldBuilder() {
+        if (resultBuilder_ == null) {
+          resultBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              org.tron.trident.proto.Response.TransactionReturn, org.tron.trident.proto.Response.TransactionReturn.Builder, org.tron.trident.proto.Response.TransactionReturnOrBuilder>(
+                  getResult(),
+                  getParentForChildren(),
+                  isClean());
+          result_ = null;
+        }
+        return resultBuilder_;
+      }
+
+      private long energyRequired_ ;
+      /**
+       * <code>int64 energy_required = 2;</code>
+       * @return The energyRequired.
+       */
+      @java.lang.Override
+      public long getEnergyRequired() {
+        return energyRequired_;
+      }
+      /**
+       * <code>int64 energy_required = 2;</code>
+       * @param value The energyRequired to set.
+       * @return This builder for chaining.
+       */
+      public Builder setEnergyRequired(long value) {
+        
+        energyRequired_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int64 energy_required = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearEnergyRequired() {
+        
+        energyRequired_ = 0L;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:protocol.EstimateEnergyMessage)
+    }
+
+    // @@protoc_insertion_point(class_scope:protocol.EstimateEnergyMessage)
+    private static final org.tron.trident.proto.Response.EstimateEnergyMessage DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new org.tron.trident.proto.Response.EstimateEnergyMessage();
+    }
+
+    public static org.tron.trident.proto.Response.EstimateEnergyMessage getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<EstimateEnergyMessage>
+        PARSER = new com.google.protobuf.AbstractParser<EstimateEnergyMessage>() {
+      @java.lang.Override
+      public EstimateEnergyMessage parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new EstimateEnergyMessage(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<EstimateEnergyMessage> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<EstimateEnergyMessage> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public org.tron.trident.proto.Response.EstimateEnergyMessage getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   public interface TransactionExtentionOrBuilder extends
       // @@protoc_insertion_point(interface_extends:protocol.TransactionExtention)
       com.google.protobuf.MessageOrBuilder {
@@ -15469,6 +16161,40 @@ public final class Response {
      * @return The withdrawExpireAmount.
      */
     long getWithdrawExpireAmount();
+
+    /**
+     * <code>map&lt;string, int64&gt; cancel_unfreezeV2_amount = 29;</code>
+     */
+    int getCancelUnfreezeV2AmountCount();
+    /**
+     * <code>map&lt;string, int64&gt; cancel_unfreezeV2_amount = 29;</code>
+     */
+    boolean containsCancelUnfreezeV2Amount(
+        java.lang.String key);
+    /**
+     * Use {@link #getCancelUnfreezeV2AmountMap()} instead.
+     */
+    @java.lang.Deprecated
+    java.util.Map<java.lang.String, java.lang.Long>
+    getCancelUnfreezeV2Amount();
+    /**
+     * <code>map&lt;string, int64&gt; cancel_unfreezeV2_amount = 29;</code>
+     */
+    java.util.Map<java.lang.String, java.lang.Long>
+    getCancelUnfreezeV2AmountMap();
+    /**
+     * <code>map&lt;string, int64&gt; cancel_unfreezeV2_amount = 29;</code>
+     */
+
+    long getCancelUnfreezeV2AmountOrDefault(
+        java.lang.String key,
+        long defaultValue);
+    /**
+     * <code>map&lt;string, int64&gt; cancel_unfreezeV2_amount = 29;</code>
+     */
+
+    long getCancelUnfreezeV2AmountOrThrow(
+        java.lang.String key);
   }
   /**
    * Protobuf type {@code protocol.TransactionInfo}
@@ -15661,6 +16387,19 @@ public final class Response {
               withdrawExpireAmount_ = input.readInt64();
               break;
             }
+            case 234: {
+              if (!((mutable_bitField0_ & 0x00000010) != 0)) {
+                cancelUnfreezeV2Amount_ = com.google.protobuf.MapField.newMapField(
+                    CancelUnfreezeV2AmountDefaultEntryHolder.defaultEntry);
+                mutable_bitField0_ |= 0x00000010;
+              }
+              com.google.protobuf.MapEntry<java.lang.String, java.lang.Long>
+              cancelUnfreezeV2Amount__ = input.readMessage(
+                  CancelUnfreezeV2AmountDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
+              cancelUnfreezeV2Amount_.getMutableMap().put(
+                  cancelUnfreezeV2Amount__.getKey(), cancelUnfreezeV2Amount__.getValue());
+              break;
+            }
             default: {
               if (!parseUnknownField(
                   input, unknownFields, extensionRegistry, tag)) {
@@ -15697,6 +16436,18 @@ public final class Response {
       return org.tron.trident.proto.Response.internal_static_protocol_TransactionInfo_descriptor;
     }
 
+    @SuppressWarnings({"rawtypes"})
+    @java.lang.Override
+    protected com.google.protobuf.MapField internalGetMapField(
+        int number) {
+      switch (number) {
+        case 29:
+          return internalGetCancelUnfreezeV2Amount();
+        default:
+          throw new RuntimeException(
+              "Invalid map field number: " + number);
+      }
+    }
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
@@ -16953,6 +17704,87 @@ public final class Response {
       return withdrawExpireAmount_;
     }
 
+    public static final int CANCEL_UNFREEZEV2_AMOUNT_FIELD_NUMBER = 29;
+    private static final class CancelUnfreezeV2AmountDefaultEntryHolder {
+      static final com.google.protobuf.MapEntry<
+          java.lang.String, java.lang.Long> defaultEntry =
+              com.google.protobuf.MapEntry
+              .<java.lang.String, java.lang.Long>newDefaultInstance(
+                  org.tron.trident.proto.Response.internal_static_protocol_TransactionInfo_CancelUnfreezeV2AmountEntry_descriptor, 
+                  com.google.protobuf.WireFormat.FieldType.STRING,
+                  "",
+                  com.google.protobuf.WireFormat.FieldType.INT64,
+                  0L);
+    }
+    private com.google.protobuf.MapField<
+        java.lang.String, java.lang.Long> cancelUnfreezeV2Amount_;
+    private com.google.protobuf.MapField<java.lang.String, java.lang.Long>
+    internalGetCancelUnfreezeV2Amount() {
+      if (cancelUnfreezeV2Amount_ == null) {
+        return com.google.protobuf.MapField.emptyMapField(
+            CancelUnfreezeV2AmountDefaultEntryHolder.defaultEntry);
+      }
+      return cancelUnfreezeV2Amount_;
+    }
+
+    public int getCancelUnfreezeV2AmountCount() {
+      return internalGetCancelUnfreezeV2Amount().getMap().size();
+    }
+    /**
+     * <code>map&lt;string, int64&gt; cancel_unfreezeV2_amount = 29;</code>
+     */
+
+    @java.lang.Override
+    public boolean containsCancelUnfreezeV2Amount(
+        java.lang.String key) {
+      if (key == null) { throw new java.lang.NullPointerException(); }
+      return internalGetCancelUnfreezeV2Amount().getMap().containsKey(key);
+    }
+    /**
+     * Use {@link #getCancelUnfreezeV2AmountMap()} instead.
+     */
+    @java.lang.Override
+    @java.lang.Deprecated
+    public java.util.Map<java.lang.String, java.lang.Long> getCancelUnfreezeV2Amount() {
+      return getCancelUnfreezeV2AmountMap();
+    }
+    /**
+     * <code>map&lt;string, int64&gt; cancel_unfreezeV2_amount = 29;</code>
+     */
+    @java.lang.Override
+
+    public java.util.Map<java.lang.String, java.lang.Long> getCancelUnfreezeV2AmountMap() {
+      return internalGetCancelUnfreezeV2Amount().getMap();
+    }
+    /**
+     * <code>map&lt;string, int64&gt; cancel_unfreezeV2_amount = 29;</code>
+     */
+    @java.lang.Override
+
+    public long getCancelUnfreezeV2AmountOrDefault(
+        java.lang.String key,
+        long defaultValue) {
+      if (key == null) { throw new java.lang.NullPointerException(); }
+      java.util.Map<java.lang.String, java.lang.Long> map =
+          internalGetCancelUnfreezeV2Amount().getMap();
+      return map.containsKey(key) ? map.get(key) : defaultValue;
+    }
+    /**
+     * <code>map&lt;string, int64&gt; cancel_unfreezeV2_amount = 29;</code>
+     */
+    @java.lang.Override
+
+    public long getCancelUnfreezeV2AmountOrThrow(
+        java.lang.String key) {
+      if (key == null) { throw new java.lang.NullPointerException(); }
+      java.util.Map<java.lang.String, java.lang.Long> map =
+          internalGetCancelUnfreezeV2Amount().getMap();
+      if (!map.containsKey(key)) {
+        throw new java.lang.IllegalArgumentException();
+      }
+      return map.get(key);
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -17033,6 +17865,12 @@ public final class Response {
       if (withdrawExpireAmount_ != 0L) {
         output.writeInt64(28, withdrawExpireAmount_);
       }
+      com.google.protobuf.GeneratedMessageV3
+        .serializeStringMapTo(
+          output,
+          internalGetCancelUnfreezeV2Amount(),
+          CancelUnfreezeV2AmountDefaultEntryHolder.defaultEntry,
+          29);
       unknownFields.writeTo(output);
     }
 
@@ -17134,6 +17972,16 @@ public final class Response {
         size += com.google.protobuf.CodedOutputStream
           .computeInt64Size(28, withdrawExpireAmount_);
       }
+      for (java.util.Map.Entry<java.lang.String, java.lang.Long> entry
+           : internalGetCancelUnfreezeV2Amount().getMap().entrySet()) {
+        com.google.protobuf.MapEntry<java.lang.String, java.lang.Long>
+        cancelUnfreezeV2Amount__ = CancelUnfreezeV2AmountDefaultEntryHolder.defaultEntry.newBuilderForType()
+            .setKey(entry.getKey())
+            .setValue(entry.getValue())
+            .build();
+        size += com.google.protobuf.CodedOutputStream
+            .computeMessageSize(29, cancelUnfreezeV2Amount__);
+      }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
@@ -17195,6 +18043,8 @@ public final class Response {
           .equals(other.getOrderDetailsList())) return false;
       if (getWithdrawExpireAmount()
           != other.getWithdrawExpireAmount()) return false;
+      if (!internalGetCancelUnfreezeV2Amount().equals(
+          other.internalGetCancelUnfreezeV2Amount())) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -17271,6 +18121,10 @@ public final class Response {
       hash = (37 * hash) + WITHDRAW_EXPIRE_AMOUNT_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
           getWithdrawExpireAmount());
+      if (!internalGetCancelUnfreezeV2Amount().getMap().isEmpty()) {
+        hash = (37 * hash) + CANCEL_UNFREEZEV2_AMOUNT_FIELD_NUMBER;
+        hash = (53 * hash) + internalGetCancelUnfreezeV2Amount().hashCode();
+      }
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -17378,6 +18232,28 @@ public final class Response {
         return org.tron.trident.proto.Response.internal_static_protocol_TransactionInfo_descriptor;
       }
 
+      @SuppressWarnings({"rawtypes"})
+      protected com.google.protobuf.MapField internalGetMapField(
+          int number) {
+        switch (number) {
+          case 29:
+            return internalGetCancelUnfreezeV2Amount();
+          default:
+            throw new RuntimeException(
+                "Invalid map field number: " + number);
+        }
+      }
+      @SuppressWarnings({"rawtypes"})
+      protected com.google.protobuf.MapField internalGetMutableMapField(
+          int number) {
+        switch (number) {
+          case 29:
+            return internalGetMutableCancelUnfreezeV2Amount();
+          default:
+            throw new RuntimeException(
+                "Invalid map field number: " + number);
+        }
+      }
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
@@ -17467,6 +18343,7 @@ public final class Response {
         }
         withdrawExpireAmount_ = 0L;
 
+        internalGetMutableCancelUnfreezeV2Amount().clear();
         return this;
       }
 
@@ -17548,6 +18425,8 @@ public final class Response {
           result.orderDetails_ = orderDetailsBuilder_.build();
         }
         result.withdrawExpireAmount_ = withdrawExpireAmount_;
+        result.cancelUnfreezeV2Amount_ = internalGetCancelUnfreezeV2Amount();
+        result.cancelUnfreezeV2Amount_.makeImmutable();
         onBuilt();
         return result;
       }
@@ -17739,6 +18618,8 @@ public final class Response {
         if (other.getWithdrawExpireAmount() != 0L) {
           setWithdrawExpireAmount(other.getWithdrawExpireAmount());
         }
+        internalGetMutableCancelUnfreezeV2Amount().mergeFrom(
+            other.internalGetCancelUnfreezeV2Amount());
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
@@ -19297,6 +20178,134 @@ public final class Response {
         
         withdrawExpireAmount_ = 0L;
         onChanged();
+        return this;
+      }
+
+      private com.google.protobuf.MapField<
+          java.lang.String, java.lang.Long> cancelUnfreezeV2Amount_;
+      private com.google.protobuf.MapField<java.lang.String, java.lang.Long>
+      internalGetCancelUnfreezeV2Amount() {
+        if (cancelUnfreezeV2Amount_ == null) {
+          return com.google.protobuf.MapField.emptyMapField(
+              CancelUnfreezeV2AmountDefaultEntryHolder.defaultEntry);
+        }
+        return cancelUnfreezeV2Amount_;
+      }
+      private com.google.protobuf.MapField<java.lang.String, java.lang.Long>
+      internalGetMutableCancelUnfreezeV2Amount() {
+        onChanged();;
+        if (cancelUnfreezeV2Amount_ == null) {
+          cancelUnfreezeV2Amount_ = com.google.protobuf.MapField.newMapField(
+              CancelUnfreezeV2AmountDefaultEntryHolder.defaultEntry);
+        }
+        if (!cancelUnfreezeV2Amount_.isMutable()) {
+          cancelUnfreezeV2Amount_ = cancelUnfreezeV2Amount_.copy();
+        }
+        return cancelUnfreezeV2Amount_;
+      }
+
+      public int getCancelUnfreezeV2AmountCount() {
+        return internalGetCancelUnfreezeV2Amount().getMap().size();
+      }
+      /**
+       * <code>map&lt;string, int64&gt; cancel_unfreezeV2_amount = 29;</code>
+       */
+
+      @java.lang.Override
+      public boolean containsCancelUnfreezeV2Amount(
+          java.lang.String key) {
+        if (key == null) { throw new java.lang.NullPointerException(); }
+        return internalGetCancelUnfreezeV2Amount().getMap().containsKey(key);
+      }
+      /**
+       * Use {@link #getCancelUnfreezeV2AmountMap()} instead.
+       */
+      @java.lang.Override
+      @java.lang.Deprecated
+      public java.util.Map<java.lang.String, java.lang.Long> getCancelUnfreezeV2Amount() {
+        return getCancelUnfreezeV2AmountMap();
+      }
+      /**
+       * <code>map&lt;string, int64&gt; cancel_unfreezeV2_amount = 29;</code>
+       */
+      @java.lang.Override
+
+      public java.util.Map<java.lang.String, java.lang.Long> getCancelUnfreezeV2AmountMap() {
+        return internalGetCancelUnfreezeV2Amount().getMap();
+      }
+      /**
+       * <code>map&lt;string, int64&gt; cancel_unfreezeV2_amount = 29;</code>
+       */
+      @java.lang.Override
+
+      public long getCancelUnfreezeV2AmountOrDefault(
+          java.lang.String key,
+          long defaultValue) {
+        if (key == null) { throw new java.lang.NullPointerException(); }
+        java.util.Map<java.lang.String, java.lang.Long> map =
+            internalGetCancelUnfreezeV2Amount().getMap();
+        return map.containsKey(key) ? map.get(key) : defaultValue;
+      }
+      /**
+       * <code>map&lt;string, int64&gt; cancel_unfreezeV2_amount = 29;</code>
+       */
+      @java.lang.Override
+
+      public long getCancelUnfreezeV2AmountOrThrow(
+          java.lang.String key) {
+        if (key == null) { throw new java.lang.NullPointerException(); }
+        java.util.Map<java.lang.String, java.lang.Long> map =
+            internalGetCancelUnfreezeV2Amount().getMap();
+        if (!map.containsKey(key)) {
+          throw new java.lang.IllegalArgumentException();
+        }
+        return map.get(key);
+      }
+
+      public Builder clearCancelUnfreezeV2Amount() {
+        internalGetMutableCancelUnfreezeV2Amount().getMutableMap()
+            .clear();
+        return this;
+      }
+      /**
+       * <code>map&lt;string, int64&gt; cancel_unfreezeV2_amount = 29;</code>
+       */
+
+      public Builder removeCancelUnfreezeV2Amount(
+          java.lang.String key) {
+        if (key == null) { throw new java.lang.NullPointerException(); }
+        internalGetMutableCancelUnfreezeV2Amount().getMutableMap()
+            .remove(key);
+        return this;
+      }
+      /**
+       * Use alternate mutation accessors instead.
+       */
+      @java.lang.Deprecated
+      public java.util.Map<java.lang.String, java.lang.Long>
+      getMutableCancelUnfreezeV2Amount() {
+        return internalGetMutableCancelUnfreezeV2Amount().getMutableMap();
+      }
+      /**
+       * <code>map&lt;string, int64&gt; cancel_unfreezeV2_amount = 29;</code>
+       */
+      public Builder putCancelUnfreezeV2Amount(
+          java.lang.String key,
+          long value) {
+        if (key == null) { throw new java.lang.NullPointerException(); }
+        
+        internalGetMutableCancelUnfreezeV2Amount().getMutableMap()
+            .put(key, value);
+        return this;
+      }
+      /**
+       * <code>map&lt;string, int64&gt; cancel_unfreezeV2_amount = 29;</code>
+       */
+
+      public Builder putAllCancelUnfreezeV2Amount(
+          java.util.Map<java.lang.String, java.lang.Long> values) {
+        internalGetMutableCancelUnfreezeV2Amount().getMutableMap()
+            .putAll(values);
         return this;
       }
       @java.lang.Override
@@ -71101,6 +72110,11 @@ public final class Response {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_protocol_TransactionReturn_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_protocol_EstimateEnergyMessage_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_protocol_EstimateEnergyMessage_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_protocol_TransactionExtention_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -71185,6 +72199,11 @@ public final class Response {
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_protocol_TransactionInfo_Log_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_protocol_TransactionInfo_CancelUnfreezeV2AmountEntry_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_protocol_TransactionInfo_CancelUnfreezeV2AmountEntry_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_protocol_Witness_descriptor;
   private static final 
@@ -71486,307 +72505,313 @@ public final class Response {
       "\006\022\035\n\031TOO_BIG_TRANSACTION_ERROR\020\007\022 \n\034TRAN" +
       "SACTION_EXPIRATION_ERROR\020\010\022\017\n\013SERVER_BUS" +
       "Y\020\t\022\021\n\rNO_CONNECTION\020\n\022#\n\037NOT_ENOUGH_EFF" +
-      "ECTIVE_CONNECTION\020\013\022\017\n\013OTHER_ERROR\020\024\"\253\001\n" +
-      "\024TransactionExtention\022*\n\013transaction\030\001 \001" +
-      "(\0132\025.protocol.Transaction\022\014\n\004txid\030\002 \001(\014\022" +
-      "\027\n\017constant_result\030\003 \003(\014\022+\n\006result\030\004 \001(\013" +
-      "2\033.protocol.TransactionReturn\022\023\n\013energy_" +
-      "used\030\005 \001(\003\"3\n\013WitnessList\022$\n\twitnesses\030\001" +
-      " \003(\0132\021.protocol.Witness\"5\n\014ProposalList\022" +
-      "%\n\tproposals\030\001 \003(\0132\022.protocol.Proposal\"5" +
-      "\n\014ExchangeList\022%\n\texchanges\030\001 \003(\0132\022.prot" +
-      "ocol.Exchange\">\n\016AssetIssueList\022,\n\006asset" +
-      "s\030\001 \003(\0132\034.protocol.AssetIssueContract\"+\n" +
-      "\tBlockList\022\036\n\005block\030\001 \003(\0132\017.protocol.Blo" +
-      "ck\"=\n\017TransactionList\022*\n\013transaction\030\001 \003" +
-      "(\0132\025.protocol.Transaction\"D\n\030DelegatedRe" +
-      "sourceMessage\022\024\n\014from_address\030\001 \001(\014\022\022\n\nt" +
-      "o_address\030\002 \001(\014\"O\n\025DelegatedResourceList" +
-      "\0226\n\021delegatedResource\030\001 \003(\0132\033.protocol.D" +
-      "elegatedResource\">\n\027AddressPrKeyPairMess" +
-      "age\022\017\n\007address\030\001 \001(\t\022\022\n\nprivateKey\030\002 \001(\t" +
-      "\"}\n\024EasyTransferResponse\022*\n\013transaction\030" +
-      "\001 \001(\0132\025.protocol.Transaction\022+\n\006result\030\002" +
-      " \001(\0132\033.protocol.TransactionReturn\022\014\n\004txi" +
-      "d\030\003 \001(\014\"a\n\030SmartContractDataWrapper\022/\n\016s" +
-      "mart_contract\030\001 \001(\0132\027.protocol.SmartCont" +
-      "ract\022\024\n\014runtime_code\030\002 \001(\014\"\360\001\n\023InternalT" +
-      "ransaction\022\014\n\004hash\030\001 \001(\014\022\026\n\016caller_addre" +
-      "ss\030\002 \001(\014\022\032\n\022transferTo_address\030\003 \001(\014\022B\n\r" +
-      "callValueInfo\030\004 \003(\0132+.protocol.InternalT" +
-      "ransaction.CallValueInfo\022\014\n\004note\030\005 \001(\014\022\020" +
-      "\n\010rejected\030\006 \001(\010\0323\n\rCallValueInfo\022\021\n\tcal" +
-      "lValue\030\001 \001(\003\022\017\n\007tokenId\030\002 \001(\t\"\325\001\n\017Resour" +
-      "ceReceipt\022\024\n\014energy_usage\030\001 \001(\003\022\022\n\nenerg" +
-      "y_fee\030\002 \001(\003\022\033\n\023origin_energy_usage\030\003 \001(\003" +
-      "\022\032\n\022energy_usage_total\030\004 \001(\003\022\021\n\tnet_usag" +
-      "e\030\005 \001(\003\022\017\n\007net_fee\030\006 \001(\003\022;\n\006result\030\007 \001(\016" +
-      "2+.protocol.Transaction.Result.contractR" +
-      "esult\"\220\006\n\017TransactionInfo\022\n\n\002id\030\001 \001(\014\022\013\n" +
-      "\003fee\030\002 \001(\003\022\023\n\013blockNumber\030\003 \001(\003\022\026\n\016block" +
-      "TimeStamp\030\004 \001(\003\022\026\n\016contractResult\030\005 \003(\014\022" +
-      "\030\n\020contract_address\030\006 \001(\014\022*\n\007receipt\030\007 \001" +
-      "(\0132\031.protocol.ResourceReceipt\022*\n\003log\030\010 \003" +
-      "(\0132\035.protocol.TransactionInfo.Log\022.\n\006res" +
-      "ult\030\t \001(\0162\036.protocol.TransactionInfo.cod" +
-      "e\022\022\n\nresMessage\030\n \001(\014\022\024\n\014assetIssueID\030\016 " +
-      "\001(\t\022\027\n\017withdraw_amount\030\017 \001(\003\022\027\n\017unfreeze" +
-      "_amount\030\020 \001(\003\022<\n\025internal_transactions\030\021" +
-      " \003(\0132\035.protocol.InternalTransaction\022 \n\030e" +
-      "xchange_received_amount\030\022 \001(\003\022&\n\036exchang" +
-      "e_inject_another_amount\030\023 \001(\003\022(\n exchang" +
-      "e_withdraw_another_amount\030\024 \001(\003\022\023\n\013excha" +
-      "nge_id\030\025 \001(\003\022 \n\030shielded_transaction_fee" +
-      "\030\026 \001(\003\022\017\n\007orderId\030\031 \001(\014\0221\n\014orderDetails\030" +
-      "\032 \003(\0132\033.protocol.MarketOrderDetail\022\036\n\026wi" +
-      "thdraw_expire_amount\030\034 \001(\003\0324\n\003Log\022\017\n\007add" +
-      "ress\030\001 \001(\014\022\016\n\006topics\030\002 \003(\014\022\014\n\004data\030\003 \001(\014" +
-      "\"\036\n\004code\022\n\n\006SUCESS\020\000\022\n\n\006FAILED\020\001\"\265\001\n\007Wit" +
-      "ness\022\017\n\007address\030\001 \001(\014\022\021\n\tvoteCount\030\002 \001(\003" +
-      "\022\016\n\006pubKey\030\003 \001(\014\022\013\n\003url\030\004 \001(\t\022\025\n\rtotalPr" +
-      "oduced\030\005 \001(\003\022\023\n\013totalMissed\030\006 \001(\003\022\026\n\016lat" +
-      "estBlockNum\030\007 \001(\003\022\025\n\rlatestSlotNum\030\010 \001(\003" +
-      "\022\016\n\006isJobs\030\t \001(\010\"\345\024\n\007Account\022\024\n\014account_" +
-      "name\030\001 \001(\014\022#\n\004type\030\002 \001(\0162\025.protocol.Acco" +
-      "untType\022\017\n\007address\030\003 \001(\014\022\017\n\007balance\030\004 \001(" +
-      "\003\022\035\n\005votes\030\005 \003(\0132\016.protocol.Vote\022+\n\005asse" +
-      "t\030\006 \003(\0132\034.protocol.Account.AssetEntry\022/\n" +
-      "\007assetV2\0308 \003(\0132\036.protocol.Account.AssetV" +
-      "2Entry\022(\n\006frozen\030\007 \003(\0132\030.protocol.Accoun" +
-      "t.Frozen\022\021\n\tnet_usage\030\010 \001(\003\0227\n/acquired_" +
-      "delegated_frozen_balance_for_bandwidth\030)" +
-      " \001(\003\022.\n&delegated_frozen_balance_for_ban" +
-      "dwidth\030* \001(\003\022\026\n\016old_tron_power\030. \001(\003\022,\n\n" +
-      "tron_power\030/ \001(\0132\030.protocol.Account.Froz" +
-      "en\022\027\n\017asset_optimized\030< \001(\010\022\023\n\013create_ti" +
-      "me\030\t \001(\003\022\034\n\024latest_opration_time\030\n \001(\003\022\021" +
-      "\n\tallowance\030\013 \001(\003\022\034\n\024latest_withdraw_tim" +
-      "e\030\014 \001(\003\022\014\n\004code\030\r \001(\014\022\022\n\nis_witness\030\016 \001(" +
-      "\010\022\024\n\014is_committee\030\017 \001(\010\022/\n\rfrozen_supply" +
-      "\030\020 \003(\0132\030.protocol.Account.Frozen\022\031\n\021asse" +
-      "t_issued_name\030\021 \001(\014\022\027\n\017asset_issued_ID\0309" +
-      " \001(\014\022T\n\033latest_asset_operation_time\030\022 \003(" +
-      "\0132/.protocol.Account.LatestAssetOperatio" +
-      "nTimeEntry\022X\n\035latest_asset_operation_tim" +
-      "eV2\030: \003(\01321.protocol.Account.LatestAsset" +
-      "OperationTimeV2Entry\022\026\n\016free_net_usage\030\023" +
-      " \001(\003\022F\n\024free_asset_net_usage\030\024 \003(\0132(.pro" +
-      "tocol.Account.FreeAssetNetUsageEntry\022J\n\026" +
-      "free_asset_net_usageV2\030; \003(\0132*.protocol." +
-      "Account.FreeAssetNetUsageV2Entry\022\033\n\023late" +
-      "st_consume_time\030\025 \001(\003\022 \n\030latest_consume_" +
-      "free_time\030\026 \001(\003\022\022\n\naccount_id\030\027 \001(\014\022\027\n\017n" +
-      "et_window_size\030\030 \001(\003\022;\n\020account_resource" +
-      "\030\032 \001(\0132!.protocol.Account.AccountResourc" +
-      "e\022\020\n\010codeHash\030\036 \001(\014\022.\n\020owner_permission\030" +
-      "\037 \001(\0132\024.protocol.Permission\0220\n\022witness_p" +
-      "ermission\030  \001(\0132\024.protocol.Permission\022/\n" +
-      "\021active_permission\030! \003(\0132\024.protocol.Perm" +
-      "ission\022,\n\010frozenV2\030\" \003(\0132\032.protocol.Acco" +
-      "unt.FreezeV2\0220\n\nunfrozenV2\030# \003(\0132\034.proto" +
-      "col.Account.UnFreezeV2\0220\n(delegated_froz" +
-      "enV2_balance_for_bandwidth\030$ \001(\003\0229\n1acqu" +
-      "ired_delegated_frozenV2_balance_for_band" +
-      "width\030% \001(\003\0325\n\006Frozen\022\026\n\016frozen_balance\030" +
-      "\001 \001(\003\022\023\n\013expire_time\030\002 \001(\003\032,\n\nAssetEntry" +
-      "\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001\032.\n\014Asse" +
-      "tV2Entry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001" +
-      "\032?\n\035LatestAssetOperationTimeEntry\022\013\n\003key" +
-      "\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001\032A\n\037LatestAsset" +
-      "OperationTimeV2Entry\022\013\n\003key\030\001 \001(\t\022\r\n\005val" +
-      "ue\030\002 \001(\003:\0028\001\0328\n\026FreeAssetNetUsageEntry\022\013" +
-      "\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001\032:\n\030FreeAs" +
-      "setNetUsageV2Entry\022\013\n\003key\030\001 \001(\t\022\r\n\005value" +
-      "\030\002 \001(\003:\0028\001\032\306\003\n\017AccountResource\022\024\n\014energy" +
-      "_usage\030\001 \001(\003\022;\n\031frozen_balance_for_energ" +
-      "y\030\002 \001(\0132\030.protocol.Account.Frozen\022&\n\036lat" +
-      "est_consume_time_for_energy\030\003 \001(\003\0224\n,acq" +
-      "uired_delegated_frozen_balance_for_energ" +
-      "y\030\004 \001(\003\022+\n#delegated_frozen_balance_for_" +
-      "energy\030\005 \001(\003\022\025\n\rstorage_limit\030\006 \001(\003\022\025\n\rs" +
-      "torage_usage\030\007 \001(\003\022$\n\034latest_exchange_st" +
-      "orage_time\030\010 \001(\003\022\032\n\022energy_window_size\030\t" +
-      " \001(\003\022-\n%delegated_frozenV2_balance_for_e" +
-      "nergy\030\n \001(\003\0226\n.acquired_delegated_frozen" +
-      "V2_balance_for_energy\030\013 \001(\003\032@\n\010FreezeV2\022" +
-      "$\n\004type\030\001 \001(\0162\026.protocol.ResourceCode\022\016\n" +
-      "\006amount\030\002 \001(\003\032i\n\nUnFreezeV2\022$\n\004type\030\001 \001(" +
-      "\0162\026.protocol.ResourceCode\022\027\n\017unfreeze_am" +
-      "ount\030\003 \001(\003\022\034\n\024unfreeze_expire_time\030\004 \001(\003" +
-      "\"r\n\021MarketOrderDetail\022\024\n\014makerOrderId\030\001 " +
-      "\001(\014\022\024\n\014takerOrderId\030\002 \001(\014\022\030\n\020fillSellQua" +
-      "ntity\030\003 \001(\003\022\027\n\017fillBuyQuantity\030\004 \001(\003\"\321\002\n" +
-      "\010Proposal\022\023\n\013proposal_id\030\001 \001(\003\022\030\n\020propos" +
-      "er_address\030\002 \001(\014\0226\n\nparameters\030\003 \003(\0132\".p" +
-      "rotocol.Proposal.ParametersEntry\022\027\n\017expi" +
-      "ration_time\030\004 \001(\003\022\023\n\013create_time\030\005 \001(\003\022\021" +
-      "\n\tapprovals\030\006 \003(\014\022\'\n\005state\030\007 \001(\0162\030.proto" +
-      "col.Proposal.State\0321\n\017ParametersEntry\022\013\n" +
-      "\003key\030\001 \001(\003\022\r\n\005value\030\002 \001(\003:\0028\001\"A\n\005State\022\013" +
-      "\n\007PENDING\020\000\022\017\n\013DISAPPROVED\020\001\022\014\n\010APPROVED" +
-      "\020\002\022\014\n\010CANCELED\020\003\"\271\001\n\010Exchange\022\023\n\013exchang" +
-      "e_id\030\001 \001(\003\022\027\n\017creator_address\030\002 \001(\014\022\023\n\013c" +
-      "reate_time\030\003 \001(\003\022\026\n\016first_token_id\030\006 \001(\014" +
-      "\022\033\n\023first_token_balance\030\007 \001(\003\022\027\n\017second_" +
-      "token_id\030\010 \001(\014\022\034\n\024second_token_balance\030\t" +
-      " \001(\003\"\271\001\n\021DelegatedResource\022\014\n\004from\030\001 \001(\014" +
-      "\022\n\n\002to\030\002 \001(\014\022$\n\034frozen_balance_for_bandw" +
-      "idth\030\003 \001(\003\022!\n\031frozen_balance_for_energy\030" +
-      "\004 \001(\003\022!\n\031expire_time_for_bandwidth\030\005 \001(\003" +
-      "\022\036\n\026expire_time_for_energy\030\006 \001(\003\"m\n\035Dele" +
-      "gatedResourceAccountIndex\022\017\n\007account\030\001 \001" +
-      "(\014\022\024\n\014fromAccounts\030\002 \003(\014\022\022\n\ntoAccounts\030\003" +
-      " \003(\014\022\021\n\ttimestamp\030\004 \001(\003\"Q\n\017TransactionSi" +
-      "gn\022*\n\013transaction\030\001 \001(\0132\025.protocol.Trans" +
-      "action\022\022\n\nprivateKey\030\002 \001(\014\"\201\001\n\017ChainPara" +
-      "meters\022@\n\016chainParameter\030\001 \003(\0132(.protoco" +
-      "l.ChainParameters.ChainParameter\032,\n\016Chai" +
-      "nParameter\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\003\"\240" +
-      "\021\n\010NodeInfo\022\024\n\014beginSyncNum\030\001 \001(\003\022\r\n\005blo" +
-      "ck\030\002 \001(\t\022\025\n\rsolidityBlock\030\003 \001(\t\022\033\n\023curre" +
-      "ntConnectCount\030\004 \001(\005\022\032\n\022activeConnectCou" +
-      "nt\030\005 \001(\005\022\033\n\023passiveConnectCount\030\006 \001(\005\022\021\n" +
-      "\ttotalFlow\030\007 \001(\003\0221\n\014peerInfoList\030\010 \003(\0132\033" +
-      ".protocol.NodeInfo.PeerInfo\0229\n\016configNod" +
-      "eInfo\030\t \001(\0132!.protocol.NodeInfo.ConfigNo" +
-      "deInfo\0223\n\013machineInfo\030\n \001(\0132\036.protocol.N" +
-      "odeInfo.MachineInfo\022H\n\023cheatWitnessInfoM" +
-      "ap\030\013 \003(\0132+.protocol.NodeInfo.CheatWitnes" +
-      "sInfoMapEntry\032:\n\030CheatWitnessInfoMapEntr" +
-      "y\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\032\315\004\n\010Pe" +
-      "erInfo\022\025\n\rlastSyncBlock\030\001 \001(\t\022\021\n\tremainN" +
-      "um\030\002 \001(\003\022\033\n\023lastBlockUpdateTime\030\003 \001(\003\022\020\n" +
-      "\010syncFlag\030\004 \001(\010\022\037\n\027headBlockTimeWeBothHa" +
-      "ve\030\005 \001(\003\022\030\n\020needSyncFromPeer\030\006 \001(\010\022\026\n\016ne" +
-      "edSyncFromUs\030\007 \001(\010\022\014\n\004host\030\010 \001(\t\022\014\n\004port" +
-      "\030\t \001(\005\022\016\n\006nodeId\030\n \001(\t\022\023\n\013connectTime\030\013 " +
-      "\001(\003\022\022\n\navgLatency\030\014 \001(\001\022\027\n\017syncToFetchSi" +
-      "ze\030\r \001(\005\022\036\n\026syncToFetchSizePeekNum\030\016 \001(\003" +
-      "\022\036\n\026syncBlockRequestedSize\030\017 \001(\005\022\025\n\runFe" +
-      "tchSynNum\030\020 \001(\003\022\027\n\017blockInPorcSize\030\021 \001(\005" +
-      "\022\033\n\023headBlockWeBothHave\030\022 \001(\t\022\020\n\010isActiv" +
-      "e\030\023 \001(\010\022\r\n\005score\030\024 \001(\005\022\021\n\tnodeCount\030\025 \001(" +
-      "\005\022\016\n\006inFlow\030\026 \001(\003\022\027\n\017disconnectTimes\030\027 \001" +
-      "(\005\022\035\n\025localDisconnectReason\030\030 \001(\t\022\036\n\026rem" +
-      "oteDisconnectReason\030\031 \001(\t\032\345\003\n\016ConfigNode" +
-      "Info\022\023\n\013codeVersion\030\001 \001(\t\022\022\n\np2pVersion\030" +
-      "\002 \001(\t\022\022\n\nlistenPort\030\003 \001(\005\022\026\n\016discoverEna" +
-      "ble\030\004 \001(\010\022\026\n\016activeNodeSize\030\005 \001(\005\022\027\n\017pas" +
-      "siveNodeSize\030\006 \001(\005\022\024\n\014sendNodeSize\030\007 \001(\005" +
-      "\022\027\n\017maxConnectCount\030\010 \001(\005\022\035\n\025sameIpMaxCo" +
-      "nnectCount\030\t \001(\005\022\030\n\020backupListenPort\030\n \001" +
-      "(\005\022\030\n\020backupMemberSize\030\013 \001(\005\022\026\n\016backupPr" +
-      "iority\030\014 \001(\005\022\021\n\tdbVersion\030\r \001(\005\022\034\n\024minPa" +
-      "rticipationRate\030\016 \001(\005\022\027\n\017supportConstant" +
-      "\030\017 \001(\010\022\024\n\014minTimeRatio\030\020 \001(\001\022\024\n\014maxTimeR" +
-      "atio\030\021 \001(\001\022 \n\030allowCreationOfContracts\030\022" +
-      " \001(\003\022\033\n\023allowAdaptiveEnergy\030\023 \001(\003\032\215\005\n\013Ma" +
-      "chineInfo\022\023\n\013threadCount\030\001 \001(\005\022\033\n\023deadLo" +
-      "ckThreadCount\030\002 \001(\005\022\020\n\010cpuCount\030\003 \001(\005\022\023\n" +
-      "\013totalMemory\030\004 \001(\003\022\022\n\nfreeMemory\030\005 \001(\003\022\017" +
-      "\n\007cpuRate\030\006 \001(\001\022\023\n\013javaVersion\030\007 \001(\t\022\016\n\006" +
-      "osName\030\010 \001(\t\022\027\n\017jvmTotalMemoery\030\t \001(\003\022\025\n" +
-      "\rjvmFreeMemory\030\n \001(\003\022\026\n\016processCpuRate\030\013" +
-      " \001(\001\022I\n\022memoryDescInfoList\030\014 \003(\0132-.proto" +
-      "col.NodeInfo.MachineInfo.MemoryDescInfo\022" +
-      "Q\n\026deadLockThreadInfoList\030\r \003(\01321.protoc" +
-      "ol.NodeInfo.MachineInfo.DeadLockThreadIn" +
-      "fo\032c\n\016MemoryDescInfo\022\014\n\004name\030\001 \001(\t\022\020\n\010in" +
-      "itSize\030\002 \001(\003\022\017\n\007useSize\030\003 \001(\003\022\017\n\007maxSize" +
-      "\030\004 \001(\003\022\017\n\007useRate\030\005 \001(\001\032\217\001\n\022DeadLockThre" +
-      "adInfo\022\014\n\004name\030\001 \001(\t\022\020\n\010lockName\030\002 \001(\t\022\021" +
-      "\n\tlockOwner\030\003 \001(\t\022\r\n\005state\030\004 \001(\t\022\021\n\tbloc" +
-      "kTime\030\005 \001(\003\022\020\n\010waitTime\030\006 \001(\003\022\022\n\nstackTr" +
-      "ace\030\007 \001(\t\"\362\002\n\013MarketOrder\022\020\n\010order_id\030\001 " +
-      "\001(\014\022\025\n\rowner_address\030\002 \001(\014\022\023\n\013create_tim" +
-      "e\030\003 \001(\003\022\025\n\rsell_token_id\030\004 \001(\014\022\033\n\023sell_t" +
-      "oken_quantity\030\005 \001(\003\022\024\n\014buy_token_id\030\006 \001(" +
-      "\014\022\032\n\022buy_token_quantity\030\007 \001(\003\022\"\n\032sell_to" +
-      "ken_quantity_remain\030\t \001(\003\022\"\n\032sell_token_" +
-      "quantity_return\030\n \001(\003\022*\n\005state\030\013 \001(\0162\033.p" +
-      "rotocol.MarketOrder.State\022\014\n\004prev\030\014 \001(\014\022" +
-      "\014\n\004next\030\r \001(\014\"/\n\005State\022\n\n\006ACTIVE\020\000\022\014\n\010IN" +
-      "ACTIVE\020\001\022\014\n\010CANCELED\020\002\"8\n\017MarketOrderLis" +
-      "t\022%\n\006orders\030\001 \003(\0132\025.protocol.MarketOrder" +
-      "\">\n\017MarketOrderPair\022\025\n\rsell_token_id\030\001 \001" +
-      "(\014\022\024\n\014buy_token_id\030\002 \001(\014\"C\n\023MarketOrderP" +
-      "airList\022,\n\torderPair\030\001 \003(\0132\031.protocol.Ma" +
-      "rketOrderPair\"F\n\013MarketPrice\022\033\n\023sell_tok" +
-      "en_quantity\030\001 \001(\003\022\032\n\022buy_token_quantity\030" +
-      "\002 \001(\003\"e\n\017MarketPriceList\022\025\n\rsell_token_i" +
-      "d\030\001 \001(\014\022\024\n\014buy_token_id\030\002 \001(\014\022%\n\006prices\030" +
-      "\003 \003(\0132\025.protocol.MarketPrice\"#\n\017Nullifie" +
-      "rResult\022\020\n\010is_spent\030\001 \001(\010\"\345\001\n\021DecryptNot" +
-      "esTRC20\0223\n\007noteTxs\030\001 \003(\0132\".protocol.Decr" +
-      "yptNotesTRC20.NoteTx\032\232\001\n\006NoteTx\022\034\n\004note\030" +
-      "\001 \001(\0132\016.protocol.Note\022\020\n\010position\030\002 \001(\003\022" +
-      "\020\n\010is_spent\030\003 \001(\010\022\014\n\004txid\030\004 \001(\014\022\r\n\005index" +
-      "\030\005 \001(\005\022\021\n\tto_amount\030\006 \001(\t\022\036\n\026transparent" +
-      "_to_address\030\007 \001(\014\"I\n\023TransactionInfoList" +
-      "\0222\n\017transactionInfo\030\001 \003(\0132\031.protocol.Tra" +
-      "nsactionInfo\"\347\002\n\027TransactionApprovedList" +
-      "\022\025\n\rapproved_list\030\002 \003(\014\0228\n\006result\030\004 \001(\0132" +
-      "(.protocol.TransactionApprovedList.Resul" +
-      "t\0223\n\013transaction\030\005 \001(\0132\036.protocol.Transa" +
-      "ctionExtention\032\305\001\n\006Result\022D\n\004code\030\001 \001(\0162" +
-      "6.protocol.TransactionApprovedList.Resul" +
-      "t.response_code\022\017\n\007message\030\002 \001(\t\"d\n\rresp" +
-      "onse_code\022\013\n\007SUCCESS\020\000\022\032\n\026SIGNATURE_FORM" +
-      "AT_ERROR\020\001\022\031\n\025COMPUTE_ADDRESS_ERROR\020\002\022\017\n" +
-      "\013OTHER_ERROR\020\024\"\337\003\n\025TransactionSignWeight" +
-      "\022(\n\npermission\030\001 \001(\0132\024.protocol.Permissi" +
-      "on\022\025\n\rapproved_list\030\002 \003(\014\022\026\n\016current_wei" +
-      "ght\030\003 \001(\003\0226\n\006result\030\004 \001(\0132&.protocol.Tra" +
-      "nsactionSignWeight.Result\0223\n\013transaction" +
-      "\030\005 \001(\0132\036.protocol.TransactionExtention\032\377" +
-      "\001\n\006Result\022B\n\004code\030\001 \001(\01624.protocol.Trans" +
-      "actionSignWeight.Result.response_code\022\017\n" +
-      "\007message\030\002 \001(\t\"\237\001\n\rresponse_code\022\025\n\021ENOU" +
-      "GH_PERMISSION\020\000\022\031\n\025NOT_ENOUGH_PERMISSION" +
-      "\020\001\022\032\n\026SIGNATURE_FORMAT_ERROR\020\002\022\031\n\025COMPUT" +
-      "E_ADDRESS_ERROR\020\003\022\024\n\020PERMISSION_ERROR\020\004\022" +
-      "\017\n\013OTHER_ERROR\020\024\"\223\001\n\010NodeList\022&\n\005nodes\030\001" +
-      " \003(\0132\027.protocol.NodeList.Node\032_\n\004Node\0220\n" +
-      "\007address\030\001 \001(\0132\037.protocol.NodeList.Node." +
-      "Address\032%\n\007Address\022\014\n\004host\030\001 \001(\014\022\014\n\004port" +
-      "\030\002 \001(\005\"\207\003\n\021AccountNetMessage\022\023\n\013freeNetU" +
-      "sed\030\001 \001(\003\022\024\n\014freeNetLimit\030\002 \001(\003\022\017\n\007NetUs" +
-      "ed\030\003 \001(\003\022\020\n\010NetLimit\030\004 \001(\003\022C\n\014assetNetUs" +
-      "ed\030\005 \003(\0132-.protocol.AccountNetMessage.As" +
-      "setNetUsedEntry\022E\n\rassetNetLimit\030\006 \003(\0132." +
-      ".protocol.AccountNetMessage.AssetNetLimi" +
-      "tEntry\022\025\n\rTotalNetLimit\030\007 \001(\003\022\026\n\016TotalNe" +
-      "tWeight\030\010 \001(\003\0323\n\021AssetNetUsedEntry\022\013\n\003ke" +
-      "y\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001\0324\n\022AssetNetLi" +
-      "mitEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001" +
-      "\"\354\004\n\026AccountResourceMessage\022\023\n\013freeNetUs" +
-      "ed\030\001 \001(\003\022\024\n\014freeNetLimit\030\002 \001(\003\022\017\n\007NetUse" +
-      "d\030\003 \001(\003\022\020\n\010NetLimit\030\004 \001(\003\022H\n\014assetNetUse" +
-      "d\030\005 \003(\01322.protocol.AccountResourceMessag" +
-      "e.AssetNetUsedEntry\022J\n\rassetNetLimit\030\006 \003" +
-      "(\01323.protocol.AccountResourceMessage.Ass" +
-      "etNetLimitEntry\022\025\n\rTotalNetLimit\030\007 \001(\003\022\026" +
-      "\n\016TotalNetWeight\030\010 \001(\003\022\034\n\024TotalTronPower" +
-      "Weight\030\t \001(\003\022\025\n\rtronPowerUsed\030\n \001(\003\022\026\n\016t" +
-      "ronPowerLimit\030\013 \001(\003\022\022\n\nEnergyUsed\030\r \001(\003\022" +
-      "\023\n\013EnergyLimit\030\016 \001(\003\022\030\n\020TotalEnergyLimit" +
-      "\030\017 \001(\003\022\031\n\021TotalEnergyWeight\030\020 \001(\003\022\023\n\013sto" +
-      "rageUsed\030\025 \001(\003\022\024\n\014storageLimit\030\026 \001(\003\0323\n\021" +
-      "AssetNetUsedEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030" +
-      "\002 \001(\003:\0028\001\0324\n\022AssetNetLimitEntry\022\013\n\003key\030\001" +
-      " \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001\"/\n\017BlockIdentifi" +
-      "er\022\014\n\004hash\030\001 \001(\014\022\016\n\006number\030\002 \001(\003\"\241\001\n\021Blo" +
-      "ckBalanceTrace\0223\n\020block_identifier\030\001 \001(\013" +
-      "2\031.protocol.BlockIdentifier\022\021\n\ttimestamp" +
-      "\030\002 \001(\003\022D\n\031transaction_balance_trace\030\003 \003(" +
-      "\0132!.protocol.TransactionBalanceTrace\"\343\001\n" +
-      "\027TransactionBalanceTrace\022\036\n\026transaction_" +
-      "identifier\030\001 \001(\014\022>\n\toperation\030\002 \003(\0132+.pr" +
-      "otocol.TransactionBalanceTrace.Operation" +
-      "\022\014\n\004type\030\003 \001(\t\022\016\n\006status\030\004 \001(\t\032J\n\tOperat" +
-      "ion\022\034\n\024operation_identifier\030\001 \001(\003\022\017\n\007add" +
-      "ress\030\002 \001(\014\022\016\n\006amount\030\003 \001(\003B\030\n\026org.tron.t" +
-      "rident.protob\006proto3"
+      "ECTIVE_CONNECTION\020\013\022\017\n\013OTHER_ERROR\020\024\"]\n\025" +
+      "EstimateEnergyMessage\022+\n\006result\030\001 \001(\0132\033." +
+      "protocol.TransactionReturn\022\027\n\017energy_req" +
+      "uired\030\002 \001(\003\"\253\001\n\024TransactionExtention\022*\n\013" +
+      "transaction\030\001 \001(\0132\025.protocol.Transaction" +
+      "\022\014\n\004txid\030\002 \001(\014\022\027\n\017constant_result\030\003 \003(\014\022" +
+      "+\n\006result\030\004 \001(\0132\033.protocol.TransactionRe" +
+      "turn\022\023\n\013energy_used\030\005 \001(\003\"3\n\013WitnessList" +
+      "\022$\n\twitnesses\030\001 \003(\0132\021.protocol.Witness\"5" +
+      "\n\014ProposalList\022%\n\tproposals\030\001 \003(\0132\022.prot" +
+      "ocol.Proposal\"5\n\014ExchangeList\022%\n\texchang" +
+      "es\030\001 \003(\0132\022.protocol.Exchange\">\n\016AssetIss" +
+      "ueList\022,\n\006assets\030\001 \003(\0132\034.protocol.AssetI" +
+      "ssueContract\"+\n\tBlockList\022\036\n\005block\030\001 \003(\013" +
+      "2\017.protocol.Block\"=\n\017TransactionList\022*\n\013" +
+      "transaction\030\001 \003(\0132\025.protocol.Transaction" +
+      "\"D\n\030DelegatedResourceMessage\022\024\n\014from_add" +
+      "ress\030\001 \001(\014\022\022\n\nto_address\030\002 \001(\014\"O\n\025Delega" +
+      "tedResourceList\0226\n\021delegatedResource\030\001 \003" +
+      "(\0132\033.protocol.DelegatedResource\">\n\027Addre" +
+      "ssPrKeyPairMessage\022\017\n\007address\030\001 \001(\t\022\022\n\np" +
+      "rivateKey\030\002 \001(\t\"}\n\024EasyTransferResponse\022" +
+      "*\n\013transaction\030\001 \001(\0132\025.protocol.Transact" +
+      "ion\022+\n\006result\030\002 \001(\0132\033.protocol.Transacti" +
+      "onReturn\022\014\n\004txid\030\003 \001(\014\"a\n\030SmartContractD" +
+      "ataWrapper\022/\n\016smart_contract\030\001 \001(\0132\027.pro" +
+      "tocol.SmartContract\022\024\n\014runtime_code\030\002 \001(" +
+      "\014\"\360\001\n\023InternalTransaction\022\014\n\004hash\030\001 \001(\014\022" +
+      "\026\n\016caller_address\030\002 \001(\014\022\032\n\022transferTo_ad" +
+      "dress\030\003 \001(\014\022B\n\rcallValueInfo\030\004 \003(\0132+.pro" +
+      "tocol.InternalTransaction.CallValueInfo\022" +
+      "\014\n\004note\030\005 \001(\014\022\020\n\010rejected\030\006 \001(\010\0323\n\rCallV" +
+      "alueInfo\022\021\n\tcallValue\030\001 \001(\003\022\017\n\007tokenId\030\002" +
+      " \001(\t\"\325\001\n\017ResourceReceipt\022\024\n\014energy_usage" +
+      "\030\001 \001(\003\022\022\n\nenergy_fee\030\002 \001(\003\022\033\n\023origin_ene" +
+      "rgy_usage\030\003 \001(\003\022\032\n\022energy_usage_total\030\004 " +
+      "\001(\003\022\021\n\tnet_usage\030\005 \001(\003\022\017\n\007net_fee\030\006 \001(\003\022" +
+      ";\n\006result\030\007 \001(\0162+.protocol.Transaction.R" +
+      "esult.contractResult\"\250\007\n\017TransactionInfo" +
+      "\022\n\n\002id\030\001 \001(\014\022\013\n\003fee\030\002 \001(\003\022\023\n\013blockNumber" +
+      "\030\003 \001(\003\022\026\n\016blockTimeStamp\030\004 \001(\003\022\026\n\016contra" +
+      "ctResult\030\005 \003(\014\022\030\n\020contract_address\030\006 \001(\014" +
+      "\022*\n\007receipt\030\007 \001(\0132\031.protocol.ResourceRec" +
+      "eipt\022*\n\003log\030\010 \003(\0132\035.protocol.Transaction" +
+      "Info.Log\022.\n\006result\030\t \001(\0162\036.protocol.Tran" +
+      "sactionInfo.code\022\022\n\nresMessage\030\n \001(\014\022\024\n\014" +
+      "assetIssueID\030\016 \001(\t\022\027\n\017withdraw_amount\030\017 " +
+      "\001(\003\022\027\n\017unfreeze_amount\030\020 \001(\003\022<\n\025internal" +
+      "_transactions\030\021 \003(\0132\035.protocol.InternalT" +
+      "ransaction\022 \n\030exchange_received_amount\030\022" +
+      " \001(\003\022&\n\036exchange_inject_another_amount\030\023" +
+      " \001(\003\022(\n exchange_withdraw_another_amount" +
+      "\030\024 \001(\003\022\023\n\013exchange_id\030\025 \001(\003\022 \n\030shielded_" +
+      "transaction_fee\030\026 \001(\003\022\017\n\007orderId\030\031 \001(\014\0221" +
+      "\n\014orderDetails\030\032 \003(\0132\033.protocol.MarketOr" +
+      "derDetail\022\036\n\026withdraw_expire_amount\030\034 \001(" +
+      "\003\022W\n\030cancel_unfreezeV2_amount\030\035 \003(\01325.pr" +
+      "otocol.TransactionInfo.CancelUnfreezeV2A" +
+      "mountEntry\0324\n\003Log\022\017\n\007address\030\001 \001(\014\022\016\n\006to" +
+      "pics\030\002 \003(\014\022\014\n\004data\030\003 \001(\014\032=\n\033CancelUnfree" +
+      "zeV2AmountEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 " +
+      "\001(\003:\0028\001\"\036\n\004code\022\n\n\006SUCESS\020\000\022\n\n\006FAILED\020\001\"" +
+      "\265\001\n\007Witness\022\017\n\007address\030\001 \001(\014\022\021\n\tvoteCoun" +
+      "t\030\002 \001(\003\022\016\n\006pubKey\030\003 \001(\014\022\013\n\003url\030\004 \001(\t\022\025\n\r" +
+      "totalProduced\030\005 \001(\003\022\023\n\013totalMissed\030\006 \001(\003" +
+      "\022\026\n\016latestBlockNum\030\007 \001(\003\022\025\n\rlatestSlotNu" +
+      "m\030\010 \001(\003\022\016\n\006isJobs\030\t \001(\010\"\345\024\n\007Account\022\024\n\014a" +
+      "ccount_name\030\001 \001(\014\022#\n\004type\030\002 \001(\0162\025.protoc" +
+      "ol.AccountType\022\017\n\007address\030\003 \001(\014\022\017\n\007balan" +
+      "ce\030\004 \001(\003\022\035\n\005votes\030\005 \003(\0132\016.protocol.Vote\022" +
+      "+\n\005asset\030\006 \003(\0132\034.protocol.Account.AssetE" +
+      "ntry\022/\n\007assetV2\0308 \003(\0132\036.protocol.Account" +
+      ".AssetV2Entry\022(\n\006frozen\030\007 \003(\0132\030.protocol" +
+      ".Account.Frozen\022\021\n\tnet_usage\030\010 \001(\003\0227\n/ac" +
+      "quired_delegated_frozen_balance_for_band" +
+      "width\030) \001(\003\022.\n&delegated_frozen_balance_" +
+      "for_bandwidth\030* \001(\003\022\026\n\016old_tron_power\030. " +
+      "\001(\003\022,\n\ntron_power\030/ \001(\0132\030.protocol.Accou" +
+      "nt.Frozen\022\027\n\017asset_optimized\030< \001(\010\022\023\n\013cr" +
+      "eate_time\030\t \001(\003\022\034\n\024latest_opration_time\030" +
+      "\n \001(\003\022\021\n\tallowance\030\013 \001(\003\022\034\n\024latest_withd" +
+      "raw_time\030\014 \001(\003\022\014\n\004code\030\r \001(\014\022\022\n\nis_witne" +
+      "ss\030\016 \001(\010\022\024\n\014is_committee\030\017 \001(\010\022/\n\rfrozen" +
+      "_supply\030\020 \003(\0132\030.protocol.Account.Frozen\022" +
+      "\031\n\021asset_issued_name\030\021 \001(\014\022\027\n\017asset_issu" +
+      "ed_ID\0309 \001(\014\022T\n\033latest_asset_operation_ti" +
+      "me\030\022 \003(\0132/.protocol.Account.LatestAssetO" +
+      "perationTimeEntry\022X\n\035latest_asset_operat" +
+      "ion_timeV2\030: \003(\01321.protocol.Account.Late" +
+      "stAssetOperationTimeV2Entry\022\026\n\016free_net_" +
+      "usage\030\023 \001(\003\022F\n\024free_asset_net_usage\030\024 \003(" +
+      "\0132(.protocol.Account.FreeAssetNetUsageEn" +
+      "try\022J\n\026free_asset_net_usageV2\030; \003(\0132*.pr" +
+      "otocol.Account.FreeAssetNetUsageV2Entry\022" +
+      "\033\n\023latest_consume_time\030\025 \001(\003\022 \n\030latest_c" +
+      "onsume_free_time\030\026 \001(\003\022\022\n\naccount_id\030\027 \001" +
+      "(\014\022\027\n\017net_window_size\030\030 \001(\003\022;\n\020account_r" +
+      "esource\030\032 \001(\0132!.protocol.Account.Account" +
+      "Resource\022\020\n\010codeHash\030\036 \001(\014\022.\n\020owner_perm" +
+      "ission\030\037 \001(\0132\024.protocol.Permission\0220\n\022wi" +
+      "tness_permission\030  \001(\0132\024.protocol.Permis" +
+      "sion\022/\n\021active_permission\030! \003(\0132\024.protoc" +
+      "ol.Permission\022,\n\010frozenV2\030\" \003(\0132\032.protoc" +
+      "ol.Account.FreezeV2\0220\n\nunfrozenV2\030# \003(\0132" +
+      "\034.protocol.Account.UnFreezeV2\0220\n(delegat" +
+      "ed_frozenV2_balance_for_bandwidth\030$ \001(\003\022" +
+      "9\n1acquired_delegated_frozenV2_balance_f" +
+      "or_bandwidth\030% \001(\003\0325\n\006Frozen\022\026\n\016frozen_b" +
+      "alance\030\001 \001(\003\022\023\n\013expire_time\030\002 \001(\003\032,\n\nAss" +
+      "etEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001\032" +
+      ".\n\014AssetV2Entry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 " +
+      "\001(\003:\0028\001\032?\n\035LatestAssetOperationTimeEntry" +
+      "\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001\032A\n\037Late" +
+      "stAssetOperationTimeV2Entry\022\013\n\003key\030\001 \001(\t" +
+      "\022\r\n\005value\030\002 \001(\003:\0028\001\0328\n\026FreeAssetNetUsage" +
+      "Entry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001\032:\n" +
+      "\030FreeAssetNetUsageV2Entry\022\013\n\003key\030\001 \001(\t\022\r" +
+      "\n\005value\030\002 \001(\003:\0028\001\032\306\003\n\017AccountResource\022\024\n" +
+      "\014energy_usage\030\001 \001(\003\022;\n\031frozen_balance_fo" +
+      "r_energy\030\002 \001(\0132\030.protocol.Account.Frozen" +
+      "\022&\n\036latest_consume_time_for_energy\030\003 \001(\003" +
+      "\0224\n,acquired_delegated_frozen_balance_fo" +
+      "r_energy\030\004 \001(\003\022+\n#delegated_frozen_balan" +
+      "ce_for_energy\030\005 \001(\003\022\025\n\rstorage_limit\030\006 \001" +
+      "(\003\022\025\n\rstorage_usage\030\007 \001(\003\022$\n\034latest_exch" +
+      "ange_storage_time\030\010 \001(\003\022\032\n\022energy_window" +
+      "_size\030\t \001(\003\022-\n%delegated_frozenV2_balanc" +
+      "e_for_energy\030\n \001(\003\0226\n.acquired_delegated" +
+      "_frozenV2_balance_for_energy\030\013 \001(\003\032@\n\010Fr" +
+      "eezeV2\022$\n\004type\030\001 \001(\0162\026.protocol.Resource" +
+      "Code\022\016\n\006amount\030\002 \001(\003\032i\n\nUnFreezeV2\022$\n\004ty" +
+      "pe\030\001 \001(\0162\026.protocol.ResourceCode\022\027\n\017unfr" +
+      "eeze_amount\030\003 \001(\003\022\034\n\024unfreeze_expire_tim" +
+      "e\030\004 \001(\003\"r\n\021MarketOrderDetail\022\024\n\014makerOrd" +
+      "erId\030\001 \001(\014\022\024\n\014takerOrderId\030\002 \001(\014\022\030\n\020fill" +
+      "SellQuantity\030\003 \001(\003\022\027\n\017fillBuyQuantity\030\004 " +
+      "\001(\003\"\321\002\n\010Proposal\022\023\n\013proposal_id\030\001 \001(\003\022\030\n" +
+      "\020proposer_address\030\002 \001(\014\0226\n\nparameters\030\003 " +
+      "\003(\0132\".protocol.Proposal.ParametersEntry\022" +
+      "\027\n\017expiration_time\030\004 \001(\003\022\023\n\013create_time\030" +
+      "\005 \001(\003\022\021\n\tapprovals\030\006 \003(\014\022\'\n\005state\030\007 \001(\0162" +
+      "\030.protocol.Proposal.State\0321\n\017ParametersE" +
+      "ntry\022\013\n\003key\030\001 \001(\003\022\r\n\005value\030\002 \001(\003:\0028\001\"A\n\005" +
+      "State\022\013\n\007PENDING\020\000\022\017\n\013DISAPPROVED\020\001\022\014\n\010A" +
+      "PPROVED\020\002\022\014\n\010CANCELED\020\003\"\271\001\n\010Exchange\022\023\n\013" +
+      "exchange_id\030\001 \001(\003\022\027\n\017creator_address\030\002 \001" +
+      "(\014\022\023\n\013create_time\030\003 \001(\003\022\026\n\016first_token_i" +
+      "d\030\006 \001(\014\022\033\n\023first_token_balance\030\007 \001(\003\022\027\n\017" +
+      "second_token_id\030\010 \001(\014\022\034\n\024second_token_ba" +
+      "lance\030\t \001(\003\"\271\001\n\021DelegatedResource\022\014\n\004fro" +
+      "m\030\001 \001(\014\022\n\n\002to\030\002 \001(\014\022$\n\034frozen_balance_fo" +
+      "r_bandwidth\030\003 \001(\003\022!\n\031frozen_balance_for_" +
+      "energy\030\004 \001(\003\022!\n\031expire_time_for_bandwidt" +
+      "h\030\005 \001(\003\022\036\n\026expire_time_for_energy\030\006 \001(\003\"" +
+      "m\n\035DelegatedResourceAccountIndex\022\017\n\007acco" +
+      "unt\030\001 \001(\014\022\024\n\014fromAccounts\030\002 \003(\014\022\022\n\ntoAcc" +
+      "ounts\030\003 \003(\014\022\021\n\ttimestamp\030\004 \001(\003\"Q\n\017Transa" +
+      "ctionSign\022*\n\013transaction\030\001 \001(\0132\025.protoco" +
+      "l.Transaction\022\022\n\nprivateKey\030\002 \001(\014\"\201\001\n\017Ch" +
+      "ainParameters\022@\n\016chainParameter\030\001 \003(\0132(." +
+      "protocol.ChainParameters.ChainParameter\032" +
+      ",\n\016ChainParameter\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030" +
+      "\002 \001(\003\"\240\021\n\010NodeInfo\022\024\n\014beginSyncNum\030\001 \001(\003" +
+      "\022\r\n\005block\030\002 \001(\t\022\025\n\rsolidityBlock\030\003 \001(\t\022\033" +
+      "\n\023currentConnectCount\030\004 \001(\005\022\032\n\022activeCon" +
+      "nectCount\030\005 \001(\005\022\033\n\023passiveConnectCount\030\006" +
+      " \001(\005\022\021\n\ttotalFlow\030\007 \001(\003\0221\n\014peerInfoList\030" +
+      "\010 \003(\0132\033.protocol.NodeInfo.PeerInfo\0229\n\016co" +
+      "nfigNodeInfo\030\t \001(\0132!.protocol.NodeInfo.C" +
+      "onfigNodeInfo\0223\n\013machineInfo\030\n \001(\0132\036.pro" +
+      "tocol.NodeInfo.MachineInfo\022H\n\023cheatWitne" +
+      "ssInfoMap\030\013 \003(\0132+.protocol.NodeInfo.Chea" +
+      "tWitnessInfoMapEntry\032:\n\030CheatWitnessInfo" +
+      "MapEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001" +
+      "\032\315\004\n\010PeerInfo\022\025\n\rlastSyncBlock\030\001 \001(\t\022\021\n\t" +
+      "remainNum\030\002 \001(\003\022\033\n\023lastBlockUpdateTime\030\003" +
+      " \001(\003\022\020\n\010syncFlag\030\004 \001(\010\022\037\n\027headBlockTimeW" +
+      "eBothHave\030\005 \001(\003\022\030\n\020needSyncFromPeer\030\006 \001(" +
+      "\010\022\026\n\016needSyncFromUs\030\007 \001(\010\022\014\n\004host\030\010 \001(\t\022" +
+      "\014\n\004port\030\t \001(\005\022\016\n\006nodeId\030\n \001(\t\022\023\n\013connect" +
+      "Time\030\013 \001(\003\022\022\n\navgLatency\030\014 \001(\001\022\027\n\017syncTo" +
+      "FetchSize\030\r \001(\005\022\036\n\026syncToFetchSizePeekNu" +
+      "m\030\016 \001(\003\022\036\n\026syncBlockRequestedSize\030\017 \001(\005\022" +
+      "\025\n\runFetchSynNum\030\020 \001(\003\022\027\n\017blockInPorcSiz" +
+      "e\030\021 \001(\005\022\033\n\023headBlockWeBothHave\030\022 \001(\t\022\020\n\010" +
+      "isActive\030\023 \001(\010\022\r\n\005score\030\024 \001(\005\022\021\n\tnodeCou" +
+      "nt\030\025 \001(\005\022\016\n\006inFlow\030\026 \001(\003\022\027\n\017disconnectTi" +
+      "mes\030\027 \001(\005\022\035\n\025localDisconnectReason\030\030 \001(\t" +
+      "\022\036\n\026remoteDisconnectReason\030\031 \001(\t\032\345\003\n\016Con" +
+      "figNodeInfo\022\023\n\013codeVersion\030\001 \001(\t\022\022\n\np2pV" +
+      "ersion\030\002 \001(\t\022\022\n\nlistenPort\030\003 \001(\005\022\026\n\016disc" +
+      "overEnable\030\004 \001(\010\022\026\n\016activeNodeSize\030\005 \001(\005" +
+      "\022\027\n\017passiveNodeSize\030\006 \001(\005\022\024\n\014sendNodeSiz" +
+      "e\030\007 \001(\005\022\027\n\017maxConnectCount\030\010 \001(\005\022\035\n\025same" +
+      "IpMaxConnectCount\030\t \001(\005\022\030\n\020backupListenP" +
+      "ort\030\n \001(\005\022\030\n\020backupMemberSize\030\013 \001(\005\022\026\n\016b" +
+      "ackupPriority\030\014 \001(\005\022\021\n\tdbVersion\030\r \001(\005\022\034" +
+      "\n\024minParticipationRate\030\016 \001(\005\022\027\n\017supportC" +
+      "onstant\030\017 \001(\010\022\024\n\014minTimeRatio\030\020 \001(\001\022\024\n\014m" +
+      "axTimeRatio\030\021 \001(\001\022 \n\030allowCreationOfCont" +
+      "racts\030\022 \001(\003\022\033\n\023allowAdaptiveEnergy\030\023 \001(\003" +
+      "\032\215\005\n\013MachineInfo\022\023\n\013threadCount\030\001 \001(\005\022\033\n" +
+      "\023deadLockThreadCount\030\002 \001(\005\022\020\n\010cpuCount\030\003" +
+      " \001(\005\022\023\n\013totalMemory\030\004 \001(\003\022\022\n\nfreeMemory\030" +
+      "\005 \001(\003\022\017\n\007cpuRate\030\006 \001(\001\022\023\n\013javaVersion\030\007 " +
+      "\001(\t\022\016\n\006osName\030\010 \001(\t\022\027\n\017jvmTotalMemoery\030\t" +
+      " \001(\003\022\025\n\rjvmFreeMemory\030\n \001(\003\022\026\n\016processCp" +
+      "uRate\030\013 \001(\001\022I\n\022memoryDescInfoList\030\014 \003(\0132" +
+      "-.protocol.NodeInfo.MachineInfo.MemoryDe" +
+      "scInfo\022Q\n\026deadLockThreadInfoList\030\r \003(\01321" +
+      ".protocol.NodeInfo.MachineInfo.DeadLockT" +
+      "hreadInfo\032c\n\016MemoryDescInfo\022\014\n\004name\030\001 \001(" +
+      "\t\022\020\n\010initSize\030\002 \001(\003\022\017\n\007useSize\030\003 \001(\003\022\017\n\007" +
+      "maxSize\030\004 \001(\003\022\017\n\007useRate\030\005 \001(\001\032\217\001\n\022DeadL" +
+      "ockThreadInfo\022\014\n\004name\030\001 \001(\t\022\020\n\010lockName\030" +
+      "\002 \001(\t\022\021\n\tlockOwner\030\003 \001(\t\022\r\n\005state\030\004 \001(\t\022" +
+      "\021\n\tblockTime\030\005 \001(\003\022\020\n\010waitTime\030\006 \001(\003\022\022\n\n" +
+      "stackTrace\030\007 \001(\t\"\362\002\n\013MarketOrder\022\020\n\010orde" +
+      "r_id\030\001 \001(\014\022\025\n\rowner_address\030\002 \001(\014\022\023\n\013cre" +
+      "ate_time\030\003 \001(\003\022\025\n\rsell_token_id\030\004 \001(\014\022\033\n" +
+      "\023sell_token_quantity\030\005 \001(\003\022\024\n\014buy_token_" +
+      "id\030\006 \001(\014\022\032\n\022buy_token_quantity\030\007 \001(\003\022\"\n\032" +
+      "sell_token_quantity_remain\030\t \001(\003\022\"\n\032sell" +
+      "_token_quantity_return\030\n \001(\003\022*\n\005state\030\013 " +
+      "\001(\0162\033.protocol.MarketOrder.State\022\014\n\004prev" +
+      "\030\014 \001(\014\022\014\n\004next\030\r \001(\014\"/\n\005State\022\n\n\006ACTIVE\020" +
+      "\000\022\014\n\010INACTIVE\020\001\022\014\n\010CANCELED\020\002\"8\n\017MarketO" +
+      "rderList\022%\n\006orders\030\001 \003(\0132\025.protocol.Mark" +
+      "etOrder\">\n\017MarketOrderPair\022\025\n\rsell_token" +
+      "_id\030\001 \001(\014\022\024\n\014buy_token_id\030\002 \001(\014\"C\n\023Marke" +
+      "tOrderPairList\022,\n\torderPair\030\001 \003(\0132\031.prot" +
+      "ocol.MarketOrderPair\"F\n\013MarketPrice\022\033\n\023s" +
+      "ell_token_quantity\030\001 \001(\003\022\032\n\022buy_token_qu" +
+      "antity\030\002 \001(\003\"e\n\017MarketPriceList\022\025\n\rsell_" +
+      "token_id\030\001 \001(\014\022\024\n\014buy_token_id\030\002 \001(\014\022%\n\006" +
+      "prices\030\003 \003(\0132\025.protocol.MarketPrice\"#\n\017N" +
+      "ullifierResult\022\020\n\010is_spent\030\001 \001(\010\"\345\001\n\021Dec" +
+      "ryptNotesTRC20\0223\n\007noteTxs\030\001 \003(\0132\".protoc" +
+      "ol.DecryptNotesTRC20.NoteTx\032\232\001\n\006NoteTx\022\034" +
+      "\n\004note\030\001 \001(\0132\016.protocol.Note\022\020\n\010position" +
+      "\030\002 \001(\003\022\020\n\010is_spent\030\003 \001(\010\022\014\n\004txid\030\004 \001(\014\022\r" +
+      "\n\005index\030\005 \001(\005\022\021\n\tto_amount\030\006 \001(\t\022\036\n\026tran" +
+      "sparent_to_address\030\007 \001(\014\"I\n\023TransactionI" +
+      "nfoList\0222\n\017transactionInfo\030\001 \003(\0132\031.proto" +
+      "col.TransactionInfo\"\347\002\n\027TransactionAppro" +
+      "vedList\022\025\n\rapproved_list\030\002 \003(\014\0228\n\006result" +
+      "\030\004 \001(\0132(.protocol.TransactionApprovedLis" +
+      "t.Result\0223\n\013transaction\030\005 \001(\0132\036.protocol" +
+      ".TransactionExtention\032\305\001\n\006Result\022D\n\004code" +
+      "\030\001 \001(\01626.protocol.TransactionApprovedLis" +
+      "t.Result.response_code\022\017\n\007message\030\002 \001(\t\"" +
+      "d\n\rresponse_code\022\013\n\007SUCCESS\020\000\022\032\n\026SIGNATU" +
+      "RE_FORMAT_ERROR\020\001\022\031\n\025COMPUTE_ADDRESS_ERR" +
+      "OR\020\002\022\017\n\013OTHER_ERROR\020\024\"\337\003\n\025TransactionSig" +
+      "nWeight\022(\n\npermission\030\001 \001(\0132\024.protocol.P" +
+      "ermission\022\025\n\rapproved_list\030\002 \003(\014\022\026\n\016curr" +
+      "ent_weight\030\003 \001(\003\0226\n\006result\030\004 \001(\0132&.proto" +
+      "col.TransactionSignWeight.Result\0223\n\013tran" +
+      "saction\030\005 \001(\0132\036.protocol.TransactionExte" +
+      "ntion\032\377\001\n\006Result\022B\n\004code\030\001 \001(\01624.protoco" +
+      "l.TransactionSignWeight.Result.response_" +
+      "code\022\017\n\007message\030\002 \001(\t\"\237\001\n\rresponse_code\022" +
+      "\025\n\021ENOUGH_PERMISSION\020\000\022\031\n\025NOT_ENOUGH_PER" +
+      "MISSION\020\001\022\032\n\026SIGNATURE_FORMAT_ERROR\020\002\022\031\n" +
+      "\025COMPUTE_ADDRESS_ERROR\020\003\022\024\n\020PERMISSION_E" +
+      "RROR\020\004\022\017\n\013OTHER_ERROR\020\024\"\223\001\n\010NodeList\022&\n\005" +
+      "nodes\030\001 \003(\0132\027.protocol.NodeList.Node\032_\n\004" +
+      "Node\0220\n\007address\030\001 \001(\0132\037.protocol.NodeLis" +
+      "t.Node.Address\032%\n\007Address\022\014\n\004host\030\001 \001(\014\022" +
+      "\014\n\004port\030\002 \001(\005\"\207\003\n\021AccountNetMessage\022\023\n\013f" +
+      "reeNetUsed\030\001 \001(\003\022\024\n\014freeNetLimit\030\002 \001(\003\022\017" +
+      "\n\007NetUsed\030\003 \001(\003\022\020\n\010NetLimit\030\004 \001(\003\022C\n\014ass" +
+      "etNetUsed\030\005 \003(\0132-.protocol.AccountNetMes" +
+      "sage.AssetNetUsedEntry\022E\n\rassetNetLimit\030" +
+      "\006 \003(\0132..protocol.AccountNetMessage.Asset" +
+      "NetLimitEntry\022\025\n\rTotalNetLimit\030\007 \001(\003\022\026\n\016" +
+      "TotalNetWeight\030\010 \001(\003\0323\n\021AssetNetUsedEntr" +
+      "y\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001\0324\n\022Ass" +
+      "etNetLimitEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 " +
+      "\001(\003:\0028\001\"\354\004\n\026AccountResourceMessage\022\023\n\013fr" +
+      "eeNetUsed\030\001 \001(\003\022\024\n\014freeNetLimit\030\002 \001(\003\022\017\n" +
+      "\007NetUsed\030\003 \001(\003\022\020\n\010NetLimit\030\004 \001(\003\022H\n\014asse" +
+      "tNetUsed\030\005 \003(\01322.protocol.AccountResourc" +
+      "eMessage.AssetNetUsedEntry\022J\n\rassetNetLi" +
+      "mit\030\006 \003(\01323.protocol.AccountResourceMess" +
+      "age.AssetNetLimitEntry\022\025\n\rTotalNetLimit\030" +
+      "\007 \001(\003\022\026\n\016TotalNetWeight\030\010 \001(\003\022\034\n\024TotalTr" +
+      "onPowerWeight\030\t \001(\003\022\025\n\rtronPowerUsed\030\n \001" +
+      "(\003\022\026\n\016tronPowerLimit\030\013 \001(\003\022\022\n\nEnergyUsed" +
+      "\030\r \001(\003\022\023\n\013EnergyLimit\030\016 \001(\003\022\030\n\020TotalEner" +
+      "gyLimit\030\017 \001(\003\022\031\n\021TotalEnergyWeight\030\020 \001(\003" +
+      "\022\023\n\013storageUsed\030\025 \001(\003\022\024\n\014storageLimit\030\026 " +
+      "\001(\003\0323\n\021AssetNetUsedEntry\022\013\n\003key\030\001 \001(\t\022\r\n" +
+      "\005value\030\002 \001(\003:\0028\001\0324\n\022AssetNetLimitEntry\022\013" +
+      "\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001\"/\n\017BlockI" +
+      "dentifier\022\014\n\004hash\030\001 \001(\014\022\016\n\006number\030\002 \001(\003\"" +
+      "\241\001\n\021BlockBalanceTrace\0223\n\020block_identifie" +
+      "r\030\001 \001(\0132\031.protocol.BlockIdentifier\022\021\n\tti" +
+      "mestamp\030\002 \001(\003\022D\n\031transaction_balance_tra" +
+      "ce\030\003 \003(\0132!.protocol.TransactionBalanceTr" +
+      "ace\"\343\001\n\027TransactionBalanceTrace\022\036\n\026trans" +
+      "action_identifier\030\001 \001(\014\022>\n\toperation\030\002 \003" +
+      "(\0132+.protocol.TransactionBalanceTrace.Op" +
+      "eration\022\014\n\004type\030\003 \001(\t\022\016\n\006status\030\004 \001(\t\032J\n" +
+      "\tOperation\022\034\n\024operation_identifier\030\001 \001(\003" +
+      "\022\017\n\007address\030\002 \001(\014\022\016\n\006amount\030\003 \001(\003B\030\n\026org" +
+      ".tron.trident.protob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -71813,80 +72838,86 @@ public final class Response {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_TransactionReturn_descriptor,
         new java.lang.String[] { "Result", "Code", "Message", });
-    internal_static_protocol_TransactionExtention_descriptor =
+    internal_static_protocol_EstimateEnergyMessage_descriptor =
       getDescriptor().getMessageTypes().get(3);
+    internal_static_protocol_EstimateEnergyMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_protocol_EstimateEnergyMessage_descriptor,
+        new java.lang.String[] { "Result", "EnergyRequired", });
+    internal_static_protocol_TransactionExtention_descriptor =
+      getDescriptor().getMessageTypes().get(4);
     internal_static_protocol_TransactionExtention_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_TransactionExtention_descriptor,
         new java.lang.String[] { "Transaction", "Txid", "ConstantResult", "Result", "EnergyUsed", });
     internal_static_protocol_WitnessList_descriptor =
-      getDescriptor().getMessageTypes().get(4);
+      getDescriptor().getMessageTypes().get(5);
     internal_static_protocol_WitnessList_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_WitnessList_descriptor,
         new java.lang.String[] { "Witnesses", });
     internal_static_protocol_ProposalList_descriptor =
-      getDescriptor().getMessageTypes().get(5);
+      getDescriptor().getMessageTypes().get(6);
     internal_static_protocol_ProposalList_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_ProposalList_descriptor,
         new java.lang.String[] { "Proposals", });
     internal_static_protocol_ExchangeList_descriptor =
-      getDescriptor().getMessageTypes().get(6);
+      getDescriptor().getMessageTypes().get(7);
     internal_static_protocol_ExchangeList_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_ExchangeList_descriptor,
         new java.lang.String[] { "Exchanges", });
     internal_static_protocol_AssetIssueList_descriptor =
-      getDescriptor().getMessageTypes().get(7);
+      getDescriptor().getMessageTypes().get(8);
     internal_static_protocol_AssetIssueList_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_AssetIssueList_descriptor,
         new java.lang.String[] { "Assets", });
     internal_static_protocol_BlockList_descriptor =
-      getDescriptor().getMessageTypes().get(8);
+      getDescriptor().getMessageTypes().get(9);
     internal_static_protocol_BlockList_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_BlockList_descriptor,
         new java.lang.String[] { "Block", });
     internal_static_protocol_TransactionList_descriptor =
-      getDescriptor().getMessageTypes().get(9);
+      getDescriptor().getMessageTypes().get(10);
     internal_static_protocol_TransactionList_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_TransactionList_descriptor,
         new java.lang.String[] { "Transaction", });
     internal_static_protocol_DelegatedResourceMessage_descriptor =
-      getDescriptor().getMessageTypes().get(10);
+      getDescriptor().getMessageTypes().get(11);
     internal_static_protocol_DelegatedResourceMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_DelegatedResourceMessage_descriptor,
         new java.lang.String[] { "FromAddress", "ToAddress", });
     internal_static_protocol_DelegatedResourceList_descriptor =
-      getDescriptor().getMessageTypes().get(11);
+      getDescriptor().getMessageTypes().get(12);
     internal_static_protocol_DelegatedResourceList_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_DelegatedResourceList_descriptor,
         new java.lang.String[] { "DelegatedResource", });
     internal_static_protocol_AddressPrKeyPairMessage_descriptor =
-      getDescriptor().getMessageTypes().get(12);
+      getDescriptor().getMessageTypes().get(13);
     internal_static_protocol_AddressPrKeyPairMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_AddressPrKeyPairMessage_descriptor,
         new java.lang.String[] { "Address", "PrivateKey", });
     internal_static_protocol_EasyTransferResponse_descriptor =
-      getDescriptor().getMessageTypes().get(13);
+      getDescriptor().getMessageTypes().get(14);
     internal_static_protocol_EasyTransferResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_EasyTransferResponse_descriptor,
         new java.lang.String[] { "Transaction", "Result", "Txid", });
     internal_static_protocol_SmartContractDataWrapper_descriptor =
-      getDescriptor().getMessageTypes().get(14);
+      getDescriptor().getMessageTypes().get(15);
     internal_static_protocol_SmartContractDataWrapper_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_SmartContractDataWrapper_descriptor,
         new java.lang.String[] { "SmartContract", "RuntimeCode", });
     internal_static_protocol_InternalTransaction_descriptor =
-      getDescriptor().getMessageTypes().get(15);
+      getDescriptor().getMessageTypes().get(16);
     internal_static_protocol_InternalTransaction_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_InternalTransaction_descriptor,
@@ -71898,31 +72929,37 @@ public final class Response {
         internal_static_protocol_InternalTransaction_CallValueInfo_descriptor,
         new java.lang.String[] { "CallValue", "TokenId", });
     internal_static_protocol_ResourceReceipt_descriptor =
-      getDescriptor().getMessageTypes().get(16);
+      getDescriptor().getMessageTypes().get(17);
     internal_static_protocol_ResourceReceipt_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_ResourceReceipt_descriptor,
         new java.lang.String[] { "EnergyUsage", "EnergyFee", "OriginEnergyUsage", "EnergyUsageTotal", "NetUsage", "NetFee", "Result", });
     internal_static_protocol_TransactionInfo_descriptor =
-      getDescriptor().getMessageTypes().get(17);
+      getDescriptor().getMessageTypes().get(18);
     internal_static_protocol_TransactionInfo_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_TransactionInfo_descriptor,
-        new java.lang.String[] { "Id", "Fee", "BlockNumber", "BlockTimeStamp", "ContractResult", "ContractAddress", "Receipt", "Log", "Result", "ResMessage", "AssetIssueID", "WithdrawAmount", "UnfreezeAmount", "InternalTransactions", "ExchangeReceivedAmount", "ExchangeInjectAnotherAmount", "ExchangeWithdrawAnotherAmount", "ExchangeId", "ShieldedTransactionFee", "OrderId", "OrderDetails", "WithdrawExpireAmount", });
+        new java.lang.String[] { "Id", "Fee", "BlockNumber", "BlockTimeStamp", "ContractResult", "ContractAddress", "Receipt", "Log", "Result", "ResMessage", "AssetIssueID", "WithdrawAmount", "UnfreezeAmount", "InternalTransactions", "ExchangeReceivedAmount", "ExchangeInjectAnotherAmount", "ExchangeWithdrawAnotherAmount", "ExchangeId", "ShieldedTransactionFee", "OrderId", "OrderDetails", "WithdrawExpireAmount", "CancelUnfreezeV2Amount", });
     internal_static_protocol_TransactionInfo_Log_descriptor =
       internal_static_protocol_TransactionInfo_descriptor.getNestedTypes().get(0);
     internal_static_protocol_TransactionInfo_Log_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_TransactionInfo_Log_descriptor,
         new java.lang.String[] { "Address", "Topics", "Data", });
+    internal_static_protocol_TransactionInfo_CancelUnfreezeV2AmountEntry_descriptor =
+      internal_static_protocol_TransactionInfo_descriptor.getNestedTypes().get(1);
+    internal_static_protocol_TransactionInfo_CancelUnfreezeV2AmountEntry_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_protocol_TransactionInfo_CancelUnfreezeV2AmountEntry_descriptor,
+        new java.lang.String[] { "Key", "Value", });
     internal_static_protocol_Witness_descriptor =
-      getDescriptor().getMessageTypes().get(18);
+      getDescriptor().getMessageTypes().get(19);
     internal_static_protocol_Witness_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_Witness_descriptor,
         new java.lang.String[] { "Address", "VoteCount", "PubKey", "Url", "TotalProduced", "TotalMissed", "LatestBlockNum", "LatestSlotNum", "IsJobs", });
     internal_static_protocol_Account_descriptor =
-      getDescriptor().getMessageTypes().get(19);
+      getDescriptor().getMessageTypes().get(20);
     internal_static_protocol_Account_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_Account_descriptor,
@@ -71988,13 +73025,13 @@ public final class Response {
         internal_static_protocol_Account_UnFreezeV2_descriptor,
         new java.lang.String[] { "Type", "UnfreezeAmount", "UnfreezeExpireTime", });
     internal_static_protocol_MarketOrderDetail_descriptor =
-      getDescriptor().getMessageTypes().get(20);
+      getDescriptor().getMessageTypes().get(21);
     internal_static_protocol_MarketOrderDetail_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_MarketOrderDetail_descriptor,
         new java.lang.String[] { "MakerOrderId", "TakerOrderId", "FillSellQuantity", "FillBuyQuantity", });
     internal_static_protocol_Proposal_descriptor =
-      getDescriptor().getMessageTypes().get(21);
+      getDescriptor().getMessageTypes().get(22);
     internal_static_protocol_Proposal_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_Proposal_descriptor,
@@ -72006,31 +73043,31 @@ public final class Response {
         internal_static_protocol_Proposal_ParametersEntry_descriptor,
         new java.lang.String[] { "Key", "Value", });
     internal_static_protocol_Exchange_descriptor =
-      getDescriptor().getMessageTypes().get(22);
+      getDescriptor().getMessageTypes().get(23);
     internal_static_protocol_Exchange_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_Exchange_descriptor,
         new java.lang.String[] { "ExchangeId", "CreatorAddress", "CreateTime", "FirstTokenId", "FirstTokenBalance", "SecondTokenId", "SecondTokenBalance", });
     internal_static_protocol_DelegatedResource_descriptor =
-      getDescriptor().getMessageTypes().get(23);
+      getDescriptor().getMessageTypes().get(24);
     internal_static_protocol_DelegatedResource_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_DelegatedResource_descriptor,
         new java.lang.String[] { "From", "To", "FrozenBalanceForBandwidth", "FrozenBalanceForEnergy", "ExpireTimeForBandwidth", "ExpireTimeForEnergy", });
     internal_static_protocol_DelegatedResourceAccountIndex_descriptor =
-      getDescriptor().getMessageTypes().get(24);
+      getDescriptor().getMessageTypes().get(25);
     internal_static_protocol_DelegatedResourceAccountIndex_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_DelegatedResourceAccountIndex_descriptor,
         new java.lang.String[] { "Account", "FromAccounts", "ToAccounts", "Timestamp", });
     internal_static_protocol_TransactionSign_descriptor =
-      getDescriptor().getMessageTypes().get(25);
+      getDescriptor().getMessageTypes().get(26);
     internal_static_protocol_TransactionSign_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_TransactionSign_descriptor,
         new java.lang.String[] { "Transaction", "PrivateKey", });
     internal_static_protocol_ChainParameters_descriptor =
-      getDescriptor().getMessageTypes().get(26);
+      getDescriptor().getMessageTypes().get(27);
     internal_static_protocol_ChainParameters_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_ChainParameters_descriptor,
@@ -72042,7 +73079,7 @@ public final class Response {
         internal_static_protocol_ChainParameters_ChainParameter_descriptor,
         new java.lang.String[] { "Key", "Value", });
     internal_static_protocol_NodeInfo_descriptor =
-      getDescriptor().getMessageTypes().get(27);
+      getDescriptor().getMessageTypes().get(28);
     internal_static_protocol_NodeInfo_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_NodeInfo_descriptor,
@@ -72084,49 +73121,49 @@ public final class Response {
         internal_static_protocol_NodeInfo_MachineInfo_DeadLockThreadInfo_descriptor,
         new java.lang.String[] { "Name", "LockName", "LockOwner", "State", "BlockTime", "WaitTime", "StackTrace", });
     internal_static_protocol_MarketOrder_descriptor =
-      getDescriptor().getMessageTypes().get(28);
+      getDescriptor().getMessageTypes().get(29);
     internal_static_protocol_MarketOrder_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_MarketOrder_descriptor,
         new java.lang.String[] { "OrderId", "OwnerAddress", "CreateTime", "SellTokenId", "SellTokenQuantity", "BuyTokenId", "BuyTokenQuantity", "SellTokenQuantityRemain", "SellTokenQuantityReturn", "State", "Prev", "Next", });
     internal_static_protocol_MarketOrderList_descriptor =
-      getDescriptor().getMessageTypes().get(29);
+      getDescriptor().getMessageTypes().get(30);
     internal_static_protocol_MarketOrderList_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_MarketOrderList_descriptor,
         new java.lang.String[] { "Orders", });
     internal_static_protocol_MarketOrderPair_descriptor =
-      getDescriptor().getMessageTypes().get(30);
+      getDescriptor().getMessageTypes().get(31);
     internal_static_protocol_MarketOrderPair_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_MarketOrderPair_descriptor,
         new java.lang.String[] { "SellTokenId", "BuyTokenId", });
     internal_static_protocol_MarketOrderPairList_descriptor =
-      getDescriptor().getMessageTypes().get(31);
+      getDescriptor().getMessageTypes().get(32);
     internal_static_protocol_MarketOrderPairList_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_MarketOrderPairList_descriptor,
         new java.lang.String[] { "OrderPair", });
     internal_static_protocol_MarketPrice_descriptor =
-      getDescriptor().getMessageTypes().get(32);
+      getDescriptor().getMessageTypes().get(33);
     internal_static_protocol_MarketPrice_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_MarketPrice_descriptor,
         new java.lang.String[] { "SellTokenQuantity", "BuyTokenQuantity", });
     internal_static_protocol_MarketPriceList_descriptor =
-      getDescriptor().getMessageTypes().get(33);
+      getDescriptor().getMessageTypes().get(34);
     internal_static_protocol_MarketPriceList_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_MarketPriceList_descriptor,
         new java.lang.String[] { "SellTokenId", "BuyTokenId", "Prices", });
     internal_static_protocol_NullifierResult_descriptor =
-      getDescriptor().getMessageTypes().get(34);
+      getDescriptor().getMessageTypes().get(35);
     internal_static_protocol_NullifierResult_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_NullifierResult_descriptor,
         new java.lang.String[] { "IsSpent", });
     internal_static_protocol_DecryptNotesTRC20_descriptor =
-      getDescriptor().getMessageTypes().get(35);
+      getDescriptor().getMessageTypes().get(36);
     internal_static_protocol_DecryptNotesTRC20_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_DecryptNotesTRC20_descriptor,
@@ -72138,13 +73175,13 @@ public final class Response {
         internal_static_protocol_DecryptNotesTRC20_NoteTx_descriptor,
         new java.lang.String[] { "Note", "Position", "IsSpent", "Txid", "Index", "ToAmount", "TransparentToAddress", });
     internal_static_protocol_TransactionInfoList_descriptor =
-      getDescriptor().getMessageTypes().get(36);
+      getDescriptor().getMessageTypes().get(37);
     internal_static_protocol_TransactionInfoList_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_TransactionInfoList_descriptor,
         new java.lang.String[] { "TransactionInfo", });
     internal_static_protocol_TransactionApprovedList_descriptor =
-      getDescriptor().getMessageTypes().get(37);
+      getDescriptor().getMessageTypes().get(38);
     internal_static_protocol_TransactionApprovedList_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_TransactionApprovedList_descriptor,
@@ -72156,7 +73193,7 @@ public final class Response {
         internal_static_protocol_TransactionApprovedList_Result_descriptor,
         new java.lang.String[] { "Code", "Message", });
     internal_static_protocol_TransactionSignWeight_descriptor =
-      getDescriptor().getMessageTypes().get(38);
+      getDescriptor().getMessageTypes().get(39);
     internal_static_protocol_TransactionSignWeight_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_TransactionSignWeight_descriptor,
@@ -72168,7 +73205,7 @@ public final class Response {
         internal_static_protocol_TransactionSignWeight_Result_descriptor,
         new java.lang.String[] { "Code", "Message", });
     internal_static_protocol_NodeList_descriptor =
-      getDescriptor().getMessageTypes().get(39);
+      getDescriptor().getMessageTypes().get(40);
     internal_static_protocol_NodeList_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_NodeList_descriptor,
@@ -72186,7 +73223,7 @@ public final class Response {
         internal_static_protocol_NodeList_Node_Address_descriptor,
         new java.lang.String[] { "Host", "Port", });
     internal_static_protocol_AccountNetMessage_descriptor =
-      getDescriptor().getMessageTypes().get(40);
+      getDescriptor().getMessageTypes().get(41);
     internal_static_protocol_AccountNetMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_AccountNetMessage_descriptor,
@@ -72204,7 +73241,7 @@ public final class Response {
         internal_static_protocol_AccountNetMessage_AssetNetLimitEntry_descriptor,
         new java.lang.String[] { "Key", "Value", });
     internal_static_protocol_AccountResourceMessage_descriptor =
-      getDescriptor().getMessageTypes().get(41);
+      getDescriptor().getMessageTypes().get(42);
     internal_static_protocol_AccountResourceMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_AccountResourceMessage_descriptor,
@@ -72222,19 +73259,19 @@ public final class Response {
         internal_static_protocol_AccountResourceMessage_AssetNetLimitEntry_descriptor,
         new java.lang.String[] { "Key", "Value", });
     internal_static_protocol_BlockIdentifier_descriptor =
-      getDescriptor().getMessageTypes().get(42);
+      getDescriptor().getMessageTypes().get(43);
     internal_static_protocol_BlockIdentifier_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_BlockIdentifier_descriptor,
         new java.lang.String[] { "Hash", "Number", });
     internal_static_protocol_BlockBalanceTrace_descriptor =
-      getDescriptor().getMessageTypes().get(43);
+      getDescriptor().getMessageTypes().get(44);
     internal_static_protocol_BlockBalanceTrace_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_BlockBalanceTrace_descriptor,
         new java.lang.String[] { "BlockIdentifier", "Timestamp", "TransactionBalanceTrace", });
     internal_static_protocol_TransactionBalanceTrace_descriptor =
-      getDescriptor().getMessageTypes().get(44);
+      getDescriptor().getMessageTypes().get(45);
     internal_static_protocol_TransactionBalanceTrace_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_TransactionBalanceTrace_descriptor,
