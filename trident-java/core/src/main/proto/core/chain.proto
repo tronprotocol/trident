@@ -94,6 +94,7 @@ message Transaction {
     int64 shielded_transaction_fee = 22;
 
     int64 withdraw_expire_amount = 27;
+    map<string, int64> cancel_unfreezeV2_amount = 28;
   }
 
   message raw {
