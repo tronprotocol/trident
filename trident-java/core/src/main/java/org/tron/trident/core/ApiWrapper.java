@@ -659,11 +659,7 @@ public class ApiWrapper {
                 .setResourceValue(resourceCode)
                 .build();
         if(lock) {
-            if(lockPeriod < 86400){
-                delegateResourceContract = delegateResourceContract.toBuilder().setLockPeriod(86400).build();
-            }else {
                 delegateResourceContract = delegateResourceContract.toBuilder().setLockPeriod(lockPeriod).build();
-            }
         }
         TransactionExtention txnExt = createTransactionExtention(delegateResourceContract, Transaction.Contract.ContractType.DelegateResourceContract);
 
