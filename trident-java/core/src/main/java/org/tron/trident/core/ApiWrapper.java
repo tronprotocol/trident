@@ -2031,7 +2031,7 @@ public class ApiWrapper {
                 .setContractAddress(cntr.getCntrAddr())
                 .setData(parseHex(encodedHex))
                 .build();
-        Response.EstimateEnergyMessage estimateEnergyMessage= blockingStubSolidity.estimateEnergy(trigger);
+        Response.EstimateEnergyMessage estimateEnergyMessage= blockingStub.estimateEnergy(trigger);
 
         return estimateEnergyMessage;
     }
@@ -2055,7 +2055,7 @@ public class ApiWrapper {
                 .setContractAddress(cntr.getCntrAddr())
                 .setData(ByteString.copyFrom(ByteArray.fromHexString(callData)))
                 .build();
-        Response.EstimateEnergyMessage estimateEnergyMessage= blockingStubSolidity.estimateEnergy(trigger);
+        Response.EstimateEnergyMessage estimateEnergyMessage= blockingStub.estimateEnergy(trigger);
 
         return estimateEnergyMessage;
     }
