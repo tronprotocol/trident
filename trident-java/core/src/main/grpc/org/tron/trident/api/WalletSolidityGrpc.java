@@ -185,37 +185,6 @@ public final class WalletSolidityGrpc {
     return getGetTransactionFromPendingMethod;
   }
 
-  private static volatile io.grpc.MethodDescriptor<org.tron.trident.proto.Contract.TriggerSmartContract,
-      org.tron.trident.proto.Response.EstimateEnergyMessage> getEstimateEnergyMethod;
-
-  @io.grpc.stub.annotations.RpcMethod(
-      fullMethodName = SERVICE_NAME + '/' + "EstimateEnergy",
-      requestType = org.tron.trident.proto.Contract.TriggerSmartContract.class,
-      responseType = org.tron.trident.proto.Response.EstimateEnergyMessage.class,
-      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<org.tron.trident.proto.Contract.TriggerSmartContract,
-      org.tron.trident.proto.Response.EstimateEnergyMessage> getEstimateEnergyMethod() {
-    io.grpc.MethodDescriptor<org.tron.trident.proto.Contract.TriggerSmartContract, org.tron.trident.proto.Response.EstimateEnergyMessage> getEstimateEnergyMethod;
-    if ((getEstimateEnergyMethod = WalletSolidityGrpc.getEstimateEnergyMethod) == null) {
-      synchronized (WalletSolidityGrpc.class) {
-        if ((getEstimateEnergyMethod = WalletSolidityGrpc.getEstimateEnergyMethod) == null) {
-          WalletSolidityGrpc.getEstimateEnergyMethod = getEstimateEnergyMethod =
-              io.grpc.MethodDescriptor.<org.tron.trident.proto.Contract.TriggerSmartContract, org.tron.trident.proto.Response.EstimateEnergyMessage>newBuilder()
-              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
-              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "EstimateEnergy"))
-              .setSampledToLocalTracing(true)
-              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  org.tron.trident.proto.Contract.TriggerSmartContract.getDefaultInstance()))
-              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  org.tron.trident.proto.Response.EstimateEnergyMessage.getDefaultInstance()))
-              .setSchemaDescriptor(new WalletSolidityMethodDescriptorSupplier("EstimateEnergy"))
-              .build();
-        }
-      }
-    }
-    return getEstimateEnergyMethod;
-  }
-
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -305,13 +274,6 @@ public final class WalletSolidityGrpc {
       asyncUnimplementedUnaryCall(getGetTransactionFromPendingMethod(), responseObserver);
     }
 
-    /**
-     */
-    public void estimateEnergy(org.tron.trident.proto.Contract.TriggerSmartContract request,
-        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.EstimateEnergyMessage> responseObserver) {
-      asyncUnimplementedUnaryCall(getEstimateEnergyMethod(), responseObserver);
-    }
-
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -349,13 +311,6 @@ public final class WalletSolidityGrpc {
                 org.tron.trident.api.GrpcAPI.BytesMessage,
                 org.tron.trident.proto.Chain.Transaction>(
                   this, METHODID_GET_TRANSACTION_FROM_PENDING)))
-          .addMethod(
-            getEstimateEnergyMethod(),
-            asyncUnaryCall(
-              new MethodHandlers<
-                org.tron.trident.proto.Contract.TriggerSmartContract,
-                org.tron.trident.proto.Response.EstimateEnergyMessage>(
-                  this, METHODID_ESTIMATE_ENERGY)))
           .build();
     }
   }
@@ -419,14 +374,6 @@ public final class WalletSolidityGrpc {
       asyncUnaryCall(
           getChannel().newCall(getGetTransactionFromPendingMethod(), getCallOptions()), request, responseObserver);
     }
-
-    /**
-     */
-    public void estimateEnergy(org.tron.trident.proto.Contract.TriggerSmartContract request,
-        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.EstimateEnergyMessage> responseObserver) {
-      asyncUnaryCall(
-          getChannel().newCall(getEstimateEnergyMethod(), getCallOptions()), request, responseObserver);
-    }
   }
 
   /**
@@ -482,13 +429,6 @@ public final class WalletSolidityGrpc {
     public org.tron.trident.proto.Chain.Transaction getTransactionFromPending(org.tron.trident.api.GrpcAPI.BytesMessage request) {
       return blockingUnaryCall(
           getChannel(), getGetTransactionFromPendingMethod(), getCallOptions(), request);
-    }
-
-    /**
-     */
-    public org.tron.trident.proto.Response.EstimateEnergyMessage estimateEnergy(org.tron.trident.proto.Contract.TriggerSmartContract request) {
-      return blockingUnaryCall(
-          getChannel(), getEstimateEnergyMethod(), getCallOptions(), request);
     }
   }
 
@@ -551,14 +491,6 @@ public final class WalletSolidityGrpc {
       return futureUnaryCall(
           getChannel().newCall(getGetTransactionFromPendingMethod(), getCallOptions()), request);
     }
-
-    /**
-     */
-    public com.google.common.util.concurrent.ListenableFuture<org.tron.trident.proto.Response.EstimateEnergyMessage> estimateEnergy(
-        org.tron.trident.proto.Contract.TriggerSmartContract request) {
-      return futureUnaryCall(
-          getChannel().newCall(getEstimateEnergyMethod(), getCallOptions()), request);
-    }
   }
 
   private static final int METHODID_GET_ACCOUNT = 0;
@@ -566,7 +498,6 @@ public final class WalletSolidityGrpc {
   private static final int METHODID_GET_TRANSACTION_BY_ID = 2;
   private static final int METHODID_GET_REWARD_INFO = 3;
   private static final int METHODID_GET_TRANSACTION_FROM_PENDING = 4;
-  private static final int METHODID_ESTIMATE_ENERGY = 5;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -604,10 +535,6 @@ public final class WalletSolidityGrpc {
         case METHODID_GET_TRANSACTION_FROM_PENDING:
           serviceImpl.getTransactionFromPending((org.tron.trident.api.GrpcAPI.BytesMessage) request,
               (io.grpc.stub.StreamObserver<org.tron.trident.proto.Chain.Transaction>) responseObserver);
-          break;
-        case METHODID_ESTIMATE_ENERGY:
-          serviceImpl.estimateEnergy((org.tron.trident.proto.Contract.TriggerSmartContract) request,
-              (io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.EstimateEnergyMessage>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -675,7 +602,6 @@ public final class WalletSolidityGrpc {
               .addMethod(getGetTransactionByIdMethod())
               .addMethod(getGetRewardInfoMethod())
               .addMethod(getGetTransactionFromPendingMethod())
-              .addMethod(getEstimateEnergyMethod())
               .build();
         }
       }
