@@ -76,7 +76,9 @@ service Wallet {
 //  rpc ClearContractABI(ClearABIContract) returns (TransactionExtention) {}
   rpc TriggerContract(TriggerSmartContract) returns (TransactionExtention) {}
   rpc TriggerConstantContract(TriggerSmartContract) returns (TransactionExtention) {}  // not a txn type
-//
+  rpc EstimateEnergy (TriggerSmartContract) returns (EstimateEnergyMessage) {}
+
+  //
 //  rpc ExchangeCreate(ExchangeCreateContract) returns (TransactionExtention) {}
 //  rpc ExchangeInject(ExchangeInjectContract) returns (TransactionExtention) {}
 //  rpc ExchangeWithdraw(ExchangeWithdrawContract) returns (TransactionExtention) {}

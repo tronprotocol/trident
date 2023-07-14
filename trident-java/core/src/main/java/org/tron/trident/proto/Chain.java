@@ -529,6 +529,10 @@ public final class Chain {
          * <code>UnDelegateResourceContract = 58;</code>
          */
         UnDelegateResourceContract(58),
+        /**
+         * <code>CancelAllUnfreezeV2Contract = 59;</code>
+         */
+        CancelAllUnfreezeV2Contract(59),
         UNRECOGNIZED(-1),
         ;
 
@@ -692,6 +696,10 @@ public final class Chain {
          * <code>UnDelegateResourceContract = 58;</code>
          */
         public static final int UnDelegateResourceContract_VALUE = 58;
+        /**
+         * <code>CancelAllUnfreezeV2Contract = 59;</code>
+         */
+        public static final int CancelAllUnfreezeV2Contract_VALUE = 59;
 
 
         public final int getNumber() {
@@ -758,6 +766,7 @@ public final class Chain {
             case 56: return WithdrawExpireUnfreezeContract;
             case 57: return DelegateResourceContract;
             case 58: return UnDelegateResourceContract;
+            case 59: return CancelAllUnfreezeV2Contract;
             default: return null;
           }
         }
@@ -1689,6 +1698,40 @@ public final class Chain {
        * @return The withdrawExpireAmount.
        */
       long getWithdrawExpireAmount();
+
+      /**
+       * <code>map&lt;string, int64&gt; cancel_unfreezeV2_amount = 28;</code>
+       */
+      int getCancelUnfreezeV2AmountCount();
+      /**
+       * <code>map&lt;string, int64&gt; cancel_unfreezeV2_amount = 28;</code>
+       */
+      boolean containsCancelUnfreezeV2Amount(
+          java.lang.String key);
+      /**
+       * Use {@link #getCancelUnfreezeV2AmountMap()} instead.
+       */
+      @java.lang.Deprecated
+      java.util.Map<java.lang.String, java.lang.Long>
+      getCancelUnfreezeV2Amount();
+      /**
+       * <code>map&lt;string, int64&gt; cancel_unfreezeV2_amount = 28;</code>
+       */
+      java.util.Map<java.lang.String, java.lang.Long>
+      getCancelUnfreezeV2AmountMap();
+      /**
+       * <code>map&lt;string, int64&gt; cancel_unfreezeV2_amount = 28;</code>
+       */
+
+      long getCancelUnfreezeV2AmountOrDefault(
+          java.lang.String key,
+          long defaultValue);
+      /**
+       * <code>map&lt;string, int64&gt; cancel_unfreezeV2_amount = 28;</code>
+       */
+
+      long getCancelUnfreezeV2AmountOrThrow(
+          java.lang.String key);
     }
     /**
      * Protobuf type {@code protocol.Transaction.Result}
@@ -1728,6 +1771,7 @@ public final class Chain {
         if (extensionRegistry == null) {
           throw new java.lang.NullPointerException();
         }
+        int mutable_bitField0_ = 0;
         com.google.protobuf.UnknownFieldSet.Builder unknownFields =
             com.google.protobuf.UnknownFieldSet.newBuilder();
         try {
@@ -1801,6 +1845,19 @@ public final class Chain {
                 withdrawExpireAmount_ = input.readInt64();
                 break;
               }
+              case 226: {
+                if (!((mutable_bitField0_ & 0x00000001) != 0)) {
+                  cancelUnfreezeV2Amount_ = com.google.protobuf.MapField.newMapField(
+                      CancelUnfreezeV2AmountDefaultEntryHolder.defaultEntry);
+                  mutable_bitField0_ |= 0x00000001;
+                }
+                com.google.protobuf.MapEntry<java.lang.String, java.lang.Long>
+                cancelUnfreezeV2Amount__ = input.readMessage(
+                    CancelUnfreezeV2AmountDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
+                cancelUnfreezeV2Amount_.getMutableMap().put(
+                    cancelUnfreezeV2Amount__.getKey(), cancelUnfreezeV2Amount__.getValue());
+                break;
+              }
               default: {
                 if (!parseUnknownField(
                     input, unknownFields, extensionRegistry, tag)) {
@@ -1825,6 +1882,18 @@ public final class Chain {
         return org.tron.trident.proto.Chain.internal_static_protocol_Transaction_Result_descriptor;
       }
 
+      @SuppressWarnings({"rawtypes"})
+      @java.lang.Override
+      protected com.google.protobuf.MapField internalGetMapField(
+          int number) {
+        switch (number) {
+          case 28:
+            return internalGetCancelUnfreezeV2Amount();
+          default:
+            throw new RuntimeException(
+                "Invalid map field number: " + number);
+        }
+      }
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
@@ -2341,6 +2410,87 @@ public final class Chain {
         return withdrawExpireAmount_;
       }
 
+      public static final int CANCEL_UNFREEZEV2_AMOUNT_FIELD_NUMBER = 28;
+      private static final class CancelUnfreezeV2AmountDefaultEntryHolder {
+        static final com.google.protobuf.MapEntry<
+            java.lang.String, java.lang.Long> defaultEntry =
+                com.google.protobuf.MapEntry
+                .<java.lang.String, java.lang.Long>newDefaultInstance(
+                    org.tron.trident.proto.Chain.internal_static_protocol_Transaction_Result_CancelUnfreezeV2AmountEntry_descriptor, 
+                    com.google.protobuf.WireFormat.FieldType.STRING,
+                    "",
+                    com.google.protobuf.WireFormat.FieldType.INT64,
+                    0L);
+      }
+      private com.google.protobuf.MapField<
+          java.lang.String, java.lang.Long> cancelUnfreezeV2Amount_;
+      private com.google.protobuf.MapField<java.lang.String, java.lang.Long>
+      internalGetCancelUnfreezeV2Amount() {
+        if (cancelUnfreezeV2Amount_ == null) {
+          return com.google.protobuf.MapField.emptyMapField(
+              CancelUnfreezeV2AmountDefaultEntryHolder.defaultEntry);
+        }
+        return cancelUnfreezeV2Amount_;
+      }
+
+      public int getCancelUnfreezeV2AmountCount() {
+        return internalGetCancelUnfreezeV2Amount().getMap().size();
+      }
+      /**
+       * <code>map&lt;string, int64&gt; cancel_unfreezeV2_amount = 28;</code>
+       */
+
+      @java.lang.Override
+      public boolean containsCancelUnfreezeV2Amount(
+          java.lang.String key) {
+        if (key == null) { throw new java.lang.NullPointerException(); }
+        return internalGetCancelUnfreezeV2Amount().getMap().containsKey(key);
+      }
+      /**
+       * Use {@link #getCancelUnfreezeV2AmountMap()} instead.
+       */
+      @java.lang.Override
+      @java.lang.Deprecated
+      public java.util.Map<java.lang.String, java.lang.Long> getCancelUnfreezeV2Amount() {
+        return getCancelUnfreezeV2AmountMap();
+      }
+      /**
+       * <code>map&lt;string, int64&gt; cancel_unfreezeV2_amount = 28;</code>
+       */
+      @java.lang.Override
+
+      public java.util.Map<java.lang.String, java.lang.Long> getCancelUnfreezeV2AmountMap() {
+        return internalGetCancelUnfreezeV2Amount().getMap();
+      }
+      /**
+       * <code>map&lt;string, int64&gt; cancel_unfreezeV2_amount = 28;</code>
+       */
+      @java.lang.Override
+
+      public long getCancelUnfreezeV2AmountOrDefault(
+          java.lang.String key,
+          long defaultValue) {
+        if (key == null) { throw new java.lang.NullPointerException(); }
+        java.util.Map<java.lang.String, java.lang.Long> map =
+            internalGetCancelUnfreezeV2Amount().getMap();
+        return map.containsKey(key) ? map.get(key) : defaultValue;
+      }
+      /**
+       * <code>map&lt;string, int64&gt; cancel_unfreezeV2_amount = 28;</code>
+       */
+      @java.lang.Override
+
+      public long getCancelUnfreezeV2AmountOrThrow(
+          java.lang.String key) {
+        if (key == null) { throw new java.lang.NullPointerException(); }
+        java.util.Map<java.lang.String, java.lang.Long> map =
+            internalGetCancelUnfreezeV2Amount().getMap();
+        if (!map.containsKey(key)) {
+          throw new java.lang.IllegalArgumentException();
+        }
+        return map.get(key);
+      }
+
       private byte memoizedIsInitialized = -1;
       @java.lang.Override
       public final boolean isInitialized() {
@@ -2391,6 +2541,12 @@ public final class Chain {
         if (withdrawExpireAmount_ != 0L) {
           output.writeInt64(27, withdrawExpireAmount_);
         }
+        com.google.protobuf.GeneratedMessageV3
+          .serializeStringMapTo(
+            output,
+            internalGetCancelUnfreezeV2Amount(),
+            CancelUnfreezeV2AmountDefaultEntryHolder.defaultEntry,
+            28);
         unknownFields.writeTo(output);
       }
 
@@ -2447,6 +2603,16 @@ public final class Chain {
           size += com.google.protobuf.CodedOutputStream
             .computeInt64Size(27, withdrawExpireAmount_);
         }
+        for (java.util.Map.Entry<java.lang.String, java.lang.Long> entry
+             : internalGetCancelUnfreezeV2Amount().getMap().entrySet()) {
+          com.google.protobuf.MapEntry<java.lang.String, java.lang.Long>
+          cancelUnfreezeV2Amount__ = CancelUnfreezeV2AmountDefaultEntryHolder.defaultEntry.newBuilderForType()
+              .setKey(entry.getKey())
+              .setValue(entry.getValue())
+              .build();
+          size += com.google.protobuf.CodedOutputStream
+              .computeMessageSize(28, cancelUnfreezeV2Amount__);
+        }
         size += unknownFields.getSerializedSize();
         memoizedSize = size;
         return size;
@@ -2484,6 +2650,8 @@ public final class Chain {
             != other.getShieldedTransactionFee()) return false;
         if (getWithdrawExpireAmount()
             != other.getWithdrawExpireAmount()) return false;
+        if (!internalGetCancelUnfreezeV2Amount().equals(
+            other.internalGetCancelUnfreezeV2Amount())) return false;
         if (!unknownFields.equals(other.unknownFields)) return false;
         return true;
       }
@@ -2528,6 +2696,10 @@ public final class Chain {
         hash = (37 * hash) + WITHDRAW_EXPIRE_AMOUNT_FIELD_NUMBER;
         hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
             getWithdrawExpireAmount());
+        if (!internalGetCancelUnfreezeV2Amount().getMap().isEmpty()) {
+          hash = (37 * hash) + CANCEL_UNFREEZEV2_AMOUNT_FIELD_NUMBER;
+          hash = (53 * hash) + internalGetCancelUnfreezeV2Amount().hashCode();
+        }
         hash = (29 * hash) + unknownFields.hashCode();
         memoizedHashCode = hash;
         return hash;
@@ -2635,6 +2807,28 @@ public final class Chain {
           return org.tron.trident.proto.Chain.internal_static_protocol_Transaction_Result_descriptor;
         }
 
+        @SuppressWarnings({"rawtypes"})
+        protected com.google.protobuf.MapField internalGetMapField(
+            int number) {
+          switch (number) {
+            case 28:
+              return internalGetCancelUnfreezeV2Amount();
+            default:
+              throw new RuntimeException(
+                  "Invalid map field number: " + number);
+          }
+        }
+        @SuppressWarnings({"rawtypes"})
+        protected com.google.protobuf.MapField internalGetMutableMapField(
+            int number) {
+          switch (number) {
+            case 28:
+              return internalGetMutableCancelUnfreezeV2Amount();
+            default:
+              throw new RuntimeException(
+                  "Invalid map field number: " + number);
+          }
+        }
         @java.lang.Override
         protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
             internalGetFieldAccessorTable() {
@@ -2685,6 +2879,7 @@ public final class Chain {
 
           withdrawExpireAmount_ = 0L;
 
+          internalGetMutableCancelUnfreezeV2Amount().clear();
           return this;
         }
 
@@ -2711,6 +2906,7 @@ public final class Chain {
         @java.lang.Override
         public org.tron.trident.proto.Chain.Transaction.Result buildPartial() {
           org.tron.trident.proto.Chain.Transaction.Result result = new org.tron.trident.proto.Chain.Transaction.Result(this);
+          int from_bitField0_ = bitField0_;
           result.fee_ = fee_;
           result.ret_ = ret_;
           result.contractRet_ = contractRet_;
@@ -2723,6 +2919,8 @@ public final class Chain {
           result.exchangeId_ = exchangeId_;
           result.shieldedTransactionFee_ = shieldedTransactionFee_;
           result.withdrawExpireAmount_ = withdrawExpireAmount_;
+          result.cancelUnfreezeV2Amount_ = internalGetCancelUnfreezeV2Amount();
+          result.cancelUnfreezeV2Amount_.makeImmutable();
           onBuilt();
           return result;
         }
@@ -2808,6 +3006,8 @@ public final class Chain {
           if (other.getWithdrawExpireAmount() != 0L) {
             setWithdrawExpireAmount(other.getWithdrawExpireAmount());
           }
+          internalGetMutableCancelUnfreezeV2Amount().mergeFrom(
+              other.internalGetCancelUnfreezeV2Amount());
           this.mergeUnknownFields(other.unknownFields);
           onChanged();
           return this;
@@ -2836,6 +3036,7 @@ public final class Chain {
           }
           return this;
         }
+        private int bitField0_;
 
         private long fee_ ;
         /**
@@ -3297,6 +3498,134 @@ public final class Chain {
           
           withdrawExpireAmount_ = 0L;
           onChanged();
+          return this;
+        }
+
+        private com.google.protobuf.MapField<
+            java.lang.String, java.lang.Long> cancelUnfreezeV2Amount_;
+        private com.google.protobuf.MapField<java.lang.String, java.lang.Long>
+        internalGetCancelUnfreezeV2Amount() {
+          if (cancelUnfreezeV2Amount_ == null) {
+            return com.google.protobuf.MapField.emptyMapField(
+                CancelUnfreezeV2AmountDefaultEntryHolder.defaultEntry);
+          }
+          return cancelUnfreezeV2Amount_;
+        }
+        private com.google.protobuf.MapField<java.lang.String, java.lang.Long>
+        internalGetMutableCancelUnfreezeV2Amount() {
+          onChanged();;
+          if (cancelUnfreezeV2Amount_ == null) {
+            cancelUnfreezeV2Amount_ = com.google.protobuf.MapField.newMapField(
+                CancelUnfreezeV2AmountDefaultEntryHolder.defaultEntry);
+          }
+          if (!cancelUnfreezeV2Amount_.isMutable()) {
+            cancelUnfreezeV2Amount_ = cancelUnfreezeV2Amount_.copy();
+          }
+          return cancelUnfreezeV2Amount_;
+        }
+
+        public int getCancelUnfreezeV2AmountCount() {
+          return internalGetCancelUnfreezeV2Amount().getMap().size();
+        }
+        /**
+         * <code>map&lt;string, int64&gt; cancel_unfreezeV2_amount = 28;</code>
+         */
+
+        @java.lang.Override
+        public boolean containsCancelUnfreezeV2Amount(
+            java.lang.String key) {
+          if (key == null) { throw new java.lang.NullPointerException(); }
+          return internalGetCancelUnfreezeV2Amount().getMap().containsKey(key);
+        }
+        /**
+         * Use {@link #getCancelUnfreezeV2AmountMap()} instead.
+         */
+        @java.lang.Override
+        @java.lang.Deprecated
+        public java.util.Map<java.lang.String, java.lang.Long> getCancelUnfreezeV2Amount() {
+          return getCancelUnfreezeV2AmountMap();
+        }
+        /**
+         * <code>map&lt;string, int64&gt; cancel_unfreezeV2_amount = 28;</code>
+         */
+        @java.lang.Override
+
+        public java.util.Map<java.lang.String, java.lang.Long> getCancelUnfreezeV2AmountMap() {
+          return internalGetCancelUnfreezeV2Amount().getMap();
+        }
+        /**
+         * <code>map&lt;string, int64&gt; cancel_unfreezeV2_amount = 28;</code>
+         */
+        @java.lang.Override
+
+        public long getCancelUnfreezeV2AmountOrDefault(
+            java.lang.String key,
+            long defaultValue) {
+          if (key == null) { throw new java.lang.NullPointerException(); }
+          java.util.Map<java.lang.String, java.lang.Long> map =
+              internalGetCancelUnfreezeV2Amount().getMap();
+          return map.containsKey(key) ? map.get(key) : defaultValue;
+        }
+        /**
+         * <code>map&lt;string, int64&gt; cancel_unfreezeV2_amount = 28;</code>
+         */
+        @java.lang.Override
+
+        public long getCancelUnfreezeV2AmountOrThrow(
+            java.lang.String key) {
+          if (key == null) { throw new java.lang.NullPointerException(); }
+          java.util.Map<java.lang.String, java.lang.Long> map =
+              internalGetCancelUnfreezeV2Amount().getMap();
+          if (!map.containsKey(key)) {
+            throw new java.lang.IllegalArgumentException();
+          }
+          return map.get(key);
+        }
+
+        public Builder clearCancelUnfreezeV2Amount() {
+          internalGetMutableCancelUnfreezeV2Amount().getMutableMap()
+              .clear();
+          return this;
+        }
+        /**
+         * <code>map&lt;string, int64&gt; cancel_unfreezeV2_amount = 28;</code>
+         */
+
+        public Builder removeCancelUnfreezeV2Amount(
+            java.lang.String key) {
+          if (key == null) { throw new java.lang.NullPointerException(); }
+          internalGetMutableCancelUnfreezeV2Amount().getMutableMap()
+              .remove(key);
+          return this;
+        }
+        /**
+         * Use alternate mutation accessors instead.
+         */
+        @java.lang.Deprecated
+        public java.util.Map<java.lang.String, java.lang.Long>
+        getMutableCancelUnfreezeV2Amount() {
+          return internalGetMutableCancelUnfreezeV2Amount().getMutableMap();
+        }
+        /**
+         * <code>map&lt;string, int64&gt; cancel_unfreezeV2_amount = 28;</code>
+         */
+        public Builder putCancelUnfreezeV2Amount(
+            java.lang.String key,
+            long value) {
+          if (key == null) { throw new java.lang.NullPointerException(); }
+          
+          internalGetMutableCancelUnfreezeV2Amount().getMutableMap()
+              .put(key, value);
+          return this;
+        }
+        /**
+         * <code>map&lt;string, int64&gt; cancel_unfreezeV2_amount = 28;</code>
+         */
+
+        public Builder putAllCancelUnfreezeV2Amount(
+            java.util.Map<java.lang.String, java.lang.Long> values) {
+          internalGetMutableCancelUnfreezeV2Amount().getMutableMap()
+              .putAll(values);
           return this;
         }
         @java.lang.Override
@@ -9022,6 +9351,11 @@ public final class Chain {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_protocol_Transaction_Result_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_protocol_Transaction_Result_CancelUnfreezeV2AmountEntry_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_protocol_Transaction_Result_CancelUnfreezeV2AmountEntry_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_protocol_Transaction_raw_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -9051,15 +9385,15 @@ public final class Chain {
   static {
     java.lang.String[] descriptorData = {
       "\n\020core/chain.proto\022\010protocol\032\031google/pro" +
-      "tobuf/any.proto\032\021core/common.proto\"\202\023\n\013T" +
+      "tobuf/any.proto\032\021core/common.proto\"\276\024\n\013T" +
       "ransaction\022+\n\010raw_data\030\001 \001(\0132\031.protocol." +
       "Transaction.raw\022\021\n\tsignature\030\002 \003(\014\022)\n\003re" +
-      "t\030\005 \003(\0132\034.protocol.Transaction.Result\032\227\n" +
+      "t\030\005 \003(\0132\034.protocol.Transaction.Result\032\270\n" +
       "\n\010Contract\0229\n\004type\030\001 \001(\0162+.protocol.Tran" +
       "saction.Contract.ContractType\022\'\n\tparamet" +
       "er\030\002 \001(\0132\024.google.protobuf.Any\022\020\n\010provid" +
       "er\030\003 \001(\014\022\024\n\014ContractName\030\004 \001(\014\022\025\n\rPermis" +
-      "sion_id\030\005 \001(\005\"\347\010\n\014ContractType\022\031\n\025Accoun" +
+      "sion_id\030\005 \001(\005\"\210\t\n\014ContractType\022\031\n\025Accoun" +
       "tCreateContract\020\000\022\024\n\020TransferContract\020\001\022" +
       "\031\n\025TransferAssetContract\020\002\022\025\n\021VoteAssetC" +
       "ontract\020\003\022\027\n\023VoteWitnessContract\020\004\022\031\n\025Wi" +
@@ -9087,42 +9421,47 @@ public final class Chain {
       "ceV2Contract\0206\022\035\n\031UnfreezeBalanceV2Contr" +
       "act\0207\022\"\n\036WithdrawExpireUnfreezeContract\020" +
       "8\022\034\n\030DelegateResourceContract\0209\022\036\n\032UnDel" +
-      "egateResourceContract\020:\032\356\005\n\006Result\022\013\n\003fe" +
-      "e\030\001 \001(\003\022.\n\003ret\030\002 \001(\0162!.protocol.Transact" +
-      "ion.Result.code\022@\n\013contractRet\030\003 \001(\0162+.p" +
-      "rotocol.Transaction.Result.contractResul" +
-      "t\022\024\n\014assetIssueID\030\016 \001(\t\022\027\n\017withdraw_amou" +
-      "nt\030\017 \001(\003\022\027\n\017unfreeze_amount\030\020 \001(\003\022 \n\030exc" +
-      "hange_received_amount\030\022 \001(\003\022&\n\036exchange_" +
-      "inject_another_amount\030\023 \001(\003\022(\n exchange_" +
-      "withdraw_another_amount\030\024 \001(\003\022\023\n\013exchang" +
-      "e_id\030\025 \001(\003\022 \n\030shielded_transaction_fee\030\026" +
-      " \001(\003\022\036\n\026withdraw_expire_amount\030\033 \001(\003\"\036\n\004" +
-      "code\022\n\n\006SUCESS\020\000\022\n\n\006FAILED\020\001\"\261\002\n\016contrac" +
-      "tResult\022\013\n\007DEFAULT\020\000\022\013\n\007SUCCESS\020\001\022\n\n\006REV" +
-      "ERT\020\002\022\030\n\024BAD_JUMP_DESTINATION\020\003\022\021\n\rOUT_O" +
-      "F_MEMORY\020\004\022\030\n\024PRECOMPILED_CONTRACT\020\005\022\023\n\017" +
-      "STACK_TOO_SMALL\020\006\022\023\n\017STACK_TOO_LARGE\020\007\022\025" +
-      "\n\021ILLEGAL_OPERATION\020\010\022\022\n\016STACK_OVERFLOW\020" +
-      "\t\022\021\n\rOUT_OF_ENERGY\020\n\022\017\n\013OUT_OF_TIME\020\013\022\027\n" +
-      "\023JVM_STACK_OVER_FLOW\020\014\022\013\n\007UNKNOWN\020\r\022\023\n\017T" +
-      "RANSFER_FAILED\020\016\032\374\001\n\003raw\022\027\n\017ref_block_by" +
-      "tes\030\001 \001(\014\022\025\n\rref_block_num\030\003 \001(\003\022\026\n\016ref_" +
-      "block_hash\030\004 \001(\014\022\022\n\nexpiration\030\010 \001(\003\022\"\n\005" +
-      "auths\030\t \003(\0132\023.protocol.authority\022\014\n\004data" +
-      "\030\n \001(\014\0220\n\010contract\030\013 \003(\0132\036.protocol.Tran" +
-      "saction.Contract\022\017\n\007scripts\030\014 \001(\014\022\021\n\ttim" +
-      "estamp\030\016 \001(\003\022\021\n\tfee_limit\030\022 \001(\003\"\200\002\n\013Bloc" +
-      "kHeader\022+\n\010raw_data\030\001 \001(\0132\031.protocol.Blo" +
-      "ckHeader.raw\022\031\n\021witness_signature\030\002 \001(\014\032" +
-      "\250\001\n\003raw\022\021\n\ttimestamp\030\001 \001(\003\022\022\n\ntxTrieRoot" +
-      "\030\002 \001(\014\022\022\n\nparentHash\030\003 \001(\014\022\016\n\006number\030\007 \001" +
-      "(\003\022\022\n\nwitness_id\030\010 \001(\003\022\027\n\017witness_addres" +
-      "s\030\t \001(\014\022\017\n\007version\030\n \001(\005\022\030\n\020accountState" +
-      "Root\030\013 \001(\014\"a\n\005Block\022+\n\014transactions\030\001 \003(" +
-      "\0132\025.protocol.Transaction\022+\n\014block_header" +
-      "\030\002 \001(\0132\025.protocol.BlockHeaderB\030\n\026org.tro" +
-      "n.trident.protob\006proto3"
+      "egateResourceContract\020:\022\037\n\033CancelAllUnfr" +
+      "eezeV2Contract\020;\032\211\007\n\006Result\022\013\n\003fee\030\001 \001(\003" +
+      "\022.\n\003ret\030\002 \001(\0162!.protocol.Transaction.Res" +
+      "ult.code\022@\n\013contractRet\030\003 \001(\0162+.protocol" +
+      ".Transaction.Result.contractResult\022\024\n\014as" +
+      "setIssueID\030\016 \001(\t\022\027\n\017withdraw_amount\030\017 \001(" +
+      "\003\022\027\n\017unfreeze_amount\030\020 \001(\003\022 \n\030exchange_r" +
+      "eceived_amount\030\022 \001(\003\022&\n\036exchange_inject_" +
+      "another_amount\030\023 \001(\003\022(\n exchange_withdra" +
+      "w_another_amount\030\024 \001(\003\022\023\n\013exchange_id\030\025 " +
+      "\001(\003\022 \n\030shielded_transaction_fee\030\026 \001(\003\022\036\n" +
+      "\026withdraw_expire_amount\030\033 \001(\003\022Z\n\030cancel_" +
+      "unfreezeV2_amount\030\034 \003(\01328.protocol.Trans" +
+      "action.Result.CancelUnfreezeV2AmountEntr" +
+      "y\032=\n\033CancelUnfreezeV2AmountEntry\022\013\n\003key\030" +
+      "\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001\"\036\n\004code\022\n\n\006SUCE" +
+      "SS\020\000\022\n\n\006FAILED\020\001\"\261\002\n\016contractResult\022\013\n\007D" +
+      "EFAULT\020\000\022\013\n\007SUCCESS\020\001\022\n\n\006REVERT\020\002\022\030\n\024BAD" +
+      "_JUMP_DESTINATION\020\003\022\021\n\rOUT_OF_MEMORY\020\004\022\030" +
+      "\n\024PRECOMPILED_CONTRACT\020\005\022\023\n\017STACK_TOO_SM" +
+      "ALL\020\006\022\023\n\017STACK_TOO_LARGE\020\007\022\025\n\021ILLEGAL_OP" +
+      "ERATION\020\010\022\022\n\016STACK_OVERFLOW\020\t\022\021\n\rOUT_OF_" +
+      "ENERGY\020\n\022\017\n\013OUT_OF_TIME\020\013\022\027\n\023JVM_STACK_O" +
+      "VER_FLOW\020\014\022\013\n\007UNKNOWN\020\r\022\023\n\017TRANSFER_FAIL" +
+      "ED\020\016\032\374\001\n\003raw\022\027\n\017ref_block_bytes\030\001 \001(\014\022\025\n" +
+      "\rref_block_num\030\003 \001(\003\022\026\n\016ref_block_hash\030\004" +
+      " \001(\014\022\022\n\nexpiration\030\010 \001(\003\022\"\n\005auths\030\t \003(\0132" +
+      "\023.protocol.authority\022\014\n\004data\030\n \001(\014\0220\n\010co" +
+      "ntract\030\013 \003(\0132\036.protocol.Transaction.Cont" +
+      "ract\022\017\n\007scripts\030\014 \001(\014\022\021\n\ttimestamp\030\016 \001(\003" +
+      "\022\021\n\tfee_limit\030\022 \001(\003\"\200\002\n\013BlockHeader\022+\n\010r" +
+      "aw_data\030\001 \001(\0132\031.protocol.BlockHeader.raw" +
+      "\022\031\n\021witness_signature\030\002 \001(\014\032\250\001\n\003raw\022\021\n\tt" +
+      "imestamp\030\001 \001(\003\022\022\n\ntxTrieRoot\030\002 \001(\014\022\022\n\npa" +
+      "rentHash\030\003 \001(\014\022\016\n\006number\030\007 \001(\003\022\022\n\nwitnes" +
+      "s_id\030\010 \001(\003\022\027\n\017witness_address\030\t \001(\014\022\017\n\007v" +
+      "ersion\030\n \001(\005\022\030\n\020accountStateRoot\030\013 \001(\014\"a" +
+      "\n\005Block\022+\n\014transactions\030\001 \003(\0132\025.protocol" +
+      ".Transaction\022+\n\014block_header\030\002 \001(\0132\025.pro" +
+      "tocol.BlockHeaderB\030\n\026org.tron.trident.pr" +
+      "otob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -9147,7 +9486,13 @@ public final class Chain {
     internal_static_protocol_Transaction_Result_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_Transaction_Result_descriptor,
-        new java.lang.String[] { "Fee", "Ret", "ContractRet", "AssetIssueID", "WithdrawAmount", "UnfreezeAmount", "ExchangeReceivedAmount", "ExchangeInjectAnotherAmount", "ExchangeWithdrawAnotherAmount", "ExchangeId", "ShieldedTransactionFee", "WithdrawExpireAmount", });
+        new java.lang.String[] { "Fee", "Ret", "ContractRet", "AssetIssueID", "WithdrawAmount", "UnfreezeAmount", "ExchangeReceivedAmount", "ExchangeInjectAnotherAmount", "ExchangeWithdrawAnotherAmount", "ExchangeId", "ShieldedTransactionFee", "WithdrawExpireAmount", "CancelUnfreezeV2Amount", });
+    internal_static_protocol_Transaction_Result_CancelUnfreezeV2AmountEntry_descriptor =
+      internal_static_protocol_Transaction_Result_descriptor.getNestedTypes().get(0);
+    internal_static_protocol_Transaction_Result_CancelUnfreezeV2AmountEntry_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_protocol_Transaction_Result_CancelUnfreezeV2AmountEntry_descriptor,
+        new java.lang.String[] { "Key", "Value", });
     internal_static_protocol_Transaction_raw_descriptor =
       internal_static_protocol_Transaction_descriptor.getNestedTypes().get(2);
     internal_static_protocol_Transaction_raw_fieldAccessorTable = new

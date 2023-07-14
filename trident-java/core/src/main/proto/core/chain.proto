@@ -49,6 +49,7 @@ message Transaction {
       WithdrawExpireUnfreezeContract = 56;
       DelegateResourceContract = 57;
       UnDelegateResourceContract = 58;
+      CancelAllUnfreezeV2Contract = 59;
     }
     ContractType type = 1;
     google.protobuf.Any parameter = 2;
@@ -93,6 +94,7 @@ message Transaction {
     int64 shielded_transaction_fee = 22;
 
     int64 withdraw_expire_amount = 27;
+    map<string, int64> cancel_unfreezeV2_amount = 28;
   }
 
   message raw {

@@ -2,6 +2,7 @@ package org.tron.trident.core;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
+import io.grpc.ClientInterceptor;
 import org.tron.trident.abi.FunctionEncoder;
 import org.tron.trident.abi.datatypes.Function;
 import org.tron.trident.api.GrpcAPI;
@@ -40,6 +41,7 @@ import org.tron.trident.proto.Contract.UpdateBrokerageContract;
 import org.tron.trident.proto.Contract.ParticipateAssetIssueContract;
 import org.tron.trident.proto.Contract.UnfreezeAssetContract;
 import org.tron.trident.proto.Contract.AccountPermissionUpdateContract;
+import org.tron.trident.proto.Response;
 import org.tron.trident.proto.Response.TransactionExtention;
 import org.tron.trident.proto.Response.TransactionReturn;
 import org.tron.trident.proto.Response.NodeInfo;
@@ -62,6 +64,7 @@ import org.tron.trident.proto.Contract.WitnessUpdateContract;
 import org.tron.trident.proto.Contract.ProposalCreateContract;
 import org.tron.trident.proto.Contract.ProposalApproveContract;
 import org.tron.trident.proto.Contract.ProposalDeleteContract;
+import org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract;
 import org.tron.trident.utils.Base58Check;
 
 import org.tron.trident.proto.Contract.FreezeBalanceV2Contract;
@@ -142,6 +145,18 @@ public class ApiWrapper {
 
         keyPair = new KeyPair(hexPrivateKey);
     }
+
+    public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey, List<ClientInterceptor> clientInterceptors) {
+        channel = ManagedChannelBuilder.forTarget(grpcEndpoint)
+            .intercept(clientInterceptors)
+            .usePlaintext()
+            .build();
+        channelSolidity = ManagedChannelBuilder.forTarget(grpcEndpointSolidity).usePlaintext().build();
+        blockingStub = WalletGrpc.newBlockingStub(channel);
+        blockingStubSolidity = WalletSolidityGrpc.newBlockingStub(channelSolidity);
+        keyPair = new KeyPair(hexPrivateKey);
+    }
+
 
     public void close() {
         channel.shutdown();
@@ -569,6 +584,25 @@ public class ApiWrapper {
 
     /**
      * Stake2.0 API
+     * Cancel all the unstaking transactions in the waiting period
+     * @param ownerAddress owner address
+     * @return TransactionExtention
+     * @throws IllegalException if fail to delegate resource
+     */
+    public TransactionExtention cancelAllUnfreezeV2(String ownerAddress) throws IllegalException {
+
+        CancelAllUnfreezeV2Contract cancelUnfreezeV2Contract =
+            CancelAllUnfreezeV2Contract.newBuilder()
+                .setOwnerAddress(parseAddress(ownerAddress))
+                .build();
+
+        TransactionExtention txnExt = createTransactionExtention(cancelUnfreezeV2Contract, Transaction.Contract.ContractType.CancelAllUnfreezeV2Contract);
+
+        return txnExt;
+    }
+
+    /**
+     * Stake2.0 API
      * Delegate bandwidth or energy resources to other accounts
      * @param ownerAddress owner address
      * @param balance  Amount of TRX staked for resources to be delegated, unit is sun
@@ -592,6 +626,41 @@ public class ApiWrapper {
                 .setLock(lock)
                 .setResourceValue(resourceCode)
                 .build();
+        TransactionExtention txnExt = createTransactionExtention(delegateResourceContract, Transaction.Contract.ContractType.DelegateResourceContract);
+
+        return txnExt;
+    }
+
+    /**
+     * Stake2.0 API
+     * Delegate bandwidth or energy resources to other accounts
+     * @param ownerAddress owner address
+     * @param balance  Amount of TRX staked for resources to be delegated, unit is sun
+     * @param resourceCode Resource type, can be 0("BANDWIDTH") or 1("ENERGY")
+     * @param receiverAddress  Resource receiver address
+     * @param lock  Whether it is locked, if it is set to true,
+     *              the delegated resources cannot be undelegated within 3 days.
+     *              When the lock time is not over, if the owner delegates the same type of resources using the lock to the same address,
+     *              the lock time will be reset to 3 days
+     * @param lockPeriod  The lockup period, unit is blocks, data type is int256,
+     *                    It indicates how many blocks the resource delegating is locked before it can be undelegated.
+     * @return TransactionExtention
+     * @throws IllegalException if fail to delegate resource
+     */
+    public TransactionExtention delegateResourceV2(String ownerAddress, long balance, int resourceCode,String receiverAddress,boolean lock, long lockPeriod) throws IllegalException {
+        ByteString rawOwner = parseAddress(ownerAddress);
+        ByteString rawReciever = parseAddress(receiverAddress);
+        DelegateResourceContract delegateResourceContract=
+            DelegateResourceContract.newBuilder()
+                .setOwnerAddress(rawOwner)
+                .setBalance(balance)
+                .setReceiverAddress(rawReciever)
+                .setLock(lock)
+                .setResourceValue(resourceCode)
+                .build();
+        if(lock) {
+                delegateResourceContract = delegateResourceContract.toBuilder().setLockPeriod(lockPeriod).build();
+        }
         TransactionExtention txnExt = createTransactionExtention(delegateResourceContract, Transaction.Contract.ContractType.DelegateResourceContract);
 
         return txnExt;
@@ -1940,6 +2009,112 @@ public class ApiWrapper {
         return block;
     }
 
+
+    /**
+     * Estimate the energy required for the successful execution of smart contract transactions
+     * This API is closed by default in tron node.
+     * To open this interface, the two coniguration items vm.estimateEnergy and vm.supportConstant must be enabled in the node configuration file at the same time.
+     * @param ownerAddr Owner address that triggers the contract. If visible=true, use base58check format, otherwise use hex format.
+     *                  For constant call you can use the all-zero address.
+     * @param contractAddr Smart contract address.
+     * @param function contract function
+     * @return EstimateEnergyMessage. Estimated energy to run the contract
+     */
+    public Response.EstimateEnergyMessage estimateEnergy(String ownerAddr, String contractAddr, Function function) {
+        Contract cntr = getContract(contractAddr);
+
+        cntr.setOwnerAddr(parseAddress(ownerAddr));
+        String encodedHex = FunctionEncoder.encode(function);
+        TriggerSmartContract trigger =
+            TriggerSmartContract.newBuilder()
+                .setOwnerAddress(cntr.getOwnerAddr())
+                .setContractAddress(cntr.getCntrAddr())
+                .setData(parseHex(encodedHex))
+                .build();
+        Response.EstimateEnergyMessage estimateEnergyMessage= blockingStub.estimateEnergy(trigger);
+
+        return estimateEnergyMessage;
+    }
+
+    /**
+     * Estimate the energy required for the successful execution of smart contract transactions
+     * This API is closed by default in tron node. To open this interface, the two configuration items vm.estimateEnergy and vm.supportConstant must be enabled in the node configuration file at the same time.
+     *  @param ownerAddr Owner address that triggers the contract. If visible=true, use base58check format, otherwise use hex format.
+     *                  For constant call you can use the all-zero address.
+     * @param contractAddr Smart contract address.
+     * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
+     * @return EstimateEnergyMessage. Estimated energy to run the contract
+     */
+    public Response.EstimateEnergyMessage estimateEnergyV2(String ownerAddr, String contractAddr, String callData) {
+        Contract cntr = getContract(contractAddr);
+
+        cntr.setOwnerAddr(parseAddress(ownerAddr));
+        TriggerSmartContract trigger =
+            TriggerSmartContract.newBuilder()
+                .setOwnerAddress(cntr.getOwnerAddr())
+                .setContractAddress(cntr.getCntrAddr())
+                .setData(ByteString.copyFrom(ByteArray.fromHexString(callData)))
+                .build();
+        Response.EstimateEnergyMessage estimateEnergyMessage= blockingStub.estimateEnergy(trigger);
+
+        return estimateEnergyMessage;
+    }
+
+    /**
+     * make a trigger call. Trigger call consumes energy and bandwidth.
+     * @param ownerAddr the current caller
+     * @param contractAddr smart contract address
+     * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
+     * @return transaction builder. TransactionExtention detail.
+     */
+    public TransactionBuilder triggerCallV2(String ownerAddr, String contractAddr, String callData) {
+        Contract cntr = getContract(contractAddr);
+
+        TransactionExtention txnExt = callWithoutBroadcastV2(ownerAddr, cntr, callData);
+
+        return new TransactionBuilder(txnExt.getTransaction());
+    }
+
+
+    /**
+     * call function without signature and broadcasting
+     * @param ownerAddr the caller
+     * @param cntr the contract
+     * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
+     * @return TransactionExtention
+     */
+    private TransactionExtention callWithoutBroadcastV2(String ownerAddr, Contract cntr, String callData) {
+        cntr.setOwnerAddr(parseAddress(ownerAddr));
+        // Make a TriggerSmartContract contract
+        TriggerSmartContract trigger =
+            TriggerSmartContract.newBuilder()
+                .setOwnerAddress(cntr.getOwnerAddr())
+                .setContractAddress(cntr.getCntrAddr())
+                .setData(ByteString.copyFrom(ByteArray.fromHexString(callData)))
+                .build();
+
+        // System.out.println("trigger:\n" + trigger);
+
+        TransactionExtention txnExt = blockingStub.triggerConstantContract(trigger);
+        // System.out.println("txn id => " + toHex(txnExt.getTxid().toByteArray()));
+
+        return txnExt;
+    }
+
+    /**
+     * make a constant call - no broadcasting
+     * @param ownerAddr the current caller.
+     * @param contractAddr smart contract address.
+     * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
+     * @return TransactionExtention.
+     */
+    public TransactionExtention constantCallV2(String ownerAddr, String contractAddr, String callData) {
+        Contract cntr = getContract(contractAddr);
+
+        TransactionExtention txnExt =  callWithoutBroadcastV2(ownerAddr, cntr, callData);
+
+        return txnExt;
+    }
 
 
 }
