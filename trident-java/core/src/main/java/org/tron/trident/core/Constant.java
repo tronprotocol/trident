@@ -10,7 +10,7 @@ public final class Constant{
     public static final String TRONGRID_SHASTA_SOLIDITY = "grpc.shasta.trongrid.io:50052";
 
     //Public Fullnode, maintained by official team
-    public static final String FULLNODE_NILE = "47.252.19.181:50051";
-    public static final String FULLNODE_NILE_SOLIDITY = "47.252.19.181:50061";
+    public static final String FULLNODE_NILE = "grpc.nile.trongrid.io:50051";
+    public static final String FULLNODE_NILE_SOLIDITY = "grpc.nile.trongrid.io:50061";
 
 }
