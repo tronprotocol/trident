@@ -94,7 +94,7 @@ public class TypeDecoder {
         return decode(input, 0, type);
     }
 
-    public tatic Address decodeAddress(String input) {
+    public static Address decodeAddress(String input) {
         return new Address(decodeNumeric(input, Uint160.class));
     }
 
