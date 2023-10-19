@@ -2786,6 +2786,99 @@ public final class WalletGrpc {
     return getGetPendingSizeMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.EmptyMessage,
+      org.tron.trident.proto.Response.PricesResponseMessage> getGetBandwidthPricesMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "GetBandwidthPrices",
+      requestType = org.tron.trident.api.GrpcAPI.EmptyMessage.class,
+      responseType = org.tron.trident.proto.Response.PricesResponseMessage.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.EmptyMessage,
+      org.tron.trident.proto.Response.PricesResponseMessage> getGetBandwidthPricesMethod() {
+    io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.EmptyMessage, org.tron.trident.proto.Response.PricesResponseMessage> getGetBandwidthPricesMethod;
+    if ((getGetBandwidthPricesMethod = WalletGrpc.getGetBandwidthPricesMethod) == null) {
+      synchronized (WalletGrpc.class) {
+        if ((getGetBandwidthPricesMethod = WalletGrpc.getGetBandwidthPricesMethod) == null) {
+          WalletGrpc.getGetBandwidthPricesMethod = getGetBandwidthPricesMethod =
+              io.grpc.MethodDescriptor.<org.tron.trident.api.GrpcAPI.EmptyMessage, org.tron.trident.proto.Response.PricesResponseMessage>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "GetBandwidthPrices"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.api.GrpcAPI.EmptyMessage.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.proto.Response.PricesResponseMessage.getDefaultInstance()))
+              .setSchemaDescriptor(new WalletMethodDescriptorSupplier("GetBandwidthPrices"))
+              .build();
+        }
+      }
+    }
+    return getGetBandwidthPricesMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.EmptyMessage,
+      org.tron.trident.proto.Response.PricesResponseMessage> getGetEnergyPricesMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "GetEnergyPrices",
+      requestType = org.tron.trident.api.GrpcAPI.EmptyMessage.class,
+      responseType = org.tron.trident.proto.Response.PricesResponseMessage.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.EmptyMessage,
+      org.tron.trident.proto.Response.PricesResponseMessage> getGetEnergyPricesMethod() {
+    io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.EmptyMessage, org.tron.trident.proto.Response.PricesResponseMessage> getGetEnergyPricesMethod;
+    if ((getGetEnergyPricesMethod = WalletGrpc.getGetEnergyPricesMethod) == null) {
+      synchronized (WalletGrpc.class) {
+        if ((getGetEnergyPricesMethod = WalletGrpc.getGetEnergyPricesMethod) == null) {
+          WalletGrpc.getGetEnergyPricesMethod = getGetEnergyPricesMethod =
+              io.grpc.MethodDescriptor.<org.tron.trident.api.GrpcAPI.EmptyMessage, org.tron.trident.proto.Response.PricesResponseMessage>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "GetEnergyPrices"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.api.GrpcAPI.EmptyMessage.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.proto.Response.PricesResponseMessage.getDefaultInstance()))
+              .setSchemaDescriptor(new WalletMethodDescriptorSupplier("GetEnergyPrices"))
+              .build();
+        }
+      }
+    }
+    return getGetEnergyPricesMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.EmptyMessage,
+      org.tron.trident.proto.Response.PricesResponseMessage> getGetMemoFeeMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "GetMemoFee",
+      requestType = org.tron.trident.api.GrpcAPI.EmptyMessage.class,
+      responseType = org.tron.trident.proto.Response.PricesResponseMessage.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.EmptyMessage,
+      org.tron.trident.proto.Response.PricesResponseMessage> getGetMemoFeeMethod() {
+    io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.EmptyMessage, org.tron.trident.proto.Response.PricesResponseMessage> getGetMemoFeeMethod;
+    if ((getGetMemoFeeMethod = WalletGrpc.getGetMemoFeeMethod) == null) {
+      synchronized (WalletGrpc.class) {
+        if ((getGetMemoFeeMethod = WalletGrpc.getGetMemoFeeMethod) == null) {
+          WalletGrpc.getGetMemoFeeMethod = getGetMemoFeeMethod =
+              io.grpc.MethodDescriptor.<org.tron.trident.api.GrpcAPI.EmptyMessage, org.tron.trident.proto.Response.PricesResponseMessage>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "GetMemoFee"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.api.GrpcAPI.EmptyMessage.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.proto.Response.PricesResponseMessage.getDefaultInstance()))
+              .setSchemaDescriptor(new WalletMethodDescriptorSupplier("GetMemoFee"))
+              .build();
+        }
+      }
+    }
+    return getGetMemoFeeMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -3541,6 +3634,30 @@ public final class WalletGrpc {
       asyncUnimplementedUnaryCall(getGetPendingSizeMethod(), responseObserver);
     }
 
+    /**
+     * <pre>
+     *query resource price
+     * </pre>
+     */
+    public void getBandwidthPrices(org.tron.trident.api.GrpcAPI.EmptyMessage request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.PricesResponseMessage> responseObserver) {
+      asyncUnimplementedUnaryCall(getGetBandwidthPricesMethod(), responseObserver);
+    }
+
+    /**
+     */
+    public void getEnergyPrices(org.tron.trident.api.GrpcAPI.EmptyMessage request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.PricesResponseMessage> responseObserver) {
+      asyncUnimplementedUnaryCall(getGetEnergyPricesMethod(), responseObserver);
+    }
+
+    /**
+     */
+    public void getMemoFee(org.tron.trident.api.GrpcAPI.EmptyMessage request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.PricesResponseMessage> responseObserver) {
+      asyncUnimplementedUnaryCall(getGetMemoFeeMethod(), responseObserver);
+    }
+
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -4166,6 +4283,27 @@ public final class WalletGrpc {
                 org.tron.trident.api.GrpcAPI.EmptyMessage,
                 org.tron.trident.api.GrpcAPI.NumberMessage>(
                   this, METHODID_GET_PENDING_SIZE)))
+          .addMethod(
+            getGetBandwidthPricesMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                org.tron.trident.api.GrpcAPI.EmptyMessage,
+                org.tron.trident.proto.Response.PricesResponseMessage>(
+                  this, METHODID_GET_BANDWIDTH_PRICES)))
+          .addMethod(
+            getGetEnergyPricesMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                org.tron.trident.api.GrpcAPI.EmptyMessage,
+                org.tron.trident.proto.Response.PricesResponseMessage>(
+                  this, METHODID_GET_ENERGY_PRICES)))
+          .addMethod(
+            getGetMemoFeeMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                org.tron.trident.api.GrpcAPI.EmptyMessage,
+                org.tron.trident.proto.Response.PricesResponseMessage>(
+                  this, METHODID_GET_MEMO_FEE)))
           .build();
     }
   }
@@ -4979,6 +5117,33 @@ public final class WalletGrpc {
       asyncUnaryCall(
           getChannel().newCall(getGetPendingSizeMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     * <pre>
+     *query resource price
+     * </pre>
+     */
+    public void getBandwidthPrices(org.tron.trident.api.GrpcAPI.EmptyMessage request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.PricesResponseMessage> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getGetBandwidthPricesMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
+    public void getEnergyPrices(org.tron.trident.api.GrpcAPI.EmptyMessage request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.PricesResponseMessage> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getGetEnergyPricesMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
+    public void getMemoFee(org.tron.trident.api.GrpcAPI.EmptyMessage request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.PricesResponseMessage> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getGetMemoFeeMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -5700,6 +5865,30 @@ public final class WalletGrpc {
     public org.tron.trident.api.GrpcAPI.NumberMessage getPendingSize(org.tron.trident.api.GrpcAPI.EmptyMessage request) {
       return blockingUnaryCall(
           getChannel(), getGetPendingSizeMethod(), getCallOptions(), request);
+    }
+
+    /**
+     * <pre>
+     *query resource price
+     * </pre>
+     */
+    public org.tron.trident.proto.Response.PricesResponseMessage getBandwidthPrices(org.tron.trident.api.GrpcAPI.EmptyMessage request) {
+      return blockingUnaryCall(
+          getChannel(), getGetBandwidthPricesMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public org.tron.trident.proto.Response.PricesResponseMessage getEnergyPrices(org.tron.trident.api.GrpcAPI.EmptyMessage request) {
+      return blockingUnaryCall(
+          getChannel(), getGetEnergyPricesMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public org.tron.trident.proto.Response.PricesResponseMessage getMemoFee(org.tron.trident.api.GrpcAPI.EmptyMessage request) {
+      return blockingUnaryCall(
+          getChannel(), getGetMemoFeeMethod(), getCallOptions(), request);
     }
   }
 
@@ -6512,6 +6701,33 @@ public final class WalletGrpc {
       return futureUnaryCall(
           getChannel().newCall(getGetPendingSizeMethod(), getCallOptions()), request);
     }
+
+    /**
+     * <pre>
+     *query resource price
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<org.tron.trident.proto.Response.PricesResponseMessage> getBandwidthPrices(
+        org.tron.trident.api.GrpcAPI.EmptyMessage request) {
+      return futureUnaryCall(
+          getChannel().newCall(getGetBandwidthPricesMethod(), getCallOptions()), request);
+    }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<org.tron.trident.proto.Response.PricesResponseMessage> getEnergyPrices(
+        org.tron.trident.api.GrpcAPI.EmptyMessage request) {
+      return futureUnaryCall(
+          getChannel().newCall(getGetEnergyPricesMethod(), getCallOptions()), request);
+    }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<org.tron.trident.proto.Response.PricesResponseMessage> getMemoFee(
+        org.tron.trident.api.GrpcAPI.EmptyMessage request) {
+      return futureUnaryCall(
+          getChannel().newCall(getGetMemoFeeMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_BROADCAST_TRANSACTION = 0;
@@ -6603,6 +6819,9 @@ public final class WalletGrpc {
   private static final int METHODID_GET_TRANSACTION_LIST_FROM_PENDING = 86;
   private static final int METHODID_GET_TRANSACTION_FROM_PENDING = 87;
   private static final int METHODID_GET_PENDING_SIZE = 88;
+  private static final int METHODID_GET_BANDWIDTH_PRICES = 89;
+  private static final int METHODID_GET_ENERGY_PRICES = 90;
+  private static final int METHODID_GET_MEMO_FEE = 91;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -6977,6 +7196,18 @@ public final class WalletGrpc {
           serviceImpl.getPendingSize((org.tron.trident.api.GrpcAPI.EmptyMessage) request,
               (io.grpc.stub.StreamObserver<org.tron.trident.api.GrpcAPI.NumberMessage>) responseObserver);
           break;
+        case METHODID_GET_BANDWIDTH_PRICES:
+          serviceImpl.getBandwidthPrices((org.tron.trident.api.GrpcAPI.EmptyMessage) request,
+              (io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.PricesResponseMessage>) responseObserver);
+          break;
+        case METHODID_GET_ENERGY_PRICES:
+          serviceImpl.getEnergyPrices((org.tron.trident.api.GrpcAPI.EmptyMessage) request,
+              (io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.PricesResponseMessage>) responseObserver);
+          break;
+        case METHODID_GET_MEMO_FEE:
+          serviceImpl.getMemoFee((org.tron.trident.api.GrpcAPI.EmptyMessage) request,
+              (io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.PricesResponseMessage>) responseObserver);
+          break;
         default:
           throw new AssertionError();
       }
@@ -7127,6 +7358,9 @@ public final class WalletGrpc {
               .addMethod(getGetTransactionListFromPendingMethod())
               .addMethod(getGetTransactionFromPendingMethod())
               .addMethod(getGetPendingSizeMethod())
+              .addMethod(getGetBandwidthPricesMethod())
+              .addMethod(getGetEnergyPricesMethod())
+              .addMethod(getGetMemoFeeMethod())
               .build();
         }
       }

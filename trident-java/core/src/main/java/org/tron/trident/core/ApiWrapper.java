@@ -100,6 +100,7 @@ import org.tron.trident.proto.Response.ProposalList;
 import org.tron.trident.proto.Response.ExchangeList;
 import org.tron.trident.proto.Response.TransactionSignWeight;
 import org.tron.trident.proto.Response.TransactionApprovedList;
+import org.tron.trident.proto.Response.PricesResponseMessage;
 
 /**
  * A {@code ApiWrapper} object is the entry point for calling the functions.
@@ -2117,4 +2118,47 @@ public class ApiWrapper {
     }
 
 
+    /**
+     * GetBandwidthPrices
+     * Query historical bandwidth unit price.
+     * @param
+     * @return prices string: All historical bandwidth unit price information.
+     *        Each unit price change is separated by a comma.
+     *        Before the colon is the millisecond timestamp,
+     *        and after the colon is the bandwidth unit price in sun.
+     */
+    public Response.PricesResponseMessage getBandwidthPrices() {
+        Response.PricesResponseMessage prices = blockingStub.getBandwidthPrices(EmptyMessage.getDefaultInstance());
+        return prices;
+    }
+
+
+    /**
+     * GetEnergyPrices
+     * Query historical energy unit price.
+     * @param
+     * @return prices string: All historical bandwidth unit price information.
+     *        Each unit price change is separated by a comma.
+     *        Before the colon is the millisecond timestamp,
+     *        and after the colon is the bandwidth unit price in sun.
+     */
+    public Response.PricesResponseMessage getEnergyPrices() {
+        Response.PricesResponseMessage prices = blockingStub.getEnergyPrices(EmptyMessage.getDefaultInstance());
+        return prices;
+    }
+
+
+    /**
+     * GetMemoFee
+     * Query historical memo fee.
+     * @param
+     * @return prices string: All historical bandwidth unit price information.
+     *        Each unit price change is separated by a comma.
+     *        Before the colon is the millisecond timestamp,
+     *        and after the colon is the bandwidth unit price in sun.
+     */
+    public Response.PricesResponseMessage getMemoFee() {
+        Response.PricesResponseMessage prices = blockingStub.getMemoFee(EmptyMessage.getDefaultInstance());
+        return prices;
+    }
 }
