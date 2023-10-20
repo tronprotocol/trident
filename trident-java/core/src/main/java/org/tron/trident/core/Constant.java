@@ -11,6 +11,6 @@ public final class Constant{
 
     //Public Fullnode, maintained by official team
     public static final String FULLNODE_NILE = "grpc.nile.trongrid.io:50051";
-    public static final String FULLNODE_NILE_SOLIDITY = "grpc.nile.trongrid.io:50052";
+    public static final String FULLNODE_NILE_SOLIDITY = "grpc.nile.trongrid.io:50061";
 
 }
