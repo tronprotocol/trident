@@ -2161,4 +2161,35 @@ public class ApiWrapper {
         Response.PricesResponseMessage prices = blockingStub.getMemoFee(EmptyMessage.getDefaultInstance());
         return prices;
     }
+
+
+    /**
+     * GetBandwidthPricesOnSolidity
+     * Query historical bandwidth unit price.
+     * @param
+     * @return prices string: All historical bandwidth unit price information.
+     *        Each unit price change is separated by a comma.
+     *        Before the colon is the millisecond timestamp,
+     *        and after the colon is the bandwidth unit price in sun.
+     */
+    public Response.PricesResponseMessage getBandwidthPricesOnSolidity() {
+        Response.PricesResponseMessage prices = blockingStubSolidity.getBandwidthPrices(EmptyMessage.getDefaultInstance());
+        return prices;
+    }
+
+
+    /**
+     * GetEnergyPricesOnSolidity
+     * Query historical energy unit price.
+     * @param
+     * @return prices string: All historical bandwidth unit price information.
+     *        Each unit price change is separated by a comma.
+     *        Before the colon is the millisecond timestamp,
+     *        and after the colon is the bandwidth unit price in sun.
+     */
+    public Response.PricesResponseMessage getEnergyPricesOnSolidity() {
+        Response.PricesResponseMessage prices = blockingStubSolidity.getEnergyPrices(EmptyMessage.getDefaultInstance());
+        return prices;
+    }
+
 }

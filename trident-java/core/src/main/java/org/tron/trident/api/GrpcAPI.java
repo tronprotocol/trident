@@ -28490,7 +28490,7 @@ public final class GrpcAPI {
       "s\022\026.protocol.EmptyMessage\032\037.protocol.Pri" +
       "cesResponseMessage\"\000\022G\n\nGetMemoFee\022\026.pro" +
       "tocol.EmptyMessage\032\037.protocol.PricesResp" +
-      "onseMessage\"\0002\361\002\n\016WalletSolidity\022B\n\nGetA" +
+      "onseMessage\"\0002\220\004\n\016WalletSolidity\022B\n\nGetA" +
       "ccount\022\037.protocol.AccountAddressMessage\032" +
       "\021.protocol.Account\"\000\022B\n\014GetNowBlock2\022\026.p" +
       "rotocol.EmptyMessage\032\030.protocol.BlockExt" +
@@ -28499,8 +28499,12 @@ public final class GrpcAPI {
       "B\n\rGetRewardInfo\022\026.protocol.BytesMessage" +
       "\032\027.protocol.NumberMessage\"\000\022L\n\031GetTransa" +
       "ctionFromPending\022\026.protocol.BytesMessage" +
-      "\032\025.protocol.Transaction\"\000B\037\n\024org.tron.tr" +
-      "ident.apiB\007GrpcAPIb\006proto3"
+      "\032\025.protocol.Transaction\"\000\022O\n\022GetBandwidt" +
+      "hPrices\022\026.protocol.EmptyMessage\032\037.protoc" +
+      "ol.PricesResponseMessage\"\000\022L\n\017GetEnergyP" +
+      "rices\022\026.protocol.EmptyMessage\032\037.protocol" +
+      ".PricesResponseMessage\"\000B\037\n\024org.tron.tri" +
+      "dent.apiB\007GrpcAPIb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,

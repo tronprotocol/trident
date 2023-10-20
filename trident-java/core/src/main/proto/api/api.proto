@@ -236,6 +236,10 @@ service WalletSolidity {
   rpc GetTransactionById(BytesMessage) returns (Transaction) {}
   rpc GetRewardInfo(BytesMessage) returns (NumberMessage) {}     // ???
   rpc GetTransactionFromPending (BytesMessage) returns (Transaction) {}
+
+  //query resource price
+  rpc GetBandwidthPrices (EmptyMessage) returns (PricesResponseMessage) {}
+  rpc GetEnergyPrices (EmptyMessage) returns (PricesResponseMessage) {}
 };
 
 message EmptyMessage {}
