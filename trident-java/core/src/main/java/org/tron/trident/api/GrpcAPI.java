@@ -28301,7 +28301,7 @@ public final class GrpcAPI {
       "ssage\022\014\n\004type\030\001 \001(\005\022\025\n\rowner_address\030\002 \001" +
       "(\014\"6\n\"CanDelegatedMaxSizeResponseMessage" +
       "\022\020\n\010max_size\030\001 \001(\003\"!\n\021TransactionIdList\022" +
-      "\014\n\004txId\030\001 \003(\t2\2359\n\006Wallet\022L\n\024BroadcastTra" +
+      "\014\n\004txId\030\001 \003(\t2\205;\n\006Wallet\022L\n\024BroadcastTra" +
       "nsaction\022\025.protocol.Transaction\032\033.protoc" +
       "ol.TransactionReturn\"\000\022Q\n\016DeployContract" +
       "\022\035.protocol.CreateSmartContract\032\036.protoc" +
@@ -28484,17 +28484,27 @@ public final class GrpcAPI {
       "tTransactionFromPending\022\026.protocol.Bytes" +
       "Message\032\025.protocol.Transaction\"\000\022C\n\016GetP" +
       "endingSize\022\026.protocol.EmptyMessage\032\027.pro" +
-      "tocol.NumberMessage\"\0002\361\002\n\016WalletSolidity" +
-      "\022B\n\nGetAccount\022\037.protocol.AccountAddress" +
-      "Message\032\021.protocol.Account\"\000\022B\n\014GetNowBl" +
-      "ock2\022\026.protocol.EmptyMessage\032\030.protocol." +
-      "BlockExtention\"\000\022E\n\022GetTransactionById\022\026" +
-      ".protocol.BytesMessage\032\025.protocol.Transa" +
-      "ction\"\000\022B\n\rGetRewardInfo\022\026.protocol.Byte" +
-      "sMessage\032\027.protocol.NumberMessage\"\000\022L\n\031G" +
-      "etTransactionFromPending\022\026.protocol.Byte" +
-      "sMessage\032\025.protocol.Transaction\"\000B\037\n\024org" +
-      ".tron.trident.apiB\007GrpcAPIb\006proto3"
+      "tocol.NumberMessage\"\000\022O\n\022GetBandwidthPri" +
+      "ces\022\026.protocol.EmptyMessage\032\037.protocol.P" +
+      "ricesResponseMessage\"\000\022L\n\017GetEnergyPrice" +
+      "s\022\026.protocol.EmptyMessage\032\037.protocol.Pri" +
+      "cesResponseMessage\"\000\022G\n\nGetMemoFee\022\026.pro" +
+      "tocol.EmptyMessage\032\037.protocol.PricesResp" +
+      "onseMessage\"\0002\220\004\n\016WalletSolidity\022B\n\nGetA" +
+      "ccount\022\037.protocol.AccountAddressMessage\032" +
+      "\021.protocol.Account\"\000\022B\n\014GetNowBlock2\022\026.p" +
+      "rotocol.EmptyMessage\032\030.protocol.BlockExt" +
+      "ention\"\000\022E\n\022GetTransactionById\022\026.protoco" +
+      "l.BytesMessage\032\025.protocol.Transaction\"\000\022" +
+      "B\n\rGetRewardInfo\022\026.protocol.BytesMessage" +
+      "\032\027.protocol.NumberMessage\"\000\022L\n\031GetTransa" +
+      "ctionFromPending\022\026.protocol.BytesMessage" +
+      "\032\025.protocol.Transaction\"\000\022O\n\022GetBandwidt" +
+      "hPrices\022\026.protocol.EmptyMessage\032\037.protoc" +
+      "ol.PricesResponseMessage\"\000\022L\n\017GetEnergyP" +
+      "rices\022\026.protocol.EmptyMessage\032\037.protocol" +
+      ".PricesResponseMessage\"\000B\037\n\024org.tron.tri" +
+      "dent.apiB\007GrpcAPIb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,

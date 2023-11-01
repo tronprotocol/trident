@@ -628,3 +628,7 @@ message TransactionBalanceTrace {
     string type = 3;
     string status = 4;
 }
+
+message PricesResponseMessage {
+    string prices = 1;
+}

@@ -221,6 +221,11 @@ service Wallet {
   rpc GetTransactionListFromPending (EmptyMessage) returns (TransactionIdList) {}
   rpc GetTransactionFromPending (BytesMessage) returns (Transaction) {}
   rpc GetPendingSize (EmptyMessage) returns (NumberMessage) {}
+
+  //query resource price
+  rpc GetBandwidthPrices (EmptyMessage) returns (PricesResponseMessage) {}
+  rpc GetEnergyPrices (EmptyMessage) returns (PricesResponseMessage) {}
+  rpc GetMemoFee (EmptyMessage) returns (PricesResponseMessage) {}
 };
 
 // NOTE: All other solidified APIs are useless.
@@ -231,6 +236,10 @@ service WalletSolidity {
   rpc GetTransactionById(BytesMessage) returns (Transaction) {}
   rpc GetRewardInfo(BytesMessage) returns (NumberMessage) {}     // ???
   rpc GetTransactionFromPending (BytesMessage) returns (Transaction) {}
+
+  //query resource price
+  rpc GetBandwidthPrices (EmptyMessage) returns (PricesResponseMessage) {}
+  rpc GetEnergyPrices (EmptyMessage) returns (PricesResponseMessage) {}
 };
 
 message EmptyMessage {}

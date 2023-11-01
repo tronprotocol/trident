@@ -185,6 +185,68 @@ public final class WalletSolidityGrpc {
     return getGetTransactionFromPendingMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.EmptyMessage,
+      org.tron.trident.proto.Response.PricesResponseMessage> getGetBandwidthPricesMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "GetBandwidthPrices",
+      requestType = org.tron.trident.api.GrpcAPI.EmptyMessage.class,
+      responseType = org.tron.trident.proto.Response.PricesResponseMessage.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.EmptyMessage,
+      org.tron.trident.proto.Response.PricesResponseMessage> getGetBandwidthPricesMethod() {
+    io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.EmptyMessage, org.tron.trident.proto.Response.PricesResponseMessage> getGetBandwidthPricesMethod;
+    if ((getGetBandwidthPricesMethod = WalletSolidityGrpc.getGetBandwidthPricesMethod) == null) {
+      synchronized (WalletSolidityGrpc.class) {
+        if ((getGetBandwidthPricesMethod = WalletSolidityGrpc.getGetBandwidthPricesMethod) == null) {
+          WalletSolidityGrpc.getGetBandwidthPricesMethod = getGetBandwidthPricesMethod =
+              io.grpc.MethodDescriptor.<org.tron.trident.api.GrpcAPI.EmptyMessage, org.tron.trident.proto.Response.PricesResponseMessage>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "GetBandwidthPrices"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.api.GrpcAPI.EmptyMessage.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.proto.Response.PricesResponseMessage.getDefaultInstance()))
+              .setSchemaDescriptor(new WalletSolidityMethodDescriptorSupplier("GetBandwidthPrices"))
+              .build();
+        }
+      }
+    }
+    return getGetBandwidthPricesMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.EmptyMessage,
+      org.tron.trident.proto.Response.PricesResponseMessage> getGetEnergyPricesMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "GetEnergyPrices",
+      requestType = org.tron.trident.api.GrpcAPI.EmptyMessage.class,
+      responseType = org.tron.trident.proto.Response.PricesResponseMessage.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.EmptyMessage,
+      org.tron.trident.proto.Response.PricesResponseMessage> getGetEnergyPricesMethod() {
+    io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.EmptyMessage, org.tron.trident.proto.Response.PricesResponseMessage> getGetEnergyPricesMethod;
+    if ((getGetEnergyPricesMethod = WalletSolidityGrpc.getGetEnergyPricesMethod) == null) {
+      synchronized (WalletSolidityGrpc.class) {
+        if ((getGetEnergyPricesMethod = WalletSolidityGrpc.getGetEnergyPricesMethod) == null) {
+          WalletSolidityGrpc.getGetEnergyPricesMethod = getGetEnergyPricesMethod =
+              io.grpc.MethodDescriptor.<org.tron.trident.api.GrpcAPI.EmptyMessage, org.tron.trident.proto.Response.PricesResponseMessage>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "GetEnergyPrices"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.api.GrpcAPI.EmptyMessage.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.proto.Response.PricesResponseMessage.getDefaultInstance()))
+              .setSchemaDescriptor(new WalletSolidityMethodDescriptorSupplier("GetEnergyPrices"))
+              .build();
+        }
+      }
+    }
+    return getGetEnergyPricesMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -274,6 +336,23 @@ public final class WalletSolidityGrpc {
       asyncUnimplementedUnaryCall(getGetTransactionFromPendingMethod(), responseObserver);
     }
 
+    /**
+     * <pre>
+     *query resource price
+     * </pre>
+     */
+    public void getBandwidthPrices(org.tron.trident.api.GrpcAPI.EmptyMessage request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.PricesResponseMessage> responseObserver) {
+      asyncUnimplementedUnaryCall(getGetBandwidthPricesMethod(), responseObserver);
+    }
+
+    /**
+     */
+    public void getEnergyPrices(org.tron.trident.api.GrpcAPI.EmptyMessage request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.PricesResponseMessage> responseObserver) {
+      asyncUnimplementedUnaryCall(getGetEnergyPricesMethod(), responseObserver);
+    }
+
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -311,6 +390,20 @@ public final class WalletSolidityGrpc {
                 org.tron.trident.api.GrpcAPI.BytesMessage,
                 org.tron.trident.proto.Chain.Transaction>(
                   this, METHODID_GET_TRANSACTION_FROM_PENDING)))
+          .addMethod(
+            getGetBandwidthPricesMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                org.tron.trident.api.GrpcAPI.EmptyMessage,
+                org.tron.trident.proto.Response.PricesResponseMessage>(
+                  this, METHODID_GET_BANDWIDTH_PRICES)))
+          .addMethod(
+            getGetEnergyPricesMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                org.tron.trident.api.GrpcAPI.EmptyMessage,
+                org.tron.trident.proto.Response.PricesResponseMessage>(
+                  this, METHODID_GET_ENERGY_PRICES)))
           .build();
     }
   }
@@ -374,6 +467,25 @@ public final class WalletSolidityGrpc {
       asyncUnaryCall(
           getChannel().newCall(getGetTransactionFromPendingMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     * <pre>
+     *query resource price
+     * </pre>
+     */
+    public void getBandwidthPrices(org.tron.trident.api.GrpcAPI.EmptyMessage request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.PricesResponseMessage> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getGetBandwidthPricesMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
+    public void getEnergyPrices(org.tron.trident.api.GrpcAPI.EmptyMessage request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.PricesResponseMessage> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getGetEnergyPricesMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -429,6 +541,23 @@ public final class WalletSolidityGrpc {
     public org.tron.trident.proto.Chain.Transaction getTransactionFromPending(org.tron.trident.api.GrpcAPI.BytesMessage request) {
       return blockingUnaryCall(
           getChannel(), getGetTransactionFromPendingMethod(), getCallOptions(), request);
+    }
+
+    /**
+     * <pre>
+     *query resource price
+     * </pre>
+     */
+    public org.tron.trident.proto.Response.PricesResponseMessage getBandwidthPrices(org.tron.trident.api.GrpcAPI.EmptyMessage request) {
+      return blockingUnaryCall(
+          getChannel(), getGetBandwidthPricesMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public org.tron.trident.proto.Response.PricesResponseMessage getEnergyPrices(org.tron.trident.api.GrpcAPI.EmptyMessage request) {
+      return blockingUnaryCall(
+          getChannel(), getGetEnergyPricesMethod(), getCallOptions(), request);
     }
   }
 
@@ -491,6 +620,25 @@ public final class WalletSolidityGrpc {
       return futureUnaryCall(
           getChannel().newCall(getGetTransactionFromPendingMethod(), getCallOptions()), request);
     }
+
+    /**
+     * <pre>
+     *query resource price
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<org.tron.trident.proto.Response.PricesResponseMessage> getBandwidthPrices(
+        org.tron.trident.api.GrpcAPI.EmptyMessage request) {
+      return futureUnaryCall(
+          getChannel().newCall(getGetBandwidthPricesMethod(), getCallOptions()), request);
+    }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<org.tron.trident.proto.Response.PricesResponseMessage> getEnergyPrices(
+        org.tron.trident.api.GrpcAPI.EmptyMessage request) {
+      return futureUnaryCall(
+          getChannel().newCall(getGetEnergyPricesMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_GET_ACCOUNT = 0;
@@ -498,6 +646,8 @@ public final class WalletSolidityGrpc {
   private static final int METHODID_GET_TRANSACTION_BY_ID = 2;
   private static final int METHODID_GET_REWARD_INFO = 3;
   private static final int METHODID_GET_TRANSACTION_FROM_PENDING = 4;
+  private static final int METHODID_GET_BANDWIDTH_PRICES = 5;
+  private static final int METHODID_GET_ENERGY_PRICES = 6;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -535,6 +685,14 @@ public final class WalletSolidityGrpc {
         case METHODID_GET_TRANSACTION_FROM_PENDING:
           serviceImpl.getTransactionFromPending((org.tron.trident.api.GrpcAPI.BytesMessage) request,
               (io.grpc.stub.StreamObserver<org.tron.trident.proto.Chain.Transaction>) responseObserver);
+          break;
+        case METHODID_GET_BANDWIDTH_PRICES:
+          serviceImpl.getBandwidthPrices((org.tron.trident.api.GrpcAPI.EmptyMessage) request,
+              (io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.PricesResponseMessage>) responseObserver);
+          break;
+        case METHODID_GET_ENERGY_PRICES:
+          serviceImpl.getEnergyPrices((org.tron.trident.api.GrpcAPI.EmptyMessage) request,
+              (io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.PricesResponseMessage>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -602,6 +760,8 @@ public final class WalletSolidityGrpc {
               .addMethod(getGetTransactionByIdMethod())
               .addMethod(getGetRewardInfoMethod())
               .addMethod(getGetTransactionFromPendingMethod())
+              .addMethod(getGetBandwidthPricesMethod())
+              .addMethod(getGetEnergyPricesMethod())
               .build();
         }
       }
