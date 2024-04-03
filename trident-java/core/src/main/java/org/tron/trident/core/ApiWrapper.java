@@ -4,7 +4,11 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 import io.grpc.ClientInterceptor;
 import org.tron.trident.abi.FunctionEncoder;
+import org.tron.trident.abi.TypeReference;
+import org.tron.trident.abi.datatypes.Address;
+import org.tron.trident.abi.datatypes.Bool;
 import org.tron.trident.abi.datatypes.Function;
+import org.tron.trident.abi.datatypes.generated.Uint256;
 import org.tron.trident.api.GrpcAPI;
 import org.tron.trident.api.GrpcAPI.BytesMessage;
 
@@ -433,6 +437,35 @@ public class ApiWrapper {
         TransactionExtention txnExt = createTransactionExtention(req, Transaction.Contract.ContractType.TransferContract);
 
         return txnExt;
+    }
+
+    /**
+     * Transfer TRX. amount in SUN
+     *
+     * @param fromAddress owner address
+     * @param toAddress   receive balance
+     * @param contractAddress   contract address
+     * @param amount      transfer amount
+     * @return TransactionExtention
+     * @throws IllegalException if fail to transfer
+     */
+    public TransactionExtention transfer(String fromAddress, String toAddress, String contractAddress, long amount) throws IllegalException {
+
+        Function trc20Transfer = new Function("transfer",
+                Arrays.asList(new Address(toAddress), new Uint256(amount)),
+                Arrays.asList(new TypeReference<Bool>() {
+                }));
+
+        String encodedHex = FunctionEncoder.encode(trc20Transfer);
+
+        TriggerSmartContract trigger =
+                TriggerSmartContract.newBuilder()
+                        .setOwnerAddress(ApiWrapper.parseAddress(fromAddress))
+                        .setContractAddress(ApiWrapper.parseAddress(contractAddress))
+                        .setData(ApiWrapper.parseHex(encodedHex))
+                        .build();
+
+        return blockingStub.triggerContract(trigger);
     }
 
     /**

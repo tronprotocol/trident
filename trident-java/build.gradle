@@ -12,6 +12,7 @@ allprojects {
     group = 'org.tron.trident'
 
     repositories {
+        gradlePluginPortal()
         mavenCentral()
     }
 }
