@@ -12,7 +12,13 @@ import org.tron.trident.proto.Chain;
 
 public class TronWalletTest {
 
+    /**
+     * Test privateKey (Not important)
+     */
     private static final String MAIN_WALLET_PRIVATE_KEY = "18ef152ae3711498556a22db1f820f33f27080aea51b19d39fdb6752a0591e1f";
+    /**
+     * test address (Not important)
+     */
     private static final String MAIN_WALLET_ADDRESS = "TFtGcTF8HER3tHAL9Fzu95D5kfBixGYPfL";
     private static final String USDT_CONTRACT_ADDRESS = "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf";
 
