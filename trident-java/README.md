@@ -29,9 +29,9 @@ dependencies {
     // protobuf & grpc
     implementation 'com.google.protobuf:protobuf-java:3.11.0'
 
-    implementation fileTree(dir:'../core')
-    implementation fileTree(dir:'../utils')
-    implementation fileTree(dir:'../abi')
+    implementation fileTree(dir: '../core')
+    implementation fileTree(dir: '../utils')
+    implementation fileTree(dir: '../abi')
 
     implementation 'com.google.guava:guava:28.0-jre'
 }
@@ -41,32 +41,33 @@ Or if you are using the jar files as your dependencies:
 
 ```groovy
 dependencies {
-    implementation fileTree(dir:'your path', include: '*.jar')
+    implementation fileTree(dir: 'your path', include: '*.jar')
 }
 ```
 
 ### Maven Settings
 
 ```xml
+
 <dependency>
-  <groupId>org.tron.trident</groupId>
-  <artifactId>abi</artifactId>
-  <version>0.8.0</version>
-  <scope>system</scope>
-  <systemPath>your path</systemPath>
+    <groupId>org.tron.trident</groupId>
+    <artifactId>abi</artifactId>
+    <version>0.8.0</version>
+    <scope>system</scope>
+    <systemPath>your path</systemPath>
 </dependency>
 <dependency>
-  <groupId>org.tron.trident</groupId>
-  <artifactId>utils</artifactId>
-  <version>0.8.0</version>
-  <scope>system</scope>
-  <systemPath>your path</systemPath>
+<groupId>org.tron.trident</groupId>
+<artifactId>utils</artifactId>
+<version>0.8.0</version>
+<scope>system</scope>
+<systemPath>your path</systemPath>
 </dependency>
 <dependency>
-  <groupId>org.tron.trident</groupId>
-  <artifactId>core</artifactId>
-  <version>0.8.0</version>
-  <scope>system</scope>
-  <systemPath>your path</systemPath>
+<groupId>org.tron.trident</groupId>
+<artifactId>core</artifactId>
+<version>0.8.0</version>
+<scope>system</scope>
+<systemPath>your path</systemPath>
 </dependency>
 ```
