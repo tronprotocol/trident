@@ -49,25 +49,27 @@ dependencies {
 
 ```xml
 
-<dependency>
-    <groupId>org.tron.trident</groupId>
-    <artifactId>abi</artifactId>
-    <version>0.8.0</version>
-    <scope>system</scope>
-    <systemPath>your path</systemPath>
-</dependency>
-<dependency>
-<groupId>org.tron.trident</groupId>
-<artifactId>utils</artifactId>
-<version>0.8.0</version>
-<scope>system</scope>
-<systemPath>your path</systemPath>
-</dependency>
-<dependency>
-<groupId>org.tron.trident</groupId>
-<artifactId>core</artifactId>
-<version>0.8.0</version>
-<scope>system</scope>
-<systemPath>your path</systemPath>
-</dependency>
+<dependencies>
+    <dependency>
+        <groupId>org.tron.trident</groupId>
+        <artifactId>abi</artifactId>
+        <version>0.8.0</version>
+        <scope>system</scope>
+        <systemPath>your path</systemPath>
+    </dependency>
+    <dependency>
+        <groupId>org.tron.trident</groupId>
+        <artifactId>utils</artifactId>
+        <version>0.8.0</version>
+        <scope>system</scope>
+        <systemPath>your path</systemPath>
+    </dependency>
+    <dependency>
+        <groupId>org.tron.trident</groupId>
+        <artifactId>core</artifactId>
+        <version>0.8.0</version>
+        <scope>system</scope>
+        <systemPath>your path</systemPath>
+    </dependency>
+</dependencies>
 ```
