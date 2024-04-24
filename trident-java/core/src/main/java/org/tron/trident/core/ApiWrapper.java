@@ -141,8 +141,9 @@ public class ApiWrapper {
         Metadata.Key<String> key = Metadata.Key.of("TRON-PRO-API-KEY", Metadata.ASCII_STRING_MARSHALLER);
         header.put(key, apiKey);
 
-        blockingStub = (WalletGrpc.WalletBlockingStub)MetadataUtils.attachHeaders(WalletGrpc.newBlockingStub(channel), header);
-        blockingStubSolidity = (WalletSolidityGrpc.WalletSolidityBlockingStub)MetadataUtils.attachHeaders(WalletSolidityGrpc.newBlockingStub(channelSolidity), header);
+        //create a client to interceptor to attach the custom metadata headers
+        blockingStub = WalletGrpc.newBlockingStub(channel).withInterceptors(MetadataUtils.newAttachHeadersInterceptor(header));
+        blockingStubSolidity = WalletSolidityGrpc.newBlockingStub(channelSolidity).withInterceptors(MetadataUtils.newAttachHeadersInterceptor(header));
 
         keyPair = new KeyPair(hexPrivateKey);
     }
