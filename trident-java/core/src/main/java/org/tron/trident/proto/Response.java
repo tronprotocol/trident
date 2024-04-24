@@ -1983,6 +1983,10 @@ public final class Response {
        */
       NOT_ENOUGH_EFFECTIVE_CONNECTION(11),
       /**
+       * <code>BLOCK_UNSOLIDIFIED = 12;</code>
+       */
+      BLOCK_UNSOLIDIFIED(12),
+      /**
        * <code>OTHER_ERROR = 20;</code>
        */
       OTHER_ERROR(20),
@@ -2042,6 +2046,10 @@ public final class Response {
        */
       public static final int NOT_ENOUGH_EFFECTIVE_CONNECTION_VALUE = 11;
       /**
+       * <code>BLOCK_UNSOLIDIFIED = 12;</code>
+       */
+      public static final int BLOCK_UNSOLIDIFIED_VALUE = 12;
+      /**
        * <code>OTHER_ERROR = 20;</code>
        */
       public static final int OTHER_ERROR_VALUE = 20;
@@ -2083,6 +2091,7 @@ public final class Response {
           case 9: return SERVER_BUSY;
           case 10: return NO_CONNECTION;
           case 11: return NOT_ENOUGH_EFFECTIVE_CONNECTION;
+          case 12: return BLOCK_UNSOLIDIFIED;
           case 20: return OTHER_ERROR;
           default: return null;
         }
@@ -72479,326 +72488,326 @@ java.lang.String defaultValue) {
       "on\022+\n\014block_header\030\002 \001(\0132\025.protocol.Bloc" +
       "kHeader\022\017\n\007blockid\030\003 \001(\014\"=\n\022BlockListExt" +
       "ention\022\'\n\005block\030\001 \003(\0132\030.protocol.BlockEx" +
-      "tention\"\252\003\n\021TransactionReturn\022\016\n\006result\030" +
+      "tention\"\302\003\n\021TransactionReturn\022\016\n\006result\030" +
       "\001 \001(\010\0227\n\004code\030\002 \001(\0162).protocol.Transacti" +
       "onReturn.response_code\022\017\n\007message\030\003 \001(\014\"" +
-      "\272\002\n\rresponse_code\022\013\n\007SUCCESS\020\000\022\014\n\010SIGERR" +
+      "\322\002\n\rresponse_code\022\013\n\007SUCCESS\020\000\022\014\n\010SIGERR" +
       "OR\020\001\022\033\n\027CONTRACT_VALIDATE_ERROR\020\002\022\026\n\022CON" +
       "TRACT_EXE_ERROR\020\003\022\022\n\016BANDWITH_ERROR\020\004\022\031\n" +
       "\025DUP_TRANSACTION_ERROR\020\005\022\017\n\013TAPOS_ERROR\020" +
       "\006\022\035\n\031TOO_BIG_TRANSACTION_ERROR\020\007\022 \n\034TRAN" +
       "SACTION_EXPIRATION_ERROR\020\010\022\017\n\013SERVER_BUS" +
       "Y\020\t\022\021\n\rNO_CONNECTION\020\n\022#\n\037NOT_ENOUGH_EFF" +
-      "ECTIVE_CONNECTION\020\013\022\017\n\013OTHER_ERROR\020\024\"]\n\025" +
-      "EstimateEnergyMessage\022+\n\006result\030\001 \001(\0132\033." +
-      "protocol.TransactionReturn\022\027\n\017energy_req" +
-      "uired\030\002 \001(\003\"\253\001\n\024TransactionExtention\022*\n\013" +
-      "transaction\030\001 \001(\0132\025.protocol.Transaction" +
-      "\022\014\n\004txid\030\002 \001(\014\022\027\n\017constant_result\030\003 \003(\014\022" +
-      "+\n\006result\030\004 \001(\0132\033.protocol.TransactionRe" +
-      "turn\022\023\n\013energy_used\030\005 \001(\003\"3\n\013WitnessList" +
-      "\022$\n\twitnesses\030\001 \003(\0132\021.protocol.Witness\"5" +
-      "\n\014ProposalList\022%\n\tproposals\030\001 \003(\0132\022.prot" +
-      "ocol.Proposal\"5\n\014ExchangeList\022%\n\texchang" +
-      "es\030\001 \003(\0132\022.protocol.Exchange\">\n\016AssetIss" +
-      "ueList\022,\n\006assets\030\001 \003(\0132\034.protocol.AssetI" +
-      "ssueContract\"+\n\tBlockList\022\036\n\005block\030\001 \003(\013" +
-      "2\017.protocol.Block\"=\n\017TransactionList\022*\n\013" +
-      "transaction\030\001 \003(\0132\025.protocol.Transaction" +
-      "\"D\n\030DelegatedResourceMessage\022\024\n\014from_add" +
-      "ress\030\001 \001(\014\022\022\n\nto_address\030\002 \001(\014\"O\n\025Delega" +
-      "tedResourceList\0226\n\021delegatedResource\030\001 \003" +
-      "(\0132\033.protocol.DelegatedResource\">\n\027Addre" +
-      "ssPrKeyPairMessage\022\017\n\007address\030\001 \001(\t\022\022\n\np" +
-      "rivateKey\030\002 \001(\t\"}\n\024EasyTransferResponse\022" +
-      "*\n\013transaction\030\001 \001(\0132\025.protocol.Transact" +
-      "ion\022+\n\006result\030\002 \001(\0132\033.protocol.Transacti" +
-      "onReturn\022\014\n\004txid\030\003 \001(\014\"a\n\030SmartContractD" +
-      "ataWrapper\022/\n\016smart_contract\030\001 \001(\0132\027.pro" +
-      "tocol.SmartContract\022\024\n\014runtime_code\030\002 \001(" +
-      "\014\"\360\001\n\023InternalTransaction\022\014\n\004hash\030\001 \001(\014\022" +
-      "\026\n\016caller_address\030\002 \001(\014\022\032\n\022transferTo_ad" +
-      "dress\030\003 \001(\014\022B\n\rcallValueInfo\030\004 \003(\0132+.pro" +
-      "tocol.InternalTransaction.CallValueInfo\022" +
-      "\014\n\004note\030\005 \001(\014\022\020\n\010rejected\030\006 \001(\010\0323\n\rCallV" +
-      "alueInfo\022\021\n\tcallValue\030\001 \001(\003\022\017\n\007tokenId\030\002" +
-      " \001(\t\"\325\001\n\017ResourceReceipt\022\024\n\014energy_usage" +
-      "\030\001 \001(\003\022\022\n\nenergy_fee\030\002 \001(\003\022\033\n\023origin_ene" +
-      "rgy_usage\030\003 \001(\003\022\032\n\022energy_usage_total\030\004 " +
-      "\001(\003\022\021\n\tnet_usage\030\005 \001(\003\022\017\n\007net_fee\030\006 \001(\003\022" +
-      ";\n\006result\030\007 \001(\0162+.protocol.Transaction.R" +
-      "esult.contractResult\"\250\007\n\017TransactionInfo" +
-      "\022\n\n\002id\030\001 \001(\014\022\013\n\003fee\030\002 \001(\003\022\023\n\013blockNumber" +
-      "\030\003 \001(\003\022\026\n\016blockTimeStamp\030\004 \001(\003\022\026\n\016contra" +
-      "ctResult\030\005 \003(\014\022\030\n\020contract_address\030\006 \001(\014" +
-      "\022*\n\007receipt\030\007 \001(\0132\031.protocol.ResourceRec" +
-      "eipt\022*\n\003log\030\010 \003(\0132\035.protocol.Transaction" +
-      "Info.Log\022.\n\006result\030\t \001(\0162\036.protocol.Tran" +
-      "sactionInfo.code\022\022\n\nresMessage\030\n \001(\014\022\024\n\014" +
-      "assetIssueID\030\016 \001(\t\022\027\n\017withdraw_amount\030\017 " +
-      "\001(\003\022\027\n\017unfreeze_amount\030\020 \001(\003\022<\n\025internal" +
-      "_transactions\030\021 \003(\0132\035.protocol.InternalT" +
-      "ransaction\022 \n\030exchange_received_amount\030\022" +
-      " \001(\003\022&\n\036exchange_inject_another_amount\030\023" +
-      " \001(\003\022(\n exchange_withdraw_another_amount" +
-      "\030\024 \001(\003\022\023\n\013exchange_id\030\025 \001(\003\022 \n\030shielded_" +
-      "transaction_fee\030\026 \001(\003\022\017\n\007orderId\030\031 \001(\014\0221" +
-      "\n\014orderDetails\030\032 \003(\0132\033.protocol.MarketOr" +
-      "derDetail\022\036\n\026withdraw_expire_amount\030\034 \001(" +
-      "\003\022W\n\030cancel_unfreezeV2_amount\030\035 \003(\01325.pr" +
-      "otocol.TransactionInfo.CancelUnfreezeV2A" +
-      "mountEntry\0324\n\003Log\022\017\n\007address\030\001 \001(\014\022\016\n\006to" +
-      "pics\030\002 \003(\014\022\014\n\004data\030\003 \001(\014\032=\n\033CancelUnfree" +
-      "zeV2AmountEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 " +
-      "\001(\003:\0028\001\"\036\n\004code\022\n\n\006SUCESS\020\000\022\n\n\006FAILED\020\001\"" +
-      "\265\001\n\007Witness\022\017\n\007address\030\001 \001(\014\022\021\n\tvoteCoun" +
-      "t\030\002 \001(\003\022\016\n\006pubKey\030\003 \001(\014\022\013\n\003url\030\004 \001(\t\022\025\n\r" +
-      "totalProduced\030\005 \001(\003\022\023\n\013totalMissed\030\006 \001(\003" +
-      "\022\026\n\016latestBlockNum\030\007 \001(\003\022\025\n\rlatestSlotNu" +
-      "m\030\010 \001(\003\022\016\n\006isJobs\030\t \001(\010\"\244\025\n\007Account\022\024\n\014a" +
-      "ccount_name\030\001 \001(\014\022#\n\004type\030\002 \001(\0162\025.protoc" +
-      "ol.AccountType\022\017\n\007address\030\003 \001(\014\022\017\n\007balan" +
-      "ce\030\004 \001(\003\022\035\n\005votes\030\005 \003(\0132\016.protocol.Vote\022" +
-      "+\n\005asset\030\006 \003(\0132\034.protocol.Account.AssetE" +
-      "ntry\022/\n\007assetV2\0308 \003(\0132\036.protocol.Account" +
-      ".AssetV2Entry\022(\n\006frozen\030\007 \003(\0132\030.protocol" +
-      ".Account.Frozen\022\021\n\tnet_usage\030\010 \001(\003\0227\n/ac" +
-      "quired_delegated_frozen_balance_for_band" +
-      "width\030) \001(\003\022.\n&delegated_frozen_balance_" +
-      "for_bandwidth\030* \001(\003\022\026\n\016old_tron_power\030. " +
-      "\001(\003\022,\n\ntron_power\030/ \001(\0132\030.protocol.Accou" +
-      "nt.Frozen\022\027\n\017asset_optimized\030< \001(\010\022\023\n\013cr" +
-      "eate_time\030\t \001(\003\022\034\n\024latest_opration_time\030" +
-      "\n \001(\003\022\021\n\tallowance\030\013 \001(\003\022\034\n\024latest_withd" +
-      "raw_time\030\014 \001(\003\022\014\n\004code\030\r \001(\014\022\022\n\nis_witne" +
-      "ss\030\016 \001(\010\022\024\n\014is_committee\030\017 \001(\010\022/\n\rfrozen" +
-      "_supply\030\020 \003(\0132\030.protocol.Account.Frozen\022" +
-      "\031\n\021asset_issued_name\030\021 \001(\014\022\027\n\017asset_issu" +
-      "ed_ID\0309 \001(\014\022T\n\033latest_asset_operation_ti" +
-      "me\030\022 \003(\0132/.protocol.Account.LatestAssetO" +
-      "perationTimeEntry\022X\n\035latest_asset_operat" +
-      "ion_timeV2\030: \003(\01321.protocol.Account.Late" +
-      "stAssetOperationTimeV2Entry\022\026\n\016free_net_" +
-      "usage\030\023 \001(\003\022F\n\024free_asset_net_usage\030\024 \003(" +
-      "\0132(.protocol.Account.FreeAssetNetUsageEn" +
-      "try\022J\n\026free_asset_net_usageV2\030; \003(\0132*.pr" +
-      "otocol.Account.FreeAssetNetUsageV2Entry\022" +
-      "\033\n\023latest_consume_time\030\025 \001(\003\022 \n\030latest_c" +
-      "onsume_free_time\030\026 \001(\003\022\022\n\naccount_id\030\027 \001" +
-      "(\014\022\027\n\017net_window_size\030\030 \001(\003\022\034\n\024net_windo" +
-      "w_optimized\030\031 \001(\010\022;\n\020account_resource\030\032 " +
-      "\001(\0132!.protocol.Account.AccountResource\022\020" +
-      "\n\010codeHash\030\036 \001(\014\022.\n\020owner_permission\030\037 \001" +
-      "(\0132\024.protocol.Permission\0220\n\022witness_perm" +
-      "ission\030  \001(\0132\024.protocol.Permission\022/\n\021ac" +
-      "tive_permission\030! \003(\0132\024.protocol.Permiss" +
-      "ion\022,\n\010frozenV2\030\" \003(\0132\032.protocol.Account" +
-      ".FreezeV2\0220\n\nunfrozenV2\030# \003(\0132\034.protocol" +
-      ".Account.UnFreezeV2\0220\n(delegated_frozenV" +
-      "2_balance_for_bandwidth\030$ \001(\003\0229\n1acquire" +
-      "d_delegated_frozenV2_balance_for_bandwid" +
-      "th\030% \001(\003\0325\n\006Frozen\022\026\n\016frozen_balance\030\001 \001" +
-      "(\003\022\023\n\013expire_time\030\002 \001(\003\032,\n\nAssetEntry\022\013\n" +
-      "\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001\032.\n\014AssetV2" +
-      "Entry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001\032?\n" +
-      "\035LatestAssetOperationTimeEntry\022\013\n\003key\030\001 " +
-      "\001(\t\022\r\n\005value\030\002 \001(\003:\0028\001\032A\n\037LatestAssetOpe" +
-      "rationTimeV2Entry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030" +
-      "\002 \001(\003:\0028\001\0328\n\026FreeAssetNetUsageEntry\022\013\n\003k" +
-      "ey\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001\032:\n\030FreeAsset" +
-      "NetUsageV2Entry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 " +
-      "\001(\003:\0028\001\032\347\003\n\017AccountResource\022\024\n\014energy_us" +
-      "age\030\001 \001(\003\022;\n\031frozen_balance_for_energy\030\002" +
-      " \001(\0132\030.protocol.Account.Frozen\022&\n\036latest" +
-      "_consume_time_for_energy\030\003 \001(\003\0224\n,acquir" +
-      "ed_delegated_frozen_balance_for_energy\030\004" +
-      " \001(\003\022+\n#delegated_frozen_balance_for_ene" +
-      "rgy\030\005 \001(\003\022\025\n\rstorage_limit\030\006 \001(\003\022\025\n\rstor" +
-      "age_usage\030\007 \001(\003\022$\n\034latest_exchange_stora" +
-      "ge_time\030\010 \001(\003\022\032\n\022energy_window_size\030\t \001(" +
-      "\003\022-\n%delegated_frozenV2_balance_for_ener" +
-      "gy\030\n \001(\003\0226\n.acquired_delegated_frozenV2_" +
-      "balance_for_energy\030\013 \001(\003\022\037\n\027energy_windo" +
-      "w_optimized\030\014 \001(\010\032@\n\010FreezeV2\022$\n\004type\030\001 " +
-      "\001(\0162\026.protocol.ResourceCode\022\016\n\006amount\030\002 " +
-      "\001(\003\032i\n\nUnFreezeV2\022$\n\004type\030\001 \001(\0162\026.protoc" +
-      "ol.ResourceCode\022\027\n\017unfreeze_amount\030\003 \001(\003" +
-      "\022\034\n\024unfreeze_expire_time\030\004 \001(\003\"r\n\021Market" +
-      "OrderDetail\022\024\n\014makerOrderId\030\001 \001(\014\022\024\n\014tak" +
-      "erOrderId\030\002 \001(\014\022\030\n\020fillSellQuantity\030\003 \001(" +
-      "\003\022\027\n\017fillBuyQuantity\030\004 \001(\003\"\321\002\n\010Proposal\022" +
-      "\023\n\013proposal_id\030\001 \001(\003\022\030\n\020proposer_address" +
-      "\030\002 \001(\014\0226\n\nparameters\030\003 \003(\0132\".protocol.Pr" +
-      "oposal.ParametersEntry\022\027\n\017expiration_tim" +
-      "e\030\004 \001(\003\022\023\n\013create_time\030\005 \001(\003\022\021\n\tapproval" +
-      "s\030\006 \003(\014\022\'\n\005state\030\007 \001(\0162\030.protocol.Propos" +
-      "al.State\0321\n\017ParametersEntry\022\013\n\003key\030\001 \001(\003" +
-      "\022\r\n\005value\030\002 \001(\003:\0028\001\"A\n\005State\022\013\n\007PENDING\020" +
-      "\000\022\017\n\013DISAPPROVED\020\001\022\014\n\010APPROVED\020\002\022\014\n\010CANC" +
-      "ELED\020\003\"\271\001\n\010Exchange\022\023\n\013exchange_id\030\001 \001(\003" +
-      "\022\027\n\017creator_address\030\002 \001(\014\022\023\n\013create_time" +
-      "\030\003 \001(\003\022\026\n\016first_token_id\030\006 \001(\014\022\033\n\023first_" +
-      "token_balance\030\007 \001(\003\022\027\n\017second_token_id\030\010" +
-      " \001(\014\022\034\n\024second_token_balance\030\t \001(\003\"\271\001\n\021D" +
-      "elegatedResource\022\014\n\004from\030\001 \001(\014\022\n\n\002to\030\002 \001" +
-      "(\014\022$\n\034frozen_balance_for_bandwidth\030\003 \001(\003" +
-      "\022!\n\031frozen_balance_for_energy\030\004 \001(\003\022!\n\031e" +
-      "xpire_time_for_bandwidth\030\005 \001(\003\022\036\n\026expire" +
-      "_time_for_energy\030\006 \001(\003\"m\n\035DelegatedResou" +
-      "rceAccountIndex\022\017\n\007account\030\001 \001(\014\022\024\n\014from" +
-      "Accounts\030\002 \003(\014\022\022\n\ntoAccounts\030\003 \003(\014\022\021\n\tti" +
-      "mestamp\030\004 \001(\003\"Q\n\017TransactionSign\022*\n\013tran" +
-      "saction\030\001 \001(\0132\025.protocol.Transaction\022\022\n\n" +
-      "privateKey\030\002 \001(\014\"\201\001\n\017ChainParameters\022@\n\016" +
-      "chainParameter\030\001 \003(\0132(.protocol.ChainPar" +
-      "ameters.ChainParameter\032,\n\016ChainParameter" +
-      "\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\003\"\240\021\n\010NodeInf" +
-      "o\022\024\n\014beginSyncNum\030\001 \001(\003\022\r\n\005block\030\002 \001(\t\022\025" +
-      "\n\rsolidityBlock\030\003 \001(\t\022\033\n\023currentConnectC" +
-      "ount\030\004 \001(\005\022\032\n\022activeConnectCount\030\005 \001(\005\022\033" +
-      "\n\023passiveConnectCount\030\006 \001(\005\022\021\n\ttotalFlow" +
-      "\030\007 \001(\003\0221\n\014peerInfoList\030\010 \003(\0132\033.protocol." +
-      "NodeInfo.PeerInfo\0229\n\016configNodeInfo\030\t \001(" +
-      "\0132!.protocol.NodeInfo.ConfigNodeInfo\0223\n\013" +
-      "machineInfo\030\n \001(\0132\036.protocol.NodeInfo.Ma" +
-      "chineInfo\022H\n\023cheatWitnessInfoMap\030\013 \003(\0132+" +
-      ".protocol.NodeInfo.CheatWitnessInfoMapEn" +
-      "try\032:\n\030CheatWitnessInfoMapEntry\022\013\n\003key\030\001" +
-      " \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\032\315\004\n\010PeerInfo\022\025\n\r" +
-      "lastSyncBlock\030\001 \001(\t\022\021\n\tremainNum\030\002 \001(\003\022\033" +
-      "\n\023lastBlockUpdateTime\030\003 \001(\003\022\020\n\010syncFlag\030" +
-      "\004 \001(\010\022\037\n\027headBlockTimeWeBothHave\030\005 \001(\003\022\030" +
-      "\n\020needSyncFromPeer\030\006 \001(\010\022\026\n\016needSyncFrom" +
-      "Us\030\007 \001(\010\022\014\n\004host\030\010 \001(\t\022\014\n\004port\030\t \001(\005\022\016\n\006" +
-      "nodeId\030\n \001(\t\022\023\n\013connectTime\030\013 \001(\003\022\022\n\navg" +
-      "Latency\030\014 \001(\001\022\027\n\017syncToFetchSize\030\r \001(\005\022\036" +
-      "\n\026syncToFetchSizePeekNum\030\016 \001(\003\022\036\n\026syncBl" +
-      "ockRequestedSize\030\017 \001(\005\022\025\n\runFetchSynNum\030" +
-      "\020 \001(\003\022\027\n\017blockInPorcSize\030\021 \001(\005\022\033\n\023headBl" +
-      "ockWeBothHave\030\022 \001(\t\022\020\n\010isActive\030\023 \001(\010\022\r\n" +
-      "\005score\030\024 \001(\005\022\021\n\tnodeCount\030\025 \001(\005\022\016\n\006inFlo" +
-      "w\030\026 \001(\003\022\027\n\017disconnectTimes\030\027 \001(\005\022\035\n\025loca" +
-      "lDisconnectReason\030\030 \001(\t\022\036\n\026remoteDisconn" +
-      "ectReason\030\031 \001(\t\032\345\003\n\016ConfigNodeInfo\022\023\n\013co" +
-      "deVersion\030\001 \001(\t\022\022\n\np2pVersion\030\002 \001(\t\022\022\n\nl" +
-      "istenPort\030\003 \001(\005\022\026\n\016discoverEnable\030\004 \001(\010\022" +
-      "\026\n\016activeNodeSize\030\005 \001(\005\022\027\n\017passiveNodeSi" +
-      "ze\030\006 \001(\005\022\024\n\014sendNodeSize\030\007 \001(\005\022\027\n\017maxCon" +
-      "nectCount\030\010 \001(\005\022\035\n\025sameIpMaxConnectCount" +
-      "\030\t \001(\005\022\030\n\020backupListenPort\030\n \001(\005\022\030\n\020back" +
-      "upMemberSize\030\013 \001(\005\022\026\n\016backupPriority\030\014 \001" +
-      "(\005\022\021\n\tdbVersion\030\r \001(\005\022\034\n\024minParticipatio" +
-      "nRate\030\016 \001(\005\022\027\n\017supportConstant\030\017 \001(\010\022\024\n\014" +
-      "minTimeRatio\030\020 \001(\001\022\024\n\014maxTimeRatio\030\021 \001(\001" +
-      "\022 \n\030allowCreationOfContracts\030\022 \001(\003\022\033\n\023al" +
-      "lowAdaptiveEnergy\030\023 \001(\003\032\215\005\n\013MachineInfo\022" +
-      "\023\n\013threadCount\030\001 \001(\005\022\033\n\023deadLockThreadCo" +
-      "unt\030\002 \001(\005\022\020\n\010cpuCount\030\003 \001(\005\022\023\n\013totalMemo" +
-      "ry\030\004 \001(\003\022\022\n\nfreeMemory\030\005 \001(\003\022\017\n\007cpuRate\030" +
-      "\006 \001(\001\022\023\n\013javaVersion\030\007 \001(\t\022\016\n\006osName\030\010 \001" +
-      "(\t\022\027\n\017jvmTotalMemoery\030\t \001(\003\022\025\n\rjvmFreeMe" +
-      "mory\030\n \001(\003\022\026\n\016processCpuRate\030\013 \001(\001\022I\n\022me" +
-      "moryDescInfoList\030\014 \003(\0132-.protocol.NodeIn" +
-      "fo.MachineInfo.MemoryDescInfo\022Q\n\026deadLoc" +
-      "kThreadInfoList\030\r \003(\01321.protocol.NodeInf" +
-      "o.MachineInfo.DeadLockThreadInfo\032c\n\016Memo" +
-      "ryDescInfo\022\014\n\004name\030\001 \001(\t\022\020\n\010initSize\030\002 \001" +
-      "(\003\022\017\n\007useSize\030\003 \001(\003\022\017\n\007maxSize\030\004 \001(\003\022\017\n\007" +
-      "useRate\030\005 \001(\001\032\217\001\n\022DeadLockThreadInfo\022\014\n\004" +
-      "name\030\001 \001(\t\022\020\n\010lockName\030\002 \001(\t\022\021\n\tlockOwne" +
-      "r\030\003 \001(\t\022\r\n\005state\030\004 \001(\t\022\021\n\tblockTime\030\005 \001(" +
-      "\003\022\020\n\010waitTime\030\006 \001(\003\022\022\n\nstackTrace\030\007 \001(\t\"" +
-      "\362\002\n\013MarketOrder\022\020\n\010order_id\030\001 \001(\014\022\025\n\rown" +
-      "er_address\030\002 \001(\014\022\023\n\013create_time\030\003 \001(\003\022\025\n" +
-      "\rsell_token_id\030\004 \001(\014\022\033\n\023sell_token_quant" +
-      "ity\030\005 \001(\003\022\024\n\014buy_token_id\030\006 \001(\014\022\032\n\022buy_t" +
-      "oken_quantity\030\007 \001(\003\022\"\n\032sell_token_quanti" +
-      "ty_remain\030\t \001(\003\022\"\n\032sell_token_quantity_r" +
-      "eturn\030\n \001(\003\022*\n\005state\030\013 \001(\0162\033.protocol.Ma" +
-      "rketOrder.State\022\014\n\004prev\030\014 \001(\014\022\014\n\004next\030\r " +
-      "\001(\014\"/\n\005State\022\n\n\006ACTIVE\020\000\022\014\n\010INACTIVE\020\001\022\014" +
-      "\n\010CANCELED\020\002\"8\n\017MarketOrderList\022%\n\006order" +
-      "s\030\001 \003(\0132\025.protocol.MarketOrder\">\n\017Market" +
-      "OrderPair\022\025\n\rsell_token_id\030\001 \001(\014\022\024\n\014buy_" +
-      "token_id\030\002 \001(\014\"C\n\023MarketOrderPairList\022,\n" +
-      "\torderPair\030\001 \003(\0132\031.protocol.MarketOrderP" +
-      "air\"F\n\013MarketPrice\022\033\n\023sell_token_quantit" +
-      "y\030\001 \001(\003\022\032\n\022buy_token_quantity\030\002 \001(\003\"e\n\017M" +
-      "arketPriceList\022\025\n\rsell_token_id\030\001 \001(\014\022\024\n" +
-      "\014buy_token_id\030\002 \001(\014\022%\n\006prices\030\003 \003(\0132\025.pr" +
-      "otocol.MarketPrice\"#\n\017NullifierResult\022\020\n" +
-      "\010is_spent\030\001 \001(\010\"\345\001\n\021DecryptNotesTRC20\0223\n" +
-      "\007noteTxs\030\001 \003(\0132\".protocol.DecryptNotesTR" +
-      "C20.NoteTx\032\232\001\n\006NoteTx\022\034\n\004note\030\001 \001(\0132\016.pr" +
-      "otocol.Note\022\020\n\010position\030\002 \001(\003\022\020\n\010is_spen" +
-      "t\030\003 \001(\010\022\014\n\004txid\030\004 \001(\014\022\r\n\005index\030\005 \001(\005\022\021\n\t" +
-      "to_amount\030\006 \001(\t\022\036\n\026transparent_to_addres" +
-      "s\030\007 \001(\014\"I\n\023TransactionInfoList\0222\n\017transa" +
-      "ctionInfo\030\001 \003(\0132\031.protocol.TransactionIn" +
-      "fo\"\347\002\n\027TransactionApprovedList\022\025\n\rapprov" +
-      "ed_list\030\002 \003(\014\0228\n\006result\030\004 \001(\0132(.protocol" +
-      ".TransactionApprovedList.Result\0223\n\013trans" +
-      "action\030\005 \001(\0132\036.protocol.TransactionExten" +
-      "tion\032\305\001\n\006Result\022D\n\004code\030\001 \001(\01626.protocol" +
-      ".TransactionApprovedList.Result.response" +
-      "_code\022\017\n\007message\030\002 \001(\t\"d\n\rresponse_code\022" +
-      "\013\n\007SUCCESS\020\000\022\032\n\026SIGNATURE_FORMAT_ERROR\020\001" +
-      "\022\031\n\025COMPUTE_ADDRESS_ERROR\020\002\022\017\n\013OTHER_ERR" +
-      "OR\020\024\"\337\003\n\025TransactionSignWeight\022(\n\npermis" +
-      "sion\030\001 \001(\0132\024.protocol.Permission\022\025\n\rappr" +
-      "oved_list\030\002 \003(\014\022\026\n\016current_weight\030\003 \001(\003\022" +
-      "6\n\006result\030\004 \001(\0132&.protocol.TransactionSi" +
-      "gnWeight.Result\0223\n\013transaction\030\005 \001(\0132\036.p" +
-      "rotocol.TransactionExtention\032\377\001\n\006Result\022" +
-      "B\n\004code\030\001 \001(\01624.protocol.TransactionSign" +
-      "Weight.Result.response_code\022\017\n\007message\030\002" +
-      " \001(\t\"\237\001\n\rresponse_code\022\025\n\021ENOUGH_PERMISS" +
-      "ION\020\000\022\031\n\025NOT_ENOUGH_PERMISSION\020\001\022\032\n\026SIGN" +
-      "ATURE_FORMAT_ERROR\020\002\022\031\n\025COMPUTE_ADDRESS_" +
-      "ERROR\020\003\022\024\n\020PERMISSION_ERROR\020\004\022\017\n\013OTHER_E" +
-      "RROR\020\024\"\223\001\n\010NodeList\022&\n\005nodes\030\001 \003(\0132\027.pro" +
-      "tocol.NodeList.Node\032_\n\004Node\0220\n\007address\030\001" +
-      " \001(\0132\037.protocol.NodeList.Node.Address\032%\n" +
-      "\007Address\022\014\n\004host\030\001 \001(\014\022\014\n\004port\030\002 \001(\005\"\207\003\n" +
-      "\021AccountNetMessage\022\023\n\013freeNetUsed\030\001 \001(\003\022" +
-      "\024\n\014freeNetLimit\030\002 \001(\003\022\017\n\007NetUsed\030\003 \001(\003\022\020" +
-      "\n\010NetLimit\030\004 \001(\003\022C\n\014assetNetUsed\030\005 \003(\0132-" +
-      ".protocol.AccountNetMessage.AssetNetUsed" +
-      "Entry\022E\n\rassetNetLimit\030\006 \003(\0132..protocol." +
-      "AccountNetMessage.AssetNetLimitEntry\022\025\n\r" +
-      "TotalNetLimit\030\007 \001(\003\022\026\n\016TotalNetWeight\030\010 " +
-      "\001(\003\0323\n\021AssetNetUsedEntry\022\013\n\003key\030\001 \001(\t\022\r\n" +
-      "\005value\030\002 \001(\003:\0028\001\0324\n\022AssetNetLimitEntry\022\013" +
-      "\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001\"\354\004\n\026Accou" +
-      "ntResourceMessage\022\023\n\013freeNetUsed\030\001 \001(\003\022\024" +
-      "\n\014freeNetLimit\030\002 \001(\003\022\017\n\007NetUsed\030\003 \001(\003\022\020\n" +
-      "\010NetLimit\030\004 \001(\003\022H\n\014assetNetUsed\030\005 \003(\01322." +
-      "protocol.AccountResourceMessage.AssetNet" +
-      "UsedEntry\022J\n\rassetNetLimit\030\006 \003(\01323.proto" +
-      "col.AccountResourceMessage.AssetNetLimit" +
-      "Entry\022\025\n\rTotalNetLimit\030\007 \001(\003\022\026\n\016TotalNet" +
-      "Weight\030\010 \001(\003\022\034\n\024TotalTronPowerWeight\030\t \001" +
-      "(\003\022\025\n\rtronPowerUsed\030\n \001(\003\022\026\n\016tronPowerLi" +
-      "mit\030\013 \001(\003\022\022\n\nEnergyUsed\030\r \001(\003\022\023\n\013EnergyL" +
-      "imit\030\016 \001(\003\022\030\n\020TotalEnergyLimit\030\017 \001(\003\022\031\n\021" +
-      "TotalEnergyWeight\030\020 \001(\003\022\023\n\013storageUsed\030\025" +
-      " \001(\003\022\024\n\014storageLimit\030\026 \001(\003\0323\n\021AssetNetUs" +
-      "edEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001\032" +
-      "4\n\022AssetNetLimitEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005va" +
-      "lue\030\002 \001(\003:\0028\001\"/\n\017BlockIdentifier\022\014\n\004hash" +
-      "\030\001 \001(\014\022\016\n\006number\030\002 \001(\003\"\241\001\n\021BlockBalanceT" +
-      "race\0223\n\020block_identifier\030\001 \001(\0132\031.protoco" +
-      "l.BlockIdentifier\022\021\n\ttimestamp\030\002 \001(\003\022D\n\031" +
-      "transaction_balance_trace\030\003 \003(\0132!.protoc" +
-      "ol.TransactionBalanceTrace\"\343\001\n\027Transacti" +
-      "onBalanceTrace\022\036\n\026transaction_identifier" +
-      "\030\001 \001(\014\022>\n\toperation\030\002 \003(\0132+.protocol.Tra" +
-      "nsactionBalanceTrace.Operation\022\014\n\004type\030\003" +
-      " \001(\t\022\016\n\006status\030\004 \001(\t\032J\n\tOperation\022\034\n\024ope" +
-      "ration_identifier\030\001 \001(\003\022\017\n\007address\030\002 \001(\014" +
-      "\022\016\n\006amount\030\003 \001(\003\"\'\n\025PricesResponseMessag" +
-      "e\022\016\n\006prices\030\001 \001(\tB\030\n\026org.tron.trident.pr" +
-      "otob\006proto3"
+      "ECTIVE_CONNECTION\020\013\022\026\n\022BLOCK_UNSOLIDIFIE" +
+      "D\020\014\022\017\n\013OTHER_ERROR\020\024\"]\n\025EstimateEnergyMe" +
+      "ssage\022+\n\006result\030\001 \001(\0132\033.protocol.Transac" +
+      "tionReturn\022\027\n\017energy_required\030\002 \001(\003\"\253\001\n\024" +
+      "TransactionExtention\022*\n\013transaction\030\001 \001(" +
+      "\0132\025.protocol.Transaction\022\014\n\004txid\030\002 \001(\014\022\027" +
+      "\n\017constant_result\030\003 \003(\014\022+\n\006result\030\004 \001(\0132" +
+      "\033.protocol.TransactionReturn\022\023\n\013energy_u" +
+      "sed\030\005 \001(\003\"3\n\013WitnessList\022$\n\twitnesses\030\001 " +
+      "\003(\0132\021.protocol.Witness\"5\n\014ProposalList\022%" +
+      "\n\tproposals\030\001 \003(\0132\022.protocol.Proposal\"5\n" +
+      "\014ExchangeList\022%\n\texchanges\030\001 \003(\0132\022.proto" +
+      "col.Exchange\">\n\016AssetIssueList\022,\n\006assets" +
+      "\030\001 \003(\0132\034.protocol.AssetIssueContract\"+\n\t" +
+      "BlockList\022\036\n\005block\030\001 \003(\0132\017.protocol.Bloc" +
+      "k\"=\n\017TransactionList\022*\n\013transaction\030\001 \003(" +
+      "\0132\025.protocol.Transaction\"D\n\030DelegatedRes" +
+      "ourceMessage\022\024\n\014from_address\030\001 \001(\014\022\022\n\nto" +
+      "_address\030\002 \001(\014\"O\n\025DelegatedResourceList\022" +
+      "6\n\021delegatedResource\030\001 \003(\0132\033.protocol.De" +
+      "legatedResource\">\n\027AddressPrKeyPairMessa" +
+      "ge\022\017\n\007address\030\001 \001(\t\022\022\n\nprivateKey\030\002 \001(\t\"" +
+      "}\n\024EasyTransferResponse\022*\n\013transaction\030\001" +
+      " \001(\0132\025.protocol.Transaction\022+\n\006result\030\002 " +
+      "\001(\0132\033.protocol.TransactionReturn\022\014\n\004txid" +
+      "\030\003 \001(\014\"a\n\030SmartContractDataWrapper\022/\n\016sm" +
+      "art_contract\030\001 \001(\0132\027.protocol.SmartContr" +
+      "act\022\024\n\014runtime_code\030\002 \001(\014\"\360\001\n\023InternalTr" +
+      "ansaction\022\014\n\004hash\030\001 \001(\014\022\026\n\016caller_addres" +
+      "s\030\002 \001(\014\022\032\n\022transferTo_address\030\003 \001(\014\022B\n\rc" +
+      "allValueInfo\030\004 \003(\0132+.protocol.InternalTr" +
+      "ansaction.CallValueInfo\022\014\n\004note\030\005 \001(\014\022\020\n" +
+      "\010rejected\030\006 \001(\010\0323\n\rCallValueInfo\022\021\n\tcall" +
+      "Value\030\001 \001(\003\022\017\n\007tokenId\030\002 \001(\t\"\325\001\n\017Resourc" +
+      "eReceipt\022\024\n\014energy_usage\030\001 \001(\003\022\022\n\nenergy" +
+      "_fee\030\002 \001(\003\022\033\n\023origin_energy_usage\030\003 \001(\003\022" +
+      "\032\n\022energy_usage_total\030\004 \001(\003\022\021\n\tnet_usage" +
+      "\030\005 \001(\003\022\017\n\007net_fee\030\006 \001(\003\022;\n\006result\030\007 \001(\0162" +
+      "+.protocol.Transaction.Result.contractRe" +
+      "sult\"\250\007\n\017TransactionInfo\022\n\n\002id\030\001 \001(\014\022\013\n\003" +
+      "fee\030\002 \001(\003\022\023\n\013blockNumber\030\003 \001(\003\022\026\n\016blockT" +
+      "imeStamp\030\004 \001(\003\022\026\n\016contractResult\030\005 \003(\014\022\030" +
+      "\n\020contract_address\030\006 \001(\014\022*\n\007receipt\030\007 \001(" +
+      "\0132\031.protocol.ResourceReceipt\022*\n\003log\030\010 \003(" +
+      "\0132\035.protocol.TransactionInfo.Log\022.\n\006resu" +
+      "lt\030\t \001(\0162\036.protocol.TransactionInfo.code" +
+      "\022\022\n\nresMessage\030\n \001(\014\022\024\n\014assetIssueID\030\016 \001" +
+      "(\t\022\027\n\017withdraw_amount\030\017 \001(\003\022\027\n\017unfreeze_" +
+      "amount\030\020 \001(\003\022<\n\025internal_transactions\030\021 " +
+      "\003(\0132\035.protocol.InternalTransaction\022 \n\030ex" +
+      "change_received_amount\030\022 \001(\003\022&\n\036exchange" +
+      "_inject_another_amount\030\023 \001(\003\022(\n exchange" +
+      "_withdraw_another_amount\030\024 \001(\003\022\023\n\013exchan" +
+      "ge_id\030\025 \001(\003\022 \n\030shielded_transaction_fee\030" +
+      "\026 \001(\003\022\017\n\007orderId\030\031 \001(\014\0221\n\014orderDetails\030\032" +
+      " \003(\0132\033.protocol.MarketOrderDetail\022\036\n\026wit" +
+      "hdraw_expire_amount\030\034 \001(\003\022W\n\030cancel_unfr" +
+      "eezeV2_amount\030\035 \003(\01325.protocol.Transacti" +
+      "onInfo.CancelUnfreezeV2AmountEntry\0324\n\003Lo" +
+      "g\022\017\n\007address\030\001 \001(\014\022\016\n\006topics\030\002 \003(\014\022\014\n\004da" +
+      "ta\030\003 \001(\014\032=\n\033CancelUnfreezeV2AmountEntry\022" +
+      "\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001\"\036\n\004code\022" +
+      "\n\n\006SUCESS\020\000\022\n\n\006FAILED\020\001\"\265\001\n\007Witness\022\017\n\007a" +
+      "ddress\030\001 \001(\014\022\021\n\tvoteCount\030\002 \001(\003\022\016\n\006pubKe" +
+      "y\030\003 \001(\014\022\013\n\003url\030\004 \001(\t\022\025\n\rtotalProduced\030\005 " +
+      "\001(\003\022\023\n\013totalMissed\030\006 \001(\003\022\026\n\016latestBlockN" +
+      "um\030\007 \001(\003\022\025\n\rlatestSlotNum\030\010 \001(\003\022\016\n\006isJob" +
+      "s\030\t \001(\010\"\244\025\n\007Account\022\024\n\014account_name\030\001 \001(" +
+      "\014\022#\n\004type\030\002 \001(\0162\025.protocol.AccountType\022\017" +
+      "\n\007address\030\003 \001(\014\022\017\n\007balance\030\004 \001(\003\022\035\n\005vote" +
+      "s\030\005 \003(\0132\016.protocol.Vote\022+\n\005asset\030\006 \003(\0132\034" +
+      ".protocol.Account.AssetEntry\022/\n\007assetV2\030" +
+      "8 \003(\0132\036.protocol.Account.AssetV2Entry\022(\n" +
+      "\006frozen\030\007 \003(\0132\030.protocol.Account.Frozen\022" +
+      "\021\n\tnet_usage\030\010 \001(\003\0227\n/acquired_delegated" +
+      "_frozen_balance_for_bandwidth\030) \001(\003\022.\n&d" +
+      "elegated_frozen_balance_for_bandwidth\030* " +
+      "\001(\003\022\026\n\016old_tron_power\030. \001(\003\022,\n\ntron_powe" +
+      "r\030/ \001(\0132\030.protocol.Account.Frozen\022\027\n\017ass" +
+      "et_optimized\030< \001(\010\022\023\n\013create_time\030\t \001(\003\022" +
+      "\034\n\024latest_opration_time\030\n \001(\003\022\021\n\tallowan" +
+      "ce\030\013 \001(\003\022\034\n\024latest_withdraw_time\030\014 \001(\003\022\014" +
+      "\n\004code\030\r \001(\014\022\022\n\nis_witness\030\016 \001(\010\022\024\n\014is_c" +
+      "ommittee\030\017 \001(\010\022/\n\rfrozen_supply\030\020 \003(\0132\030." +
+      "protocol.Account.Frozen\022\031\n\021asset_issued_" +
+      "name\030\021 \001(\014\022\027\n\017asset_issued_ID\0309 \001(\014\022T\n\033l" +
+      "atest_asset_operation_time\030\022 \003(\0132/.proto" +
+      "col.Account.LatestAssetOperationTimeEntr" +
+      "y\022X\n\035latest_asset_operation_timeV2\030: \003(\013" +
+      "21.protocol.Account.LatestAssetOperation" +
+      "TimeV2Entry\022\026\n\016free_net_usage\030\023 \001(\003\022F\n\024f" +
+      "ree_asset_net_usage\030\024 \003(\0132(.protocol.Acc" +
+      "ount.FreeAssetNetUsageEntry\022J\n\026free_asse" +
+      "t_net_usageV2\030; \003(\0132*.protocol.Account.F" +
+      "reeAssetNetUsageV2Entry\022\033\n\023latest_consum" +
+      "e_time\030\025 \001(\003\022 \n\030latest_consume_free_time" +
+      "\030\026 \001(\003\022\022\n\naccount_id\030\027 \001(\014\022\027\n\017net_window" +
+      "_size\030\030 \001(\003\022\034\n\024net_window_optimized\030\031 \001(" +
+      "\010\022;\n\020account_resource\030\032 \001(\0132!.protocol.A" +
+      "ccount.AccountResource\022\020\n\010codeHash\030\036 \001(\014" +
+      "\022.\n\020owner_permission\030\037 \001(\0132\024.protocol.Pe" +
+      "rmission\0220\n\022witness_permission\030  \001(\0132\024.p" +
+      "rotocol.Permission\022/\n\021active_permission\030" +
+      "! \003(\0132\024.protocol.Permission\022,\n\010frozenV2\030" +
+      "\" \003(\0132\032.protocol.Account.FreezeV2\0220\n\nunf" +
+      "rozenV2\030# \003(\0132\034.protocol.Account.UnFreez" +
+      "eV2\0220\n(delegated_frozenV2_balance_for_ba" +
+      "ndwidth\030$ \001(\003\0229\n1acquired_delegated_froz" +
+      "enV2_balance_for_bandwidth\030% \001(\003\0325\n\006Froz" +
+      "en\022\026\n\016frozen_balance\030\001 \001(\003\022\023\n\013expire_tim" +
+      "e\030\002 \001(\003\032,\n\nAssetEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005va" +
+      "lue\030\002 \001(\003:\0028\001\032.\n\014AssetV2Entry\022\013\n\003key\030\001 \001" +
+      "(\t\022\r\n\005value\030\002 \001(\003:\0028\001\032?\n\035LatestAssetOper" +
+      "ationTimeEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001" +
+      "(\003:\0028\001\032A\n\037LatestAssetOperationTimeV2Entr" +
+      "y\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001\0328\n\026Fre" +
+      "eAssetNetUsageEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005valu" +
+      "e\030\002 \001(\003:\0028\001\032:\n\030FreeAssetNetUsageV2Entry\022" +
+      "\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001\032\347\003\n\017Acco" +
+      "untResource\022\024\n\014energy_usage\030\001 \001(\003\022;\n\031fro" +
+      "zen_balance_for_energy\030\002 \001(\0132\030.protocol." +
+      "Account.Frozen\022&\n\036latest_consume_time_fo" +
+      "r_energy\030\003 \001(\003\0224\n,acquired_delegated_fro" +
+      "zen_balance_for_energy\030\004 \001(\003\022+\n#delegate" +
+      "d_frozen_balance_for_energy\030\005 \001(\003\022\025\n\rsto" +
+      "rage_limit\030\006 \001(\003\022\025\n\rstorage_usage\030\007 \001(\003\022" +
+      "$\n\034latest_exchange_storage_time\030\010 \001(\003\022\032\n" +
+      "\022energy_window_size\030\t \001(\003\022-\n%delegated_f" +
+      "rozenV2_balance_for_energy\030\n \001(\003\0226\n.acqu" +
+      "ired_delegated_frozenV2_balance_for_ener" +
+      "gy\030\013 \001(\003\022\037\n\027energy_window_optimized\030\014 \001(" +
+      "\010\032@\n\010FreezeV2\022$\n\004type\030\001 \001(\0162\026.protocol.R" +
+      "esourceCode\022\016\n\006amount\030\002 \001(\003\032i\n\nUnFreezeV" +
+      "2\022$\n\004type\030\001 \001(\0162\026.protocol.ResourceCode\022" +
+      "\027\n\017unfreeze_amount\030\003 \001(\003\022\034\n\024unfreeze_exp" +
+      "ire_time\030\004 \001(\003\"r\n\021MarketOrderDetail\022\024\n\014m" +
+      "akerOrderId\030\001 \001(\014\022\024\n\014takerOrderId\030\002 \001(\014\022" +
+      "\030\n\020fillSellQuantity\030\003 \001(\003\022\027\n\017fillBuyQuan" +
+      "tity\030\004 \001(\003\"\321\002\n\010Proposal\022\023\n\013proposal_id\030\001" +
+      " \001(\003\022\030\n\020proposer_address\030\002 \001(\014\0226\n\nparame" +
+      "ters\030\003 \003(\0132\".protocol.Proposal.Parameter" +
+      "sEntry\022\027\n\017expiration_time\030\004 \001(\003\022\023\n\013creat" +
+      "e_time\030\005 \001(\003\022\021\n\tapprovals\030\006 \003(\014\022\'\n\005state" +
+      "\030\007 \001(\0162\030.protocol.Proposal.State\0321\n\017Para" +
+      "metersEntry\022\013\n\003key\030\001 \001(\003\022\r\n\005value\030\002 \001(\003:" +
+      "\0028\001\"A\n\005State\022\013\n\007PENDING\020\000\022\017\n\013DISAPPROVED" +
+      "\020\001\022\014\n\010APPROVED\020\002\022\014\n\010CANCELED\020\003\"\271\001\n\010Excha" +
+      "nge\022\023\n\013exchange_id\030\001 \001(\003\022\027\n\017creator_addr" +
+      "ess\030\002 \001(\014\022\023\n\013create_time\030\003 \001(\003\022\026\n\016first_" +
+      "token_id\030\006 \001(\014\022\033\n\023first_token_balance\030\007 " +
+      "\001(\003\022\027\n\017second_token_id\030\010 \001(\014\022\034\n\024second_t" +
+      "oken_balance\030\t \001(\003\"\271\001\n\021DelegatedResource" +
+      "\022\014\n\004from\030\001 \001(\014\022\n\n\002to\030\002 \001(\014\022$\n\034frozen_bal" +
+      "ance_for_bandwidth\030\003 \001(\003\022!\n\031frozen_balan" +
+      "ce_for_energy\030\004 \001(\003\022!\n\031expire_time_for_b" +
+      "andwidth\030\005 \001(\003\022\036\n\026expire_time_for_energy" +
+      "\030\006 \001(\003\"m\n\035DelegatedResourceAccountIndex\022" +
+      "\017\n\007account\030\001 \001(\014\022\024\n\014fromAccounts\030\002 \003(\014\022\022" +
+      "\n\ntoAccounts\030\003 \003(\014\022\021\n\ttimestamp\030\004 \001(\003\"Q\n" +
+      "\017TransactionSign\022*\n\013transaction\030\001 \001(\0132\025." +
+      "protocol.Transaction\022\022\n\nprivateKey\030\002 \001(\014" +
+      "\"\201\001\n\017ChainParameters\022@\n\016chainParameter\030\001" +
+      " \003(\0132(.protocol.ChainParameters.ChainPar" +
+      "ameter\032,\n\016ChainParameter\022\013\n\003key\030\001 \001(\t\022\r\n" +
+      "\005value\030\002 \001(\003\"\240\021\n\010NodeInfo\022\024\n\014beginSyncNu" +
+      "m\030\001 \001(\003\022\r\n\005block\030\002 \001(\t\022\025\n\rsolidityBlock\030" +
+      "\003 \001(\t\022\033\n\023currentConnectCount\030\004 \001(\005\022\032\n\022ac" +
+      "tiveConnectCount\030\005 \001(\005\022\033\n\023passiveConnect" +
+      "Count\030\006 \001(\005\022\021\n\ttotalFlow\030\007 \001(\003\0221\n\014peerIn" +
+      "foList\030\010 \003(\0132\033.protocol.NodeInfo.PeerInf" +
+      "o\0229\n\016configNodeInfo\030\t \001(\0132!.protocol.Nod" +
+      "eInfo.ConfigNodeInfo\0223\n\013machineInfo\030\n \001(" +
+      "\0132\036.protocol.NodeInfo.MachineInfo\022H\n\023che" +
+      "atWitnessInfoMap\030\013 \003(\0132+.protocol.NodeIn" +
+      "fo.CheatWitnessInfoMapEntry\032:\n\030CheatWitn" +
+      "essInfoMapEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 " +
+      "\001(\t:\0028\001\032\315\004\n\010PeerInfo\022\025\n\rlastSyncBlock\030\001 " +
+      "\001(\t\022\021\n\tremainNum\030\002 \001(\003\022\033\n\023lastBlockUpdat" +
+      "eTime\030\003 \001(\003\022\020\n\010syncFlag\030\004 \001(\010\022\037\n\027headBlo" +
+      "ckTimeWeBothHave\030\005 \001(\003\022\030\n\020needSyncFromPe" +
+      "er\030\006 \001(\010\022\026\n\016needSyncFromUs\030\007 \001(\010\022\014\n\004host" +
+      "\030\010 \001(\t\022\014\n\004port\030\t \001(\005\022\016\n\006nodeId\030\n \001(\t\022\023\n\013" +
+      "connectTime\030\013 \001(\003\022\022\n\navgLatency\030\014 \001(\001\022\027\n" +
+      "\017syncToFetchSize\030\r \001(\005\022\036\n\026syncToFetchSiz" +
+      "ePeekNum\030\016 \001(\003\022\036\n\026syncBlockRequestedSize" +
+      "\030\017 \001(\005\022\025\n\runFetchSynNum\030\020 \001(\003\022\027\n\017blockIn" +
+      "PorcSize\030\021 \001(\005\022\033\n\023headBlockWeBothHave\030\022 " +
+      "\001(\t\022\020\n\010isActive\030\023 \001(\010\022\r\n\005score\030\024 \001(\005\022\021\n\t" +
+      "nodeCount\030\025 \001(\005\022\016\n\006inFlow\030\026 \001(\003\022\027\n\017disco" +
+      "nnectTimes\030\027 \001(\005\022\035\n\025localDisconnectReaso" +
+      "n\030\030 \001(\t\022\036\n\026remoteDisconnectReason\030\031 \001(\t\032" +
+      "\345\003\n\016ConfigNodeInfo\022\023\n\013codeVersion\030\001 \001(\t\022" +
+      "\022\n\np2pVersion\030\002 \001(\t\022\022\n\nlistenPort\030\003 \001(\005\022" +
+      "\026\n\016discoverEnable\030\004 \001(\010\022\026\n\016activeNodeSiz" +
+      "e\030\005 \001(\005\022\027\n\017passiveNodeSize\030\006 \001(\005\022\024\n\014send" +
+      "NodeSize\030\007 \001(\005\022\027\n\017maxConnectCount\030\010 \001(\005\022" +
+      "\035\n\025sameIpMaxConnectCount\030\t \001(\005\022\030\n\020backup" +
+      "ListenPort\030\n \001(\005\022\030\n\020backupMemberSize\030\013 \001" +
+      "(\005\022\026\n\016backupPriority\030\014 \001(\005\022\021\n\tdbVersion\030" +
+      "\r \001(\005\022\034\n\024minParticipationRate\030\016 \001(\005\022\027\n\017s" +
+      "upportConstant\030\017 \001(\010\022\024\n\014minTimeRatio\030\020 \001" +
+      "(\001\022\024\n\014maxTimeRatio\030\021 \001(\001\022 \n\030allowCreatio" +
+      "nOfContracts\030\022 \001(\003\022\033\n\023allowAdaptiveEnerg" +
+      "y\030\023 \001(\003\032\215\005\n\013MachineInfo\022\023\n\013threadCount\030\001" +
+      " \001(\005\022\033\n\023deadLockThreadCount\030\002 \001(\005\022\020\n\010cpu" +
+      "Count\030\003 \001(\005\022\023\n\013totalMemory\030\004 \001(\003\022\022\n\nfree" +
+      "Memory\030\005 \001(\003\022\017\n\007cpuRate\030\006 \001(\001\022\023\n\013javaVer" +
+      "sion\030\007 \001(\t\022\016\n\006osName\030\010 \001(\t\022\027\n\017jvmTotalMe" +
+      "moery\030\t \001(\003\022\025\n\rjvmFreeMemory\030\n \001(\003\022\026\n\016pr" +
+      "ocessCpuRate\030\013 \001(\001\022I\n\022memoryDescInfoList" +
+      "\030\014 \003(\0132-.protocol.NodeInfo.MachineInfo.M" +
+      "emoryDescInfo\022Q\n\026deadLockThreadInfoList\030" +
+      "\r \003(\01321.protocol.NodeInfo.MachineInfo.De" +
+      "adLockThreadInfo\032c\n\016MemoryDescInfo\022\014\n\004na" +
+      "me\030\001 \001(\t\022\020\n\010initSize\030\002 \001(\003\022\017\n\007useSize\030\003 " +
+      "\001(\003\022\017\n\007maxSize\030\004 \001(\003\022\017\n\007useRate\030\005 \001(\001\032\217\001" +
+      "\n\022DeadLockThreadInfo\022\014\n\004name\030\001 \001(\t\022\020\n\010lo" +
+      "ckName\030\002 \001(\t\022\021\n\tlockOwner\030\003 \001(\t\022\r\n\005state" +
+      "\030\004 \001(\t\022\021\n\tblockTime\030\005 \001(\003\022\020\n\010waitTime\030\006 " +
+      "\001(\003\022\022\n\nstackTrace\030\007 \001(\t\"\362\002\n\013MarketOrder\022" +
+      "\020\n\010order_id\030\001 \001(\014\022\025\n\rowner_address\030\002 \001(\014" +
+      "\022\023\n\013create_time\030\003 \001(\003\022\025\n\rsell_token_id\030\004" +
+      " \001(\014\022\033\n\023sell_token_quantity\030\005 \001(\003\022\024\n\014buy" +
+      "_token_id\030\006 \001(\014\022\032\n\022buy_token_quantity\030\007 " +
+      "\001(\003\022\"\n\032sell_token_quantity_remain\030\t \001(\003\022" +
+      "\"\n\032sell_token_quantity_return\030\n \001(\003\022*\n\005s" +
+      "tate\030\013 \001(\0162\033.protocol.MarketOrder.State\022" +
+      "\014\n\004prev\030\014 \001(\014\022\014\n\004next\030\r \001(\014\"/\n\005State\022\n\n\006" +
+      "ACTIVE\020\000\022\014\n\010INACTIVE\020\001\022\014\n\010CANCELED\020\002\"8\n\017" +
+      "MarketOrderList\022%\n\006orders\030\001 \003(\0132\025.protoc" +
+      "ol.MarketOrder\">\n\017MarketOrderPair\022\025\n\rsel" +
+      "l_token_id\030\001 \001(\014\022\024\n\014buy_token_id\030\002 \001(\014\"C" +
+      "\n\023MarketOrderPairList\022,\n\torderPair\030\001 \003(\013" +
+      "2\031.protocol.MarketOrderPair\"F\n\013MarketPri" +
+      "ce\022\033\n\023sell_token_quantity\030\001 \001(\003\022\032\n\022buy_t" +
+      "oken_quantity\030\002 \001(\003\"e\n\017MarketPriceList\022\025" +
+      "\n\rsell_token_id\030\001 \001(\014\022\024\n\014buy_token_id\030\002 " +
+      "\001(\014\022%\n\006prices\030\003 \003(\0132\025.protocol.MarketPri" +
+      "ce\"#\n\017NullifierResult\022\020\n\010is_spent\030\001 \001(\010\"" +
+      "\345\001\n\021DecryptNotesTRC20\0223\n\007noteTxs\030\001 \003(\0132\"" +
+      ".protocol.DecryptNotesTRC20.NoteTx\032\232\001\n\006N" +
+      "oteTx\022\034\n\004note\030\001 \001(\0132\016.protocol.Note\022\020\n\010p" +
+      "osition\030\002 \001(\003\022\020\n\010is_spent\030\003 \001(\010\022\014\n\004txid\030" +
+      "\004 \001(\014\022\r\n\005index\030\005 \001(\005\022\021\n\tto_amount\030\006 \001(\t\022" +
+      "\036\n\026transparent_to_address\030\007 \001(\014\"I\n\023Trans" +
+      "actionInfoList\0222\n\017transactionInfo\030\001 \003(\0132" +
+      "\031.protocol.TransactionInfo\"\347\002\n\027Transacti" +
+      "onApprovedList\022\025\n\rapproved_list\030\002 \003(\014\0228\n" +
+      "\006result\030\004 \001(\0132(.protocol.TransactionAppr" +
+      "ovedList.Result\0223\n\013transaction\030\005 \001(\0132\036.p" +
+      "rotocol.TransactionExtention\032\305\001\n\006Result\022" +
+      "D\n\004code\030\001 \001(\01626.protocol.TransactionAppr" +
+      "ovedList.Result.response_code\022\017\n\007message" +
+      "\030\002 \001(\t\"d\n\rresponse_code\022\013\n\007SUCCESS\020\000\022\032\n\026" +
+      "SIGNATURE_FORMAT_ERROR\020\001\022\031\n\025COMPUTE_ADDR" +
+      "ESS_ERROR\020\002\022\017\n\013OTHER_ERROR\020\024\"\337\003\n\025Transac" +
+      "tionSignWeight\022(\n\npermission\030\001 \001(\0132\024.pro" +
+      "tocol.Permission\022\025\n\rapproved_list\030\002 \003(\014\022" +
+      "\026\n\016current_weight\030\003 \001(\003\0226\n\006result\030\004 \001(\0132" +
+      "&.protocol.TransactionSignWeight.Result\022" +
+      "3\n\013transaction\030\005 \001(\0132\036.protocol.Transact" +
+      "ionExtention\032\377\001\n\006Result\022B\n\004code\030\001 \001(\01624." +
+      "protocol.TransactionSignWeight.Result.re" +
+      "sponse_code\022\017\n\007message\030\002 \001(\t\"\237\001\n\rrespons" +
+      "e_code\022\025\n\021ENOUGH_PERMISSION\020\000\022\031\n\025NOT_ENO" +
+      "UGH_PERMISSION\020\001\022\032\n\026SIGNATURE_FORMAT_ERR" +
+      "OR\020\002\022\031\n\025COMPUTE_ADDRESS_ERROR\020\003\022\024\n\020PERMI" +
+      "SSION_ERROR\020\004\022\017\n\013OTHER_ERROR\020\024\"\223\001\n\010NodeL" +
+      "ist\022&\n\005nodes\030\001 \003(\0132\027.protocol.NodeList.N" +
+      "ode\032_\n\004Node\0220\n\007address\030\001 \001(\0132\037.protocol." +
+      "NodeList.Node.Address\032%\n\007Address\022\014\n\004host" +
+      "\030\001 \001(\014\022\014\n\004port\030\002 \001(\005\"\207\003\n\021AccountNetMessa" +
+      "ge\022\023\n\013freeNetUsed\030\001 \001(\003\022\024\n\014freeNetLimit\030" +
+      "\002 \001(\003\022\017\n\007NetUsed\030\003 \001(\003\022\020\n\010NetLimit\030\004 \001(\003" +
+      "\022C\n\014assetNetUsed\030\005 \003(\0132-.protocol.Accoun" +
+      "tNetMessage.AssetNetUsedEntry\022E\n\rassetNe" +
+      "tLimit\030\006 \003(\0132..protocol.AccountNetMessag" +
+      "e.AssetNetLimitEntry\022\025\n\rTotalNetLimit\030\007 " +
+      "\001(\003\022\026\n\016TotalNetWeight\030\010 \001(\003\0323\n\021AssetNetU" +
+      "sedEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001" +
+      "\0324\n\022AssetNetLimitEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005v" +
+      "alue\030\002 \001(\003:\0028\001\"\354\004\n\026AccountResourceMessag" +
+      "e\022\023\n\013freeNetUsed\030\001 \001(\003\022\024\n\014freeNetLimit\030\002" +
+      " \001(\003\022\017\n\007NetUsed\030\003 \001(\003\022\020\n\010NetLimit\030\004 \001(\003\022" +
+      "H\n\014assetNetUsed\030\005 \003(\01322.protocol.Account" +
+      "ResourceMessage.AssetNetUsedEntry\022J\n\rass" +
+      "etNetLimit\030\006 \003(\01323.protocol.AccountResou" +
+      "rceMessage.AssetNetLimitEntry\022\025\n\rTotalNe" +
+      "tLimit\030\007 \001(\003\022\026\n\016TotalNetWeight\030\010 \001(\003\022\034\n\024" +
+      "TotalTronPowerWeight\030\t \001(\003\022\025\n\rtronPowerU" +
+      "sed\030\n \001(\003\022\026\n\016tronPowerLimit\030\013 \001(\003\022\022\n\nEne" +
+      "rgyUsed\030\r \001(\003\022\023\n\013EnergyLimit\030\016 \001(\003\022\030\n\020To" +
+      "talEnergyLimit\030\017 \001(\003\022\031\n\021TotalEnergyWeigh" +
+      "t\030\020 \001(\003\022\023\n\013storageUsed\030\025 \001(\003\022\024\n\014storageL" +
+      "imit\030\026 \001(\003\0323\n\021AssetNetUsedEntry\022\013\n\003key\030\001" +
+      " \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001\0324\n\022AssetNetLimit" +
+      "Entry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001\"/\n" +
+      "\017BlockIdentifier\022\014\n\004hash\030\001 \001(\014\022\016\n\006number" +
+      "\030\002 \001(\003\"\241\001\n\021BlockBalanceTrace\0223\n\020block_id" +
+      "entifier\030\001 \001(\0132\031.protocol.BlockIdentifie" +
+      "r\022\021\n\ttimestamp\030\002 \001(\003\022D\n\031transaction_bala" +
+      "nce_trace\030\003 \003(\0132!.protocol.TransactionBa" +
+      "lanceTrace\"\343\001\n\027TransactionBalanceTrace\022\036" +
+      "\n\026transaction_identifier\030\001 \001(\014\022>\n\toperat" +
+      "ion\030\002 \003(\0132+.protocol.TransactionBalanceT" +
+      "race.Operation\022\014\n\004type\030\003 \001(\t\022\016\n\006status\030\004" +
+      " \001(\t\032J\n\tOperation\022\034\n\024operation_identifie" +
+      "r\030\001 \001(\003\022\017\n\007address\030\002 \001(\014\022\016\n\006amount\030\003 \001(\003" +
+      "\"\'\n\025PricesResponseMessage\022\016\n\006prices\030\001 \001(" +
+      "\tB\030\n\026org.tron.trident.protob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
