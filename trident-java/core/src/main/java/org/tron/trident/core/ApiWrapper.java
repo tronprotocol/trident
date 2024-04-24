@@ -83,6 +83,7 @@ import io.grpc.stub.MetadataUtils;
 
 import java.nio.ByteBuffer;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import org.tron.trident.crypto.tuwenitypes.Bytes32;
 import org.bouncycastle.jcajce.provider.digest.Keccak;
@@ -158,6 +159,18 @@ public class ApiWrapper {
         blockingStubSolidity = WalletSolidityGrpc.newBlockingStub(channelSolidity);
         keyPair = new KeyPair(hexPrivateKey);
     }
+
+    public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey, List<ClientInterceptor> clientInterceptors,int timeout) {
+        channel = ManagedChannelBuilder.forTarget(grpcEndpoint)
+                .intercept(clientInterceptors)
+                .usePlaintext()
+                .build();
+        channelSolidity = ManagedChannelBuilder.forTarget(grpcEndpointSolidity).usePlaintext().build();
+        blockingStub = WalletGrpc.newBlockingStub(channel).withDeadlineAfter(timeout, TimeUnit.MILLISECONDS);
+        blockingStubSolidity = WalletSolidityGrpc.newBlockingStub(channelSolidity).withDeadlineAfter(timeout, TimeUnit.MILLISECONDS);
+        keyPair = new KeyPair(hexPrivateKey);
+    }
+
 
 
     public void close() {
