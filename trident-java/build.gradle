@@ -3,7 +3,7 @@ plugins {
 }
 
 ext {
-    bouncycastleVersion = '1.66'
+    bouncycastleVersion = '1.69'
     junitJupiterVersion = '5.4.2'
 }
 
