@@ -27,7 +27,7 @@ Then add required packages as dependencies. Please add dependencies locally.
 ```groovy
 dependencies {
     // protobuf & grpc
-    implementation 'com.google.protobuf:protobuf-java:3.11.0'
+    implementation 'com.google.protobuf:protobuf-java:3.16.3'
 
     implementation fileTree(dir:'../core')
     implementation fileTree(dir:'../utils')
