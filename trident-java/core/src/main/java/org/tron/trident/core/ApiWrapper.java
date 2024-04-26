@@ -198,7 +198,7 @@ public class ApiWrapper {
     }*/
 
     /**
-     * The constuctor for main net. Use TronGrid as default
+     * The constructor for main net. Use TronGrid as default
      * @param hexPrivateKey the binding private key. Operations require private key will all use this unless the private key is specified elsewhere.
      * @param apiKey this function works with TronGrid, an API key is required.
      * @return a ApiWrapper object
@@ -208,7 +208,7 @@ public class ApiWrapper {
     }
 
     /**
-     * The constuctor for main net.
+     * The constructor for main net.
      * @deprecated 
      * This method will only be available before TronGrid prohibits the use without API key
      * 
@@ -222,7 +222,7 @@ public class ApiWrapper {
     }
 
     /**
-     * The constuctor for Shasta test net. Use TronGrid as default.
+     * The constructor for Shasta test net. Use TronGrid as default.
      * @param hexPrivateKey the binding private key. Operations require private key will all use this unless the private key is specified elsewhere.
      * @param apiKey this function works with TronGrid, an API key is required.
      * @return a ApiWrapper object
@@ -232,7 +232,7 @@ public class ApiWrapper {
     }
 
     /**
-     * The constuctor for Nile test net.
+     * The constructor for Nile test net.
      * @param hexPrivateKey the binding private key. Operations require private key will all use this unless the private key is specified elsewhere.
      * @return a ApiWrapper object
      */
