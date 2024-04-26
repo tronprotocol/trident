@@ -160,6 +160,20 @@ public class ApiWrapper {
         keyPair = new KeyPair(hexPrivateKey);
     }
 
+     /*
+        constuctor enable setting timeout
+      */
+    public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey, int timeout) {
+        channel = ManagedChannelBuilder.forTarget(grpcEndpoint).usePlaintext().build();
+        channelSolidity = ManagedChannelBuilder.forTarget(grpcEndpointSolidity).usePlaintext().build();
+        blockingStub = WalletGrpc.newBlockingStub(channel).withDeadlineAfter(timeout, TimeUnit.MILLISECONDS);
+        blockingStubSolidity = WalletSolidityGrpc.newBlockingStub(channelSolidity).withDeadlineAfter(timeout, TimeUnit.MILLISECONDS);
+        keyPair = new KeyPair(hexPrivateKey);
+    }
+
+    /*
+       constructor enable setting timeout and custom interceptors
+     */
     public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey, List<ClientInterceptor> clientInterceptors,int timeout) {
         channel = ManagedChannelBuilder.forTarget(grpcEndpoint)
                 .intercept(clientInterceptors)
@@ -170,7 +184,6 @@ public class ApiWrapper {
         blockingStubSolidity = WalletSolidityGrpc.newBlockingStub(channelSolidity).withDeadlineAfter(timeout, TimeUnit.MILLISECONDS);
         keyPair = new KeyPair(hexPrivateKey);
     }
-
 
 
     public void close() {
