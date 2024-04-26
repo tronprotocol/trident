@@ -161,7 +161,7 @@ public class ApiWrapper {
     }
 
      /*
-        constuctor enable setting timeout
+        constructor enable setting timeout
       */
     public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey, int timeout) {
         channel = ManagedChannelBuilder.forTarget(grpcEndpoint).usePlaintext().build();
