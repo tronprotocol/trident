@@ -3,6 +3,7 @@ package org.tron.trident.core;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import io.grpc.ClientInterceptor;
 import org.tron.trident.abi.FunctionEncoder;
 import org.tron.trident.abi.TypeReference;
 import org.tron.trident.abi.datatypes.Address;
@@ -10,6 +11,8 @@ import org.tron.trident.abi.datatypes.Bool;
 import org.tron.trident.abi.datatypes.Function;
 import org.tron.trident.abi.datatypes.generated.Uint256;
 import org.tron.trident.api.GrpcAPI.EmptyMessage;
+import org.tron.trident.core.exceptions.IllegalException;
+import org.tron.trident.proto.Chain;
 import org.tron.trident.proto.Chain.Transaction;
 import org.tron.trident.proto.Contract.TriggerSmartContract;
 import org.tron.trident.proto.Response.BlockExtention;
@@ -17,7 +20,9 @@ import org.tron.trident.proto.Response.TransactionExtention;
 import org.tron.trident.proto.Response.TransactionReturn;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.bouncycastle.util.encoders.Hex;
 import org.junit.jupiter.api.Test;
@@ -27,6 +32,16 @@ public class ApiWrapperTest {
     public void testGetNowBlockQuery() {
         ApiWrapper client = ApiWrapper.ofShasta("3333333333333333333333333333333333333333333333333333333333333333");
         BlockExtention block = client.blockingStub.getNowBlock2(EmptyMessage.newBuilder().build());
+
+        System.out.println(block.getBlockHeader());
+        assertTrue(block.getBlockHeader().getRawDataOrBuilder().getNumber() > 0);
+    }
+
+    @Test
+    public void testGetNowBlockQueryWithTimeout() throws IllegalException {
+        List<ClientInterceptor> clientInterceptors = new ArrayList<>();
+        ApiWrapper client =new ApiWrapper(Constant.FULLNODE_NILE, Constant.FULLNODE_NILE_SOLIDITY, "3333333333333333333333333333333333333333333333333333333333333333",clientInterceptors,2000);
+        Chain.Block block = client.getNowBlock();
 
         System.out.println(block.getBlockHeader());
         assertTrue(block.getBlockHeader().getRawDataOrBuilder().getNumber() > 0);

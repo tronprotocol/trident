@@ -83,6 +83,7 @@ import io.grpc.stub.MetadataUtils;
 
 import java.nio.ByteBuffer;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import org.tron.trident.crypto.tuwenitypes.Bytes32;
 import org.bouncycastle.jcajce.provider.digest.Keccak;
@@ -141,8 +142,9 @@ public class ApiWrapper {
         Metadata.Key<String> key = Metadata.Key.of("TRON-PRO-API-KEY", Metadata.ASCII_STRING_MARSHALLER);
         header.put(key, apiKey);
 
-        blockingStub = (WalletGrpc.WalletBlockingStub)MetadataUtils.attachHeaders(WalletGrpc.newBlockingStub(channel), header);
-        blockingStubSolidity = (WalletSolidityGrpc.WalletSolidityBlockingStub)MetadataUtils.attachHeaders(WalletSolidityGrpc.newBlockingStub(channelSolidity), header);
+        //create a client to interceptor to attach the custom metadata headers
+        blockingStub = WalletGrpc.newBlockingStub(channel).withInterceptors(MetadataUtils.newAttachHeadersInterceptor(header));
+        blockingStubSolidity = WalletSolidityGrpc.newBlockingStub(channelSolidity).withInterceptors(MetadataUtils.newAttachHeadersInterceptor(header));
 
         keyPair = new KeyPair(hexPrivateKey);
     }
@@ -155,6 +157,31 @@ public class ApiWrapper {
         channelSolidity = ManagedChannelBuilder.forTarget(grpcEndpointSolidity).usePlaintext().build();
         blockingStub = WalletGrpc.newBlockingStub(channel);
         blockingStubSolidity = WalletSolidityGrpc.newBlockingStub(channelSolidity);
+        keyPair = new KeyPair(hexPrivateKey);
+    }
+
+     /*
+        constructor enable setting timeout
+      */
+    public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey, int timeout) {
+        channel = ManagedChannelBuilder.forTarget(grpcEndpoint).usePlaintext().build();
+        channelSolidity = ManagedChannelBuilder.forTarget(grpcEndpointSolidity).usePlaintext().build();
+        blockingStub = WalletGrpc.newBlockingStub(channel).withDeadlineAfter(timeout, TimeUnit.MILLISECONDS);
+        blockingStubSolidity = WalletSolidityGrpc.newBlockingStub(channelSolidity).withDeadlineAfter(timeout, TimeUnit.MILLISECONDS);
+        keyPair = new KeyPair(hexPrivateKey);
+    }
+
+    /*
+       constructor enable setting timeout and custom interceptors
+     */
+    public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey, List<ClientInterceptor> clientInterceptors,int timeout) {
+        channel = ManagedChannelBuilder.forTarget(grpcEndpoint)
+                .intercept(clientInterceptors)
+                .usePlaintext()
+                .build();
+        channelSolidity = ManagedChannelBuilder.forTarget(grpcEndpointSolidity).usePlaintext().build();
+        blockingStub = WalletGrpc.newBlockingStub(channel).withDeadlineAfter(timeout, TimeUnit.MILLISECONDS);
+        blockingStubSolidity = WalletSolidityGrpc.newBlockingStub(channelSolidity).withDeadlineAfter(timeout, TimeUnit.MILLISECONDS);
         keyPair = new KeyPair(hexPrivateKey);
     }
 
@@ -171,7 +198,7 @@ public class ApiWrapper {
     }*/
 
     /**
-     * The constuctor for main net. Use TronGrid as default
+     * The constructor for main net. Use TronGrid as default
      * @param hexPrivateKey the binding private key. Operations require private key will all use this unless the private key is specified elsewhere.
      * @param apiKey this function works with TronGrid, an API key is required.
      * @return a ApiWrapper object
@@ -181,7 +208,7 @@ public class ApiWrapper {
     }
 
     /**
-     * The constuctor for main net.
+     * The constructor for main net.
      * @deprecated 
      * This method will only be available before TronGrid prohibits the use without API key
      * 
@@ -195,7 +222,7 @@ public class ApiWrapper {
     }
 
     /**
-     * The constuctor for Shasta test net. Use TronGrid as default.
+     * The constructor for Shasta test net. Use TronGrid as default.
      * @param hexPrivateKey the binding private key. Operations require private key will all use this unless the private key is specified elsewhere.
      * @param apiKey this function works with TronGrid, an API key is required.
      * @return a ApiWrapper object
@@ -205,7 +232,7 @@ public class ApiWrapper {
     }
 
     /**
-     * The constuctor for Nile test net.
+     * The constructor for Nile test net.
      * @param hexPrivateKey the binding private key. Operations require private key will all use this unless the private key is specified elsewhere.
      * @return a ApiWrapper object
      */

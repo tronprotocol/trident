@@ -27,7 +27,7 @@ Then add required packages as dependencies. Please add dependencies locally.
 ```groovy
 dependencies {
     // protobuf & grpc
-    implementation 'com.google.protobuf:protobuf-java:3.11.0'
+    implementation 'com.google.protobuf:protobuf-java:3.25.0'
 
     implementation fileTree(dir:'../core')
     implementation fileTree(dir:'../utils')
@@ -51,21 +51,21 @@ dependencies {
 <dependency>
   <groupId>org.tron.trident</groupId>
   <artifactId>abi</artifactId>
-  <version>0.8.0</version>
+  <version>0.9.0</version>
   <scope>system</scope>
   <systemPath>your path</systemPath>
 </dependency>
 <dependency>
   <groupId>org.tron.trident</groupId>
   <artifactId>utils</artifactId>
-  <version>0.8.0</version>
+  <version>0.9.0</version>
   <scope>system</scope>
   <systemPath>your path</systemPath>
 </dependency>
 <dependency>
   <groupId>org.tron.trident</groupId>
   <artifactId>core</artifactId>
-  <version>0.8.0</version>
+  <version>0.9.0</version>
   <scope>system</scope>
   <systemPath>your path</systemPath>
 </dependency>
