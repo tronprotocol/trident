@@ -149,6 +149,22 @@ public class ApiWrapper {
         keyPair = new KeyPair(hexPrivateKey);
     }
 
+    public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey, String apiKey, int timeout) {
+        channel = ManagedChannelBuilder.forTarget(grpcEndpoint).usePlaintext().build();
+        channelSolidity = ManagedChannelBuilder.forTarget(grpcEndpointSolidity).usePlaintext().build();
+
+        //attach api key
+        Metadata header = new Metadata();
+        Metadata.Key<String> key = Metadata.Key.of("TRON-PRO-API-KEY", Metadata.ASCII_STRING_MARSHALLER);
+        header.put(key, apiKey);
+
+        //create a client to interceptor to attach the custom metadata headers
+        blockingStub = WalletGrpc.newBlockingStub(channel).withInterceptors(MetadataUtils.newAttachHeadersInterceptor(header)).withDeadlineAfter(timeout, TimeUnit.MILLISECONDS);
+        blockingStubSolidity = WalletSolidityGrpc.newBlockingStub(channelSolidity).withInterceptors(MetadataUtils.newAttachHeadersInterceptor(header)).withDeadlineAfter(timeout, TimeUnit.MILLISECONDS);
+
+        keyPair = new KeyPair(hexPrivateKey);
+    }
+
     public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey, List<ClientInterceptor> clientInterceptors) {
         channel = ManagedChannelBuilder.forTarget(grpcEndpoint)
             .intercept(clientInterceptors)
