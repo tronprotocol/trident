@@ -360,15 +360,18 @@ public class ApiWrapper {
      */
     public TransactionExtention createTransactionExtention(Message request, Transaction.Contract.ContractType contractType) throws IllegalException {
         TransactionExtention.Builder trxExtBuilder = TransactionExtention.newBuilder();
-
+        TransactionReturn.Builder retBuilder = TransactionReturn.newBuilder();
         try {
             TransactionCapsule trx = createTransaction(request, contractType);
             trxExtBuilder.setTransaction(trx.getTransaction());
             trxExtBuilder.setTxid(ByteString.copyFrom(Sha256Hash.hash(true, trx.getTransaction().getRawData().toByteArray())));
+            retBuilder.setResult(true).setCode(TransactionReturn.response_code.SUCCESS);
         } catch (Exception e) {
+            retBuilder.setResult(false).setCode(TransactionReturn.response_code.OTHER_ERROR)
+                    .setMessage(ByteString.copyFromUtf8(e.getClass() + " : " + e.getMessage()));
             throw new IllegalException("createTransactionExtention error,"+e.getMessage());
         }
-
+        trxExtBuilder.setResult(retBuilder);
         return trxExtBuilder.build();
     }
 
