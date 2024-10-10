@@ -228,7 +228,7 @@ public class ApiWrapper {
      * @return a ApiWrapper object
      */
     public static ApiWrapper ofShasta(String hexPrivateKey) {
-        return new ApiWrapper(Constant.TRONGRID_SHASTA, Constant.TRONGRID_SHASTA_SOLIDITY, hexPrivateKey);
+        return new ApiWrapper(Constant.TRONGRID_SHASTA, Constant.TRONGRID_SHASTA_SOLIDITY, hexPrivateKey);
     }
 
     /**
@@ -360,15 +360,18 @@ public class ApiWrapper {
      */
     public TransactionExtention createTransactionExtention(Message request, Transaction.Contract.ContractType contractType) throws IllegalException {
         TransactionExtention.Builder trxExtBuilder = TransactionExtention.newBuilder();
-
+        TransactionReturn.Builder retBuilder = TransactionReturn.newBuilder();
         try {
             TransactionCapsule trx = createTransaction(request, contractType);
             trxExtBuilder.setTransaction(trx.getTransaction());
             trxExtBuilder.setTxid(ByteString.copyFrom(Sha256Hash.hash(true, trx.getTransaction().getRawData().toByteArray())));
+            retBuilder.setResult(true).setCode(TransactionReturn.response_code.SUCCESS);
         } catch (Exception e) {
+            retBuilder.setResult(false).setCode(TransactionReturn.response_code.OTHER_ERROR)
+                    .setMessage(ByteString.copyFromUtf8(e.getClass() + " : " + e.getMessage()));
             throw new IllegalException("createTransactionExtention error,"+e.getMessage());
         }
-
+        trxExtBuilder.setResult(retBuilder);
         return trxExtBuilder.build();
     }
 
@@ -394,30 +397,43 @@ public class ApiWrapper {
         switch (code) {
             case 0:
                 responseCode = "SUCCESS";
+                break;
             case 1:
                 responseCode = "SIGERROR";
+                break;
             case 2:
                 responseCode = "CONTRACT_VALIDATE_ERROR";
+                break;
             case 3:
                 responseCode = "CONTRACT_EXE_ERROR";
+                break;
             case 4:
                 responseCode = "BANDWITH_ERROR";
+                break;
             case 5:
                 responseCode = "DUP_TRANSACTION_ERROR";
+                break;
             case 6:
                 responseCode = "TAPOS_ERROR";
+                break;
             case 7:
                 responseCode = "TOO_BIG_TRANSACTION_ERROR";
+                break;
             case 8:
                 responseCode = "TRANSACTION_EXPIRATION_ERROR";
+                break;
             case 9:
                 responseCode = "SERVER_BUSY";
+                break;
             case 10:
                 responseCode = "NO_CONNECTION";
+                break;
             case 11:
                 responseCode = "NOT_ENOUGH_EFFECTIVE_CONNECTION";
+                break;
             case 20:
                 responseCode = "OTHER_ERROR";
+                break;
         }
         return responseCode;
     }
