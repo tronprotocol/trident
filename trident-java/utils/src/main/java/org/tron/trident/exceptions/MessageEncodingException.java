@@ -10,15 +10,19 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+
 package org.tron.trident.exceptions;
 
-/** Encoding exception. */
+/**
+ * Encoding exception.
+ */
 public class MessageEncodingException extends RuntimeException {
-    public MessageEncodingException(String message) {
-        super(message);
-    }
 
-    public MessageEncodingException(String message, Throwable cause) {
-        super(message, cause);
-    }
+  public MessageEncodingException(String message) {
+    super(message);
+  }
+
+  public MessageEncodingException(String message, Throwable cause) {
+    super(message, cause);
+  }
 }

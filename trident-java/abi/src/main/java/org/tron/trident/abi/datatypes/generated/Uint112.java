@@ -10,13 +10,14 @@ import org.tron.trident.abi.datatypes.Uint;
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  */
 public class Uint112 extends Uint {
-    public static final Uint112 DEFAULT = new Uint112(BigInteger.ZERO);
 
-    public Uint112(BigInteger value) {
-        super(112, value);
-    }
+  public static final Uint112 DEFAULT = new Uint112(BigInteger.ZERO);
 
-    public Uint112(long value) {
-        this(BigInteger.valueOf(value));
-    }
+  public Uint112(BigInteger value) {
+    super(112, value);
+  }
+
+  public Uint112(long value) {
+    this(BigInteger.valueOf(value));
+  }
 }

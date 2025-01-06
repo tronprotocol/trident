@@ -10,13 +10,14 @@ import org.tron.trident.abi.datatypes.Uint;
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  */
 public class Uint16 extends Uint {
-    public static final Uint16 DEFAULT = new Uint16(BigInteger.ZERO);
 
-    public Uint16(BigInteger value) {
-        super(16, value);
-    }
+  public static final Uint16 DEFAULT = new Uint16(BigInteger.ZERO);
 
-    public Uint16(long value) {
-        this(BigInteger.valueOf(value));
-    }
+  public Uint16(BigInteger value) {
+    super(16, value);
+  }
+
+  public Uint16(long value) {
+    this(BigInteger.valueOf(value));
+  }
 }

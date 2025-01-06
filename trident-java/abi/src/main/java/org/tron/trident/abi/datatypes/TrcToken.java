@@ -10,31 +10,34 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+
 package org.tron.trident.abi.datatypes;
 
 import java.math.BigInteger;
 
-/** Unsigned integer type. */
+/**
+ * Unsigned integer type.
+ */
 public class TrcToken extends IntType {
 
-    public static final String TYPE_NAME = "trcToken";
-    public static final Uint DEFAULT = new Uint(BigInteger.ZERO);
+  public static final String TYPE_NAME = "trcToken";
+  public static final Uint DEFAULT = new Uint(BigInteger.ZERO);
 
-    protected TrcToken(int bitSize, BigInteger value) {
-        super(TYPE_NAME, bitSize, value);
-    }
+  protected TrcToken(int bitSize, BigInteger value) {
+    super(TYPE_NAME, bitSize, value);
+  }
 
-    public TrcToken(int value) {
-        this(BigInteger.valueOf(value));
-    }
+  public TrcToken(int value) {
+    this(BigInteger.valueOf(value));
+  }
 
-    public TrcToken(BigInteger value) {
-        // "int" values should be declared as int256 in computing function selectors
-        this(MAX_BIT_LENGTH, value);
-    }
+  public TrcToken(BigInteger value) {
+    // "int" values should be declared as int256 in computing function selectors
+    this(MAX_BIT_LENGTH, value);
+  }
 
-    @Override
-    protected boolean valid() {
-        return super.valid() && 0 <= value.signum();
-    }
+  @Override
+  protected boolean valid() {
+    return super.valid() && 0 <= value.signum();
+  }
 }

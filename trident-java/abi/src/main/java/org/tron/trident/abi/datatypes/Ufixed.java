@@ -10,34 +10,37 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+
 package org.tron.trident.abi.datatypes;
 
 import java.math.BigInteger;
 
-/** Signed fixed type. */
+/**
+ * Signed fixed type.
+ */
 public class Ufixed extends FixedPointType {
 
-    public static final String TYPE_NAME = "ufixed";
-    public static final Ufixed DEFAULT = new Ufixed(BigInteger.ZERO);
+  public static final String TYPE_NAME = "ufixed";
+  public static final Ufixed DEFAULT = new Ufixed(BigInteger.ZERO);
 
-    protected Ufixed(int mBitSize, int nBitSize, BigInteger value) {
-        super(TYPE_NAME, mBitSize, nBitSize, value);
-    }
+  protected Ufixed(int mBitSize, int nBitSize, BigInteger value) {
+    super(TYPE_NAME, mBitSize, nBitSize, value);
+  }
 
-    public Ufixed(BigInteger value) {
-        this(DEFAULT_BIT_LENGTH, DEFAULT_BIT_LENGTH, value);
-    }
+  public Ufixed(BigInteger value) {
+    this(DEFAULT_BIT_LENGTH, DEFAULT_BIT_LENGTH, value);
+  }
 
-    public Ufixed(BigInteger m, BigInteger n) {
-        this(convert(m, n));
-    }
+  public Ufixed(BigInteger m, BigInteger n) {
+    this(convert(m, n));
+  }
 
-    protected Ufixed(int mBitSize, int nBitSize, BigInteger m, BigInteger n) {
-        this(convert(mBitSize, nBitSize, m, n));
-    }
+  protected Ufixed(int mBitSize, int nBitSize, BigInteger m, BigInteger n) {
+    this(convert(mBitSize, nBitSize, m, n));
+  }
 
-    @Override
-    boolean valid(int mBitSize, int nBitSize, BigInteger value) {
-        return super.valid(mBitSize, nBitSize, value) && value.signum() != -1;
-    }
+  @Override
+  boolean valid(int mBitSize, int nBitSize, BigInteger value) {
+    return super.valid(mBitSize, nBitSize, value) && value.signum() != -1;
+  }
 }

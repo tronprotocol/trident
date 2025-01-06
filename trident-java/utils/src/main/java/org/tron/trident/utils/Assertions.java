@@ -10,20 +10,23 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+
 package org.tron.trident.utils;
 
-/** Assertion utility functions. */
+/**
+ * Assertion utility functions.
+ */
 public class Assertions {
 
-    /**
-     * Verify that the provided precondition holds true.
-     *
-     * @param assertionResult assertion value
-     * @param errorMessage error message if precondition failure
-     */
-    public static void verifyPrecondition(boolean assertionResult, String errorMessage) {
-        if (!assertionResult) {
-            throw new RuntimeException(errorMessage);
-        }
+  /**
+   * Verify that the provided precondition holds true.
+   *
+   * @param assertionResult assertion value
+   * @param errorMessage error message if precondition failure
+   */
+  public static void verifyPrecondition(boolean assertionResult, String errorMessage) {
+    if (!assertionResult) {
+      throw new RuntimeException(errorMessage);
     }
+  }
 }

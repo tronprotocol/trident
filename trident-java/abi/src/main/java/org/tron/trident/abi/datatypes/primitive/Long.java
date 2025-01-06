@@ -10,19 +10,20 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+
 package org.tron.trident.abi.datatypes.primitive;
 
-import org.tron.trident.abi.datatypes.generated.Int64;
 import org.tron.trident.abi.datatypes.NumericType;
+import org.tron.trident.abi.datatypes.generated.Int64;
 
 public final class Long extends Number<java.lang.Long> {
 
-    public Long(long value) {
-        super(value);
-    }
+  public Long(long value) {
+    super(value);
+  }
 
-    @Override
-    public NumericType toSolidityType() {
-        return new Int64(getValue());
-    }
+  @Override
+  public NumericType toSolidityType() {
+    return new Int64(getValue());
+  }
 }

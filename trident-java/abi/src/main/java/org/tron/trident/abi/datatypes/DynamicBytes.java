@@ -10,15 +10,18 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+
 package org.tron.trident.abi.datatypes;
 
-/** Dynamically allocated sequence of bytes. */
+/**
+ * Dynamically allocated sequence of bytes.
+ */
 public class DynamicBytes extends BytesType {
 
-    public static final String TYPE_NAME = "bytes";
-    public static final DynamicBytes DEFAULT = new DynamicBytes(new byte[] {});
+  public static final String TYPE_NAME = "bytes";
+  public static final DynamicBytes DEFAULT = new DynamicBytes(new byte[] {});
 
-    public DynamicBytes(byte[] value) {
-        super(value, TYPE_NAME);
-    }
+  public DynamicBytes(byte[] value) {
+    super(value, TYPE_NAME);
+  }
 }

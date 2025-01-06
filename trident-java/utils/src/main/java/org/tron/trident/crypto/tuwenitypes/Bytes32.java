@@ -10,6 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+
 package org.tron.trident.crypto.tuwenitypes;
 
 import java.security.SecureRandom;
@@ -22,10 +23,15 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * A {@link Bytes} value that is guaranteed to contain exactly 32 bytes.
  */
 public interface Bytes32 extends Bytes {
-  /** The number of bytes in this value - i.e. 32 */
+
+  /**
+   * The number of bytes in this value - i.e. 32
+   */
   int SIZE = 32;
 
-  /** A {@code Bytes32} containing all zero bytes */
+  /**
+   * A {@code Bytes32} containing all zero bytes
+   */
   Bytes32 ZERO = wrap(new byte[32]);
 
   /**
@@ -54,11 +60,11 @@ public interface Bytes32 extends Bytes {
    *
    * @param bytes The bytes to wrap.
    * @param offset The index (inclusive) in {@code value} of the first byte exposed by the returned value. In other
-   *        words, you will have {@code wrap(value, i).get(0) == value[i]}.
+   * words, you will have {@code wrap(value, i).get(0) == value[i]}.
    * @return A {@link Bytes32} that exposes the bytes of {@code value} from {@code offset} (inclusive) to
-   *         {@code offset + 32} (exclusive).
+   * {@code offset + 32} (exclusive).
    * @throws IndexOutOfBoundsException if {@code offset < 0 || (value.length > 0 && offset >=
-   *     value.length)}.
+   * value.length)}.
    * @throws IllegalArgumentException if {@code length < 0 || offset + 32 > value.length}.
    */
   static Bytes32 wrap(byte[] bytes, int offset) {
@@ -95,11 +101,11 @@ public interface Bytes32 extends Bytes {
    *
    * @param value The bytes to wrap.
    * @param offset The index (inclusive) in {@code value} of the first byte exposed by the returned value. In other
-   *        words, you will have {@code wrap(value, i).get(0) == value.get(i)}.
+   * words, you will have {@code wrap(value, i).get(0) == value.get(i)}.
    * @return A {@link Bytes32} that exposes the bytes of {@code value} from {@code offset} (inclusive) to
-   *         {@code offset + 32} (exclusive).
+   * {@code offset + 32} (exclusive).
    * @throws IndexOutOfBoundsException if {@code offset < 0 || (value.size() > 0 && offset >=
-   *     value.size())}.
+   * value.size())}.
    * @throws IllegalArgumentException if {@code length < 0 || offset + 32 > value.size()}.
    */
   static Bytes32 wrap(Bytes value, int offset) {
@@ -155,11 +161,11 @@ public interface Bytes32 extends Bytes {
    * an additional 0 in front.
    *
    * @param str The hexadecimal string to parse, which may or may not start with "0x". That representation may contain
-   *        less than 32 bytes, in which case the result is left padded with zeros (see {@link #fromHexStringStrict} if
-   *        this is not what you want).
+   * less than 32 bytes, in which case the result is left padded with zeros (see {@link #fromHexStringStrict} if
+   * this is not what you want).
    * @return The value corresponding to {@code str}.
    * @throws IllegalArgumentException if {@code str} does not correspond to a valid hexadecimal representation or
-   *         contains more than 32 bytes.
+   * contains more than 32 bytes.
    */
   static Bytes32 fromHexStringLenient(CharSequence str) {
     checkNotNull(str);
@@ -173,11 +179,11 @@ public interface Bytes32 extends Bytes {
    * This method is strict in that {@code str} must of an even length.
    *
    * @param str The hexadecimal string to parse, which may or may not start with "0x". That representation may contain
-   *        less than 32 bytes, in which case the result is left padded with zeros (see {@link #fromHexStringStrict} if
-   *        this is not what you want).
+   * less than 32 bytes, in which case the result is left padded with zeros (see {@link #fromHexStringStrict} if
+   * this is not what you want).
    * @return The value corresponding to {@code str}.
    * @throws IllegalArgumentException if {@code str} does not correspond to a valid hexadecimal representation, is of an
-   *         odd length, or contains more than 32 bytes.
+   * odd length, or contains more than 32 bytes.
    */
   static Bytes32 fromHexString(CharSequence str) {
     checkNotNull(str);
@@ -215,7 +221,7 @@ public interface Bytes32 extends Bytes {
    * @param str The hexadecimal string to parse, which may or may not start with "0x".
    * @return The value corresponding to {@code str}.
    * @throws IllegalArgumentException if {@code str} does not correspond to a valid hexadecimal representation, is of an
-   *         odd length or does not contain exactly 32 bytes.
+   * odd length or does not contain exactly 32 bytes.
    */
   static Bytes32 fromHexStringStrict(CharSequence str) {
     checkNotNull(str);

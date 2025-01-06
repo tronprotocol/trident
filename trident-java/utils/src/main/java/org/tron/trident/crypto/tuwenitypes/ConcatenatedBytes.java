@@ -10,6 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+
 package org.tron.trident.crypto.tuwenitypes;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -41,7 +42,8 @@ final class ConcatenatedBytes extends AbstractBytes {
       try {
         totalSize = Math.addExact(totalSize, size);
       } catch (ArithmeticException e) {
-        throw new IllegalArgumentException("Combined length of values is too long (> Integer.MAX_VALUE)");
+        throw new IllegalArgumentException(
+            "Combined length of values is too long (> Integer.MAX_VALUE)");
       }
       if (value instanceof ConcatenatedBytes) {
         count += ((ConcatenatedBytes) value).values.length;

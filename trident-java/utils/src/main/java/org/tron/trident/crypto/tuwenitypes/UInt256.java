@@ -10,6 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+
 package org.tron.trident.crypto.tuwenitypes;
 
 import java.math.BigInteger;
@@ -23,9 +24,11 @@ import static com.google.common.base.Preconditions.checkArgument;
  * This is a raw {@link UInt256Value} - a 256-bit precision unsigned number of no particular unit.
  */
 public final class UInt256 implements UInt256Value<UInt256> {
+
   private final static int MAX_CONSTANT = 64;
   private final static BigInteger BI_MAX_CONSTANT = BigInteger.valueOf(MAX_CONSTANT);
   private static UInt256[] CONSTANTS = new UInt256[MAX_CONSTANT + 1];
+
   static {
     CONSTANTS[0] = new UInt256(Bytes32.ZERO);
     for (int i = 1; i <= MAX_CONSTANT; ++i) {
@@ -33,13 +36,21 @@ public final class UInt256 implements UInt256Value<UInt256> {
     }
   }
 
-  /** The minimum value of a UInt256 */
+  /**
+   * The minimum value of a UInt256
+   */
   public final static UInt256 MIN_VALUE = valueOf(0);
-  /** The maximum value of a UInt256 */
+  /**
+   * The maximum value of a UInt256
+   */
   public final static UInt256 MAX_VALUE = new UInt256(Bytes32.ZERO.not());
-  /** The value 0 */
+  /**
+   * The value 0
+   */
   public final static UInt256 ZERO = valueOf(0);
-  /** The value 1 */
+  /**
+   * The value 1
+   */
   public final static UInt256 ONE = valueOf(1);
 
   private static final int INTS_SIZE = 32 / 4;
@@ -139,10 +150,10 @@ public final class UInt256 implements UInt256Value<UInt256> {
    * Parse a hexadecimal string into a {@link UInt256}.
    *
    * @param str The hexadecimal string to parse, which may or may not start with "0x". That representation may contain
-   *        less than 32 bytes, in which case the result is left padded with zeros.
+   * less than 32 bytes, in which case the result is left padded with zeros.
    * @return The value corresponding to {@code str}.
    * @throws IllegalArgumentException if {@code str} does not correspond to a valid hexadecimal representation or
-   *         contains more than 32 bytes.
+   * contains more than 32 bytes.
    */
   public static UInt256 fromHexString(String str) {
     return new UInt256(Bytes32.fromHexStringLenient(str));
@@ -248,7 +259,8 @@ public final class UInt256 implements UInt256Value<UInt256> {
     if (modulus.isZero()) {
       throw new ArithmeticException("addMod with zero modulus");
     }
-    return UInt256.valueOf(toBigInteger().add(BigInteger.valueOf(value)).mod(modulus.toBigInteger()));
+    return UInt256.valueOf(
+        toBigInteger().add(BigInteger.valueOf(value)).mod(modulus.toBigInteger()));
   }
 
   @Override
@@ -259,7 +271,8 @@ public final class UInt256 implements UInt256Value<UInt256> {
     if (modulus < 0) {
       throw new ArithmeticException("addMod unsigned with negative modulus");
     }
-    return UInt256.valueOf(toBigInteger().add(BigInteger.valueOf(value)).mod(BigInteger.valueOf(modulus)));
+    return UInt256.valueOf(
+        toBigInteger().add(BigInteger.valueOf(value)).mod(BigInteger.valueOf(modulus)));
   }
 
   @Override
@@ -270,7 +283,8 @@ public final class UInt256 implements UInt256Value<UInt256> {
 
     int[] result = new int[INTS_SIZE];
     boolean constant = true;
-    long sum = (this.ints[INTS_SIZE - 1] & LONG_MASK) + ((~value.ints[INTS_SIZE - 1]) & LONG_MASK) + 1;
+    long sum =
+        (this.ints[INTS_SIZE - 1] & LONG_MASK) + ((~value.ints[INTS_SIZE - 1]) & LONG_MASK) + 1;
     result[INTS_SIZE - 1] = (int) (sum & LONG_MASK);
     if (result[INTS_SIZE - 1] < 0 || result[INTS_SIZE - 1] > MAX_CONSTANT) {
       constant = false;
@@ -331,7 +345,8 @@ public final class UInt256 implements UInt256Value<UInt256> {
     for (int i = INTS_SIZE; i < (INTS_SIZE + INTS_SIZE) - 1; ++i) {
       constant &= (result[i] == 0);
     }
-    if (constant && result[INTS_SIZE + INTS_SIZE - 1] >= 0 && result[INTS_SIZE + INTS_SIZE - 1] <= MAX_CONSTANT) {
+    if (constant && result[INTS_SIZE + INTS_SIZE - 1] >= 0
+        && result[INTS_SIZE + INTS_SIZE - 1] <= MAX_CONSTANT) {
       return CONSTANTS[result[INTS_SIZE + INTS_SIZE - 1]];
     }
     return new UInt256(Arrays.copyOfRange(result, INTS_SIZE, INTS_SIZE + INTS_SIZE));
@@ -366,7 +381,8 @@ public final class UInt256 implements UInt256Value<UInt256> {
     if (value.equals(UInt256.ONE)) {
       return mod(modulus);
     }
-    return UInt256.valueOf(toBigInteger().multiply(value.toBigInteger()).mod(modulus.toBigInteger()));
+    return UInt256.valueOf(
+        toBigInteger().multiply(value.toBigInteger()).mod(modulus.toBigInteger()));
   }
 
   @Override
@@ -383,7 +399,8 @@ public final class UInt256 implements UInt256Value<UInt256> {
     if (value < 0) {
       throw new ArithmeticException("multiplyMod unsigned by negative");
     }
-    return UInt256.valueOf(toBigInteger().multiply(BigInteger.valueOf(value)).mod(modulus.toBigInteger()));
+    return UInt256.valueOf(
+        toBigInteger().multiply(BigInteger.valueOf(value)).mod(modulus.toBigInteger()));
   }
 
   @Override
@@ -403,7 +420,8 @@ public final class UInt256 implements UInt256Value<UInt256> {
     if (value < 0) {
       throw new ArithmeticException("multiplyMod unsigned by negative");
     }
-    return UInt256.valueOf(toBigInteger().multiply(BigInteger.valueOf(value)).mod(BigInteger.valueOf(modulus)));
+    return UInt256.valueOf(
+        toBigInteger().multiply(BigInteger.valueOf(value)).mod(BigInteger.valueOf(modulus)));
   }
 
   @Override
@@ -632,7 +650,7 @@ public final class UInt256 implements UInt256Value<UInt256> {
 
     int resIdx = INTS_SIZE;
     if (s == 0) {
-      for (int i = INTS_SIZE - d; i > 0;) {
+      for (int i = INTS_SIZE - d; i > 0; ) {
         result[--resIdx] = this.ints[--i];
       }
     } else {
@@ -664,7 +682,7 @@ public final class UInt256 implements UInt256Value<UInt256> {
 
     int resIdx = 0;
     if (s == 0) {
-      for (int i = d; i < INTS_SIZE;) {
+      for (int i = d; i < INTS_SIZE; ) {
         result[resIdx++] = this.ints[i++];
       }
     } else {
@@ -749,7 +767,8 @@ public final class UInt256 implements UInt256Value<UInt256> {
     if (!fitsLong()) {
       throw new ArithmeticException("Value does not fit a 8 byte long");
     }
-    return (((long) this.ints[INTS_SIZE - 2]) << 32) | (((long) (this.ints[INTS_SIZE - 1])) & LONG_MASK);
+    return (((long) this.ints[INTS_SIZE - 2]) << 32) | (((long) (this.ints[INTS_SIZE - 1]))
+        & LONG_MASK);
   }
 
   @Override

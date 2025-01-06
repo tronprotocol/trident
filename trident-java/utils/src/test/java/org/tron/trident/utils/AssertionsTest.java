@@ -10,6 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+
 package org.tron.trident.utils;
 
 import org.junit.jupiter.api.Test;
@@ -18,14 +19,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AssertionsTest {
 
-    @Test
-    public void testVerifyPrecondition() {
-        Assertions.verifyPrecondition(true, "");
-    }
+  @Test
+  public void testVerifyPrecondition() {
+    Assertions.verifyPrecondition(true, "");
+  }
 
-    @Test
-    public void testVerifyPreconditionFailure() {
+  @Test
+  public void testVerifyPreconditionFailure() {
 
-        assertThrows(RuntimeException.class, () -> Assertions.verifyPrecondition(false, ""));
-    }
+    assertThrows(RuntimeException.class, () -> Assertions.verifyPrecondition(false, ""));
+  }
 }

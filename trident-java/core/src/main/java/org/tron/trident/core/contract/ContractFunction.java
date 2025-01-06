@@ -1,11 +1,9 @@
 package org.tron.trident.core.contract;
 
 import com.google.protobuf.ByteString;
-import org.tron.trident.proto.Common.SmartContract.ABI.Entry;
-
-import java.lang.StringBuilder;
 import java.util.ArrayList;
 import java.util.List;
+import org.tron.trident.proto.Common.SmartContract.ABI.Entry;
 
 /**
  * The class {@code ContractFunction} provides a easier way to access smart contract
@@ -15,24 +13,25 @@ import java.util.List;
  * declaration and easy to call by construct a {@link
  * org.tron.trident.abi.datatypes.Function}</p>
  *
- * @since jdk 1.8.0_231
  * @see org.tron.trident.abi.datatypes.Function
  * @see org.tron.trident.proto.Common.SmartContract
+ * @since jdk 1.8.0_231
  */
 
 public class ContractFunction {
-    private String name;
-    private Entry abi;
-    private Contract cntr;
-    private ByteString ownerAddr;
-    private List<String> inputParams = new ArrayList();
-    private List<String> inputTypes = new ArrayList();
-    private String output = "";
-    private String outputType;
-    private long callValue = 0;
-    private long callTokenValue = 0;
-    private int callTokenId = 0;
-    private String stateMutability;
+
+  private String name;
+  private Entry abi;
+  private Contract cntr;
+  private ByteString ownerAddr;
+  private List<String> inputParams = new ArrayList();
+  private List<String> inputTypes = new ArrayList();
+  private String output = "";
+  private String outputType;
+  private long callValue = 0;
+  private long callTokenValue = 0;
+  private int callTokenId = 0;
+  private String stateMutability;
 
   public ContractFunction(Builder builder) {
     this.name = builder.name;
@@ -146,6 +145,7 @@ public class ContractFunction {
   }
 
   public static class Builder {
+
     private String name;
     private Entry abi;
     private Contract cntr;
@@ -160,67 +160,67 @@ public class ContractFunction {
     private String stateMutability;
 
     public Builder setName(String name) {
-        this.name = name;
-        return this;
+      this.name = name;
+      return this;
     }
 
     public Builder setAbi(Entry abi) {
-        this.abi = abi;
-        return this;
+      this.abi = abi;
+      return this;
     }
 
     public Builder setCntr(Contract cntr) {
-        this.cntr = cntr;
-        return this;
+      this.cntr = cntr;
+      return this;
     }
 
     public Builder setOwnerAddr(ByteString ownerAddr) {
-        this.ownerAddr = ownerAddr;
-        return this;
+      this.ownerAddr = ownerAddr;
+      return this;
     }
 
     public Builder setInputParams(List inputParams) {
-        this.inputParams = inputParams;
-        return this;
+      this.inputParams = inputParams;
+      return this;
     }
 
     public Builder setInputTypes(List inputTypes) {
-        this.inputTypes = inputTypes;
-        return this;
+      this.inputTypes = inputTypes;
+      return this;
     }
 
     public Builder setOutput(String output) {
-        this.output = output;
-        return this;
+      this.output = output;
+      return this;
     }
 
     public Builder setOutputType(String outputType) {
-        this.outputType = outputType;
-        return this;
+      this.outputType = outputType;
+      return this;
     }
 
     public Builder setCallValue(long callValue) {
-        this.callValue = callValue;
-        return this;
+      this.callValue = callValue;
+      return this;
     }
 
     public Builder setCallTokenValue(long callTokenValue) {
-        this.callTokenValue = callTokenValue;
-        return this;
+      this.callTokenValue = callTokenValue;
+      return this;
     }
 
     public Builder setCallTokenId(int callTokenId) {
-        this.callTokenId = callTokenId;
-        return this;
+      this.callTokenId = callTokenId;
+      return this;
     }
-  
+
     public Builder setStateMutability(String stateMutability) {
       this.stateMutability = stateMutability;
       return this;
     }
 
     public ContractFunction build() {
-        return new ContractFunction(this);
+      return new ContractFunction(this);
     }
   }
 
@@ -240,7 +240,7 @@ public class ContractFunction {
     ret.append(outputType);
     ret.append(" " + output);
     ret.append(")");
-    
+
     return ret.toString();
   }
 

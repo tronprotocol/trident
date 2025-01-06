@@ -28,58 +28,64 @@ import org.bouncycastle.util.encoders.Hex;
 import org.junit.jupiter.api.Test;
 
 public class ApiWrapperTest {
-    @Test
-    public void testGetNowBlockQuery() {
-        ApiWrapper client = ApiWrapper.ofShasta("3333333333333333333333333333333333333333333333333333333333333333");
-        BlockExtention block = client.blockingStub.getNowBlock2(EmptyMessage.newBuilder().build());
 
-        System.out.println(block.getBlockHeader());
-        assertTrue(block.getBlockHeader().getRawDataOrBuilder().getNumber() > 0);
-    }
+  @Test
+  public void testGetNowBlockQuery() {
+    ApiWrapper client = ApiWrapper.ofShasta(
+        "3333333333333333333333333333333333333333333333333333333333333333");
+    BlockExtention block = client.blockingStub.getNowBlock2(EmptyMessage.newBuilder().build());
 
-    @Test
-    public void testGetNowBlockQueryWithTimeout() throws IllegalException {
-        List<ClientInterceptor> clientInterceptors = new ArrayList<>();
-        ApiWrapper client =new ApiWrapper(Constant.FULLNODE_NILE, Constant.FULLNODE_NILE_SOLIDITY, "3333333333333333333333333333333333333333333333333333333333333333",clientInterceptors,2000);
-        Chain.Block block = client.getNowBlock();
+    System.out.println(block.getBlockHeader());
+    assertTrue(block.getBlockHeader().getRawDataOrBuilder().getNumber() > 0);
+  }
 
-        System.out.println(block.getBlockHeader());
-        assertTrue(block.getBlockHeader().getRawDataOrBuilder().getNumber() > 0);
-    }
+  @Test
+  public void testGetNowBlockQueryWithTimeout() throws IllegalException {
+    List<ClientInterceptor> clientInterceptors = new ArrayList<>();
+    ApiWrapper client = new ApiWrapper(Constant.FULLNODE_NILE, Constant.FULLNODE_NILE_SOLIDITY,
+        "3333333333333333333333333333333333333333333333333333333333333333", clientInterceptors,
+        2000);
+    Chain.Block block = client.getNowBlock();
 
-    @Test
-    public void testSendTrc20Transaction() {
-        ApiWrapper client = ApiWrapper.ofNile("3333333333333333333333333333333333333333333333333333333333333333");
+    System.out.println(block.getBlockHeader());
+    assertTrue(block.getBlockHeader().getRawDataOrBuilder().getNumber() > 0);
+  }
 
-        // transfer(address,uint256) returns (bool)
-        Function trc20Transfer = new Function("transfer",
-            Arrays.asList(new Address("TVjsyZ7fYF3qLF6BQgPmTEZy1xrNNyVAAA"),
-                new Uint256(BigInteger.valueOf(10).multiply(BigInteger.valueOf(10).pow(18)))),
-            Arrays.asList(new TypeReference<Bool>() {}));
+  @Test
+  public void testSendTrc20Transaction() {
+    ApiWrapper client = ApiWrapper.ofNile(
+        "3333333333333333333333333333333333333333333333333333333333333333");
 
-        String encodedHex = FunctionEncoder.encode(trc20Transfer);
+    // transfer(address,uint256) returns (bool)
+    Function trc20Transfer = new Function("transfer",
+        Arrays.asList(new Address("TVjsyZ7fYF3qLF6BQgPmTEZy1xrNNyVAAA"),
+            new Uint256(BigInteger.valueOf(10).multiply(BigInteger.valueOf(10).pow(18)))),
+        Arrays.asList(new TypeReference<Bool>() {
+        }));
 
-        TriggerSmartContract trigger =
-            TriggerSmartContract.newBuilder()
-                .setOwnerAddress(ApiWrapper.parseAddress("TJRabPrwbZy45sbavfcjinPJC18kjpRTv8"))
-                .setContractAddress(ApiWrapper.parseAddress("TF17BgPaZYbz8oxbjhriubPDsA7ArKoLX3"))
-                .setData(ApiWrapper.parseHex(encodedHex))
-                .build();
+    String encodedHex = FunctionEncoder.encode(trc20Transfer);
 
-        System.out.println("trigger:\n" + trigger);
+    TriggerSmartContract trigger =
+        TriggerSmartContract.newBuilder()
+            .setOwnerAddress(ApiWrapper.parseAddress("TJRabPrwbZy45sbavfcjinPJC18kjpRTv8"))
+            .setContractAddress(ApiWrapper.parseAddress("TF17BgPaZYbz8oxbjhriubPDsA7ArKoLX3"))
+            .setData(ApiWrapper.parseHex(encodedHex))
+            .build();
 
-        TransactionExtention txnExt = client.blockingStub.triggerContract(trigger);
-        System.out.println("txn id => " + Hex.toHexString(txnExt.getTxid().toByteArray()));
+    System.out.println("trigger:\n" + trigger);
 
-        Transaction signedTxn = client.signTransaction(txnExt);
+    TransactionExtention txnExt = client.blockingStub.triggerContract(trigger);
+    System.out.println("txn id => " + Hex.toHexString(txnExt.getTxid().toByteArray()));
 
-        System.out.println(signedTxn.toString());
-        TransactionReturn ret = client.blockingStub.broadcastTransaction(signedTxn);
-        System.out.println("======== Result ========\n" + ret.toString());
-    }
+    Transaction signedTxn = client.signTransaction(txnExt);
 
-    @Test
-    public void testGenerateAddress() {
-        ApiWrapper.generateAddress();
-    }
+    System.out.println(signedTxn.toString());
+    TransactionReturn ret = client.blockingStub.broadcastTransaction(signedTxn);
+    System.out.println("======== Result ========\n" + ret.toString());
+  }
+
+  @Test
+  public void testGenerateAddress() {
+    ApiWrapper.generateAddress();
+  }
 }

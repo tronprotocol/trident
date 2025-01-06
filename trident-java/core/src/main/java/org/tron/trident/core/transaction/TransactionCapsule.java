@@ -7,10 +7,12 @@ import org.tron.trident.proto.Chain;
 
 public class TransactionCapsule {
 
-  public TransactionCapsule(com.google.protobuf.Message message, Chain.Transaction.Contract.ContractType contractType) {
-    Chain.Transaction.raw.Builder transactionBuilder = Chain.Transaction.raw.newBuilder().addContract(
-        Chain.Transaction.Contract.newBuilder().setType(contractType).setParameter(
-            (message instanceof Any ? (Any) message : Any.pack(message))).build());
+  public TransactionCapsule(com.google.protobuf.Message message,
+      Chain.Transaction.Contract.ContractType contractType) {
+    Chain.Transaction.raw.Builder transactionBuilder = Chain.Transaction.raw.newBuilder()
+        .addContract(
+            Chain.Transaction.Contract.newBuilder().setType(contractType).setParameter(
+                (message instanceof Any ? (Any) message : Any.pack(message))).build());
     transaction = Chain.Transaction.newBuilder().setRawData(transactionBuilder.build()).build();
   }
 
@@ -86,7 +88,8 @@ public class TransactionCapsule {
   }
 
   public void setExpiration(long expiration) {
-    Chain.Transaction.raw rawData = this.transaction.getRawData().toBuilder().setExpiration(expiration)
+    Chain.Transaction.raw rawData = this.transaction.getRawData().toBuilder()
+        .setExpiration(expiration)
         .build();
     this.transaction = this.transaction.toBuilder().setRawData(rawData).build();
   }

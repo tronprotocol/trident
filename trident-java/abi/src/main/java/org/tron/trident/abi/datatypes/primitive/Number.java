@@ -10,15 +10,17 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+
 package org.tron.trident.abi.datatypes.primitive;
 
 import org.tron.trident.abi.datatypes.NumericType;
 
 public abstract class Number<T extends java.lang.Number & Comparable<T>> extends PrimitiveType<T> {
-    Number(T value) {
-        super(value);
-    }
 
-    @Override
-    public abstract NumericType toSolidityType();
+  Number(T value) {
+    super(value);
+  }
+
+  @Override
+  public abstract NumericType toSolidityType();
 }

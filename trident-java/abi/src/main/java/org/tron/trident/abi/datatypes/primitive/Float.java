@@ -10,18 +10,19 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+
 package org.tron.trident.abi.datatypes.primitive;
 
 import org.tron.trident.abi.datatypes.NumericType;
 
 public class Float extends Number<java.lang.Float> {
 
-    public Float(float value) {
-        super(value);
-    }
+  public Float(float value) {
+    super(value);
+  }
 
-    @Override
-    public NumericType toSolidityType() {
-        throw new UnsupportedOperationException("Fixed types are not supported");
-    }
+  @Override
+  public NumericType toSolidityType() {
+    throw new UnsupportedOperationException("Fixed types are not supported");
+  }
 }

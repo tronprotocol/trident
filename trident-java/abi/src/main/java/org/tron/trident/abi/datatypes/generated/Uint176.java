@@ -1,7 +1,6 @@
 package org.tron.trident.abi.datatypes.generated;
 
 import java.math.BigInteger;
-
 import org.tron.trident.abi.datatypes.Uint;
 
 /**
@@ -11,13 +10,14 @@ import org.tron.trident.abi.datatypes.Uint;
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  */
 public class Uint176 extends Uint {
-    public static final Uint176 DEFAULT = new Uint176(BigInteger.ZERO);
 
-    public Uint176(BigInteger value) {
-        super(176, value);
-    }
+  public static final Uint176 DEFAULT = new Uint176(BigInteger.ZERO);
 
-    public Uint176(long value) {
-        this(BigInteger.valueOf(value));
-    }
+  public Uint176(BigInteger value) {
+    super(176, value);
+  }
+
+  public Uint176(long value) {
+    this(BigInteger.valueOf(value));
+  }
 }

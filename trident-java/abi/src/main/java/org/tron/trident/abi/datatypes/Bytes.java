@@ -10,23 +10,26 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+
 package org.tron.trident.abi.datatypes;
 
-/** Statically allocated sequence of bytes. */
+/**
+ * Statically allocated sequence of bytes.
+ */
 public class Bytes extends BytesType {
 
-    public static final String TYPE_NAME = "bytes";
+  public static final String TYPE_NAME = "bytes";
 
-    protected Bytes(int byteSize, byte[] value) {
-        super(value, TYPE_NAME + value.length);
-        if (!isValid(byteSize)) {
-            throw new UnsupportedOperationException(
-                    "Input byte array must be in range 0 < M <= 32 and length must match type");
-        }
+  protected Bytes(int byteSize, byte[] value) {
+    super(value, TYPE_NAME + value.length);
+    if (!isValid(byteSize)) {
+      throw new UnsupportedOperationException(
+          "Input byte array must be in range 0 < M <= 32 and length must match type");
     }
+  }
 
-    private boolean isValid(int byteSize) {
-        int length = getValue().length;
-        return length > 0 && length <= 32 && length == byteSize;
-    }
+  private boolean isValid(int byteSize) {
+    int length = getValue().length;
+    return length > 0 && length <= 32 && length == byteSize;
+  }
 }

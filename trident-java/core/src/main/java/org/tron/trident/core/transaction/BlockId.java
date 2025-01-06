@@ -1,8 +1,7 @@
 package org.tron.trident.core.transaction;
 
-import org.tron.trident.core.utils.Sha256Hash;
-
 import java.util.Arrays;
+import org.tron.trident.core.utils.Sha256Hash;
 
 public class BlockId extends Sha256Hash {
 

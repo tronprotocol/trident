@@ -10,6 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+
 package org.tron.trident.abi.datatypes.primitive;
 
 import org.tron.trident.abi.datatypes.Type;
@@ -17,12 +18,12 @@ import org.tron.trident.abi.datatypes.Utf8String;
 
 public final class Char extends PrimitiveType<Character> {
 
-    public Char(char value) {
-        super(value);
-    }
+  public Char(char value) {
+    super(value);
+  }
 
-    @Override
-    public Type toSolidityType() {
-        return new Utf8String(String.valueOf(getValue()));
-    }
+  @Override
+  public Type toSolidityType() {
+    return new Utf8String(String.valueOf(getValue()));
+  }
 }

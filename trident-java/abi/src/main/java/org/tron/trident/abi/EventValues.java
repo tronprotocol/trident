@@ -10,27 +10,30 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+
 package org.tron.trident.abi;
 
 import java.util.List;
-
 import org.tron.trident.abi.datatypes.Type;
 
-/** Persisted solidity event parameters. */
+/**
+ * Persisted solidity event parameters.
+ */
 public class EventValues {
-    private final List<Type> indexedValues;
-    private final List<Type> nonIndexedValues;
 
-    public EventValues(List<Type> indexedValues, List<Type> nonIndexedValues) {
-        this.indexedValues = indexedValues;
-        this.nonIndexedValues = nonIndexedValues;
-    }
+  private final List<Type> indexedValues;
+  private final List<Type> nonIndexedValues;
 
-    public List<Type> getIndexedValues() {
-        return indexedValues;
-    }
+  public EventValues(List<Type> indexedValues, List<Type> nonIndexedValues) {
+    this.indexedValues = indexedValues;
+    this.nonIndexedValues = nonIndexedValues;
+  }
 
-    public List<Type> getNonIndexedValues() {
-        return nonIndexedValues;
-    }
+  public List<Type> getIndexedValues() {
+    return indexedValues;
+  }
+
+  public List<Type> getNonIndexedValues() {
+    return nonIndexedValues;
+  }
 }
