@@ -235,6 +235,37 @@ public final class WalletSolidityGrpc {
     return getGetEnergyPricesMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.BlockReq,
+      org.tron.trident.proto.Response.BlockExtention> getGetBlockMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "GetBlock",
+      requestType = org.tron.trident.api.GrpcAPI.BlockReq.class,
+      responseType = org.tron.trident.proto.Response.BlockExtention.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.BlockReq,
+      org.tron.trident.proto.Response.BlockExtention> getGetBlockMethod() {
+    io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.BlockReq, org.tron.trident.proto.Response.BlockExtention> getGetBlockMethod;
+    if ((getGetBlockMethod = WalletSolidityGrpc.getGetBlockMethod) == null) {
+      synchronized (WalletSolidityGrpc.class) {
+        if ((getGetBlockMethod = WalletSolidityGrpc.getGetBlockMethod) == null) {
+          WalletSolidityGrpc.getGetBlockMethod = getGetBlockMethod =
+              io.grpc.MethodDescriptor.<org.tron.trident.api.GrpcAPI.BlockReq, org.tron.trident.proto.Response.BlockExtention>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "GetBlock"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.api.GrpcAPI.BlockReq.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.proto.Response.BlockExtention.getDefaultInstance()))
+              .setSchemaDescriptor(new WalletSolidityMethodDescriptorSupplier("GetBlock"))
+              .build();
+        }
+      }
+    }
+    return getGetBlockMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -340,6 +371,13 @@ public final class WalletSolidityGrpc {
         io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.PricesResponseMessage> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getGetEnergyPricesMethod(), responseObserver);
     }
+
+    /**
+     */
+    default void getBlock(org.tron.trident.api.GrpcAPI.BlockReq request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.BlockExtention> responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getGetBlockMethod(), responseObserver);
+    }
   }
 
   /**
@@ -436,6 +474,14 @@ public final class WalletSolidityGrpc {
       io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getGetEnergyPricesMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void getBlock(org.tron.trident.api.GrpcAPI.BlockReq request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.BlockExtention> responseObserver) {
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
+          getChannel().newCall(getGetBlockMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -510,6 +556,13 @@ public final class WalletSolidityGrpc {
     public org.tron.trident.proto.Response.PricesResponseMessage getEnergyPrices(org.tron.trident.api.GrpcAPI.EmptyMessage request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getGetEnergyPricesMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public org.tron.trident.proto.Response.BlockExtention getBlock(org.tron.trident.api.GrpcAPI.BlockReq request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getGetBlockMethod(), getCallOptions(), request);
     }
   }
 
@@ -593,6 +646,14 @@ public final class WalletSolidityGrpc {
       return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getGetEnergyPricesMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<org.tron.trident.proto.Response.BlockExtention> getBlock(
+        org.tron.trident.api.GrpcAPI.BlockReq request) {
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
+          getChannel().newCall(getGetBlockMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_GET_ACCOUNT = 0;
@@ -602,6 +663,7 @@ public final class WalletSolidityGrpc {
   private static final int METHODID_GET_TRANSACTION_FROM_PENDING = 4;
   private static final int METHODID_GET_BANDWIDTH_PRICES = 5;
   private static final int METHODID_GET_ENERGY_PRICES = 6;
+  private static final int METHODID_GET_BLOCK = 7;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -647,6 +709,10 @@ public final class WalletSolidityGrpc {
         case METHODID_GET_ENERGY_PRICES:
           serviceImpl.getEnergyPrices((org.tron.trident.api.GrpcAPI.EmptyMessage) request,
               (io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.PricesResponseMessage>) responseObserver);
+          break;
+        case METHODID_GET_BLOCK:
+          serviceImpl.getBlock((org.tron.trident.api.GrpcAPI.BlockReq) request,
+              (io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.BlockExtention>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -715,6 +781,13 @@ public final class WalletSolidityGrpc {
               org.tron.trident.api.GrpcAPI.EmptyMessage,
               org.tron.trident.proto.Response.PricesResponseMessage>(
                 service, METHODID_GET_ENERGY_PRICES)))
+        .addMethod(
+          getGetBlockMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              org.tron.trident.api.GrpcAPI.BlockReq,
+              org.tron.trident.proto.Response.BlockExtention>(
+                service, METHODID_GET_BLOCK)))
         .build();
   }
 
@@ -770,6 +843,7 @@ public final class WalletSolidityGrpc {
               .addMethod(getGetTransactionFromPendingMethod())
               .addMethod(getGetBandwidthPricesMethod())
               .addMethod(getGetEnergyPricesMethod())
+              .addMethod(getGetBlockMethod())
               .build();
         }
       }

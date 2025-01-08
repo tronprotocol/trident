@@ -19,6 +19,7 @@ import org.tron.trident.api.GrpcAPI;
 import org.tron.trident.api.GrpcAPI.AccountAddressMessage;
 import org.tron.trident.api.GrpcAPI.AccountIdMessage;
 import org.tron.trident.api.GrpcAPI.BlockLimit;
+import org.tron.trident.api.GrpcAPI.BlockReq;
 import org.tron.trident.api.GrpcAPI.BytesMessage;
 import org.tron.trident.api.GrpcAPI.EmptyMessage;
 import org.tron.trident.api.GrpcAPI.NumberMessage;
@@ -36,12 +37,14 @@ import org.tron.trident.core.utils.Sha256Hash;
 import org.tron.trident.core.utils.Utils;
 import org.tron.trident.proto.Chain.Block;
 import org.tron.trident.proto.Chain.Transaction;
+import org.tron.trident.proto.Chain.Transaction.Contract.ContractType;
 import org.tron.trident.proto.Common.SmartContract;
 import org.tron.trident.proto.Contract.AccountCreateContract;
 import org.tron.trident.proto.Contract.AccountPermissionUpdateContract;
 import org.tron.trident.proto.Contract.AccountUpdateContract;
 import org.tron.trident.proto.Contract.AssetIssueContract;
 import org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract;
+import org.tron.trident.proto.Contract.ClearABIContract;
 import org.tron.trident.proto.Contract.DelegateResourceContract;
 import org.tron.trident.proto.Contract.FreezeBalanceContract;
 import org.tron.trident.proto.Contract.FreezeBalanceV2Contract;
@@ -349,9 +352,9 @@ public class ApiWrapper {
 
   private TransactionCapsule createTransaction(
       Message message, Transaction.Contract.ContractType contractType) throws Exception {
-    BlockExtention solidHeadBlock = blockingStubSolidity.getNowBlock2(
-        EmptyMessage.getDefaultInstance());
-    BlockExtention headBlock = blockingStub.getNowBlock2(EmptyMessage.getDefaultInstance());
+    BlockReq blockReq = BlockReq.newBuilder().setDetail(false).build();
+    BlockExtention solidHeadBlock = blockingStubSolidity.getBlock(blockReq);
+    BlockExtention headBlock = blockingStub.getBlock(blockReq);
 
     return createTransactionCapsuleWithoutValidate(message, contractType, solidHeadBlock,
         headBlock);
@@ -777,6 +780,8 @@ public class ApiWrapper {
     return createTransactionExtention(withdrawExpireUnfreezeContract,
         Transaction.Contract.ContractType.WithdrawExpireUnfreezeContract);
   }
+
+
 
   /**
    * Stake2.0 API
@@ -2290,6 +2295,26 @@ public class ApiWrapper {
    */
   public Response.PricesResponseMessage getEnergyPricesOnSolidity() {
     return blockingStubSolidity.getEnergyPrices(EmptyMessage.getDefaultInstance());
+  }
+
+  /**
+   * ClearABIContract
+   *
+   * @param ownerAddress owner address
+   * @param contractAddress contract address
+   * @return TransactionExtention
+   * @throws IllegalException
+   */
+  public TransactionExtention clearContractABI(String ownerAddress, String contractAddress)
+      throws IllegalException {
+    ByteString rawOwner = parseAddress(ownerAddress);
+    ByteString rawContract = parseAddress(contractAddress);
+    ClearABIContract clearABIContract = ClearABIContract.newBuilder()
+        .setOwnerAddress(rawOwner)
+        .setContractAddress(rawContract)
+        .build();
+    return createTransactionExtention(clearABIContract,
+        ContractType.ClearABIContract);
   }
 
 }

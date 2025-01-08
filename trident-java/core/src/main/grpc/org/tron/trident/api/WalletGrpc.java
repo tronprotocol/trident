@@ -697,6 +697,37 @@ public final class WalletGrpc {
     return getGetPaginatedAssetIssueListMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.BlockReq,
+      org.tron.trident.proto.Response.BlockExtention> getGetBlockMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "GetBlock",
+      requestType = org.tron.trident.api.GrpcAPI.BlockReq.class,
+      responseType = org.tron.trident.proto.Response.BlockExtention.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.BlockReq,
+      org.tron.trident.proto.Response.BlockExtention> getGetBlockMethod() {
+    io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.BlockReq, org.tron.trident.proto.Response.BlockExtention> getGetBlockMethod;
+    if ((getGetBlockMethod = WalletGrpc.getGetBlockMethod) == null) {
+      synchronized (WalletGrpc.class) {
+        if ((getGetBlockMethod = WalletGrpc.getGetBlockMethod) == null) {
+          WalletGrpc.getGetBlockMethod = getGetBlockMethod =
+              io.grpc.MethodDescriptor.<org.tron.trident.api.GrpcAPI.BlockReq, org.tron.trident.proto.Response.BlockExtention>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "GetBlock"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.api.GrpcAPI.BlockReq.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  org.tron.trident.proto.Response.BlockExtention.getDefaultInstance()))
+              .setSchemaDescriptor(new WalletMethodDescriptorSupplier("GetBlock"))
+              .build();
+        }
+      }
+    }
+    return getGetBlockMethod;
+  }
+
   private static volatile io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.EmptyMessage,
       org.tron.trident.proto.Chain.Block> getGetNowBlockMethod;
 
@@ -3122,6 +3153,13 @@ public final class WalletGrpc {
 
     /**
      */
+    default void getBlock(org.tron.trident.api.GrpcAPI.BlockReq request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.BlockExtention> responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getGetBlockMethod(), responseObserver);
+    }
+
+    /**
+     */
     default void getNowBlock(org.tron.trident.api.GrpcAPI.EmptyMessage request,
         io.grpc.stub.StreamObserver<org.tron.trident.proto.Chain.Block> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getGetNowBlockMethod(), responseObserver);
@@ -3899,6 +3937,14 @@ public final class WalletGrpc {
         io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.AssetIssueList> responseObserver) {
       io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getGetPaginatedAssetIssueListMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
+    public void getBlock(org.tron.trident.api.GrpcAPI.BlockReq request,
+        io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.BlockExtention> responseObserver) {
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
+          getChannel().newCall(getGetBlockMethod(), getCallOptions()), request, responseObserver);
     }
 
     /**
@@ -4721,6 +4767,13 @@ public final class WalletGrpc {
 
     /**
      */
+    public org.tron.trident.proto.Response.BlockExtention getBlock(org.tron.trident.api.GrpcAPI.BlockReq request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getGetBlockMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
     public org.tron.trident.proto.Chain.Block getNowBlock(org.tron.trident.api.GrpcAPI.EmptyMessage request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getGetNowBlockMethod(), getCallOptions(), request);
@@ -5491,6 +5544,14 @@ public final class WalletGrpc {
 
     /**
      */
+    public com.google.common.util.concurrent.ListenableFuture<org.tron.trident.proto.Response.BlockExtention> getBlock(
+        org.tron.trident.api.GrpcAPI.BlockReq request) {
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
+          getChannel().newCall(getGetBlockMethod(), getCallOptions()), request);
+    }
+
+    /**
+     */
     public com.google.common.util.concurrent.ListenableFuture<org.tron.trident.proto.Chain.Block> getNowBlock(
         org.tron.trident.api.GrpcAPI.EmptyMessage request) {
       return io.grpc.stub.ClientCalls.futureUnaryCall(
@@ -6108,76 +6169,77 @@ public final class WalletGrpc {
   private static final int METHODID_GET_ASSET_ISSUE_BY_ID = 19;
   private static final int METHODID_GET_ASSET_ISSUE_LIST = 20;
   private static final int METHODID_GET_PAGINATED_ASSET_ISSUE_LIST = 21;
-  private static final int METHODID_GET_NOW_BLOCK = 22;
-  private static final int METHODID_GET_NOW_BLOCK2 = 23;
-  private static final int METHODID_GET_BLOCK_BY_NUM = 24;
-  private static final int METHODID_GET_BLOCK_BY_NUM2 = 25;
-  private static final int METHODID_GET_BLOCK_BY_ID = 26;
-  private static final int METHODID_GET_BLOCK_BY_LIMIT_NEXT = 27;
-  private static final int METHODID_GET_BLOCK_BY_LIMIT_NEXT2 = 28;
-  private static final int METHODID_GET_BLOCK_BY_LATEST_NUM = 29;
-  private static final int METHODID_GET_BLOCK_BY_LATEST_NUM2 = 30;
-  private static final int METHODID_GET_TRANSACTION_COUNT_BY_BLOCK_NUM = 31;
-  private static final int METHODID_GET_TRANSACTION_BY_ID = 32;
-  private static final int METHODID_GET_TRANSACTION_INFO_BY_ID = 33;
-  private static final int METHODID_GET_TRANSACTION_INFO_BY_BLOCK_NUM = 34;
-  private static final int METHODID_GET_CONTRACT = 35;
-  private static final int METHODID_GET_CONTRACT_INFO = 36;
-  private static final int METHODID_LIST_WITNESSES = 37;
-  private static final int METHODID_GET_BROKERAGE_INFO = 38;
-  private static final int METHODID_GET_REWARD_INFO = 39;
-  private static final int METHODID_GET_DELEGATED_RESOURCE = 40;
-  private static final int METHODID_GET_DELEGATED_RESOURCE_ACCOUNT_INDEX = 41;
-  private static final int METHODID_LIST_PROPOSALS = 42;
-  private static final int METHODID_GET_PROPOSAL_BY_ID = 43;
-  private static final int METHODID_GET_PAGINATED_PROPOSAL_LIST = 44;
-  private static final int METHODID_LIST_EXCHANGES = 45;
-  private static final int METHODID_GET_EXCHANGE_BY_ID = 46;
-  private static final int METHODID_GET_PAGINATED_EXCHANGE_LIST = 47;
-  private static final int METHODID_SCAN_SHIELDED_TRC20NOTES_BY_IVK = 48;
-  private static final int METHODID_SCAN_SHIELDED_TRC20NOTES_BY_OVK = 49;
-  private static final int METHODID_IS_SHIELDED_TRC20CONTRACT_NOTE_SPENT = 50;
-  private static final int METHODID_GET_MARKET_ORDER_BY_ACCOUNT = 51;
-  private static final int METHODID_GET_MARKET_ORDER_BY_ID = 52;
-  private static final int METHODID_GET_MARKET_PRICE_BY_PAIR = 53;
-  private static final int METHODID_GET_MARKET_ORDER_LIST_BY_PAIR = 54;
-  private static final int METHODID_GET_MARKET_PAIR_LIST = 55;
-  private static final int METHODID_GET_TRANSACTION_SIGN = 56;
-  private static final int METHODID_GET_TRANSACTION_SIGN2 = 57;
-  private static final int METHODID_EASY_TRANSFER_ASSET = 58;
-  private static final int METHODID_EASY_TRANSFER_ASSET_BY_PRIVATE = 59;
-  private static final int METHODID_EASY_TRANSFER = 60;
-  private static final int METHODID_EASY_TRANSFER_BY_PRIVATE = 61;
-  private static final int METHODID_CREATE_ADDRESS = 62;
-  private static final int METHODID_GENERATE_ADDRESS = 63;
-  private static final int METHODID_ADD_SIGN = 64;
-  private static final int METHODID_GET_SPENDING_KEY = 65;
-  private static final int METHODID_GET_EXPANDED_SPENDING_KEY = 66;
-  private static final int METHODID_GET_AK_FROM_ASK = 67;
-  private static final int METHODID_GET_NK_FROM_NSK = 68;
-  private static final int METHODID_GET_INCOMING_VIEWING_KEY = 69;
-  private static final int METHODID_GET_DIVERSIFIER = 70;
-  private static final int METHODID_GET_ZEN_PAYMENT_ADDRESS = 71;
-  private static final int METHODID_GET_NEW_SHIELDED_ADDRESS = 72;
-  private static final int METHODID_GET_RCM = 73;
-  private static final int METHODID_CREATE_SHIELDED_CONTRACT_PARAMETERS = 74;
-  private static final int METHODID_CREATE_SHIELDED_CONTRACT_PARAMETERS_WITHOUT_ASK = 75;
-  private static final int METHODID_GET_TRIGGER_INPUT_FOR_SHIELDED_TRC20CONTRACT = 76;
-  private static final int METHODID_GET_AVAILABLE_UNFREEZE_COUNT = 77;
-  private static final int METHODID_GET_CAN_WITHDRAW_UNFREEZE_AMOUNT = 78;
-  private static final int METHODID_GET_CAN_DELEGATED_MAX_SIZE = 79;
-  private static final int METHODID_GET_DELEGATED_RESOURCE_V2 = 80;
-  private static final int METHODID_GET_DELEGATED_RESOURCE_ACCOUNT_INDEX_V2 = 81;
-  private static final int METHODID_GET_BURN_TRX = 82;
-  private static final int METHODID_GET_BLOCK_BALANCE_TRACE = 83;
-  private static final int METHODID_CREATE_WITNESS2 = 84;
-  private static final int METHODID_WITHDRAW_BALANCE2 = 85;
-  private static final int METHODID_GET_TRANSACTION_LIST_FROM_PENDING = 86;
-  private static final int METHODID_GET_TRANSACTION_FROM_PENDING = 87;
-  private static final int METHODID_GET_PENDING_SIZE = 88;
-  private static final int METHODID_GET_BANDWIDTH_PRICES = 89;
-  private static final int METHODID_GET_ENERGY_PRICES = 90;
-  private static final int METHODID_GET_MEMO_FEE = 91;
+  private static final int METHODID_GET_BLOCK = 22;
+  private static final int METHODID_GET_NOW_BLOCK = 23;
+  private static final int METHODID_GET_NOW_BLOCK2 = 24;
+  private static final int METHODID_GET_BLOCK_BY_NUM = 25;
+  private static final int METHODID_GET_BLOCK_BY_NUM2 = 26;
+  private static final int METHODID_GET_BLOCK_BY_ID = 27;
+  private static final int METHODID_GET_BLOCK_BY_LIMIT_NEXT = 28;
+  private static final int METHODID_GET_BLOCK_BY_LIMIT_NEXT2 = 29;
+  private static final int METHODID_GET_BLOCK_BY_LATEST_NUM = 30;
+  private static final int METHODID_GET_BLOCK_BY_LATEST_NUM2 = 31;
+  private static final int METHODID_GET_TRANSACTION_COUNT_BY_BLOCK_NUM = 32;
+  private static final int METHODID_GET_TRANSACTION_BY_ID = 33;
+  private static final int METHODID_GET_TRANSACTION_INFO_BY_ID = 34;
+  private static final int METHODID_GET_TRANSACTION_INFO_BY_BLOCK_NUM = 35;
+  private static final int METHODID_GET_CONTRACT = 36;
+  private static final int METHODID_GET_CONTRACT_INFO = 37;
+  private static final int METHODID_LIST_WITNESSES = 38;
+  private static final int METHODID_GET_BROKERAGE_INFO = 39;
+  private static final int METHODID_GET_REWARD_INFO = 40;
+  private static final int METHODID_GET_DELEGATED_RESOURCE = 41;
+  private static final int METHODID_GET_DELEGATED_RESOURCE_ACCOUNT_INDEX = 42;
+  private static final int METHODID_LIST_PROPOSALS = 43;
+  private static final int METHODID_GET_PROPOSAL_BY_ID = 44;
+  private static final int METHODID_GET_PAGINATED_PROPOSAL_LIST = 45;
+  private static final int METHODID_LIST_EXCHANGES = 46;
+  private static final int METHODID_GET_EXCHANGE_BY_ID = 47;
+  private static final int METHODID_GET_PAGINATED_EXCHANGE_LIST = 48;
+  private static final int METHODID_SCAN_SHIELDED_TRC20NOTES_BY_IVK = 49;
+  private static final int METHODID_SCAN_SHIELDED_TRC20NOTES_BY_OVK = 50;
+  private static final int METHODID_IS_SHIELDED_TRC20CONTRACT_NOTE_SPENT = 51;
+  private static final int METHODID_GET_MARKET_ORDER_BY_ACCOUNT = 52;
+  private static final int METHODID_GET_MARKET_ORDER_BY_ID = 53;
+  private static final int METHODID_GET_MARKET_PRICE_BY_PAIR = 54;
+  private static final int METHODID_GET_MARKET_ORDER_LIST_BY_PAIR = 55;
+  private static final int METHODID_GET_MARKET_PAIR_LIST = 56;
+  private static final int METHODID_GET_TRANSACTION_SIGN = 57;
+  private static final int METHODID_GET_TRANSACTION_SIGN2 = 58;
+  private static final int METHODID_EASY_TRANSFER_ASSET = 59;
+  private static final int METHODID_EASY_TRANSFER_ASSET_BY_PRIVATE = 60;
+  private static final int METHODID_EASY_TRANSFER = 61;
+  private static final int METHODID_EASY_TRANSFER_BY_PRIVATE = 62;
+  private static final int METHODID_CREATE_ADDRESS = 63;
+  private static final int METHODID_GENERATE_ADDRESS = 64;
+  private static final int METHODID_ADD_SIGN = 65;
+  private static final int METHODID_GET_SPENDING_KEY = 66;
+  private static final int METHODID_GET_EXPANDED_SPENDING_KEY = 67;
+  private static final int METHODID_GET_AK_FROM_ASK = 68;
+  private static final int METHODID_GET_NK_FROM_NSK = 69;
+  private static final int METHODID_GET_INCOMING_VIEWING_KEY = 70;
+  private static final int METHODID_GET_DIVERSIFIER = 71;
+  private static final int METHODID_GET_ZEN_PAYMENT_ADDRESS = 72;
+  private static final int METHODID_GET_NEW_SHIELDED_ADDRESS = 73;
+  private static final int METHODID_GET_RCM = 74;
+  private static final int METHODID_CREATE_SHIELDED_CONTRACT_PARAMETERS = 75;
+  private static final int METHODID_CREATE_SHIELDED_CONTRACT_PARAMETERS_WITHOUT_ASK = 76;
+  private static final int METHODID_GET_TRIGGER_INPUT_FOR_SHIELDED_TRC20CONTRACT = 77;
+  private static final int METHODID_GET_AVAILABLE_UNFREEZE_COUNT = 78;
+  private static final int METHODID_GET_CAN_WITHDRAW_UNFREEZE_AMOUNT = 79;
+  private static final int METHODID_GET_CAN_DELEGATED_MAX_SIZE = 80;
+  private static final int METHODID_GET_DELEGATED_RESOURCE_V2 = 81;
+  private static final int METHODID_GET_DELEGATED_RESOURCE_ACCOUNT_INDEX_V2 = 82;
+  private static final int METHODID_GET_BURN_TRX = 83;
+  private static final int METHODID_GET_BLOCK_BALANCE_TRACE = 84;
+  private static final int METHODID_CREATE_WITNESS2 = 85;
+  private static final int METHODID_WITHDRAW_BALANCE2 = 86;
+  private static final int METHODID_GET_TRANSACTION_LIST_FROM_PENDING = 87;
+  private static final int METHODID_GET_TRANSACTION_FROM_PENDING = 88;
+  private static final int METHODID_GET_PENDING_SIZE = 89;
+  private static final int METHODID_GET_BANDWIDTH_PRICES = 90;
+  private static final int METHODID_GET_ENERGY_PRICES = 91;
+  private static final int METHODID_GET_MEMO_FEE = 92;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -6283,6 +6345,10 @@ public final class WalletGrpc {
         case METHODID_GET_PAGINATED_ASSET_ISSUE_LIST:
           serviceImpl.getPaginatedAssetIssueList((org.tron.trident.api.GrpcAPI.PaginatedMessage) request,
               (io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.AssetIssueList>) responseObserver);
+          break;
+        case METHODID_GET_BLOCK:
+          serviceImpl.getBlock((org.tron.trident.api.GrpcAPI.BlockReq) request,
+              (io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.BlockExtention>) responseObserver);
           break;
         case METHODID_GET_NOW_BLOCK:
           serviceImpl.getNowBlock((org.tron.trident.api.GrpcAPI.EmptyMessage) request,
@@ -6736,6 +6802,13 @@ public final class WalletGrpc {
               org.tron.trident.api.GrpcAPI.PaginatedMessage,
               org.tron.trident.proto.Response.AssetIssueList>(
                 service, METHODID_GET_PAGINATED_ASSET_ISSUE_LIST)))
+        .addMethod(
+          getGetBlockMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              org.tron.trident.api.GrpcAPI.BlockReq,
+              org.tron.trident.proto.Response.BlockExtention>(
+                service, METHODID_GET_BLOCK)))
         .addMethod(
           getGetNowBlockMethod(),
           io.grpc.stub.ServerCalls.asyncUnaryCall(
@@ -7296,6 +7369,7 @@ public final class WalletGrpc {
               .addMethod(getGetAssetIssueByIdMethod())
               .addMethod(getGetAssetIssueListMethod())
               .addMethod(getGetPaginatedAssetIssueListMethod())
+              .addMethod(getGetBlockMethod())
               .addMethod(getGetNowBlockMethod())
               .addMethod(getGetNowBlock2Method())
               .addMethod(getGetBlockByNumMethod())

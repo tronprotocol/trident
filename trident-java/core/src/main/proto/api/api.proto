@@ -112,6 +112,7 @@ service Wallet {
   rpc GetAssetIssueList(EmptyMessage) returns (AssetIssueList) {}
   rpc GetPaginatedAssetIssueList(PaginatedMessage) returns (AssetIssueList) {}
 
+  rpc GetBlock (BlockReq) returns (BlockExtention) {}
   rpc GetNowBlock(EmptyMessage) returns (Block) {}
   rpc GetNowBlock2(EmptyMessage) returns (BlockExtention) {}
   //deprecated
@@ -240,6 +241,8 @@ service WalletSolidity {
   //query resource price
   rpc GetBandwidthPrices (EmptyMessage) returns (PricesResponseMessage) {}
   rpc GetEnergyPrices (EmptyMessage) returns (PricesResponseMessage) {}
+
+  rpc GetBlock (BlockReq) returns (BlockExtention) {}
 };
 
 message EmptyMessage {}
@@ -248,6 +251,10 @@ message NumberMessage {
 }
 message BytesMessage {
   bytes value = 1;
+}
+message BlockReq {
+  string id_or_num = 1;
+  bool   detail = 2;
 }
 message BlockLimit {
   int64 startNum = 1;

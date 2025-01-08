@@ -1366,6 +1366,631 @@ public final class GrpcAPI {
 
   }
 
+  public interface BlockReqOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:protocol.BlockReq)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>string id_or_num = 1;</code>
+     * @return The idOrNum.
+     */
+    java.lang.String getIdOrNum();
+    /**
+     * <code>string id_or_num = 1;</code>
+     * @return The bytes for idOrNum.
+     */
+    com.google.protobuf.ByteString
+        getIdOrNumBytes();
+
+    /**
+     * <code>bool detail = 2;</code>
+     * @return The detail.
+     */
+    boolean getDetail();
+  }
+  /**
+   * Protobuf type {@code protocol.BlockReq}
+   */
+  public static final class BlockReq extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:protocol.BlockReq)
+      BlockReqOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use BlockReq.newBuilder() to construct.
+    private BlockReq(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private BlockReq() {
+      idOrNum_ = "";
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new BlockReq();
+    }
+
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return org.tron.trident.api.GrpcAPI.internal_static_protocol_BlockReq_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return org.tron.trident.api.GrpcAPI.internal_static_protocol_BlockReq_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              org.tron.trident.api.GrpcAPI.BlockReq.class, org.tron.trident.api.GrpcAPI.BlockReq.Builder.class);
+    }
+
+    public static final int ID_OR_NUM_FIELD_NUMBER = 1;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object idOrNum_ = "";
+    /**
+     * <code>string id_or_num = 1;</code>
+     * @return The idOrNum.
+     */
+    @java.lang.Override
+    public java.lang.String getIdOrNum() {
+      java.lang.Object ref = idOrNum_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        idOrNum_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string id_or_num = 1;</code>
+     * @return The bytes for idOrNum.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getIdOrNumBytes() {
+      java.lang.Object ref = idOrNum_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        idOrNum_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int DETAIL_FIELD_NUMBER = 2;
+    private boolean detail_ = false;
+    /**
+     * <code>bool detail = 2;</code>
+     * @return The detail.
+     */
+    @java.lang.Override
+    public boolean getDetail() {
+      return detail_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(idOrNum_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, idOrNum_);
+      }
+      if (detail_ != false) {
+        output.writeBool(2, detail_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(idOrNum_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, idOrNum_);
+      }
+      if (detail_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(2, detail_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof org.tron.trident.api.GrpcAPI.BlockReq)) {
+        return super.equals(obj);
+      }
+      org.tron.trident.api.GrpcAPI.BlockReq other = (org.tron.trident.api.GrpcAPI.BlockReq) obj;
+
+      if (!getIdOrNum()
+          .equals(other.getIdOrNum())) return false;
+      if (getDetail()
+          != other.getDetail()) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + ID_OR_NUM_FIELD_NUMBER;
+      hash = (53 * hash) + getIdOrNum().hashCode();
+      hash = (37 * hash) + DETAIL_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getDetail());
+      hash = (29 * hash) + getUnknownFields().hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static org.tron.trident.api.GrpcAPI.BlockReq parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.api.GrpcAPI.BlockReq parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.api.GrpcAPI.BlockReq parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.api.GrpcAPI.BlockReq parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.api.GrpcAPI.BlockReq parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.tron.trident.api.GrpcAPI.BlockReq parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.tron.trident.api.GrpcAPI.BlockReq parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.api.GrpcAPI.BlockReq parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public static org.tron.trident.api.GrpcAPI.BlockReq parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+
+    public static org.tron.trident.api.GrpcAPI.BlockReq parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.tron.trident.api.GrpcAPI.BlockReq parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.tron.trident.api.GrpcAPI.BlockReq parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(org.tron.trident.api.GrpcAPI.BlockReq prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code protocol.BlockReq}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:protocol.BlockReq)
+        org.tron.trident.api.GrpcAPI.BlockReqOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return org.tron.trident.api.GrpcAPI.internal_static_protocol_BlockReq_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return org.tron.trident.api.GrpcAPI.internal_static_protocol_BlockReq_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                org.tron.trident.api.GrpcAPI.BlockReq.class, org.tron.trident.api.GrpcAPI.BlockReq.Builder.class);
+      }
+
+      // Construct using org.tron.trident.api.GrpcAPI.BlockReq.newBuilder()
+      private Builder() {
+
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        bitField0_ = 0;
+        idOrNum_ = "";
+        detail_ = false;
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return org.tron.trident.api.GrpcAPI.internal_static_protocol_BlockReq_descriptor;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.api.GrpcAPI.BlockReq getDefaultInstanceForType() {
+        return org.tron.trident.api.GrpcAPI.BlockReq.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public org.tron.trident.api.GrpcAPI.BlockReq build() {
+        org.tron.trident.api.GrpcAPI.BlockReq result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public org.tron.trident.api.GrpcAPI.BlockReq buildPartial() {
+        org.tron.trident.api.GrpcAPI.BlockReq result = new org.tron.trident.api.GrpcAPI.BlockReq(this);
+        if (bitField0_ != 0) { buildPartial0(result); }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartial0(org.tron.trident.api.GrpcAPI.BlockReq result) {
+        int from_bitField0_ = bitField0_;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.idOrNum_ = idOrNum_;
+        }
+        if (((from_bitField0_ & 0x00000002) != 0)) {
+          result.detail_ = detail_;
+        }
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof org.tron.trident.api.GrpcAPI.BlockReq) {
+          return mergeFrom((org.tron.trident.api.GrpcAPI.BlockReq)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(org.tron.trident.api.GrpcAPI.BlockReq other) {
+        if (other == org.tron.trident.api.GrpcAPI.BlockReq.getDefaultInstance()) return this;
+        if (!other.getIdOrNum().isEmpty()) {
+          idOrNum_ = other.idOrNum_;
+          bitField0_ |= 0x00000001;
+          onChanged();
+        }
+        if (other.getDetail() != false) {
+          setDetail(other.getDetail());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 10: {
+                idOrNum_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 10
+              case 16: {
+                detail_ = input.readBool();
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 16
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.unwrapIOException();
+        } finally {
+          onChanged();
+        } // finally
+        return this;
+      }
+      private int bitField0_;
+
+      private java.lang.Object idOrNum_ = "";
+      /**
+       * <code>string id_or_num = 1;</code>
+       * @return The idOrNum.
+       */
+      public java.lang.String getIdOrNum() {
+        java.lang.Object ref = idOrNum_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          idOrNum_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string id_or_num = 1;</code>
+       * @return The bytes for idOrNum.
+       */
+      public com.google.protobuf.ByteString
+          getIdOrNumBytes() {
+        java.lang.Object ref = idOrNum_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          idOrNum_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string id_or_num = 1;</code>
+       * @param value The idOrNum to set.
+       * @return This builder for chaining.
+       */
+      public Builder setIdOrNum(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        idOrNum_ = value;
+        bitField0_ |= 0x00000001;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string id_or_num = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearIdOrNum() {
+        idOrNum_ = getDefaultInstance().getIdOrNum();
+        bitField0_ = (bitField0_ & ~0x00000001);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string id_or_num = 1;</code>
+       * @param value The bytes for idOrNum to set.
+       * @return This builder for chaining.
+       */
+      public Builder setIdOrNumBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        idOrNum_ = value;
+        bitField0_ |= 0x00000001;
+        onChanged();
+        return this;
+      }
+
+      private boolean detail_ ;
+      /**
+       * <code>bool detail = 2;</code>
+       * @return The detail.
+       */
+      @java.lang.Override
+      public boolean getDetail() {
+        return detail_;
+      }
+      /**
+       * <code>bool detail = 2;</code>
+       * @param value The detail to set.
+       * @return This builder for chaining.
+       */
+      public Builder setDetail(boolean value) {
+
+        detail_ = value;
+        bitField0_ |= 0x00000002;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bool detail = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearDetail() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        detail_ = false;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:protocol.BlockReq)
+    }
+
+    // @@protoc_insertion_point(class_scope:protocol.BlockReq)
+    private static final org.tron.trident.api.GrpcAPI.BlockReq DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new org.tron.trident.api.GrpcAPI.BlockReq();
+    }
+
+    public static org.tron.trident.api.GrpcAPI.BlockReq getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<BlockReq>
+        PARSER = new com.google.protobuf.AbstractParser<BlockReq>() {
+      @java.lang.Override
+      public BlockReq parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
+      }
+    };
+
+    public static com.google.protobuf.Parser<BlockReq> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<BlockReq> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public org.tron.trident.api.GrpcAPI.BlockReq getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   public interface BlockLimitOrBuilder extends
       // @@protoc_insertion_point(interface_extends:protocol.BlockLimit)
       com.google.protobuf.MessageOrBuilder {
@@ -27504,6 +28129,11 @@ public final class GrpcAPI {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_protocol_BytesMessage_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_protocol_BlockReq_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_protocol_BlockReq_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_protocol_BlockLimit_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -27681,298 +28311,302 @@ public final class GrpcAPI {
       "roto\032\020core/chain.proto\032\023core/contract.pr" +
       "oto\032\023core/response.proto\"\016\n\014EmptyMessage" +
       "\"\034\n\rNumberMessage\022\013\n\003num\030\001 \001(\003\"\035\n\014BytesM" +
-      "essage\022\r\n\005value\030\001 \001(\014\".\n\nBlockLimit\022\020\n\010s" +
-      "tartNum\030\001 \001(\003\022\016\n\006endNum\030\002 \001(\003\"(\n\025Account" +
-      "AddressMessage\022\017\n\007address\030\003 \001(\014\"\036\n\020Accou" +
-      "ntIdMessage\022\n\n\002id\030\027 \001(\014\"1\n\020PaginatedMess" +
-      "age\022\016\n\006offset\030\001 \001(\003\022\r\n\005limit\030\002 \001(\003\"L\n\023Ea" +
-      "syTransferMessage\022\022\n\npassPhrase\030\001 \001(\014\022\021\n" +
-      "\ttoAddress\030\002 \001(\014\022\016\n\006amount\030\003 \001(\003\"b\n\030Easy" +
-      "TransferAssetMessage\022\022\n\npassPhrase\030\001 \001(\014" +
-      "\022\021\n\ttoAddress\030\002 \001(\014\022\017\n\007assetId\030\003 \001(\t\022\016\n\006" +
-      "amount\030\004 \001(\003\"U\n\034EasyTransferByPrivateMes" +
-      "sage\022\022\n\nprivateKey\030\001 \001(\014\022\021\n\ttoAddress\030\002 " +
-      "\001(\014\022\016\n\006amount\030\003 \001(\003\"k\n!EasyTransferAsset" +
-      "ByPrivateMessage\022\022\n\nprivateKey\030\001 \001(\014\022\021\n\t" +
-      "toAddress\030\002 \001(\014\022\017\n\007assetId\030\003 \001(\t\022\016\n\006amou" +
-      "nt\030\004 \001(\003\"+\n\021ViewingKeyMessage\022\n\n\002ak\030\001 \001(" +
-      "\014\022\n\n\002nk\030\002 \001(\014\"\236\001\n\023ShieldedAddressInfo\022\n\n" +
-      "\002sk\030\001 \001(\014\022\013\n\003ask\030\002 \001(\014\022\013\n\003nsk\030\003 \001(\014\022\013\n\003o" +
-      "vk\030\004 \001(\014\022\n\n\002ak\030\005 \001(\014\022\n\n\002nk\030\006 \001(\014\022\013\n\003ivk\030" +
-      "\007 \001(\014\022\t\n\001d\030\010 \001(\014\022\013\n\003pkD\030\t \001(\014\022\027\n\017payment" +
-      "_address\030\n \001(\t\"f\n\025PaymentAddressMessage\022" +
-      "\'\n\001d\030\001 \001(\0132\034.protocol.DiversifierMessage" +
-      "\022\013\n\003pkD\030\002 \001(\014\022\027\n\017payment_address\030\003 \001(\t\"\037" +
-      "\n\022DiversifierMessage\022\t\n\001d\030\001 \001(\014\"C\n\032Expan" +
-      "dedSpendingKeyMessage\022\013\n\003ask\030\001 \001(\014\022\013\n\003ns" +
-      "k\030\002 \001(\014\022\013\n\003ovk\030\003 \001(\014\"(\n\031IncomingViewingK" +
-      "eyMessage\022\013\n\003ivk\030\001 \001(\014\"\201\001\n$IncomingViewi" +
-      "ngKeyDiversifierMessage\0220\n\003ivk\030\001 \001(\0132#.p" +
-      "rotocol.IncomingViewingKeyMessage\022\'\n\001d\030\002" +
-      " \001(\0132\034.protocol.DiversifierMessage\"+\n\013Re" +
-      "ceiveNote\022\034\n\004note\030\001 \001(\0132\016.protocol.Note\"" +
-      "f\n\016SpendNoteTRC20\022\034\n\004note\030\001 \001(\0132\016.protoc" +
-      "ol.Note\022\r\n\005alpha\030\002 \001(\014\022\014\n\004root\030\003 \001(\014\022\014\n\004" +
-      "path\030\004 \001(\014\022\013\n\003pos\030\005 \001(\003\"\235\002\n\036PrivateShiel" +
-      "dedTRC20Parameters\022\013\n\003ask\030\001 \001(\014\022\013\n\003nsk\030\002" +
-      " \001(\014\022\013\n\003ovk\030\003 \001(\014\022\023\n\013from_amount\030\004 \001(\t\0221" +
-      "\n\017shielded_spends\030\005 \003(\0132\030.protocol.Spend" +
-      "NoteTRC20\0220\n\021shielded_receives\030\006 \003(\0132\025.p" +
-      "rotocol.ReceiveNote\022\036\n\026transparent_to_ad" +
-      "dress\030\007 \001(\014\022\021\n\tto_amount\030\010 \001(\t\022\'\n\037shield" +
-      "ed_TRC20_contract_address\030\t \001(\014\"\246\002\n(Priv" +
-      "ateShieldedTRC20ParametersWithoutAsk\022\n\n\002" +
-      "ak\030\001 \001(\014\022\013\n\003nsk\030\002 \001(\014\022\013\n\003ovk\030\003 \001(\014\022\023\n\013fr" +
-      "om_amount\030\004 \001(\t\0221\n\017shielded_spends\030\005 \003(\013" +
-      "2\030.protocol.SpendNoteTRC20\0220\n\021shielded_r" +
-      "eceives\030\006 \003(\0132\025.protocol.ReceiveNote\022\036\n\026" +
-      "transparent_to_address\030\007 \001(\014\022\021\n\tto_amoun" +
-      "t\030\010 \001(\t\022\'\n\037shielded_TRC20_contract_addre" +
-      "ss\030\t \001(\014\"\217\001\n\020SpendDescription\022\030\n\020value_c" +
-      "ommitment\030\001 \001(\014\022\016\n\006anchor\030\002 \001(\014\022\021\n\tnulli" +
-      "fier\030\003 \001(\014\022\n\n\002rk\030\004 \001(\014\022\017\n\007zkproof\030\005 \001(\014\022" +
-      "!\n\031spend_authority_signature\030\006 \001(\014\"\203\001\n\022R" +
-      "eceiveDescription\022\030\n\020value_commitment\030\001 " +
-      "\001(\014\022\027\n\017note_commitment\030\002 \001(\014\022\013\n\003epk\030\003 \001(" +
-      "\014\022\r\n\005c_enc\030\004 \001(\014\022\r\n\005c_out\030\005 \001(\014\022\017\n\007zkpro" +
-      "of\030\006 \001(\014\"\364\001\n\027ShieldedTRC20Parameters\0225\n\021" +
-      "spend_description\030\001 \003(\0132\032.protocol.Spend" +
-      "Description\0229\n\023receive_description\030\002 \003(\013" +
-      "2\034.protocol.ReceiveDescription\022\031\n\021bindin" +
-      "g_signature\030\003 \001(\014\022\024\n\014message_hash\030\004 \001(\014\022" +
-      "\036\n\026trigger_contract_input\030\005 \001(\t\022\026\n\016param" +
-      "eter_type\030\006 \001(\t\"\255\001\n\031IvkDecryptTRC20Param" +
-      "eters\022\031\n\021start_block_index\030\001 \001(\003\022\027\n\017end_" +
-      "block_index\030\002 \001(\003\022\'\n\037shielded_TRC20_cont" +
-      "ract_address\030\003 \001(\014\022\013\n\003ivk\030\004 \001(\014\022\n\n\002ak\030\005 " +
-      "\001(\014\022\n\n\002nk\030\006 \001(\014\022\016\n\006events\030\007 \003(\t\"\225\001\n\031OvkD" +
-      "ecryptTRC20Parameters\022\031\n\021start_block_ind" +
-      "ex\030\001 \001(\003\022\027\n\017end_block_index\030\002 \001(\003\022\013\n\003ovk" +
-      "\030\003 \001(\014\022\'\n\037shielded_TRC20_contract_addres" +
-      "s\030\004 \001(\014\022\016\n\006events\030\005 \003(\t\"\204\001\n\021NfTRC20Param" +
-      "eters\022\034\n\004note\030\001 \001(\0132\016.protocol.Note\022\n\n\002a" +
-      "k\030\002 \001(\014\022\n\n\002nk\030\003 \001(\014\022\020\n\010position\030\004 \001(\003\022\'\n" +
-      "\037shielded_TRC20_contract_address\030\005 \001(\014\"\331" +
-      "\001\n&ShieldedTRC20TriggerContractParameter" +
-      "s\022D\n\031shielded_TRC20_Parameters\030\001 \001(\0132!.p" +
-      "rotocol.ShieldedTRC20Parameters\0229\n\031spend" +
-      "_authority_signature\030\002 \003(\0132\026.protocol.By" +
-      "tesMessage\022\016\n\006amount\030\003 \001(\t\022\036\n\026transparen" +
-      "t_to_address\030\004 \001(\014\"S\n\'CanWithdrawUnfreez" +
-      "eAmountRequestMessage\022\025\n\rowner_address\030\001" +
-      " \001(\014\022\021\n\ttimestamp\030\002 \001(\003\"@\n\'GetAvailableU" +
-      "nfreezeCountRequestMessage\022\025\n\rowner_addr" +
-      "ess\030\001 \001(\014\"9\n(GetAvailableUnfreezeCountRe" +
-      "sponseMessage\022\r\n\005count\030\001 \001(\003\":\n(CanWithd" +
-      "rawUnfreezeAmountResponseMessage\022\016\n\006amou" +
-      "nt\030\001 \001(\003\"H\n!CanDelegatedMaxSizeRequestMe" +
-      "ssage\022\014\n\004type\030\001 \001(\005\022\025\n\rowner_address\030\002 \001" +
-      "(\014\"6\n\"CanDelegatedMaxSizeResponseMessage" +
-      "\022\020\n\010max_size\030\001 \001(\003\"!\n\021TransactionIdList\022" +
-      "\014\n\004txId\030\001 \003(\t2\205;\n\006Wallet\022L\n\024BroadcastTra" +
-      "nsaction\022\025.protocol.Transaction\032\033.protoc" +
-      "ol.TransactionReturn\"\000\022Q\n\016DeployContract" +
-      "\022\035.protocol.CreateSmartContract\032\036.protoc" +
-      "ol.TransactionExtention\"\000\022S\n\017TriggerCont" +
-      "ract\022\036.protocol.TriggerSmartContract\032\036.p" +
-      "rotocol.TransactionExtention\"\000\022[\n\027Trigge" +
-      "rConstantContract\022\036.protocol.TriggerSmar" +
-      "tContract\032\036.protocol.TransactionExtentio" +
-      "n\"\000\022S\n\016EstimateEnergy\022\036.protocol.Trigger" +
-      "SmartContract\032\037.protocol.EstimateEnergyM" +
-      "essage\"\000\022;\n\013GetNodeInfo\022\026.protocol.Empty" +
-      "Message\032\022.protocol.NodeInfo\"\000\0229\n\tListNod" +
-      "es\022\026.protocol.EmptyMessage\032\022.protocol.No" +
-      "deList\"\000\022I\n\022GetChainParameters\022\026.protoco" +
-      "l.EmptyMessage\032\031.protocol.ChainParameter" +
-      "s\"\000\022E\n\020TotalTransaction\022\026.protocol.Empty" +
-      "Message\032\027.protocol.NumberMessage\"\000\022K\n\026Ge" +
-      "tNextMaintenanceTime\022\026.protocol.EmptyMes" +
-      "sage\032\027.protocol.NumberMessage\"\000\022T\n\030GetTr" +
-      "ansactionSignWeight\022\025.protocol.Transacti" +
-      "on\032\037.protocol.TransactionSignWeight\"\000\022X\n" +
-      "\032GetTransactionApprovedList\022\025.protocol.T" +
-      "ransaction\032!.protocol.TransactionApprove" +
-      "dList\"\000\022B\n\nGetAccount\022\037.protocol.Account" +
-      "AddressMessage\032\021.protocol.Account\"\000\022A\n\016G" +
-      "etAccountById\022\032.protocol.AccountIdMessag" +
-      "e\032\021.protocol.Account\"\000\022O\n\rGetAccountNet\022" +
-      "\037.protocol.AccountAddressMessage\032\033.proto" +
-      "col.AccountNetMessage\"\000\022Y\n\022GetAccountRes" +
-      "ource\022\037.protocol.AccountAddressMessage\032 " +
-      ".protocol.AccountResourceMessage\"\000\022U\n\026Ge" +
-      "tAssetIssueByAccount\022\037.protocol.AccountA" +
-      "ddressMessage\032\030.protocol.AssetIssueList\"" +
-      "\000\022M\n\023GetAssetIssueByName\022\026.protocol.Byte" +
-      "sMessage\032\034.protocol.AssetIssueContract\"\000" +
-      "\022M\n\027GetAssetIssueListByName\022\026.protocol.B" +
-      "ytesMessage\032\030.protocol.AssetIssueList\"\000\022" +
-      "K\n\021GetAssetIssueById\022\026.protocol.BytesMes" +
-      "sage\032\034.protocol.AssetIssueContract\"\000\022G\n\021" +
-      "GetAssetIssueList\022\026.protocol.EmptyMessag" +
-      "e\032\030.protocol.AssetIssueList\"\000\022T\n\032GetPagi" +
-      "natedAssetIssueList\022\032.protocol.Paginated" +
-      "Message\032\030.protocol.AssetIssueList\"\000\0228\n\013G" +
-      "etNowBlock\022\026.protocol.EmptyMessage\032\017.pro" +
-      "tocol.Block\"\000\022B\n\014GetNowBlock2\022\026.protocol" +
-      ".EmptyMessage\032\030.protocol.BlockExtention\"" +
-      "\000\022;\n\rGetBlockByNum\022\027.protocol.NumberMess" +
-      "age\032\017.protocol.Block\"\000\022E\n\016GetBlockByNum2" +
-      "\022\027.protocol.NumberMessage\032\030.protocol.Blo" +
-      "ckExtention\"\000\0229\n\014GetBlockById\022\026.protocol" +
-      ".BytesMessage\032\017.protocol.Block\"\000\022B\n\023GetB" +
-      "lockByLimitNext\022\024.protocol.BlockLimit\032\023." +
-      "protocol.BlockList\"\000\022L\n\024GetBlockByLimitN" +
-      "ext2\022\024.protocol.BlockLimit\032\034.protocol.Bl" +
-      "ockListExtention\"\000\022E\n\023GetBlockByLatestNu" +
-      "m\022\027.protocol.NumberMessage\032\023.protocol.Bl" +
-      "ockList\"\000\022O\n\024GetBlockByLatestNum2\022\027.prot" +
-      "ocol.NumberMessage\032\034.protocol.BlockListE" +
-      "xtention\"\000\022S\n\035GetTransactionCountByBlock" +
-      "Num\022\027.protocol.NumberMessage\032\027.protocol." +
-      "NumberMessage\"\000\022E\n\022GetTransactionById\022\026." +
-      "protocol.BytesMessage\032\025.protocol.Transac" +
-      "tion\"\000\022M\n\026GetTransactionInfoById\022\026.proto" +
-      "col.BytesMessage\032\031.protocol.TransactionI" +
-      "nfo\"\000\022X\n\034GetTransactionInfoByBlockNum\022\027." +
-      "protocol.NumberMessage\032\035.protocol.Transa" +
-      "ctionInfoList\"\000\022@\n\013GetContract\022\026.protoco" +
-      "l.BytesMessage\032\027.protocol.SmartContract\"" +
-      "\000\022O\n\017GetContractInfo\022\026.protocol.BytesMes" +
-      "sage\032\".protocol.SmartContractDataWrapper" +
-      "\"\000\022@\n\rListWitnesses\022\026.protocol.EmptyMess" +
-      "age\032\025.protocol.WitnessList\"\000\022E\n\020GetBroke" +
-      "rageInfo\022\026.protocol.BytesMessage\032\027.proto" +
-      "col.NumberMessage\"\000\022B\n\rGetRewardInfo\022\026.p" +
-      "rotocol.BytesMessage\032\027.protocol.NumberMe" +
-      "ssage\"\000\022]\n\024GetDelegatedResource\022\".protoc" +
-      "ol.DelegatedResourceMessage\032\037.protocol.D" +
-      "elegatedResourceList\"\000\022e\n GetDelegatedRe" +
-      "sourceAccountIndex\022\026.protocol.BytesMessa" +
-      "ge\032\'.protocol.DelegatedResourceAccountIn" +
-      "dex\"\000\022A\n\rListProposals\022\026.protocol.EmptyM" +
-      "essage\032\026.protocol.ProposalList\"\000\022?\n\017GetP" +
-      "roposalById\022\026.protocol.BytesMessage\032\022.pr" +
-      "otocol.Proposal\"\000\022P\n\030GetPaginatedProposa" +
-      "lList\022\032.protocol.PaginatedMessage\032\026.prot" +
-      "ocol.ProposalList\"\000\022A\n\rListExchanges\022\026.p" +
-      "rotocol.EmptyMessage\032\026.protocol.Exchange" +
-      "List\"\000\022?\n\017GetExchangeById\022\026.protocol.Byt" +
-      "esMessage\032\022.protocol.Exchange\"\000\022P\n\030GetPa" +
-      "ginatedExchangeList\022\032.protocol.Paginated" +
-      "Message\032\026.protocol.ExchangeList\"\000\022a\n\033Sca" +
-      "nShieldedTRC20NotesByIvk\022#.protocol.IvkD" +
-      "ecryptTRC20Parameters\032\033.protocol.Decrypt" +
-      "NotesTRC20\"\000\022a\n\033ScanShieldedTRC20NotesBy" +
-      "Ovk\022#.protocol.OvkDecryptTRC20Parameters" +
-      "\032\033.protocol.DecryptNotesTRC20\"\000\022\\\n IsShi" +
-      "eldedTRC20ContractNoteSpent\022\033.protocol.N" +
-      "fTRC20Parameters\032\031.protocol.NullifierRes" +
-      "ult\"\000\022N\n\027GetMarketOrderByAccount\022\026.proto" +
-      "col.BytesMessage\032\031.protocol.MarketOrderL" +
-      "ist\"\000\022E\n\022GetMarketOrderById\022\026.protocol.B" +
-      "ytesMessage\032\025.protocol.MarketOrder\"\000\022N\n\024" +
-      "GetMarketPriceByPair\022\031.protocol.MarketOr" +
-      "derPair\032\031.protocol.MarketPriceList\"\000\022R\n\030" +
-      "GetMarketOrderListByPair\022\031.protocol.Mark" +
-      "etOrderPair\032\031.protocol.MarketOrderList\"\000" +
-      "\022L\n\021GetMarketPairList\022\026.protocol.EmptyMe" +
-      "ssage\032\035.protocol.MarketOrderPairList\"\000\022H" +
-      "\n\022GetTransactionSign\022\031.protocol.Transact" +
-      "ionSign\032\025.protocol.Transaction\"\000\022R\n\023GetT" +
-      "ransactionSign2\022\031.protocol.TransactionSi" +
-      "gn\032\036.protocol.TransactionExtention\"\000\022Y\n\021" +
-      "EasyTransferAsset\022\".protocol.EasyTransfe" +
-      "rAssetMessage\032\036.protocol.EasyTransferRes" +
-      "ponse\"\000\022k\n\032EasyTransferAssetByPrivate\022+." +
-      "protocol.EasyTransferAssetByPrivateMessa" +
-      "ge\032\036.protocol.EasyTransferResponse\"\000\022O\n\014" +
-      "EasyTransfer\022\035.protocol.EasyTransferMess" +
-      "age\032\036.protocol.EasyTransferResponse\"\000\022a\n" +
-      "\025EasyTransferByPrivate\022&.protocol.EasyTr" +
-      "ansferByPrivateMessage\032\036.protocol.EasyTr" +
-      "ansferResponse\"\000\022A\n\rCreateAddress\022\026.prot" +
-      "ocol.BytesMessage\032\026.protocol.BytesMessag" +
-      "e\"\000\022N\n\017GenerateAddress\022\026.protocol.EmptyM" +
-      "essage\032!.protocol.AddressPrKeyPairMessag" +
-      "e\"\000\022F\n\007AddSign\022\031.protocol.TransactionSig" +
-      "n\032\036.protocol.TransactionExtention\"\000\022B\n\016G" +
-      "etSpendingKey\022\026.protocol.EmptyMessage\032\026." +
-      "protocol.BytesMessage\"\000\022X\n\026GetExpandedSp" +
-      "endingKey\022\026.protocol.BytesMessage\032$.prot" +
-      "ocol.ExpandedSpendingKeyMessage\"\000\022@\n\014Get" +
-      "AkFromAsk\022\026.protocol.BytesMessage\032\026.prot" +
-      "ocol.BytesMessage\"\000\022@\n\014GetNkFromNsk\022\026.pr" +
-      "otocol.BytesMessage\032\026.protocol.BytesMess" +
-      "age\"\000\022[\n\025GetIncomingViewingKey\022\033.protoco" +
-      "l.ViewingKeyMessage\032#.protocol.IncomingV" +
-      "iewingKeyMessage\"\000\022H\n\016GetDiversifier\022\026.p" +
-      "rotocol.EmptyMessage\032\034.protocol.Diversif" +
-      "ierMessage\"\000\022i\n\024GetZenPaymentAddress\022..p" +
-      "rotocol.IncomingViewingKeyDiversifierMes" +
-      "sage\032\037.protocol.PaymentAddressMessage\"\000\022" +
-      "P\n\025GetNewShieldedAddress\022\026.protocol.Empt" +
-      "yMessage\032\035.protocol.ShieldedAddressInfo\"" +
-      "\000\022:\n\006GetRcm\022\026.protocol.EmptyMessage\032\026.pr" +
-      "otocol.BytesMessage\"\000\022q\n CreateShieldedC" +
-      "ontractParameters\022(.protocol.PrivateShie" +
-      "ldedTRC20Parameters\032!.protocol.ShieldedT" +
-      "RC20Parameters\"\000\022\205\001\n*CreateShieldedContr" +
-      "actParametersWithoutAsk\0222.protocol.Priva" +
-      "teShieldedTRC20ParametersWithoutAsk\032!.pr" +
-      "otocol.ShieldedTRC20Parameters\"\000\022u\n\'GetT" +
-      "riggerInputForShieldedTRC20Contract\0220.pr" +
-      "otocol.ShieldedTRC20TriggerContractParam" +
-      "eters\032\026.protocol.BytesMessage\"\000\022\204\001\n\031GetA" +
-      "vailableUnfreezeCount\0221.protocol.GetAvai" +
-      "lableUnfreezeCountRequestMessage\0322.proto" +
-      "col.GetAvailableUnfreezeCountResponseMes" +
-      "sage\"\000\022\207\001\n\034GetCanWithdrawUnfreezeAmount\022" +
-      "1.protocol.CanWithdrawUnfreezeAmountRequ" +
-      "estMessage\0322.protocol.CanWithdrawUnfreez" +
-      "eAmountResponseMessage\"\000\022u\n\026GetCanDelega" +
-      "tedMaxSize\022+.protocol.CanDelegatedMaxSiz" +
-      "eRequestMessage\032,.protocol.CanDelegatedM" +
-      "axSizeResponseMessage\"\000\022_\n\026GetDelegatedR" +
-      "esourceV2\022\".protocol.DelegatedResourceMe" +
-      "ssage\032\037.protocol.DelegatedResourceList\"\000" +
-      "\022g\n\"GetDelegatedResourceAccountIndexV2\022\026" +
-      ".protocol.BytesMessage\032\'.protocol.Delega" +
-      "tedResourceAccountIndex\"\000\022?\n\nGetBurnTrx\022" +
-      "\026.protocol.EmptyMessage\032\027.protocol.Numbe" +
-      "rMessage\"\000\022P\n\024GetBlockBalanceTrace\022\031.pro" +
-      "tocol.BlockIdentifier\032\033.protocol.BlockBa" +
-      "lanceTrace\"\000\022S\n\016CreateWitness2\022\037.protoco" +
-      "l.WitnessCreateContract\032\036.protocol.Trans" +
-      "actionExtention\"\000\022W\n\020WithdrawBalance2\022!." +
-      "protocol.WithdrawBalanceContract\032\036.proto" +
-      "col.TransactionExtention\"\000\022V\n\035GetTransac" +
-      "tionListFromPending\022\026.protocol.EmptyMess" +
-      "age\032\033.protocol.TransactionIdList\"\000\022L\n\031Ge" +
-      "tTransactionFromPending\022\026.protocol.Bytes" +
-      "Message\032\025.protocol.Transaction\"\000\022C\n\016GetP" +
-      "endingSize\022\026.protocol.EmptyMessage\032\027.pro" +
-      "tocol.NumberMessage\"\000\022O\n\022GetBandwidthPri" +
-      "ces\022\026.protocol.EmptyMessage\032\037.protocol.P" +
-      "ricesResponseMessage\"\000\022L\n\017GetEnergyPrice" +
-      "s\022\026.protocol.EmptyMessage\032\037.protocol.Pri" +
-      "cesResponseMessage\"\000\022G\n\nGetMemoFee\022\026.pro" +
+      "essage\022\r\n\005value\030\001 \001(\014\"-\n\010BlockReq\022\021\n\tid_" +
+      "or_num\030\001 \001(\t\022\016\n\006detail\030\002 \001(\010\".\n\nBlockLim" +
+      "it\022\020\n\010startNum\030\001 \001(\003\022\016\n\006endNum\030\002 \001(\003\"(\n\025" +
+      "AccountAddressMessage\022\017\n\007address\030\003 \001(\014\"\036" +
+      "\n\020AccountIdMessage\022\n\n\002id\030\027 \001(\014\"1\n\020Pagina" +
+      "tedMessage\022\016\n\006offset\030\001 \001(\003\022\r\n\005limit\030\002 \001(" +
+      "\003\"L\n\023EasyTransferMessage\022\022\n\npassPhrase\030\001" +
+      " \001(\014\022\021\n\ttoAddress\030\002 \001(\014\022\016\n\006amount\030\003 \001(\003\"" +
+      "b\n\030EasyTransferAssetMessage\022\022\n\npassPhras" +
+      "e\030\001 \001(\014\022\021\n\ttoAddress\030\002 \001(\014\022\017\n\007assetId\030\003 " +
+      "\001(\t\022\016\n\006amount\030\004 \001(\003\"U\n\034EasyTransferByPri" +
+      "vateMessage\022\022\n\nprivateKey\030\001 \001(\014\022\021\n\ttoAdd" +
+      "ress\030\002 \001(\014\022\016\n\006amount\030\003 \001(\003\"k\n!EasyTransf" +
+      "erAssetByPrivateMessage\022\022\n\nprivateKey\030\001 " +
+      "\001(\014\022\021\n\ttoAddress\030\002 \001(\014\022\017\n\007assetId\030\003 \001(\t\022" +
+      "\016\n\006amount\030\004 \001(\003\"+\n\021ViewingKeyMessage\022\n\n\002" +
+      "ak\030\001 \001(\014\022\n\n\002nk\030\002 \001(\014\"\236\001\n\023ShieldedAddress" +
+      "Info\022\n\n\002sk\030\001 \001(\014\022\013\n\003ask\030\002 \001(\014\022\013\n\003nsk\030\003 \001" +
+      "(\014\022\013\n\003ovk\030\004 \001(\014\022\n\n\002ak\030\005 \001(\014\022\n\n\002nk\030\006 \001(\014\022" +
+      "\013\n\003ivk\030\007 \001(\014\022\t\n\001d\030\010 \001(\014\022\013\n\003pkD\030\t \001(\014\022\027\n\017" +
+      "payment_address\030\n \001(\t\"f\n\025PaymentAddressM" +
+      "essage\022\'\n\001d\030\001 \001(\0132\034.protocol.Diversifier" +
+      "Message\022\013\n\003pkD\030\002 \001(\014\022\027\n\017payment_address\030" +
+      "\003 \001(\t\"\037\n\022DiversifierMessage\022\t\n\001d\030\001 \001(\014\"C" +
+      "\n\032ExpandedSpendingKeyMessage\022\013\n\003ask\030\001 \001(" +
+      "\014\022\013\n\003nsk\030\002 \001(\014\022\013\n\003ovk\030\003 \001(\014\"(\n\031IncomingV" +
+      "iewingKeyMessage\022\013\n\003ivk\030\001 \001(\014\"\201\001\n$Incomi" +
+      "ngViewingKeyDiversifierMessage\0220\n\003ivk\030\001 " +
+      "\001(\0132#.protocol.IncomingViewingKeyMessage" +
+      "\022\'\n\001d\030\002 \001(\0132\034.protocol.DiversifierMessag" +
+      "e\"+\n\013ReceiveNote\022\034\n\004note\030\001 \001(\0132\016.protoco" +
+      "l.Note\"f\n\016SpendNoteTRC20\022\034\n\004note\030\001 \001(\0132\016" +
+      ".protocol.Note\022\r\n\005alpha\030\002 \001(\014\022\014\n\004root\030\003 " +
+      "\001(\014\022\014\n\004path\030\004 \001(\014\022\013\n\003pos\030\005 \001(\003\"\235\002\n\036Priva" +
+      "teShieldedTRC20Parameters\022\013\n\003ask\030\001 \001(\014\022\013" +
+      "\n\003nsk\030\002 \001(\014\022\013\n\003ovk\030\003 \001(\014\022\023\n\013from_amount\030" +
+      "\004 \001(\t\0221\n\017shielded_spends\030\005 \003(\0132\030.protoco" +
+      "l.SpendNoteTRC20\0220\n\021shielded_receives\030\006 " +
+      "\003(\0132\025.protocol.ReceiveNote\022\036\n\026transparen" +
+      "t_to_address\030\007 \001(\014\022\021\n\tto_amount\030\010 \001(\t\022\'\n" +
+      "\037shielded_TRC20_contract_address\030\t \001(\014\"\246" +
+      "\002\n(PrivateShieldedTRC20ParametersWithout" +
+      "Ask\022\n\n\002ak\030\001 \001(\014\022\013\n\003nsk\030\002 \001(\014\022\013\n\003ovk\030\003 \001(" +
+      "\014\022\023\n\013from_amount\030\004 \001(\t\0221\n\017shielded_spend" +
+      "s\030\005 \003(\0132\030.protocol.SpendNoteTRC20\0220\n\021shi" +
+      "elded_receives\030\006 \003(\0132\025.protocol.ReceiveN" +
+      "ote\022\036\n\026transparent_to_address\030\007 \001(\014\022\021\n\tt" +
+      "o_amount\030\010 \001(\t\022\'\n\037shielded_TRC20_contrac" +
+      "t_address\030\t \001(\014\"\217\001\n\020SpendDescription\022\030\n\020" +
+      "value_commitment\030\001 \001(\014\022\016\n\006anchor\030\002 \001(\014\022\021" +
+      "\n\tnullifier\030\003 \001(\014\022\n\n\002rk\030\004 \001(\014\022\017\n\007zkproof" +
+      "\030\005 \001(\014\022!\n\031spend_authority_signature\030\006 \001(" +
+      "\014\"\203\001\n\022ReceiveDescription\022\030\n\020value_commit" +
+      "ment\030\001 \001(\014\022\027\n\017note_commitment\030\002 \001(\014\022\013\n\003e" +
+      "pk\030\003 \001(\014\022\r\n\005c_enc\030\004 \001(\014\022\r\n\005c_out\030\005 \001(\014\022\017" +
+      "\n\007zkproof\030\006 \001(\014\"\364\001\n\027ShieldedTRC20Paramet" +
+      "ers\0225\n\021spend_description\030\001 \003(\0132\032.protoco" +
+      "l.SpendDescription\0229\n\023receive_descriptio" +
+      "n\030\002 \003(\0132\034.protocol.ReceiveDescription\022\031\n" +
+      "\021binding_signature\030\003 \001(\014\022\024\n\014message_hash" +
+      "\030\004 \001(\014\022\036\n\026trigger_contract_input\030\005 \001(\t\022\026" +
+      "\n\016parameter_type\030\006 \001(\t\"\255\001\n\031IvkDecryptTRC" +
+      "20Parameters\022\031\n\021start_block_index\030\001 \001(\003\022" +
+      "\027\n\017end_block_index\030\002 \001(\003\022\'\n\037shielded_TRC" +
+      "20_contract_address\030\003 \001(\014\022\013\n\003ivk\030\004 \001(\014\022\n" +
+      "\n\002ak\030\005 \001(\014\022\n\n\002nk\030\006 \001(\014\022\016\n\006events\030\007 \003(\t\"\225" +
+      "\001\n\031OvkDecryptTRC20Parameters\022\031\n\021start_bl" +
+      "ock_index\030\001 \001(\003\022\027\n\017end_block_index\030\002 \001(\003" +
+      "\022\013\n\003ovk\030\003 \001(\014\022\'\n\037shielded_TRC20_contract" +
+      "_address\030\004 \001(\014\022\016\n\006events\030\005 \003(\t\"\204\001\n\021NfTRC" +
+      "20Parameters\022\034\n\004note\030\001 \001(\0132\016.protocol.No" +
+      "te\022\n\n\002ak\030\002 \001(\014\022\n\n\002nk\030\003 \001(\014\022\020\n\010position\030\004" +
+      " \001(\003\022\'\n\037shielded_TRC20_contract_address\030" +
+      "\005 \001(\014\"\331\001\n&ShieldedTRC20TriggerContractPa" +
+      "rameters\022D\n\031shielded_TRC20_Parameters\030\001 " +
+      "\001(\0132!.protocol.ShieldedTRC20Parameters\0229" +
+      "\n\031spend_authority_signature\030\002 \003(\0132\026.prot" +
+      "ocol.BytesMessage\022\016\n\006amount\030\003 \001(\t\022\036\n\026tra" +
+      "nsparent_to_address\030\004 \001(\014\"S\n\'CanWithdraw" +
+      "UnfreezeAmountRequestMessage\022\025\n\rowner_ad" +
+      "dress\030\001 \001(\014\022\021\n\ttimestamp\030\002 \001(\003\"@\n\'GetAva" +
+      "ilableUnfreezeCountRequestMessage\022\025\n\rown" +
+      "er_address\030\001 \001(\014\"9\n(GetAvailableUnfreeze" +
+      "CountResponseMessage\022\r\n\005count\030\001 \001(\003\":\n(C" +
+      "anWithdrawUnfreezeAmountResponseMessage\022" +
+      "\016\n\006amount\030\001 \001(\003\"H\n!CanDelegatedMaxSizeRe" +
+      "questMessage\022\014\n\004type\030\001 \001(\005\022\025\n\rowner_addr" +
+      "ess\030\002 \001(\014\"6\n\"CanDelegatedMaxSizeResponse" +
+      "Message\022\020\n\010max_size\030\001 \001(\003\"!\n\021Transaction" +
+      "IdList\022\014\n\004txId\030\001 \003(\t2\301;\n\006Wallet\022L\n\024Broad" +
+      "castTransaction\022\025.protocol.Transaction\032\033" +
+      ".protocol.TransactionReturn\"\000\022Q\n\016DeployC" +
+      "ontract\022\035.protocol.CreateSmartContract\032\036" +
+      ".protocol.TransactionExtention\"\000\022S\n\017Trig" +
+      "gerContract\022\036.protocol.TriggerSmartContr" +
+      "act\032\036.protocol.TransactionExtention\"\000\022[\n" +
+      "\027TriggerConstantContract\022\036.protocol.Trig" +
+      "gerSmartContract\032\036.protocol.TransactionE" +
+      "xtention\"\000\022S\n\016EstimateEnergy\022\036.protocol." +
+      "TriggerSmartContract\032\037.protocol.Estimate" +
+      "EnergyMessage\"\000\022;\n\013GetNodeInfo\022\026.protoco" +
+      "l.EmptyMessage\032\022.protocol.NodeInfo\"\000\0229\n\t" +
+      "ListNodes\022\026.protocol.EmptyMessage\032\022.prot" +
+      "ocol.NodeList\"\000\022I\n\022GetChainParameters\022\026." +
+      "protocol.EmptyMessage\032\031.protocol.ChainPa" +
+      "rameters\"\000\022E\n\020TotalTransaction\022\026.protoco" +
+      "l.EmptyMessage\032\027.protocol.NumberMessage\"" +
+      "\000\022K\n\026GetNextMaintenanceTime\022\026.protocol.E" +
+      "mptyMessage\032\027.protocol.NumberMessage\"\000\022T" +
+      "\n\030GetTransactionSignWeight\022\025.protocol.Tr" +
+      "ansaction\032\037.protocol.TransactionSignWeig" +
+      "ht\"\000\022X\n\032GetTransactionApprovedList\022\025.pro" +
+      "tocol.Transaction\032!.protocol.Transaction" +
+      "ApprovedList\"\000\022B\n\nGetAccount\022\037.protocol." +
+      "AccountAddressMessage\032\021.protocol.Account" +
+      "\"\000\022A\n\016GetAccountById\022\032.protocol.AccountI" +
+      "dMessage\032\021.protocol.Account\"\000\022O\n\rGetAcco" +
+      "untNet\022\037.protocol.AccountAddressMessage\032" +
+      "\033.protocol.AccountNetMessage\"\000\022Y\n\022GetAcc" +
+      "ountResource\022\037.protocol.AccountAddressMe" +
+      "ssage\032 .protocol.AccountResourceMessage\"" +
+      "\000\022U\n\026GetAssetIssueByAccount\022\037.protocol.A" +
+      "ccountAddressMessage\032\030.protocol.AssetIss" +
+      "ueList\"\000\022M\n\023GetAssetIssueByName\022\026.protoc" +
+      "ol.BytesMessage\032\034.protocol.AssetIssueCon" +
+      "tract\"\000\022M\n\027GetAssetIssueListByName\022\026.pro" +
+      "tocol.BytesMessage\032\030.protocol.AssetIssue" +
+      "List\"\000\022K\n\021GetAssetIssueById\022\026.protocol.B" +
+      "ytesMessage\032\034.protocol.AssetIssueContrac" +
+      "t\"\000\022G\n\021GetAssetIssueList\022\026.protocol.Empt" +
+      "yMessage\032\030.protocol.AssetIssueList\"\000\022T\n\032" +
+      "GetPaginatedAssetIssueList\022\032.protocol.Pa" +
+      "ginatedMessage\032\030.protocol.AssetIssueList" +
+      "\"\000\022:\n\010GetBlock\022\022.protocol.BlockReq\032\030.pro" +
+      "tocol.BlockExtention\"\000\0228\n\013GetNowBlock\022\026." +
+      "protocol.EmptyMessage\032\017.protocol.Block\"\000" +
+      "\022B\n\014GetNowBlock2\022\026.protocol.EmptyMessage" +
+      "\032\030.protocol.BlockExtention\"\000\022;\n\rGetBlock" +
+      "ByNum\022\027.protocol.NumberMessage\032\017.protoco" +
+      "l.Block\"\000\022E\n\016GetBlockByNum2\022\027.protocol.N" +
+      "umberMessage\032\030.protocol.BlockExtention\"\000" +
+      "\0229\n\014GetBlockById\022\026.protocol.BytesMessage" +
+      "\032\017.protocol.Block\"\000\022B\n\023GetBlockByLimitNe" +
+      "xt\022\024.protocol.BlockLimit\032\023.protocol.Bloc" +
+      "kList\"\000\022L\n\024GetBlockByLimitNext2\022\024.protoc" +
+      "ol.BlockLimit\032\034.protocol.BlockListExtent" +
+      "ion\"\000\022E\n\023GetBlockByLatestNum\022\027.protocol." +
+      "NumberMessage\032\023.protocol.BlockList\"\000\022O\n\024" +
+      "GetBlockByLatestNum2\022\027.protocol.NumberMe" +
+      "ssage\032\034.protocol.BlockListExtention\"\000\022S\n" +
+      "\035GetTransactionCountByBlockNum\022\027.protoco" +
+      "l.NumberMessage\032\027.protocol.NumberMessage" +
+      "\"\000\022E\n\022GetTransactionById\022\026.protocol.Byte" +
+      "sMessage\032\025.protocol.Transaction\"\000\022M\n\026Get" +
+      "TransactionInfoById\022\026.protocol.BytesMess" +
+      "age\032\031.protocol.TransactionInfo\"\000\022X\n\034GetT" +
+      "ransactionInfoByBlockNum\022\027.protocol.Numb" +
+      "erMessage\032\035.protocol.TransactionInfoList" +
+      "\"\000\022@\n\013GetContract\022\026.protocol.BytesMessag" +
+      "e\032\027.protocol.SmartContract\"\000\022O\n\017GetContr" +
+      "actInfo\022\026.protocol.BytesMessage\032\".protoc" +
+      "ol.SmartContractDataWrapper\"\000\022@\n\rListWit" +
+      "nesses\022\026.protocol.EmptyMessage\032\025.protoco" +
+      "l.WitnessList\"\000\022E\n\020GetBrokerageInfo\022\026.pr" +
+      "otocol.BytesMessage\032\027.protocol.NumberMes" +
+      "sage\"\000\022B\n\rGetRewardInfo\022\026.protocol.Bytes" +
+      "Message\032\027.protocol.NumberMessage\"\000\022]\n\024Ge" +
+      "tDelegatedResource\022\".protocol.DelegatedR" +
+      "esourceMessage\032\037.protocol.DelegatedResou" +
+      "rceList\"\000\022e\n GetDelegatedResourceAccount" +
+      "Index\022\026.protocol.BytesMessage\032\'.protocol" +
+      ".DelegatedResourceAccountIndex\"\000\022A\n\rList" +
+      "Proposals\022\026.protocol.EmptyMessage\032\026.prot" +
+      "ocol.ProposalList\"\000\022?\n\017GetProposalById\022\026" +
+      ".protocol.BytesMessage\032\022.protocol.Propos" +
+      "al\"\000\022P\n\030GetPaginatedProposalList\022\032.proto" +
+      "col.PaginatedMessage\032\026.protocol.Proposal" +
+      "List\"\000\022A\n\rListExchanges\022\026.protocol.Empty" +
+      "Message\032\026.protocol.ExchangeList\"\000\022?\n\017Get" +
+      "ExchangeById\022\026.protocol.BytesMessage\032\022.p" +
+      "rotocol.Exchange\"\000\022P\n\030GetPaginatedExchan" +
+      "geList\022\032.protocol.PaginatedMessage\032\026.pro" +
+      "tocol.ExchangeList\"\000\022a\n\033ScanShieldedTRC2" +
+      "0NotesByIvk\022#.protocol.IvkDecryptTRC20Pa" +
+      "rameters\032\033.protocol.DecryptNotesTRC20\"\000\022" +
+      "a\n\033ScanShieldedTRC20NotesByOvk\022#.protoco" +
+      "l.OvkDecryptTRC20Parameters\032\033.protocol.D" +
+      "ecryptNotesTRC20\"\000\022\\\n IsShieldedTRC20Con" +
+      "tractNoteSpent\022\033.protocol.NfTRC20Paramet" +
+      "ers\032\031.protocol.NullifierResult\"\000\022N\n\027GetM" +
+      "arketOrderByAccount\022\026.protocol.BytesMess" +
+      "age\032\031.protocol.MarketOrderList\"\000\022E\n\022GetM" +
+      "arketOrderById\022\026.protocol.BytesMessage\032\025" +
+      ".protocol.MarketOrder\"\000\022N\n\024GetMarketPric" +
+      "eByPair\022\031.protocol.MarketOrderPair\032\031.pro" +
+      "tocol.MarketPriceList\"\000\022R\n\030GetMarketOrde" +
+      "rListByPair\022\031.protocol.MarketOrderPair\032\031" +
+      ".protocol.MarketOrderList\"\000\022L\n\021GetMarket" +
+      "PairList\022\026.protocol.EmptyMessage\032\035.proto" +
+      "col.MarketOrderPairList\"\000\022H\n\022GetTransact" +
+      "ionSign\022\031.protocol.TransactionSign\032\025.pro" +
+      "tocol.Transaction\"\000\022R\n\023GetTransactionSig" +
+      "n2\022\031.protocol.TransactionSign\032\036.protocol" +
+      ".TransactionExtention\"\000\022Y\n\021EasyTransferA" +
+      "sset\022\".protocol.EasyTransferAssetMessage" +
+      "\032\036.protocol.EasyTransferResponse\"\000\022k\n\032Ea" +
+      "syTransferAssetByPrivate\022+.protocol.Easy" +
+      "TransferAssetByPrivateMessage\032\036.protocol" +
+      ".EasyTransferResponse\"\000\022O\n\014EasyTransfer\022" +
+      "\035.protocol.EasyTransferMessage\032\036.protoco" +
+      "l.EasyTransferResponse\"\000\022a\n\025EasyTransfer" +
+      "ByPrivate\022&.protocol.EasyTransferByPriva" +
+      "teMessage\032\036.protocol.EasyTransferRespons" +
+      "e\"\000\022A\n\rCreateAddress\022\026.protocol.BytesMes" +
+      "sage\032\026.protocol.BytesMessage\"\000\022N\n\017Genera" +
+      "teAddress\022\026.protocol.EmptyMessage\032!.prot" +
+      "ocol.AddressPrKeyPairMessage\"\000\022F\n\007AddSig" +
+      "n\022\031.protocol.TransactionSign\032\036.protocol." +
+      "TransactionExtention\"\000\022B\n\016GetSpendingKey" +
+      "\022\026.protocol.EmptyMessage\032\026.protocol.Byte" +
+      "sMessage\"\000\022X\n\026GetExpandedSpendingKey\022\026.p" +
+      "rotocol.BytesMessage\032$.protocol.Expanded" +
+      "SpendingKeyMessage\"\000\022@\n\014GetAkFromAsk\022\026.p" +
+      "rotocol.BytesMessage\032\026.protocol.BytesMes" +
+      "sage\"\000\022@\n\014GetNkFromNsk\022\026.protocol.BytesM" +
+      "essage\032\026.protocol.BytesMessage\"\000\022[\n\025GetI" +
+      "ncomingViewingKey\022\033.protocol.ViewingKeyM" +
+      "essage\032#.protocol.IncomingViewingKeyMess" +
+      "age\"\000\022H\n\016GetDiversifier\022\026.protocol.Empty" +
+      "Message\032\034.protocol.DiversifierMessage\"\000\022" +
+      "i\n\024GetZenPaymentAddress\022..protocol.Incom" +
+      "ingViewingKeyDiversifierMessage\032\037.protoc" +
+      "ol.PaymentAddressMessage\"\000\022P\n\025GetNewShie" +
+      "ldedAddress\022\026.protocol.EmptyMessage\032\035.pr" +
+      "otocol.ShieldedAddressInfo\"\000\022:\n\006GetRcm\022\026" +
+      ".protocol.EmptyMessage\032\026.protocol.BytesM" +
+      "essage\"\000\022q\n CreateShieldedContractParame" +
+      "ters\022(.protocol.PrivateShieldedTRC20Para" +
+      "meters\032!.protocol.ShieldedTRC20Parameter" +
+      "s\"\000\022\205\001\n*CreateShieldedContractParameters" +
+      "WithoutAsk\0222.protocol.PrivateShieldedTRC" +
+      "20ParametersWithoutAsk\032!.protocol.Shield" +
+      "edTRC20Parameters\"\000\022u\n\'GetTriggerInputFo" +
+      "rShieldedTRC20Contract\0220.protocol.Shield" +
+      "edTRC20TriggerContractParameters\032\026.proto" +
+      "col.BytesMessage\"\000\022\204\001\n\031GetAvailableUnfre" +
+      "ezeCount\0221.protocol.GetAvailableUnfreeze" +
+      "CountRequestMessage\0322.protocol.GetAvaila" +
+      "bleUnfreezeCountResponseMessage\"\000\022\207\001\n\034Ge" +
+      "tCanWithdrawUnfreezeAmount\0221.protocol.Ca" +
+      "nWithdrawUnfreezeAmountRequestMessage\0322." +
+      "protocol.CanWithdrawUnfreezeAmountRespon" +
+      "seMessage\"\000\022u\n\026GetCanDelegatedMaxSize\022+." +
+      "protocol.CanDelegatedMaxSizeRequestMessa" +
+      "ge\032,.protocol.CanDelegatedMaxSizeRespons" +
+      "eMessage\"\000\022_\n\026GetDelegatedResourceV2\022\".p" +
+      "rotocol.DelegatedResourceMessage\032\037.proto" +
+      "col.DelegatedResourceList\"\000\022g\n\"GetDelega" +
+      "tedResourceAccountIndexV2\022\026.protocol.Byt" +
+      "esMessage\032\'.protocol.DelegatedResourceAc" +
+      "countIndex\"\000\022?\n\nGetBurnTrx\022\026.protocol.Em" +
+      "ptyMessage\032\027.protocol.NumberMessage\"\000\022P\n" +
+      "\024GetBlockBalanceTrace\022\031.protocol.BlockId" +
+      "entifier\032\033.protocol.BlockBalanceTrace\"\000\022" +
+      "S\n\016CreateWitness2\022\037.protocol.WitnessCrea" +
+      "teContract\032\036.protocol.TransactionExtenti" +
+      "on\"\000\022W\n\020WithdrawBalance2\022!.protocol.With" +
+      "drawBalanceContract\032\036.protocol.Transacti" +
+      "onExtention\"\000\022V\n\035GetTransactionListFromP" +
+      "ending\022\026.protocol.EmptyMessage\032\033.protoco" +
+      "l.TransactionIdList\"\000\022L\n\031GetTransactionF" +
+      "romPending\022\026.protocol.BytesMessage\032\025.pro" +
+      "tocol.Transaction\"\000\022C\n\016GetPendingSize\022\026." +
+      "protocol.EmptyMessage\032\027.protocol.NumberM" +
+      "essage\"\000\022O\n\022GetBandwidthPrices\022\026.protoco" +
+      "l.EmptyMessage\032\037.protocol.PricesResponse" +
+      "Message\"\000\022L\n\017GetEnergyPrices\022\026.protocol." +
+      "EmptyMessage\032\037.protocol.PricesResponseMe" +
+      "ssage\"\000\022G\n\nGetMemoFee\022\026.protocol.EmptyMe" +
+      "ssage\032\037.protocol.PricesResponseMessage\"\000" +
+      "2\314\004\n\016WalletSolidity\022B\n\nGetAccount\022\037.prot" +
+      "ocol.AccountAddressMessage\032\021.protocol.Ac" +
+      "count\"\000\022B\n\014GetNowBlock2\022\026.protocol.Empty" +
+      "Message\032\030.protocol.BlockExtention\"\000\022E\n\022G" +
+      "etTransactionById\022\026.protocol.BytesMessag" +
+      "e\032\025.protocol.Transaction\"\000\022B\n\rGetRewardI" +
+      "nfo\022\026.protocol.BytesMessage\032\027.protocol.N" +
+      "umberMessage\"\000\022L\n\031GetTransactionFromPend" +
+      "ing\022\026.protocol.BytesMessage\032\025.protocol.T" +
+      "ransaction\"\000\022O\n\022GetBandwidthPrices\022\026.pro" +
       "tocol.EmptyMessage\032\037.protocol.PricesResp" +
-      "onseMessage\"\0002\220\004\n\016WalletSolidity\022B\n\nGetA" +
-      "ccount\022\037.protocol.AccountAddressMessage\032" +
-      "\021.protocol.Account\"\000\022B\n\014GetNowBlock2\022\026.p" +
-      "rotocol.EmptyMessage\032\030.protocol.BlockExt" +
-      "ention\"\000\022E\n\022GetTransactionById\022\026.protoco" +
-      "l.BytesMessage\032\025.protocol.Transaction\"\000\022" +
-      "B\n\rGetRewardInfo\022\026.protocol.BytesMessage" +
-      "\032\027.protocol.NumberMessage\"\000\022L\n\031GetTransa" +
-      "ctionFromPending\022\026.protocol.BytesMessage" +
-      "\032\025.protocol.Transaction\"\000\022O\n\022GetBandwidt" +
-      "hPrices\022\026.protocol.EmptyMessage\032\037.protoc" +
-      "ol.PricesResponseMessage\"\000\022L\n\017GetEnergyP" +
-      "rices\022\026.protocol.EmptyMessage\032\037.protocol" +
-      ".PricesResponseMessage\"\000B\037\n\024org.tron.tri" +
-      "dent.apiB\007GrpcAPIb\006proto3"
+      "onseMessage\"\000\022L\n\017GetEnergyPrices\022\026.proto" +
+      "col.EmptyMessage\032\037.protocol.PricesRespon" +
+      "seMessage\"\000\022:\n\010GetBlock\022\022.protocol.Block" +
+      "Req\032\030.protocol.BlockExtention\"\000B\037\n\024org.t" +
+      "ron.trident.apiB\007GrpcAPIb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -28000,200 +28634,206 @@ public final class GrpcAPI {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_BytesMessage_descriptor,
         new java.lang.String[] { "Value", });
-    internal_static_protocol_BlockLimit_descriptor =
+    internal_static_protocol_BlockReq_descriptor =
       getDescriptor().getMessageTypes().get(3);
+    internal_static_protocol_BlockReq_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_protocol_BlockReq_descriptor,
+        new java.lang.String[] { "IdOrNum", "Detail", });
+    internal_static_protocol_BlockLimit_descriptor =
+      getDescriptor().getMessageTypes().get(4);
     internal_static_protocol_BlockLimit_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_BlockLimit_descriptor,
         new java.lang.String[] { "StartNum", "EndNum", });
     internal_static_protocol_AccountAddressMessage_descriptor =
-      getDescriptor().getMessageTypes().get(4);
+      getDescriptor().getMessageTypes().get(5);
     internal_static_protocol_AccountAddressMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_AccountAddressMessage_descriptor,
         new java.lang.String[] { "Address", });
     internal_static_protocol_AccountIdMessage_descriptor =
-      getDescriptor().getMessageTypes().get(5);
+      getDescriptor().getMessageTypes().get(6);
     internal_static_protocol_AccountIdMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_AccountIdMessage_descriptor,
         new java.lang.String[] { "Id", });
     internal_static_protocol_PaginatedMessage_descriptor =
-      getDescriptor().getMessageTypes().get(6);
+      getDescriptor().getMessageTypes().get(7);
     internal_static_protocol_PaginatedMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_PaginatedMessage_descriptor,
         new java.lang.String[] { "Offset", "Limit", });
     internal_static_protocol_EasyTransferMessage_descriptor =
-      getDescriptor().getMessageTypes().get(7);
+      getDescriptor().getMessageTypes().get(8);
     internal_static_protocol_EasyTransferMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_EasyTransferMessage_descriptor,
         new java.lang.String[] { "PassPhrase", "ToAddress", "Amount", });
     internal_static_protocol_EasyTransferAssetMessage_descriptor =
-      getDescriptor().getMessageTypes().get(8);
+      getDescriptor().getMessageTypes().get(9);
     internal_static_protocol_EasyTransferAssetMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_EasyTransferAssetMessage_descriptor,
         new java.lang.String[] { "PassPhrase", "ToAddress", "AssetId", "Amount", });
     internal_static_protocol_EasyTransferByPrivateMessage_descriptor =
-      getDescriptor().getMessageTypes().get(9);
+      getDescriptor().getMessageTypes().get(10);
     internal_static_protocol_EasyTransferByPrivateMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_EasyTransferByPrivateMessage_descriptor,
         new java.lang.String[] { "PrivateKey", "ToAddress", "Amount", });
     internal_static_protocol_EasyTransferAssetByPrivateMessage_descriptor =
-      getDescriptor().getMessageTypes().get(10);
+      getDescriptor().getMessageTypes().get(11);
     internal_static_protocol_EasyTransferAssetByPrivateMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_EasyTransferAssetByPrivateMessage_descriptor,
         new java.lang.String[] { "PrivateKey", "ToAddress", "AssetId", "Amount", });
     internal_static_protocol_ViewingKeyMessage_descriptor =
-      getDescriptor().getMessageTypes().get(11);
+      getDescriptor().getMessageTypes().get(12);
     internal_static_protocol_ViewingKeyMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_ViewingKeyMessage_descriptor,
         new java.lang.String[] { "Ak", "Nk", });
     internal_static_protocol_ShieldedAddressInfo_descriptor =
-      getDescriptor().getMessageTypes().get(12);
+      getDescriptor().getMessageTypes().get(13);
     internal_static_protocol_ShieldedAddressInfo_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_ShieldedAddressInfo_descriptor,
         new java.lang.String[] { "Sk", "Ask", "Nsk", "Ovk", "Ak", "Nk", "Ivk", "D", "PkD", "PaymentAddress", });
     internal_static_protocol_PaymentAddressMessage_descriptor =
-      getDescriptor().getMessageTypes().get(13);
+      getDescriptor().getMessageTypes().get(14);
     internal_static_protocol_PaymentAddressMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_PaymentAddressMessage_descriptor,
         new java.lang.String[] { "D", "PkD", "PaymentAddress", });
     internal_static_protocol_DiversifierMessage_descriptor =
-      getDescriptor().getMessageTypes().get(14);
+      getDescriptor().getMessageTypes().get(15);
     internal_static_protocol_DiversifierMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_DiversifierMessage_descriptor,
         new java.lang.String[] { "D", });
     internal_static_protocol_ExpandedSpendingKeyMessage_descriptor =
-      getDescriptor().getMessageTypes().get(15);
+      getDescriptor().getMessageTypes().get(16);
     internal_static_protocol_ExpandedSpendingKeyMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_ExpandedSpendingKeyMessage_descriptor,
         new java.lang.String[] { "Ask", "Nsk", "Ovk", });
     internal_static_protocol_IncomingViewingKeyMessage_descriptor =
-      getDescriptor().getMessageTypes().get(16);
+      getDescriptor().getMessageTypes().get(17);
     internal_static_protocol_IncomingViewingKeyMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_IncomingViewingKeyMessage_descriptor,
         new java.lang.String[] { "Ivk", });
     internal_static_protocol_IncomingViewingKeyDiversifierMessage_descriptor =
-      getDescriptor().getMessageTypes().get(17);
+      getDescriptor().getMessageTypes().get(18);
     internal_static_protocol_IncomingViewingKeyDiversifierMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_IncomingViewingKeyDiversifierMessage_descriptor,
         new java.lang.String[] { "Ivk", "D", });
     internal_static_protocol_ReceiveNote_descriptor =
-      getDescriptor().getMessageTypes().get(18);
+      getDescriptor().getMessageTypes().get(19);
     internal_static_protocol_ReceiveNote_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_ReceiveNote_descriptor,
         new java.lang.String[] { "Note", });
     internal_static_protocol_SpendNoteTRC20_descriptor =
-      getDescriptor().getMessageTypes().get(19);
+      getDescriptor().getMessageTypes().get(20);
     internal_static_protocol_SpendNoteTRC20_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_SpendNoteTRC20_descriptor,
         new java.lang.String[] { "Note", "Alpha", "Root", "Path", "Pos", });
     internal_static_protocol_PrivateShieldedTRC20Parameters_descriptor =
-      getDescriptor().getMessageTypes().get(20);
+      getDescriptor().getMessageTypes().get(21);
     internal_static_protocol_PrivateShieldedTRC20Parameters_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_PrivateShieldedTRC20Parameters_descriptor,
         new java.lang.String[] { "Ask", "Nsk", "Ovk", "FromAmount", "ShieldedSpends", "ShieldedReceives", "TransparentToAddress", "ToAmount", "ShieldedTRC20ContractAddress", });
     internal_static_protocol_PrivateShieldedTRC20ParametersWithoutAsk_descriptor =
-      getDescriptor().getMessageTypes().get(21);
+      getDescriptor().getMessageTypes().get(22);
     internal_static_protocol_PrivateShieldedTRC20ParametersWithoutAsk_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_PrivateShieldedTRC20ParametersWithoutAsk_descriptor,
         new java.lang.String[] { "Ak", "Nsk", "Ovk", "FromAmount", "ShieldedSpends", "ShieldedReceives", "TransparentToAddress", "ToAmount", "ShieldedTRC20ContractAddress", });
     internal_static_protocol_SpendDescription_descriptor =
-      getDescriptor().getMessageTypes().get(22);
+      getDescriptor().getMessageTypes().get(23);
     internal_static_protocol_SpendDescription_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_SpendDescription_descriptor,
         new java.lang.String[] { "ValueCommitment", "Anchor", "Nullifier", "Rk", "Zkproof", "SpendAuthoritySignature", });
     internal_static_protocol_ReceiveDescription_descriptor =
-      getDescriptor().getMessageTypes().get(23);
+      getDescriptor().getMessageTypes().get(24);
     internal_static_protocol_ReceiveDescription_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_ReceiveDescription_descriptor,
         new java.lang.String[] { "ValueCommitment", "NoteCommitment", "Epk", "CEnc", "COut", "Zkproof", });
     internal_static_protocol_ShieldedTRC20Parameters_descriptor =
-      getDescriptor().getMessageTypes().get(24);
+      getDescriptor().getMessageTypes().get(25);
     internal_static_protocol_ShieldedTRC20Parameters_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_ShieldedTRC20Parameters_descriptor,
         new java.lang.String[] { "SpendDescription", "ReceiveDescription", "BindingSignature", "MessageHash", "TriggerContractInput", "ParameterType", });
     internal_static_protocol_IvkDecryptTRC20Parameters_descriptor =
-      getDescriptor().getMessageTypes().get(25);
+      getDescriptor().getMessageTypes().get(26);
     internal_static_protocol_IvkDecryptTRC20Parameters_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_IvkDecryptTRC20Parameters_descriptor,
         new java.lang.String[] { "StartBlockIndex", "EndBlockIndex", "ShieldedTRC20ContractAddress", "Ivk", "Ak", "Nk", "Events", });
     internal_static_protocol_OvkDecryptTRC20Parameters_descriptor =
-      getDescriptor().getMessageTypes().get(26);
+      getDescriptor().getMessageTypes().get(27);
     internal_static_protocol_OvkDecryptTRC20Parameters_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_OvkDecryptTRC20Parameters_descriptor,
         new java.lang.String[] { "StartBlockIndex", "EndBlockIndex", "Ovk", "ShieldedTRC20ContractAddress", "Events", });
     internal_static_protocol_NfTRC20Parameters_descriptor =
-      getDescriptor().getMessageTypes().get(27);
+      getDescriptor().getMessageTypes().get(28);
     internal_static_protocol_NfTRC20Parameters_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_NfTRC20Parameters_descriptor,
         new java.lang.String[] { "Note", "Ak", "Nk", "Position", "ShieldedTRC20ContractAddress", });
     internal_static_protocol_ShieldedTRC20TriggerContractParameters_descriptor =
-      getDescriptor().getMessageTypes().get(28);
+      getDescriptor().getMessageTypes().get(29);
     internal_static_protocol_ShieldedTRC20TriggerContractParameters_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_ShieldedTRC20TriggerContractParameters_descriptor,
         new java.lang.String[] { "ShieldedTRC20Parameters", "SpendAuthoritySignature", "Amount", "TransparentToAddress", });
     internal_static_protocol_CanWithdrawUnfreezeAmountRequestMessage_descriptor =
-      getDescriptor().getMessageTypes().get(29);
+      getDescriptor().getMessageTypes().get(30);
     internal_static_protocol_CanWithdrawUnfreezeAmountRequestMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_CanWithdrawUnfreezeAmountRequestMessage_descriptor,
         new java.lang.String[] { "OwnerAddress", "Timestamp", });
     internal_static_protocol_GetAvailableUnfreezeCountRequestMessage_descriptor =
-      getDescriptor().getMessageTypes().get(30);
+      getDescriptor().getMessageTypes().get(31);
     internal_static_protocol_GetAvailableUnfreezeCountRequestMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_GetAvailableUnfreezeCountRequestMessage_descriptor,
         new java.lang.String[] { "OwnerAddress", });
     internal_static_protocol_GetAvailableUnfreezeCountResponseMessage_descriptor =
-      getDescriptor().getMessageTypes().get(31);
+      getDescriptor().getMessageTypes().get(32);
     internal_static_protocol_GetAvailableUnfreezeCountResponseMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_GetAvailableUnfreezeCountResponseMessage_descriptor,
         new java.lang.String[] { "Count", });
     internal_static_protocol_CanWithdrawUnfreezeAmountResponseMessage_descriptor =
-      getDescriptor().getMessageTypes().get(32);
+      getDescriptor().getMessageTypes().get(33);
     internal_static_protocol_CanWithdrawUnfreezeAmountResponseMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_CanWithdrawUnfreezeAmountResponseMessage_descriptor,
         new java.lang.String[] { "Amount", });
     internal_static_protocol_CanDelegatedMaxSizeRequestMessage_descriptor =
-      getDescriptor().getMessageTypes().get(33);
+      getDescriptor().getMessageTypes().get(34);
     internal_static_protocol_CanDelegatedMaxSizeRequestMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_CanDelegatedMaxSizeRequestMessage_descriptor,
         new java.lang.String[] { "Type", "OwnerAddress", });
     internal_static_protocol_CanDelegatedMaxSizeResponseMessage_descriptor =
-      getDescriptor().getMessageTypes().get(34);
+      getDescriptor().getMessageTypes().get(35);
     internal_static_protocol_CanDelegatedMaxSizeResponseMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_CanDelegatedMaxSizeResponseMessage_descriptor,
         new java.lang.String[] { "MaxSize", });
     internal_static_protocol_TransactionIdList_descriptor =
-      getDescriptor().getMessageTypes().get(35);
+      getDescriptor().getMessageTypes().get(36);
     internal_static_protocol_TransactionIdList_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_TransactionIdList_descriptor,
