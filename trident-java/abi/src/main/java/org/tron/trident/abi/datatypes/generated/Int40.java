@@ -10,13 +10,14 @@ import org.tron.trident.abi.datatypes.Int;
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  */
 public class Int40 extends Int {
-    public static final Int40 DEFAULT = new Int40(BigInteger.ZERO);
 
-    public Int40(BigInteger value) {
-        super(40, value);
-    }
+  public static final Int40 DEFAULT = new Int40(BigInteger.ZERO);
 
-    public Int40(long value) {
-        this(BigInteger.valueOf(value));
-    }
+  public Int40(BigInteger value) {
+    super(40, value);
+  }
+
+  public Int40(long value) {
+    this(BigInteger.valueOf(value));
+  }
 }

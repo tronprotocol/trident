@@ -10,19 +10,20 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+
 package org.tron.trident.abi.datatypes.primitive;
 
-import org.tron.trident.abi.datatypes.generated.Int32;
 import org.tron.trident.abi.datatypes.NumericType;
+import org.tron.trident.abi.datatypes.generated.Int32;
 
 public final class Int extends Number<Integer> {
 
-    public Int(int value) {
-        super(value);
-    }
+  public Int(int value) {
+    super(value);
+  }
 
-    @Override
-    public NumericType toSolidityType() {
-        return new Int32(getValue());
-    }
+  @Override
+  public NumericType toSolidityType() {
+    return new Int32(getValue());
+  }
 }

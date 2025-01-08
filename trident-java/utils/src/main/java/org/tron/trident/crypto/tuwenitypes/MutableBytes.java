@@ -10,6 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+
 package org.tron.trident.crypto.tuwenitypes;
 
 import io.netty.buffer.ByteBuf;
@@ -63,12 +64,12 @@ public interface MutableBytes extends Bytes {
    *
    * @param value The value to wrap.
    * @param offset The index (inclusive) in {@code value} of the first byte exposed by the returned value. In other
-   *        words, you will have {@code wrap(value, o, l).get(0) == value[o]}.
+   * words, you will have {@code wrap(value, o, l).get(0) == value[o]}.
    * @param length The length of the resulting value.
    * @return A {@link Bytes} value that expose the bytes of {@code value} from {@code offset} (inclusive) to
-   *         {@code offset + length} (exclusive).
+   * {@code offset + length} (exclusive).
    * @throws IndexOutOfBoundsException if {@code offset < 0 || (value.length > 0 && offset >=
-   *     value.length)}.
+   * value.length)}.
    * @throws IllegalArgumentException if {@code length < 0 || offset + length > value.length}.
    */
   static MutableBytes wrap(byte[] value, int offset, int length) {
@@ -105,11 +106,11 @@ public interface MutableBytes extends Bytes {
    *
    * @param buffer The buffer to wrap.
    * @param offset The offset in {@code buffer} from which to expose the bytes in the returned value. That is,
-   *        {@code wrapBuffer(buffer, i, 1).get(0) == buffer.getByte(i)}.
+   * {@code wrapBuffer(buffer, i, 1).get(0) == buffer.getByte(i)}.
    * @param size The size of the returned value.
    * @return A {@link MutableBytes} value.
    * @throws IndexOutOfBoundsException if {@code offset < 0 || (buffer.length() > 0 && offset >=
-   *     buffer.length())}.
+   * buffer.length())}.
    * @throws IllegalArgumentException if {@code length < 0 || offset + length > buffer.length()}.
    */
   static MutableBytes wrapBuffer(Buffer buffer, int offset, int size) {
@@ -146,11 +147,11 @@ public interface MutableBytes extends Bytes {
    *
    * @param byteBuf The {@link ByteBuf} to wrap.
    * @param offset The offset in {@code byteBuf} from which to expose the bytes in the returned value. That is,
-   *        {@code wrapByteBuf(byteBuf, i, 1).get(0) == byteBuf.getByte(i)}.
+   * {@code wrapByteBuf(byteBuf, i, 1).get(0) == byteBuf.getByte(i)}.
    * @param size The size of the returned value.
    * @return A {@link MutableBytes} value.
    * @throws IndexOutOfBoundsException if {@code offset < 0 || (byteBuf.capacity() > 0 && offset >=
-   *     byteBuf.capacity())}.
+   * byteBuf.capacity())}.
    * @throws IllegalArgumentException if {@code length < 0 || offset + length > byteBuf.capacity()}.
    */
   static MutableBytes wrapByteBuf(ByteBuf byteBuf, int offset, int size) {
@@ -187,11 +188,11 @@ public interface MutableBytes extends Bytes {
    *
    * @param byteBuffer The {@link ByteBuffer} to wrap.
    * @param offset The offset in {@code byteBuffer} from which to expose the bytes in the returned value. That is,
-   *        {@code wrapByteBuffer(byteBuffer, i, 1).get(0) == byteBuffer.getByte(i)}.
+   * {@code wrapByteBuffer(byteBuffer, i, 1).get(0) == byteBuffer.getByte(i)}.
    * @param size The size of the returned value.
    * @return A {@link MutableBytes} value.
    * @throws IndexOutOfBoundsException if {@code offset < 0 || (byteBuffer.limit() > 0 && offset >=
-   *     byteBuffer.limit())}.
+   * byteBuffer.limit())}.
    * @throws IllegalArgumentException if {@code length < 0 || offset + length > byteBuffer.limit()}.
    */
   static MutableBytes wrapByteBuffer(ByteBuffer byteBuffer, int offset, int size) {
@@ -263,7 +264,8 @@ public interface MutableBytes extends Bytes {
     checkElementIndex(i, size);
     if (i > (size - 4)) {
       throw new IndexOutOfBoundsException(
-          format("Value of size %s has not enough bytes to write a 4 bytes int from index %s", size, i));
+          format("Value of size %s has not enough bytes to write a 4 bytes int from index %s", size,
+              i));
     }
 
     set(i++, (byte) (value >>> 24));
@@ -284,7 +286,8 @@ public interface MutableBytes extends Bytes {
     checkElementIndex(i, size);
     if (i > (size - 8)) {
       throw new IndexOutOfBoundsException(
-          format("Value of size %s has not enough bytes to write a 8 bytes long from index %s", size, i));
+          format("Value of size %s has not enough bytes to write a 8 bytes long from index %s",
+              size, i));
     }
 
     set(i++, (byte) (value >>> 56));
@@ -347,7 +350,7 @@ public interface MutableBytes extends Bytes {
    * @param i The start index for the slice.
    * @param length The length of the resulting value.
    * @return A new mutable view over the bytes of this value from index {@code i} (included) to index {@code i + length}
-   *         (excluded).
+   * (excluded).
    * @throws IllegalArgumentException if {@code length < 0}.
    * @throws IndexOutOfBoundsException if {@code i < 0} or {i >= size()} or {i + length > size()} .
    */

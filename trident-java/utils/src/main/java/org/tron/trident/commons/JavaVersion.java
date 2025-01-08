@@ -10,15 +10,16 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+
 package org.tron.trident.commons;
 
 public class JavaVersion {
 
-    public static String getJavaVersion() {
-        return System.getProperty("java.specification.version");
-    }
+  public static String getJavaVersion() {
+    return System.getProperty("java.specification.version");
+  }
 
-    public static double getJavaVersionAsDouble() {
-        return Double.parseDouble(System.getProperty("java.specification.version"));
-    }
+  public static double getJavaVersionAsDouble() {
+    return Double.parseDouble(System.getProperty("java.specification.version"));
+  }
 }

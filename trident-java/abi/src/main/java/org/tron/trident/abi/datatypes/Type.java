@@ -10,18 +10,22 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+
 package org.tron.trident.abi.datatypes;
 
-/** ABI Types. */
+/**
+ * ABI Types.
+ */
 public interface Type<T> {
-    int MAX_BIT_LENGTH = 256;
-    int MAX_BYTE_LENGTH = MAX_BIT_LENGTH / 8;
 
-    default int bytes32PaddedLength() {
-        return MAX_BYTE_LENGTH;
-    }
+  int MAX_BIT_LENGTH = 256;
+  int MAX_BYTE_LENGTH = MAX_BIT_LENGTH / 8;
 
-    T getValue();
+  default int bytes32PaddedLength() {
+    return MAX_BYTE_LENGTH;
+  }
 
-    String getTypeAsString();
+  T getValue();
+
+  String getTypeAsString();
 }

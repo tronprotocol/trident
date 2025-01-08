@@ -10,13 +10,14 @@ import org.tron.trident.abi.datatypes.Uint;
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  */
 public class Uint88 extends Uint {
-    public static final Uint88 DEFAULT = new Uint88(BigInteger.ZERO);
 
-    public Uint88(BigInteger value) {
-        super(88, value);
-    }
+  public static final Uint88 DEFAULT = new Uint88(BigInteger.ZERO);
 
-    public Uint88(long value) {
-        this(BigInteger.valueOf(value));
-    }
+  public Uint88(BigInteger value) {
+    super(88, value);
+  }
+
+  public Uint88(long value) {
+    this(BigInteger.valueOf(value));
+  }
 }

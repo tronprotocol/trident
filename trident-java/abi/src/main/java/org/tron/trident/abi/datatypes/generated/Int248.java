@@ -10,13 +10,14 @@ import org.tron.trident.abi.datatypes.Int;
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  */
 public class Int248 extends Int {
-    public static final Int248 DEFAULT = new Int248(BigInteger.ZERO);
 
-    public Int248(BigInteger value) {
-        super(248, value);
-    }
+  public static final Int248 DEFAULT = new Int248(BigInteger.ZERO);
 
-    public Int248(long value) {
-        this(BigInteger.valueOf(value));
-    }
+  public Int248(BigInteger value) {
+    super(248, value);
+  }
+
+  public Int248(long value) {
+    this(BigInteger.valueOf(value));
+  }
 }

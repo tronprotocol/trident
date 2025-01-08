@@ -10,12 +10,15 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+
 package org.tron.trident.crypto.tuwenitypes;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
 final class BytesValues {
-  private BytesValues() {}
+
+  private BytesValues() {
+  }
 
   static final int MAX_UNSIGNED_SHORT = (1 << 16) - 1;
   static final long MAX_UNSIGNED_INT = (1L << 32) - 1;
@@ -48,7 +51,8 @@ final class BytesValues {
     if (destSize < 0) {
       destSize = size;
     } else {
-      checkArgument(size <= destSize, "Hex value is too large: expected at most %s bytes but got %s", destSize, size);
+      checkArgument(size <= destSize,
+          "Hex value is too large: expected at most %s bytes but got %s", destSize, size);
     }
 
     byte[] out = new byte[destSize];

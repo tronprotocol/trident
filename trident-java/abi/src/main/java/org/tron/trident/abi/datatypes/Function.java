@@ -10,35 +10,38 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+
 package org.tron.trident.abi.datatypes;
 
 import java.util.List;
-
 import org.tron.trident.abi.TypeReference;
 import org.tron.trident.abi.Utils;
 
-/** Function type. */
+/**
+ * Function type.
+ */
 public class Function {
-    private String name;
-    private List<Type> inputParameters;
-    private List<TypeReference<Type>> outputParameters;
 
-    public Function(
-            String name, List<Type> inputParameters, List<TypeReference<?>> outputParameters) {
-        this.name = name;
-        this.inputParameters = inputParameters;
-        this.outputParameters = Utils.convert(outputParameters);
-    }
+  private String name;
+  private List<Type> inputParameters;
+  private List<TypeReference<Type>> outputParameters;
 
-    public String getName() {
-        return name;
-    }
+  public Function(
+      String name, List<Type> inputParameters, List<TypeReference<?>> outputParameters) {
+    this.name = name;
+    this.inputParameters = inputParameters;
+    this.outputParameters = Utils.convert(outputParameters);
+  }
 
-    public List<Type> getInputParameters() {
-        return inputParameters;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public List<TypeReference<Type>> getOutputParameters() {
-        return outputParameters;
-    }
+  public List<Type> getInputParameters() {
+    return inputParameters;
+  }
+
+  public List<TypeReference<Type>> getOutputParameters() {
+    return outputParameters;
+  }
 }

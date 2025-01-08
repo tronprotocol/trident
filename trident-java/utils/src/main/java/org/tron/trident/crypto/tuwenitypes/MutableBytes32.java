@@ -10,6 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+
 package org.tron.trident.crypto.tuwenitypes;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -49,11 +50,11 @@ public interface MutableBytes32 extends MutableBytes, Bytes32 {
    *
    * @param value The bytes to wrap.
    * @param offset The index (inclusive) in {@code value} of the first byte exposed by the returned value. In other
-   *        words, you will have {@code wrap(value, i).get(0) == value[i]}.
+   * words, you will have {@code wrap(value, i).get(0) == value[i]}.
    * @return A {@link MutableBytes32} that exposes the bytes of {@code value} from {@code offset} (inclusive) to
-   *         {@code offset + 32} (exclusive).
+   * {@code offset + 32} (exclusive).
    * @throws IndexOutOfBoundsException if {@code offset < 0 || (value.length > 0 && offset >=
-   *     value.length)}.
+   * value.length)}.
    * @throws IllegalArgumentException if {@code length < 0 || offset + 32 > value.length}.
    */
   static MutableBytes32 wrap(byte[] value, int offset) {
@@ -89,11 +90,11 @@ public interface MutableBytes32 extends MutableBytes, Bytes32 {
    *
    * @param value The bytes to wrap.
    * @param offset The index (inclusive) in {@code value} of the first byte exposed by the returned value. In other
-   *        words, you will have {@code wrap(value, i).get(0) == value.get(i)}.
+   * words, you will have {@code wrap(value, i).get(0) == value.get(i)}.
    * @return A {@link Bytes32} that exposes the bytes of {@code value} from {@code offset} (inclusive) to
-   *         {@code offset + 32} (exclusive).
+   * {@code offset + 32} (exclusive).
    * @throws IndexOutOfBoundsException if {@code offset < 0 || (value.size() > 0 && offset >=
-   *     value.size())}.
+   * value.size())}.
    * @throws IllegalArgumentException if {@code length < 0 || offset + 32 > value.size()}.
    */
   static MutableBytes32 wrap(MutableBytes value, int offset) {

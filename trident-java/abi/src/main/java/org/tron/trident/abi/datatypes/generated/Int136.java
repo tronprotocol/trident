@@ -10,13 +10,14 @@ import org.tron.trident.abi.datatypes.Int;
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  */
 public class Int136 extends Int {
-    public static final Int136 DEFAULT = new Int136(BigInteger.ZERO);
 
-    public Int136(BigInteger value) {
-        super(136, value);
-    }
+  public static final Int136 DEFAULT = new Int136(BigInteger.ZERO);
 
-    public Int136(long value) {
-        this(BigInteger.valueOf(value));
-    }
+  public Int136(BigInteger value) {
+    super(136, value);
+  }
+
+  public Int136(long value) {
+    this(BigInteger.valueOf(value));
+  }
 }

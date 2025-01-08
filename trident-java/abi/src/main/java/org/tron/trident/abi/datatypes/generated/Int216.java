@@ -10,13 +10,14 @@ import org.tron.trident.abi.datatypes.Int;
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  */
 public class Int216 extends Int {
-    public static final Int216 DEFAULT = new Int216(BigInteger.ZERO);
 
-    public Int216(BigInteger value) {
-        super(216, value);
-    }
+  public static final Int216 DEFAULT = new Int216(BigInteger.ZERO);
 
-    public Int216(long value) {
-        this(BigInteger.valueOf(value));
-    }
+  public Int216(BigInteger value) {
+    super(216, value);
+  }
+
+  public Int216(long value) {
+    this(BigInteger.valueOf(value));
+  }
 }

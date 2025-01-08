@@ -14,15 +14,18 @@ public class Utils {
     if (blockId.equals(Sha256Hash.ZERO_HASH)) {
       blockId =
           new BlockId(Sha256Hash.of(true,
-              blockExtention.getBlockHeader().getRawData().toByteArray()), blockExtention.getBlockHeader().getRawData().getNumber());
+              blockExtention.getBlockHeader().getRawData().toByteArray()),
+              blockExtention.getBlockHeader().getRawData().getNumber());
     }
     return blockId;
   }
 
-  public static Contract.CreateSmartContract getSmartContractFromTransaction(Chain.Transaction trx) {
+  public static Contract.CreateSmartContract getSmartContractFromTransaction(
+      Chain.Transaction trx) {
     try {
       Any any = trx.getRawData().getContract(0).getParameter();
-      Contract.CreateSmartContract createSmartContract = any.unpack(Contract.CreateSmartContract.class);
+      Contract.CreateSmartContract createSmartContract = any.unpack(
+          Contract.CreateSmartContract.class);
       return createSmartContract;
     } catch (InvalidProtocolBufferException e) {
       return null;

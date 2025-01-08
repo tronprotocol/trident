@@ -10,17 +10,18 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.tron.trident.abi.datatypes;
 
-import org.junit.jupiter.api.Test;
+package org.tron.trident.abi.datatypes;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.junit.jupiter.api.Test;
+
 public class Utf8StringTest {
 
-    @Test
-    public void testToString() {
-        assertEquals(new Utf8String("").toString(), (""));
-        assertEquals(new Utf8String("string").toString(), ("string"));
-    }
+  @Test
+  public void testToString() {
+    assertEquals(new Utf8String("").toString(), (""));
+    assertEquals(new Utf8String("string").toString(), ("string"));
+  }
 }

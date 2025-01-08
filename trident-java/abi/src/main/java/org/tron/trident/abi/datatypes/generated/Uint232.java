@@ -10,13 +10,14 @@ import org.tron.trident.abi.datatypes.Uint;
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  */
 public class Uint232 extends Uint {
-    public static final Uint232 DEFAULT = new Uint232(BigInteger.ZERO);
 
-    public Uint232(BigInteger value) {
-        super(232, value);
-    }
+  public static final Uint232 DEFAULT = new Uint232(BigInteger.ZERO);
 
-    public Uint232(long value) {
-        this(BigInteger.valueOf(value));
-    }
+  public Uint232(BigInteger value) {
+    super(232, value);
+  }
+
+  public Uint232(long value) {
+    this(BigInteger.valueOf(value));
+  }
 }

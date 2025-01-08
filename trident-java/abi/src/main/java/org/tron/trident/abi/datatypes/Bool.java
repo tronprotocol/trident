@@ -10,50 +10,53 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+
 package org.tron.trident.abi.datatypes;
 
-/** Boolean type. */
+/**
+ * Boolean type.
+ */
 public class Bool implements Type<Boolean> {
 
-    public static final String TYPE_NAME = "bool";
-    public static final Bool DEFAULT = new Bool(false);
+  public static final String TYPE_NAME = "bool";
+  public static final Bool DEFAULT = new Bool(false);
 
-    private boolean value;
+  private boolean value;
 
-    public Bool(boolean value) {
-        this.value = value;
+  public Bool(boolean value) {
+    this.value = value;
+  }
+
+  public Bool(Boolean value) {
+    this.value = value;
+  }
+
+  @Override
+  public String getTypeAsString() {
+    return TYPE_NAME;
+  }
+
+  @Override
+  public Boolean getValue() {
+    return value;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
     }
 
-    public Bool(Boolean value) {
-        this.value = value;
-    }
+    Bool bool = (Bool) o;
 
-    @Override
-    public String getTypeAsString() {
-        return TYPE_NAME;
-    }
+    return value == bool.value;
+  }
 
-    @Override
-    public Boolean getValue() {
-        return value;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        Bool bool = (Bool) o;
-
-        return value == bool.value;
-    }
-
-    @Override
-    public int hashCode() {
-        return (value ? 1 : 0);
-    }
+  @Override
+  public int hashCode() {
+    return (value ? 1 : 0);
+  }
 }

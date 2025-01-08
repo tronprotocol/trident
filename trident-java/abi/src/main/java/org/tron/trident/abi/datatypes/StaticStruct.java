@@ -10,6 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+
 package org.tron.trident.abi.datatypes;
 
 import java.util.ArrayList;
@@ -18,35 +19,35 @@ import java.util.List;
 
 public class StaticStruct extends StaticArray<Type> implements StructType {
 
-    private final List<Class<Type>> itemTypes = new ArrayList<>();
+  private final List<Class<Type>> itemTypes = new ArrayList<>();
 
-    public StaticStruct(List<Type> values) {
-        super(Type.class, values.size(), values);
-        for (Type value : values) {
-            itemTypes.add((Class<Type>) value.getClass());
-        }
+  public StaticStruct(List<Type> values) {
+    super(Type.class, values.size(), values);
+    for (Type value : values) {
+      itemTypes.add((Class<Type>) value.getClass());
     }
+  }
 
-    @SafeVarargs
-    public StaticStruct(Type... values) {
-        this(Arrays.asList(values));
-    }
+  @SafeVarargs
+  public StaticStruct(Type... values) {
+    this(Arrays.asList(values));
+  }
 
-    @Override
-    public String getTypeAsString() {
-        final StringBuilder type = new StringBuilder("(");
-        for (int i = 0; i < itemTypes.size(); ++i) {
-            final Class<Type> cls = itemTypes.get(i);
-            if (StructType.class.isAssignableFrom(cls)) {
-                type.append(getValue().get(i).getTypeAsString());
-            } else {
-                type.append(AbiTypes.getTypeAString(cls));
-            }
-            if (i < itemTypes.size() - 1) {
-                type.append(",");
-            }
-        }
-        type.append(")");
-        return type.toString();
+  @Override
+  public String getTypeAsString() {
+    final StringBuilder type = new StringBuilder("(");
+    for (int i = 0; i < itemTypes.size(); ++i) {
+      final Class<Type> cls = itemTypes.get(i);
+      if (StructType.class.isAssignableFrom(cls)) {
+        type.append(getValue().get(i).getTypeAsString());
+      } else {
+        type.append(AbiTypes.getTypeAString(cls));
+      }
+      if (i < itemTypes.size() - 1) {
+        type.append(",");
+      }
     }
+    type.append(")");
+    return type.toString();
+  }
 }

@@ -1,64 +1,60 @@
 package org.tron.trident.core.contract;
 
-import org.bouncycastle.util.encoders.Hex;
-
 import com.google.protobuf.ByteString;
-import org.tron.trident.abi.datatypes.Type;
+import java.util.ArrayList;
+import java.util.List;
+import org.bouncycastle.util.encoders.Hex;
 import org.tron.trident.abi.TypeEncoder;
+import org.tron.trident.abi.datatypes.Type;
 import org.tron.trident.core.exceptions.ContractCreateException;
-import org.tron.trident.proto.Common.SmartContract.ABI;
 import org.tron.trident.proto.Common.SmartContract.ABI.Entry;
 import org.tron.trident.proto.Common.SmartContract.ABI.Entry.Param;
 
-import java.lang.StringBuilder;
-import java.util.ArrayList;
-import java.util.List;
-
 public class ContractConstructor {
 
-    private Entry rawConstructor;
+  private Entry rawConstructor;
 
-    private List paramTypes;
+  private List paramTypes;
 
-    private boolean payable;
+  private boolean payable;
 
-    private ByteString bytecode = null;
-    
-    public ContractConstructor(Entry raw) {
-        this.rawConstructor = raw;
-        this.paramTypes = new ArrayList<String>();
-        
-        for (Param p : raw.getInputsList()) {
-            paramTypes.add(p.getType());
-        }
+  private ByteString bytecode = null;
 
-        this.payable = raw.getPayable();
+  public ContractConstructor(Entry raw) {
+    this.rawConstructor = raw;
+    this.paramTypes = new ArrayList<String>();
+
+    for (Param p : raw.getInputsList()) {
+      paramTypes.add(p.getType());
     }
 
-    public Entry getRawConstructor() {
-        return this.rawConstructor;
-    }
+    this.payable = raw.getPayable();
+  }
 
-    public List getParamTypes() {
-        return this.paramTypes;
-    }
+  public Entry getRawConstructor() {
+    return this.rawConstructor;
+  }
 
-    public boolean getPayable() {
-        return this.payable;
-    }
+  public List getParamTypes() {
+    return this.paramTypes;
+  }
 
-    public ByteString getBytecode() {
-        return this.bytecode;
-    }
+  public boolean getPayable() {
+    return this.payable;
+  }
 
-    public void encodeParameter(List<Type> params) throws ContractCreateException {
-        if (params.size() != paramTypes.size()) {
-            throw new ContractCreateException("Parameter amount doesn't match.");
-        }
-        StringBuilder builder = new StringBuilder();
-        for (Type p : params) {
-            builder.append(TypeEncoder.encode(p));
-        }
-        this.bytecode = ByteString.copyFrom(Hex.decode(builder.toString()));
+  public ByteString getBytecode() {
+    return this.bytecode;
+  }
+
+  public void encodeParameter(List<Type> params) throws ContractCreateException {
+    if (params.size() != paramTypes.size()) {
+      throw new ContractCreateException("Parameter amount doesn't match.");
     }
+    StringBuilder builder = new StringBuilder();
+    for (Type p : params) {
+      builder.append(TypeEncoder.encode(p));
+    }
+    this.bytecode = ByteString.copyFrom(Hex.decode(builder.toString()));
+  }
 }

@@ -10,6 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+
 package org.tron.trident.crypto.tuwenitypes;
 
 import java.nio.ByteBuffer;
@@ -112,7 +113,8 @@ class ByteBufferWrappingBytes extends AbstractBytes {
       return super.toArray();
     }
     int arrayOffset = byteBuffer.arrayOffset();
-    return Arrays.copyOfRange(byteBuffer.array(), arrayOffset + offset, arrayOffset + offset + length);
+    return Arrays.copyOfRange(byteBuffer.array(), arrayOffset + offset,
+        arrayOffset + offset + length);
   }
 
   @Override
