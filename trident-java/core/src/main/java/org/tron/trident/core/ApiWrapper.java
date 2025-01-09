@@ -82,10 +82,16 @@ import org.tron.trident.proto.Response.DelegatedResourceList;
 import org.tron.trident.proto.Response.DelegatedResourceMessage;
 import org.tron.trident.proto.Response.Exchange;
 import org.tron.trident.proto.Response.ExchangeList;
+import org.tron.trident.proto.Response.MarketOrder;
+import org.tron.trident.proto.Response.MarketOrderList;
+import org.tron.trident.proto.Response.MarketOrderPair;
+import org.tron.trident.proto.Response.MarketOrderPairList;
+import org.tron.trident.proto.Response.MarketPriceList;
 import org.tron.trident.proto.Response.NodeInfo;
 import org.tron.trident.proto.Response.NodeList;
 import org.tron.trident.proto.Response.Proposal;
 import org.tron.trident.proto.Response.ProposalList;
+import org.tron.trident.proto.Response.SmartContractDataWrapper;
 import org.tron.trident.proto.Response.TransactionApprovedList;
 import org.tron.trident.proto.Response.TransactionExtention;
 import org.tron.trident.proto.Response.TransactionInfo;
@@ -2323,6 +2329,112 @@ public class ApiWrapper {
         .build();
     return createTransactionExtention(clearABIContract,
         ContractType.ClearABIContract);
+  }
+
+  /**
+   * getContractInfo
+   *
+   * @param contractAddr contract address
+   * @return SmartContractDataWrapper
+   */
+  public SmartContractDataWrapper getContractInfo(String contractAddr) {
+    ByteString rawAddr = parseAddress(contractAddr);
+    BytesMessage param =
+        BytesMessage.newBuilder()
+            .setValue(rawAddr)
+            .build();
+    return blockingStub.getContractInfo(param);
+  }
+
+  /**
+   * getMarketOrderByAccount
+   *
+   * @param account account address
+   * @return MarketOrderList
+   */
+  public MarketOrderList getMarketOrderByAccount(String account) {
+    ByteString rawAddr = parseAddress(account);
+    BytesMessage param =
+        BytesMessage.newBuilder()
+            .setValue(rawAddr)
+            .build();
+    return blockingStub.getMarketOrderByAccount(param);
+  }
+
+  /**
+   * getMarketOrderById
+   *
+   * @param txn market transactionId
+   * @return MarketOrder
+   */
+  public MarketOrder getMarketOrderById(String txn) {
+    ByteString rawAddr = parseAddress(txn);
+    BytesMessage param =
+        BytesMessage.newBuilder()
+            .setValue(rawAddr)
+            .build();
+    return blockingStub.getMarketOrderById(param);
+  }
+
+  /**
+   * getMarketOrderListByPair
+   *
+   * @param sellTokenId market sell token id
+   * @param buyTokenId market buy token id
+   * @return MarketOrderList
+   */
+  public MarketOrderList getMarketOrderListByPair(String sellTokenId, String buyTokenId) {
+    MarketOrderPair param =
+        MarketOrderPair.newBuilder()
+            .setSellTokenId(ByteString.copyFrom(sellTokenId.getBytes()))
+            .setBuyTokenId(ByteString.copyFrom(buyTokenId.getBytes()))
+            .build();
+    return blockingStub.getMarketOrderListByPair(param);
+  }
+
+  /**
+   * getMarketPairList
+   *
+   * @return MarketOrderPairList
+   */
+  public MarketOrderPairList getMarketPairList() {
+    return blockingStub.getMarketPairList(EmptyMessage.getDefaultInstance());
+  }
+
+  /**
+   * getMarketPriceByPair
+   *
+   * @param sellTokenId market sell token id
+   * @param buyTokenId market buy token id
+   * @return MarketPriceList
+   */
+  public MarketPriceList getMarketPriceByPair(String sellTokenId, String buyTokenId) {
+    MarketOrderPair param =
+        MarketOrderPair.newBuilder()
+            .setSellTokenId(ByteString.copyFrom(sellTokenId.getBytes()))
+            .setBuyTokenId(ByteString.copyFrom(buyTokenId.getBytes()))
+            .build();
+    return blockingStub.getMarketPriceByPair(param);
+  }
+
+  /**
+   * getTotalTransaction
+   *
+   * @return totalTransaction count
+   */
+  public long getTotalTransaction() {
+    return blockingStub.totalTransaction(EmptyMessage.getDefaultInstance()).getNum();
+  }
+
+  /**
+   * getTransactionCountByBlockNum
+   *
+   * @param blockNum block num
+   * @return the transaction count in block
+   */
+  public long getTransactionCountByBlockNum(long blockNum) {
+    NumberMessage message = NumberMessage.newBuilder().setNum(blockNum).build();
+    return blockingStub.getTransactionCountByBlockNum(message).getNum();
   }
 
 }
