@@ -112,6 +112,8 @@ public class ApiWrapper {
 
   public static final long TRANSACTION_DEFAULT_EXPIRATION_TIME = 60 * 1_000L; //60 seconds
 
+  public static final long GRPC_TIMEOUT = 30;
+
   public final WalletGrpc.WalletBlockingStub blockingStub;
   public final WalletSolidityGrpc.WalletSolidityBlockingStub blockingStubSolidity;
   public final KeyPair keyPair;
