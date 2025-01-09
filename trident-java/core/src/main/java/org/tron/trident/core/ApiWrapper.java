@@ -112,7 +112,7 @@ public class ApiWrapper {
 
   public static final long TRANSACTION_DEFAULT_EXPIRATION_TIME = 60 * 1_000L; //60 seconds
 
-  public static final long GRPC_TIMEOUT = 30;
+  public static final long GRPC_TIMEOUT = 30 * 1_000L; //30 seconds
 
   public final WalletGrpc.WalletBlockingStub blockingStub;
   public final WalletSolidityGrpc.WalletSolidityBlockingStub blockingStubSolidity;
@@ -123,8 +123,10 @@ public class ApiWrapper {
   public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey) {
     channel = ManagedChannelBuilder.forTarget(grpcEndpoint).usePlaintext().build();
     channelSolidity = ManagedChannelBuilder.forTarget(grpcEndpointSolidity).usePlaintext().build();
-    blockingStub = WalletGrpc.newBlockingStub(channel);
-    blockingStubSolidity = WalletSolidityGrpc.newBlockingStub(channelSolidity);
+    blockingStub = WalletGrpc.newBlockingStub(channel)
+        .withDeadlineAfter(GRPC_TIMEOUT, TimeUnit.MILLISECONDS);
+    blockingStubSolidity = WalletSolidityGrpc.newBlockingStub(channelSolidity)
+        .withDeadlineAfter(GRPC_TIMEOUT, TimeUnit.MILLISECONDS);
     keyPair = new KeyPair(hexPrivateKey);
   }
 
@@ -141,9 +143,11 @@ public class ApiWrapper {
 
     //create a client to interceptor to attach the custom metadata headers
     blockingStub = WalletGrpc.newBlockingStub(channel)
-        .withInterceptors(MetadataUtils.newAttachHeadersInterceptor(header));
+        .withInterceptors(MetadataUtils.newAttachHeadersInterceptor(header))
+        .withDeadlineAfter(GRPC_TIMEOUT, TimeUnit.MILLISECONDS);
     blockingStubSolidity = WalletSolidityGrpc.newBlockingStub(channelSolidity)
-        .withInterceptors(MetadataUtils.newAttachHeadersInterceptor(header));
+        .withInterceptors(MetadataUtils.newAttachHeadersInterceptor(header))
+        .withDeadlineAfter(GRPC_TIMEOUT, TimeUnit.MILLISECONDS);
 
     keyPair = new KeyPair(hexPrivateKey);
   }
@@ -155,8 +159,10 @@ public class ApiWrapper {
         .usePlaintext()
         .build();
     channelSolidity = ManagedChannelBuilder.forTarget(grpcEndpointSolidity).usePlaintext().build();
-    blockingStub = WalletGrpc.newBlockingStub(channel);
-    blockingStubSolidity = WalletSolidityGrpc.newBlockingStub(channelSolidity);
+    blockingStub = WalletGrpc.newBlockingStub(channel)
+        .withDeadlineAfter(GRPC_TIMEOUT, TimeUnit.MILLISECONDS);
+    blockingStubSolidity = WalletSolidityGrpc.newBlockingStub(channelSolidity)
+        .withDeadlineAfter(GRPC_TIMEOUT, TimeUnit.MILLISECONDS);
     keyPair = new KeyPair(hexPrivateKey);
   }
 
