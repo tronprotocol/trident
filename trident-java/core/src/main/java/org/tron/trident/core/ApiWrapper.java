@@ -18,12 +18,14 @@ import org.tron.trident.abi.datatypes.Function;
 import org.tron.trident.api.GrpcAPI;
 import org.tron.trident.api.GrpcAPI.AccountAddressMessage;
 import org.tron.trident.api.GrpcAPI.AccountIdMessage;
+import org.tron.trident.api.GrpcAPI.AccountPaginated;
 import org.tron.trident.api.GrpcAPI.BlockLimit;
 import org.tron.trident.api.GrpcAPI.BlockReq;
 import org.tron.trident.api.GrpcAPI.BytesMessage;
 import org.tron.trident.api.GrpcAPI.EmptyMessage;
 import org.tron.trident.api.GrpcAPI.NumberMessage;
 import org.tron.trident.api.GrpcAPI.PaginatedMessage;
+import org.tron.trident.api.GrpcAPI.TransactionListExtention;
 import org.tron.trident.api.WalletGrpc;
 import org.tron.trident.api.WalletSolidityGrpc;
 import org.tron.trident.core.contract.Contract;
@@ -94,6 +96,7 @@ import org.tron.trident.proto.Response.TransactionReturn;
 import org.tron.trident.proto.Response.TransactionSignWeight;
 import org.tron.trident.proto.Response.WitnessList;
 import org.tron.trident.utils.Base58Check;
+import org.tron.trident.utils.Numeric;
 
 /**
  * A {@code ApiWrapper} object is the entry point for calling the functions.
@@ -788,7 +791,6 @@ public class ApiWrapper {
     return createTransactionExtention(withdrawExpireUnfreezeContract,
         Transaction.Contract.ContractType.WithdrawExpireUnfreezeContract);
   }
-
 
 
   /**
@@ -1812,14 +1814,14 @@ public class ApiWrapper {
     SmartContract cntr = blockingStub.getContract(param);
 
     return new Contract.Builder()
-            .setOriginAddr(cntr.getOriginAddress())
-            .setCntrAddr(cntr.getContractAddress())
-            .setBytecode(cntr.getBytecode())
-            .setName(cntr.getName())
-            .setAbi(cntr.getAbi())
-            .setOriginEnergyLimit(cntr.getOriginEnergyLimit())
-            .setConsumeUserResourcePercent(cntr.getConsumeUserResourcePercent())
-            .build();
+        .setOriginAddr(cntr.getOriginAddress())
+        .setCntrAddr(cntr.getContractAddress())
+        .setBytecode(cntr.getBytecode())
+        .setName(cntr.getName())
+        .setAbi(cntr.getAbi())
+        .setOriginEnergyLimit(cntr.getOriginEnergyLimit())
+        .setConsumeUserResourcePercent(cntr.getConsumeUserResourcePercent())
+        .build();
   }
 
   /**
@@ -2311,7 +2313,6 @@ public class ApiWrapper {
    * @param ownerAddress owner address
    * @param contractAddress contract address
    * @return TransactionExtention
-   * @throws IllegalException
    */
   public TransactionExtention clearContractABI(String ownerAddress, String contractAddress)
       throws IllegalException {
@@ -2325,4 +2326,96 @@ public class ApiWrapper {
         ContractType.ClearABIContract);
   }
 
+  /**
+   * GetPaginatedExchangeList
+   *
+   * @param offset todo
+   * @param limit todo
+   * @return todo
+   */
+  public ExchangeList getPaginatedExchangeList(long offset, long limit) {
+    PaginatedMessage paginatedMessage = PaginatedMessage.newBuilder()
+        .setOffset(offset)
+        .setLimit(limit)
+        .build();
+    return blockingStub.getPaginatedExchangeList(paginatedMessage);
+  }
+
+  /**
+   * GetPaginatedProposalList
+   *
+   * @param offset todo
+   * @param limit todo
+   * @return todo
+   */
+  public ProposalList getPaginatedProposalList(long offset, long limit) {
+    PaginatedMessage paginatedMessage = PaginatedMessage.newBuilder()
+        .setOffset(offset)
+        .setLimit(limit)
+        .build();
+    return blockingStub.getPaginatedProposalList(paginatedMessage);
+  }
+
+  /**
+   * GetTransactionsFromThis2
+   *
+   * @param address todo
+   * @param offset todo
+   * @param limit todo
+   * @return todo
+   */
+  public TransactionListExtention getTransactionsFromThis2(String address, long offset,
+      long limit) {
+    ByteString rawOwner = parseAddress(address);
+    Account account = Account.newBuilder().setAddress(rawOwner).build();
+    AccountPaginated accountPaginated = AccountPaginated.newBuilder()
+        .setAccount(account)
+        .setOffset(offset)
+        .setLimit(limit)
+        .build();
+    return blockingStub.getTransactionsFromThis2(accountPaginated);
+  }
+
+  /**
+   * GetTransactionsToThis2
+   *
+   * @param address todo
+   * @param offset todo
+   * @param limit todo
+   * @return todo
+   */
+  public TransactionListExtention getTransactionsToThis2(String address, long offset,
+      long limit) {
+    ByteString rawOwner = parseAddress(address);
+    Account account = Account.newBuilder().setAddress(rawOwner).build();
+    AccountPaginated accountPaginated = AccountPaginated.newBuilder()
+        .setAccount(account)
+        .setOffset(offset)
+        .setLimit(limit)
+        .build();
+    return blockingStub.getTransactionsToThis2(accountPaginated);
+  }
+
+  /**
+   * GetBlockByIdOrNum
+   *
+   * @param blockIDOrNum todo
+   * @return todo
+   */
+  public Block getBlockByIdOrNum(String blockIDOrNum) {
+    if (Numeric.isNumericString(blockIDOrNum)) {
+      NumberMessage numberMessage = NumberMessage.newBuilder()
+          .setNum(Long.parseLong(blockIDOrNum))
+          .build();
+      return blockingStub.getBlockByNum(numberMessage);
+    } else if (ByteArray.isHexString(blockIDOrNum)) {
+      byte[] blockID = ByteArray.fromHexString(blockIDOrNum);
+      BytesMessage bytesMessage = BytesMessage.newBuilder()
+          .setValue(ByteString.copyFrom(blockID))
+          .build();
+      return blockingStub.getBlockById(bytesMessage);
+    } else {
+      throw new IllegalArgumentException("Invalid blockIDOrNum: " + blockIDOrNum);
+    }
+  }
 }

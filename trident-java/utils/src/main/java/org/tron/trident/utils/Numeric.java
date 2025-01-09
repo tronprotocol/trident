@@ -251,4 +251,13 @@ public final class Numeric {
   public static boolean isIntegerValue(BigDecimal value) {
     return value.signum() == 0 || value.scale() <= 0 || value.stripTrailingZeros().scale() <= 0;
   }
+
+  public static boolean isNumericString(String str) {
+    for (int i = str.length(); --i >= 0; ) {
+      if (!Character.isDigit(str.charAt(i))) {
+        return false;
+      }
+    }
+    return true;
+  }
 }
