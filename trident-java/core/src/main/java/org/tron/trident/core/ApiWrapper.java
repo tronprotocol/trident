@@ -305,8 +305,7 @@ public class ApiWrapper {
   }
 
   public static ByteString parseHex(String hexString) {
-    byte[] raw = Hex.decode(hexString);
-    return ByteString.copyFrom(raw);
+    return ByteString.copyFrom(ByteArray.fromHexString(hexString));
   }
 
   public static String toHex(byte[] raw) {
@@ -1651,7 +1650,7 @@ public class ApiWrapper {
    * @throws IllegalException if the parameters are not correct
    */
   public Transaction getTransactionByIdSolidity(String txID) throws IllegalException {
-    ByteString bsTxid = parseAddress(txID);
+    ByteString bsTxid = parseHex(txID);
     BytesMessage request = BytesMessage.newBuilder()
         .setValue(bsTxid)
         .build();
@@ -1914,7 +1913,7 @@ public class ApiWrapper {
    * @return BlockBalanceTrace
    */
   public BlockBalanceTrace getBlockBalance(String blockId, long blockNum) {
-    ByteString bsId = parseAddress(blockId); //todo fix
+    ByteString bsId = parseHex(blockId);
     BlockIdentifier blockIdentifier =
         BlockIdentifier.newBuilder()
             .setHash(bsId)
@@ -2127,7 +2126,7 @@ public class ApiWrapper {
    * @return the size of the pending pool queue
    */
   public Block getBlockById(String blockID) {
-    ByteString bsBlockid = parseAddress(blockID);//todo fix
+    ByteString bsBlockid = parseHex(blockID);
     BytesMessage request = BytesMessage.newBuilder()
         .setValue(bsBlockid)
         .build();
@@ -2333,7 +2332,6 @@ public class ApiWrapper {
   }
 
   /**
-<<<<<<< HEAD
    * GetPaginatedExchangeList
    *
    * @param offset todo
@@ -2463,7 +2461,7 @@ public class ApiWrapper {
    * @return MarketOrder
    */
   public MarketOrder getMarketOrderById(String txn) {
-    ByteString rawAddr = parseAddress(txn); //todo fix
+    ByteString rawAddr = parseHex(txn);
     BytesMessage param =
         BytesMessage.newBuilder()
             .setValue(rawAddr)
