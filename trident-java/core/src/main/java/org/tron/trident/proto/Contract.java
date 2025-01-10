@@ -11342,16 +11342,6 @@ public final class Contract {
      * @return The buyTokenQuantity.
      */
     long getBuyTokenQuantity();
-
-    /**
-     * <pre>
-     * order price position
-     * </pre>
-     *
-     * <code>bytes pre_price_key = 6;</code>
-     * @return The prePriceKey.
-     */
-    com.google.protobuf.ByteString getPrePriceKey();
   }
   /**
    * Protobuf type {@code protocol.MarketSellAssetContract}
@@ -11369,7 +11359,6 @@ public final class Contract {
       ownerAddress_ = com.google.protobuf.ByteString.EMPTY;
       sellTokenId_ = com.google.protobuf.ByteString.EMPTY;
       buyTokenId_ = com.google.protobuf.ByteString.EMPTY;
-      prePriceKey_ = com.google.protobuf.ByteString.EMPTY;
     }
 
     @java.lang.Override
@@ -11451,21 +11440,6 @@ public final class Contract {
       return buyTokenQuantity_;
     }
 
-    public static final int PRE_PRICE_KEY_FIELD_NUMBER = 6;
-    private com.google.protobuf.ByteString prePriceKey_ = com.google.protobuf.ByteString.EMPTY;
-    /**
-     * <pre>
-     * order price position
-     * </pre>
-     *
-     * <code>bytes pre_price_key = 6;</code>
-     * @return The prePriceKey.
-     */
-    @java.lang.Override
-    public com.google.protobuf.ByteString getPrePriceKey() {
-      return prePriceKey_;
-    }
-
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -11494,9 +11468,6 @@ public final class Contract {
       }
       if (buyTokenQuantity_ != 0L) {
         output.writeInt64(5, buyTokenQuantity_);
-      }
-      if (!prePriceKey_.isEmpty()) {
-        output.writeBytes(6, prePriceKey_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -11527,10 +11498,6 @@ public final class Contract {
         size += com.google.protobuf.CodedOutputStream
           .computeInt64Size(5, buyTokenQuantity_);
       }
-      if (!prePriceKey_.isEmpty()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(6, prePriceKey_);
-      }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
@@ -11556,8 +11523,6 @@ public final class Contract {
           .equals(other.getBuyTokenId())) return false;
       if (getBuyTokenQuantity()
           != other.getBuyTokenQuantity()) return false;
-      if (!getPrePriceKey()
-          .equals(other.getPrePriceKey())) return false;
       if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
@@ -11581,8 +11546,6 @@ public final class Contract {
       hash = (37 * hash) + BUY_TOKEN_QUANTITY_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
           getBuyTokenQuantity());
-      hash = (37 * hash) + PRE_PRICE_KEY_FIELD_NUMBER;
-      hash = (53 * hash) + getPrePriceKey().hashCode();
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -11719,7 +11682,6 @@ public final class Contract {
         sellTokenQuantity_ = 0L;
         buyTokenId_ = com.google.protobuf.ByteString.EMPTY;
         buyTokenQuantity_ = 0L;
-        prePriceKey_ = com.google.protobuf.ByteString.EMPTY;
         return this;
       }
 
@@ -11767,9 +11729,6 @@ public final class Contract {
         }
         if (((from_bitField0_ & 0x00000010) != 0)) {
           result.buyTokenQuantity_ = buyTokenQuantity_;
-        }
-        if (((from_bitField0_ & 0x00000020) != 0)) {
-          result.prePriceKey_ = prePriceKey_;
         }
       }
 
@@ -11832,9 +11791,6 @@ public final class Contract {
         if (other.getBuyTokenQuantity() != 0L) {
           setBuyTokenQuantity(other.getBuyTokenQuantity());
         }
-        if (other.getPrePriceKey() != com.google.protobuf.ByteString.EMPTY) {
-          setPrePriceKey(other.getPrePriceKey());
-        }
         this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
@@ -11886,11 +11842,6 @@ public final class Contract {
                 bitField0_ |= 0x00000010;
                 break;
               } // case 40
-              case 50: {
-                prePriceKey_ = input.readBytes();
-                bitField0_ |= 0x00000020;
-                break;
-              } // case 50
               default: {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                   done = true; // was an endgroup tag
@@ -12076,50 +12027,6 @@ public final class Contract {
       public Builder clearBuyTokenQuantity() {
         bitField0_ = (bitField0_ & ~0x00000010);
         buyTokenQuantity_ = 0L;
-        onChanged();
-        return this;
-      }
-
-      private com.google.protobuf.ByteString prePriceKey_ = com.google.protobuf.ByteString.EMPTY;
-      /**
-       * <pre>
-       * order price position
-       * </pre>
-       *
-       * <code>bytes pre_price_key = 6;</code>
-       * @return The prePriceKey.
-       */
-      @java.lang.Override
-      public com.google.protobuf.ByteString getPrePriceKey() {
-        return prePriceKey_;
-      }
-      /**
-       * <pre>
-       * order price position
-       * </pre>
-       *
-       * <code>bytes pre_price_key = 6;</code>
-       * @param value The prePriceKey to set.
-       * @return This builder for chaining.
-       */
-      public Builder setPrePriceKey(com.google.protobuf.ByteString value) {
-        if (value == null) { throw new NullPointerException(); }
-        prePriceKey_ = value;
-        bitField0_ |= 0x00000020;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * order price position
-       * </pre>
-       *
-       * <code>bytes pre_price_key = 6;</code>
-       * @return This builder for chaining.
-       */
-      public Builder clearPrePriceKey() {
-        bitField0_ = (bitField0_ & ~0x00000020);
-        prePriceKey_ = getDefaultInstance().getPrePriceKey();
         onChanged();
         return this;
       }
@@ -29186,77 +29093,76 @@ public final class Contract {
       "ithdrawBalanceContract\022\025\n\rowner_address\030" +
       "\001 \001(\014\"M\n\020TransferContract\022\025\n\rowner_addre" +
       "ss\030\001 \001(\014\022\022\n\nto_address\030\002 \001(\014\022\016\n\006amount\030\003" +
-      " \001(\003\"\255\001\n\027MarketSellAssetContract\022\025\n\rowne" +
+      " \001(\003\"\226\001\n\027MarketSellAssetContract\022\025\n\rowne" +
       "r_address\030\001 \001(\014\022\025\n\rsell_token_id\030\002 \001(\014\022\033" +
       "\n\023sell_token_quantity\030\003 \001(\003\022\024\n\014buy_token" +
-      "_id\030\004 \001(\014\022\032\n\022buy_token_quantity\030\005 \001(\003\022\025\n" +
-      "\rpre_price_key\030\006 \001(\014\"D\n\031MarketCancelOrde" +
-      "rContract\022\025\n\rowner_address\030\001 \001(\014\022\020\n\010orde" +
-      "r_id\030\002 \001(\014\"^\n\027ProposalApproveContract\022\025\n" +
-      "\rowner_address\030\001 \001(\014\022\023\n\013proposal_id\030\002 \001(" +
-      "\003\022\027\n\017is_add_approval\030\003 \001(\010\"\250\001\n\026ProposalC" +
-      "reateContract\022\025\n\rowner_address\030\001 \001(\014\022D\n\n" +
-      "parameters\030\002 \003(\01320.protocol.ProposalCrea" +
-      "teContract.ParametersEntry\0321\n\017Parameters" +
-      "Entry\022\013\n\003key\030\001 \001(\003\022\r\n\005value\030\002 \001(\003:\0028\001\"D\n" +
-      "\026ProposalDeleteContract\022\025\n\rowner_address" +
-      "\030\001 \001(\014\022\023\n\013proposal_id\030\002 \001(\003\"\207\001\n\023CreateSm" +
-      "artContract\022\025\n\rowner_address\030\001 \001(\014\022-\n\014ne" +
-      "w_contract\030\002 \001(\0132\027.protocol.SmartContrac" +
-      "t\022\030\n\020call_token_value\030\003 \001(\003\022\020\n\010token_id\030" +
-      "\004 \001(\003\"\225\001\n\024TriggerSmartContract\022\025\n\rowner_" +
-      "address\030\001 \001(\014\022\030\n\020contract_address\030\002 \001(\014\022" +
-      "\022\n\ncall_value\030\003 \001(\003\022\014\n\004data\030\004 \001(\014\022\030\n\020cal" +
-      "l_token_value\030\005 \001(\003\022\020\n\010token_id\030\006 \001(\003\"C\n" +
-      "\020ClearABIContract\022\025\n\rowner_address\030\001 \001(\014" +
-      "\022\030\n\020contract_address\030\002 \001(\014\"o\n\025UpdateSett" +
-      "ingContract\022\025\n\rowner_address\030\001 \001(\014\022\030\n\020co" +
-      "ntract_address\030\002 \001(\014\022%\n\035consume_user_res" +
-      "ource_percent\030\003 \001(\003\"i\n\031UpdateEnergyLimit" +
-      "Contract\022\025\n\rowner_address\030\001 \001(\014\022\030\n\020contr" +
-      "act_address\030\002 \001(\014\022\033\n\023origin_energy_limit" +
-      "\030\003 \001(\003\"C\n\027UpdateBrokerageContract\022\025\n\rown" +
-      "er_address\030\001 \001(\014\022\021\n\tbrokerage\030\002 \001(\005\"`\n\021V" +
-      "oteAssetContract\022\025\n\rowner_address\030\001 \001(\014\022" +
-      "\024\n\014vote_address\030\002 \003(\014\022\017\n\007support\030\003 \001(\010\022\r" +
-      "\n\005count\030\005 \001(\005\";\n\025WitnessCreateContract\022\025" +
-      "\n\rowner_address\030\001 \001(\014\022\013\n\003url\030\002 \001(\014\"B\n\025Wi" +
-      "tnessUpdateContract\022\025\n\rowner_address\030\001 \001" +
-      "(\014\022\022\n\nupdate_url\030\014 \001(\014\"\242\001\n\023VoteWitnessCo" +
-      "ntract\022\025\n\rowner_address\030\001 \001(\014\0221\n\005votes\030\002" +
-      " \003(\0132\".protocol.VoteWitnessContract.Vote" +
-      "\022\017\n\007support\030\003 \001(\010\0320\n\004Vote\022\024\n\014vote_addres" +
-      "s\030\001 \001(\014\022\022\n\nvote_count\030\002 \001(\003\"\233\001\n\026Exchange" +
-      "CreateContract\022\025\n\rowner_address\030\001 \001(\014\022\026\n" +
-      "\016first_token_id\030\002 \001(\014\022\033\n\023first_token_bal" +
-      "ance\030\003 \001(\003\022\027\n\017second_token_id\030\004 \001(\014\022\034\n\024s" +
-      "econd_token_balance\030\005 \001(\003\"e\n\026ExchangeInj" +
-      "ectContract\022\025\n\rowner_address\030\001 \001(\014\022\023\n\013ex" +
-      "change_id\030\002 \001(\003\022\020\n\010token_id\030\003 \001(\014\022\r\n\005qua" +
-      "nt\030\004 \001(\003\"g\n\030ExchangeWithdrawContract\022\025\n\r" +
-      "owner_address\030\001 \001(\014\022\023\n\013exchange_id\030\002 \001(\003" +
-      "\022\020\n\010token_id\030\003 \001(\014\022\r\n\005quant\030\004 \001(\003\"|\n\033Exc" +
-      "hangeTransactionContract\022\025\n\rowner_addres" +
-      "s\030\001 \001(\014\022\023\n\013exchange_id\030\002 \001(\003\022\020\n\010token_id" +
-      "\030\003 \001(\014\022\r\n\005quant\030\004 \001(\003\022\020\n\010expected\030\005 \001(\003\"" +
-      "r\n\027FreezeBalanceV2Contract\022\025\n\rowner_addr" +
-      "ess\030\001 \001(\014\022\026\n\016frozen_balance\030\002 \001(\003\022(\n\010res" +
-      "ource\030\003 \001(\0162\026.protocol.ResourceCode\"v\n\031U" +
-      "nfreezeBalanceV2Contract\022\025\n\rowner_addres" +
-      "s\030\001 \001(\014\022\030\n\020unfreeze_balance\030\002 \001(\003\022(\n\010res" +
-      "ource\030\003 \001(\0162\026.protocol.ResourceCode\"\251\001\n\030" +
-      "DelegateResourceContract\022\025\n\rowner_addres" +
-      "s\030\001 \001(\014\022(\n\010resource\030\002 \001(\0162\026.protocol.Res" +
-      "ourceCode\022\017\n\007balance\030\003 \001(\003\022\030\n\020receiver_a" +
-      "ddress\030\004 \001(\014\022\014\n\004lock\030\005 \001(\010\022\023\n\013lock_perio" +
-      "d\030\006 \001(\003\"\210\001\n\032UnDelegateResourceContract\022\025" +
-      "\n\rowner_address\030\001 \001(\014\022(\n\010resource\030\002 \001(\0162" +
-      "\026.protocol.ResourceCode\022\017\n\007balance\030\003 \001(\003" +
-      "\022\030\n\020receiver_address\030\004 \001(\014\"7\n\036WithdrawEx" +
-      "pireUnfreezeContract\022\025\n\rowner_address\030\001 " +
-      "\001(\014\"4\n\033CancelAllUnfreezeV2Contract\022\025\n\row" +
-      "ner_address\030\001 \001(\014B\030\n\026org.tron.trident.pr" +
-      "otob\006proto3"
+      "_id\030\004 \001(\014\022\032\n\022buy_token_quantity\030\005 \001(\003\"D\n" +
+      "\031MarketCancelOrderContract\022\025\n\rowner_addr" +
+      "ess\030\001 \001(\014\022\020\n\010order_id\030\002 \001(\014\"^\n\027ProposalA" +
+      "pproveContract\022\025\n\rowner_address\030\001 \001(\014\022\023\n" +
+      "\013proposal_id\030\002 \001(\003\022\027\n\017is_add_approval\030\003 " +
+      "\001(\010\"\250\001\n\026ProposalCreateContract\022\025\n\rowner_" +
+      "address\030\001 \001(\014\022D\n\nparameters\030\002 \003(\01320.prot" +
+      "ocol.ProposalCreateContract.ParametersEn" +
+      "try\0321\n\017ParametersEntry\022\013\n\003key\030\001 \001(\003\022\r\n\005v" +
+      "alue\030\002 \001(\003:\0028\001\"D\n\026ProposalDeleteContract" +
+      "\022\025\n\rowner_address\030\001 \001(\014\022\023\n\013proposal_id\030\002" +
+      " \001(\003\"\207\001\n\023CreateSmartContract\022\025\n\rowner_ad" +
+      "dress\030\001 \001(\014\022-\n\014new_contract\030\002 \001(\0132\027.prot" +
+      "ocol.SmartContract\022\030\n\020call_token_value\030\003" +
+      " \001(\003\022\020\n\010token_id\030\004 \001(\003\"\225\001\n\024TriggerSmartC" +
+      "ontract\022\025\n\rowner_address\030\001 \001(\014\022\030\n\020contra" +
+      "ct_address\030\002 \001(\014\022\022\n\ncall_value\030\003 \001(\003\022\014\n\004" +
+      "data\030\004 \001(\014\022\030\n\020call_token_value\030\005 \001(\003\022\020\n\010" +
+      "token_id\030\006 \001(\003\"C\n\020ClearABIContract\022\025\n\row" +
+      "ner_address\030\001 \001(\014\022\030\n\020contract_address\030\002 " +
+      "\001(\014\"o\n\025UpdateSettingContract\022\025\n\rowner_ad" +
+      "dress\030\001 \001(\014\022\030\n\020contract_address\030\002 \001(\014\022%\n" +
+      "\035consume_user_resource_percent\030\003 \001(\003\"i\n\031" +
+      "UpdateEnergyLimitContract\022\025\n\rowner_addre" +
+      "ss\030\001 \001(\014\022\030\n\020contract_address\030\002 \001(\014\022\033\n\023or" +
+      "igin_energy_limit\030\003 \001(\003\"C\n\027UpdateBrokera" +
+      "geContract\022\025\n\rowner_address\030\001 \001(\014\022\021\n\tbro" +
+      "kerage\030\002 \001(\005\"`\n\021VoteAssetContract\022\025\n\rown" +
+      "er_address\030\001 \001(\014\022\024\n\014vote_address\030\002 \003(\014\022\017" +
+      "\n\007support\030\003 \001(\010\022\r\n\005count\030\005 \001(\005\";\n\025Witnes" +
+      "sCreateContract\022\025\n\rowner_address\030\001 \001(\014\022\013" +
+      "\n\003url\030\002 \001(\014\"B\n\025WitnessUpdateContract\022\025\n\r" +
+      "owner_address\030\001 \001(\014\022\022\n\nupdate_url\030\014 \001(\014\"" +
+      "\242\001\n\023VoteWitnessContract\022\025\n\rowner_address" +
+      "\030\001 \001(\014\0221\n\005votes\030\002 \003(\0132\".protocol.VoteWit" +
+      "nessContract.Vote\022\017\n\007support\030\003 \001(\010\0320\n\004Vo" +
+      "te\022\024\n\014vote_address\030\001 \001(\014\022\022\n\nvote_count\030\002" +
+      " \001(\003\"\233\001\n\026ExchangeCreateContract\022\025\n\rowner" +
+      "_address\030\001 \001(\014\022\026\n\016first_token_id\030\002 \001(\014\022\033" +
+      "\n\023first_token_balance\030\003 \001(\003\022\027\n\017second_to" +
+      "ken_id\030\004 \001(\014\022\034\n\024second_token_balance\030\005 \001" +
+      "(\003\"e\n\026ExchangeInjectContract\022\025\n\rowner_ad" +
+      "dress\030\001 \001(\014\022\023\n\013exchange_id\030\002 \001(\003\022\020\n\010toke" +
+      "n_id\030\003 \001(\014\022\r\n\005quant\030\004 \001(\003\"g\n\030ExchangeWit" +
+      "hdrawContract\022\025\n\rowner_address\030\001 \001(\014\022\023\n\013" +
+      "exchange_id\030\002 \001(\003\022\020\n\010token_id\030\003 \001(\014\022\r\n\005q" +
+      "uant\030\004 \001(\003\"|\n\033ExchangeTransactionContrac" +
+      "t\022\025\n\rowner_address\030\001 \001(\014\022\023\n\013exchange_id\030" +
+      "\002 \001(\003\022\020\n\010token_id\030\003 \001(\014\022\r\n\005quant\030\004 \001(\003\022\020" +
+      "\n\010expected\030\005 \001(\003\"r\n\027FreezeBalanceV2Contr" +
+      "act\022\025\n\rowner_address\030\001 \001(\014\022\026\n\016frozen_bal" +
+      "ance\030\002 \001(\003\022(\n\010resource\030\003 \001(\0162\026.protocol." +
+      "ResourceCode\"v\n\031UnfreezeBalanceV2Contrac" +
+      "t\022\025\n\rowner_address\030\001 \001(\014\022\030\n\020unfreeze_bal" +
+      "ance\030\002 \001(\003\022(\n\010resource\030\003 \001(\0162\026.protocol." +
+      "ResourceCode\"\251\001\n\030DelegateResourceContrac" +
+      "t\022\025\n\rowner_address\030\001 \001(\014\022(\n\010resource\030\002 \001" +
+      "(\0162\026.protocol.ResourceCode\022\017\n\007balance\030\003 " +
+      "\001(\003\022\030\n\020receiver_address\030\004 \001(\014\022\014\n\004lock\030\005 " +
+      "\001(\010\022\023\n\013lock_period\030\006 \001(\003\"\210\001\n\032UnDelegateR" +
+      "esourceContract\022\025\n\rowner_address\030\001 \001(\014\022(" +
+      "\n\010resource\030\002 \001(\0162\026.protocol.ResourceCode" +
+      "\022\017\n\007balance\030\003 \001(\003\022\030\n\020receiver_address\030\004 " +
+      "\001(\014\"7\n\036WithdrawExpireUnfreezeContract\022\025\n" +
+      "\rowner_address\030\001 \001(\014\"4\n\033CancelAllUnfreez" +
+      "eV2Contract\022\025\n\rowner_address\030\001 \001(\014B\030\n\026or" +
+      "g.tron.trident.protob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -29352,7 +29258,7 @@ public final class Contract {
     internal_static_protocol_MarketSellAssetContract_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_MarketSellAssetContract_descriptor,
-        new java.lang.String[] { "OwnerAddress", "SellTokenId", "SellTokenQuantity", "BuyTokenId", "BuyTokenQuantity", "PrePriceKey", });
+        new java.lang.String[] { "OwnerAddress", "SellTokenId", "SellTokenQuantity", "BuyTokenId", "BuyTokenQuantity", });
     internal_static_protocol_MarketCancelOrderContract_descriptor =
       getDescriptor().getMessageTypes().get(14);
     internal_static_protocol_MarketCancelOrderContract_fieldAccessorTable = new
