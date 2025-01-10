@@ -136,11 +136,6 @@ service Wallet {
   rpc GetTransactionInfoById(BytesMessage) returns (TransactionInfo) {}
   rpc GetTransactionInfoByBlockNum(NumberMessage) returns (TransactionInfoList) {}
 
-  //Use this function instead of GetTransactionsFromThis.
-  rpc GetTransactionsFromThis2 (AccountPaginated) returns (TransactionListExtention) {}
-  //Use this function instead of GetTransactionsToThis.
-  rpc GetTransactionsToThis2 (AccountPaginated) returns (TransactionListExtention) {}
-
   rpc GetContract(BytesMessage) returns (SmartContract) {}
   // FLAW: Abusing of `info`. Should be a `GetContractCode`.
   rpc GetContractInfo(BytesMessage) returns (SmartContractDataWrapper) {}
@@ -472,14 +467,5 @@ message CanDelegatedMaxSizeResponseMessage {
 
 message TransactionIdList {
   repeated string txId = 1;
-}
-
-message AccountPaginated {
-  Account account = 1;
-  int64 offset = 2;
-  int64 limit = 3;
-}
-message TransactionListExtention {
-  repeated TransactionExtention transaction = 1;
 }
 

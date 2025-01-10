@@ -1131,68 +1131,6 @@ public final class WalletGrpc {
     return getGetTransactionInfoByBlockNumMethod;
   }
 
-  private static volatile io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.AccountPaginated,
-      org.tron.trident.api.GrpcAPI.TransactionListExtention> getGetTransactionsFromThis2Method;
-
-  @io.grpc.stub.annotations.RpcMethod(
-      fullMethodName = SERVICE_NAME + '/' + "GetTransactionsFromThis2",
-      requestType = org.tron.trident.api.GrpcAPI.AccountPaginated.class,
-      responseType = org.tron.trident.api.GrpcAPI.TransactionListExtention.class,
-      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.AccountPaginated,
-      org.tron.trident.api.GrpcAPI.TransactionListExtention> getGetTransactionsFromThis2Method() {
-    io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.AccountPaginated, org.tron.trident.api.GrpcAPI.TransactionListExtention> getGetTransactionsFromThis2Method;
-    if ((getGetTransactionsFromThis2Method = WalletGrpc.getGetTransactionsFromThis2Method) == null) {
-      synchronized (WalletGrpc.class) {
-        if ((getGetTransactionsFromThis2Method = WalletGrpc.getGetTransactionsFromThis2Method) == null) {
-          WalletGrpc.getGetTransactionsFromThis2Method = getGetTransactionsFromThis2Method =
-              io.grpc.MethodDescriptor.<org.tron.trident.api.GrpcAPI.AccountPaginated, org.tron.trident.api.GrpcAPI.TransactionListExtention>newBuilder()
-              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
-              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "GetTransactionsFromThis2"))
-              .setSampledToLocalTracing(true)
-              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  org.tron.trident.api.GrpcAPI.AccountPaginated.getDefaultInstance()))
-              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  org.tron.trident.api.GrpcAPI.TransactionListExtention.getDefaultInstance()))
-              .setSchemaDescriptor(new WalletMethodDescriptorSupplier("GetTransactionsFromThis2"))
-              .build();
-        }
-      }
-    }
-    return getGetTransactionsFromThis2Method;
-  }
-
-  private static volatile io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.AccountPaginated,
-      org.tron.trident.api.GrpcAPI.TransactionListExtention> getGetTransactionsToThis2Method;
-
-  @io.grpc.stub.annotations.RpcMethod(
-      fullMethodName = SERVICE_NAME + '/' + "GetTransactionsToThis2",
-      requestType = org.tron.trident.api.GrpcAPI.AccountPaginated.class,
-      responseType = org.tron.trident.api.GrpcAPI.TransactionListExtention.class,
-      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.AccountPaginated,
-      org.tron.trident.api.GrpcAPI.TransactionListExtention> getGetTransactionsToThis2Method() {
-    io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.AccountPaginated, org.tron.trident.api.GrpcAPI.TransactionListExtention> getGetTransactionsToThis2Method;
-    if ((getGetTransactionsToThis2Method = WalletGrpc.getGetTransactionsToThis2Method) == null) {
-      synchronized (WalletGrpc.class) {
-        if ((getGetTransactionsToThis2Method = WalletGrpc.getGetTransactionsToThis2Method) == null) {
-          WalletGrpc.getGetTransactionsToThis2Method = getGetTransactionsToThis2Method =
-              io.grpc.MethodDescriptor.<org.tron.trident.api.GrpcAPI.AccountPaginated, org.tron.trident.api.GrpcAPI.TransactionListExtention>newBuilder()
-              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
-              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "GetTransactionsToThis2"))
-              .setSampledToLocalTracing(true)
-              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  org.tron.trident.api.GrpcAPI.AccountPaginated.getDefaultInstance()))
-              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  org.tron.trident.api.GrpcAPI.TransactionListExtention.getDefaultInstance()))
-              .setSchemaDescriptor(new WalletMethodDescriptorSupplier("GetTransactionsToThis2"))
-              .build();
-        }
-      }
-    }
-    return getGetTransactionsToThis2Method;
-  }
-
   private static volatile io.grpc.MethodDescriptor<org.tron.trident.api.GrpcAPI.BytesMessage,
       org.tron.trident.proto.Common.SmartContract> getGetContractMethod;
 
@@ -3321,26 +3259,6 @@ public final class WalletGrpc {
     }
 
     /**
-     * <pre>
-     *Use this function instead of GetTransactionsFromThis.
-     * </pre>
-     */
-    default void getTransactionsFromThis2(org.tron.trident.api.GrpcAPI.AccountPaginated request,
-        io.grpc.stub.StreamObserver<org.tron.trident.api.GrpcAPI.TransactionListExtention> responseObserver) {
-      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getGetTransactionsFromThis2Method(), responseObserver);
-    }
-
-    /**
-     * <pre>
-     *Use this function instead of GetTransactionsToThis.
-     * </pre>
-     */
-    default void getTransactionsToThis2(org.tron.trident.api.GrpcAPI.AccountPaginated request,
-        io.grpc.stub.StreamObserver<org.tron.trident.api.GrpcAPI.TransactionListExtention> responseObserver) {
-      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getGetTransactionsToThis2Method(), responseObserver);
-    }
-
-    /**
      */
     default void getContract(org.tron.trident.api.GrpcAPI.BytesMessage request,
         io.grpc.stub.StreamObserver<org.tron.trident.proto.Common.SmartContract> responseObserver) {
@@ -4140,28 +4058,6 @@ public final class WalletGrpc {
         io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.TransactionInfoList> responseObserver) {
       io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getGetTransactionInfoByBlockNumMethod(), getCallOptions()), request, responseObserver);
-    }
-
-    /**
-     * <pre>
-     *Use this function instead of GetTransactionsFromThis.
-     * </pre>
-     */
-    public void getTransactionsFromThis2(org.tron.trident.api.GrpcAPI.AccountPaginated request,
-        io.grpc.stub.StreamObserver<org.tron.trident.api.GrpcAPI.TransactionListExtention> responseObserver) {
-      io.grpc.stub.ClientCalls.asyncUnaryCall(
-          getChannel().newCall(getGetTransactionsFromThis2Method(), getCallOptions()), request, responseObserver);
-    }
-
-    /**
-     * <pre>
-     *Use this function instead of GetTransactionsToThis.
-     * </pre>
-     */
-    public void getTransactionsToThis2(org.tron.trident.api.GrpcAPI.AccountPaginated request,
-        io.grpc.stub.StreamObserver<org.tron.trident.api.GrpcAPI.TransactionListExtention> responseObserver) {
-      io.grpc.stub.ClientCalls.asyncUnaryCall(
-          getChannel().newCall(getGetTransactionsToThis2Method(), getCallOptions()), request, responseObserver);
     }
 
     /**
@@ -4977,26 +4873,6 @@ public final class WalletGrpc {
     }
 
     /**
-     * <pre>
-     *Use this function instead of GetTransactionsFromThis.
-     * </pre>
-     */
-    public org.tron.trident.api.GrpcAPI.TransactionListExtention getTransactionsFromThis2(org.tron.trident.api.GrpcAPI.AccountPaginated request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
-          getChannel(), getGetTransactionsFromThis2Method(), getCallOptions(), request);
-    }
-
-    /**
-     * <pre>
-     *Use this function instead of GetTransactionsToThis.
-     * </pre>
-     */
-    public org.tron.trident.api.GrpcAPI.TransactionListExtention getTransactionsToThis2(org.tron.trident.api.GrpcAPI.AccountPaginated request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
-          getChannel(), getGetTransactionsToThis2Method(), getCallOptions(), request);
-    }
-
-    /**
      */
     public org.tron.trident.proto.Common.SmartContract getContract(org.tron.trident.api.GrpcAPI.BytesMessage request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
@@ -5788,28 +5664,6 @@ public final class WalletGrpc {
     }
 
     /**
-     * <pre>
-     *Use this function instead of GetTransactionsFromThis.
-     * </pre>
-     */
-    public com.google.common.util.concurrent.ListenableFuture<org.tron.trident.api.GrpcAPI.TransactionListExtention> getTransactionsFromThis2(
-        org.tron.trident.api.GrpcAPI.AccountPaginated request) {
-      return io.grpc.stub.ClientCalls.futureUnaryCall(
-          getChannel().newCall(getGetTransactionsFromThis2Method(), getCallOptions()), request);
-    }
-
-    /**
-     * <pre>
-     *Use this function instead of GetTransactionsToThis.
-     * </pre>
-     */
-    public com.google.common.util.concurrent.ListenableFuture<org.tron.trident.api.GrpcAPI.TransactionListExtention> getTransactionsToThis2(
-        org.tron.trident.api.GrpcAPI.AccountPaginated request) {
-      return io.grpc.stub.ClientCalls.futureUnaryCall(
-          getChannel().newCall(getGetTransactionsToThis2Method(), getCallOptions()), request);
-    }
-
-    /**
      */
     public com.google.common.util.concurrent.ListenableFuture<org.tron.trident.proto.Common.SmartContract> getContract(
         org.tron.trident.api.GrpcAPI.BytesMessage request) {
@@ -6329,65 +6183,63 @@ public final class WalletGrpc {
   private static final int METHODID_GET_TRANSACTION_BY_ID = 33;
   private static final int METHODID_GET_TRANSACTION_INFO_BY_ID = 34;
   private static final int METHODID_GET_TRANSACTION_INFO_BY_BLOCK_NUM = 35;
-  private static final int METHODID_GET_TRANSACTIONS_FROM_THIS2 = 36;
-  private static final int METHODID_GET_TRANSACTIONS_TO_THIS2 = 37;
-  private static final int METHODID_GET_CONTRACT = 38;
-  private static final int METHODID_GET_CONTRACT_INFO = 39;
-  private static final int METHODID_LIST_WITNESSES = 40;
-  private static final int METHODID_GET_BROKERAGE_INFO = 41;
-  private static final int METHODID_GET_REWARD_INFO = 42;
-  private static final int METHODID_GET_DELEGATED_RESOURCE = 43;
-  private static final int METHODID_GET_DELEGATED_RESOURCE_ACCOUNT_INDEX = 44;
-  private static final int METHODID_LIST_PROPOSALS = 45;
-  private static final int METHODID_GET_PROPOSAL_BY_ID = 46;
-  private static final int METHODID_GET_PAGINATED_PROPOSAL_LIST = 47;
-  private static final int METHODID_LIST_EXCHANGES = 48;
-  private static final int METHODID_GET_EXCHANGE_BY_ID = 49;
-  private static final int METHODID_GET_PAGINATED_EXCHANGE_LIST = 50;
-  private static final int METHODID_SCAN_SHIELDED_TRC20NOTES_BY_IVK = 51;
-  private static final int METHODID_SCAN_SHIELDED_TRC20NOTES_BY_OVK = 52;
-  private static final int METHODID_IS_SHIELDED_TRC20CONTRACT_NOTE_SPENT = 53;
-  private static final int METHODID_GET_MARKET_ORDER_BY_ACCOUNT = 54;
-  private static final int METHODID_GET_MARKET_ORDER_BY_ID = 55;
-  private static final int METHODID_GET_MARKET_PRICE_BY_PAIR = 56;
-  private static final int METHODID_GET_MARKET_ORDER_LIST_BY_PAIR = 57;
-  private static final int METHODID_GET_MARKET_PAIR_LIST = 58;
-  private static final int METHODID_GET_TRANSACTION_SIGN = 59;
-  private static final int METHODID_GET_TRANSACTION_SIGN2 = 60;
-  private static final int METHODID_EASY_TRANSFER_ASSET = 61;
-  private static final int METHODID_EASY_TRANSFER_ASSET_BY_PRIVATE = 62;
-  private static final int METHODID_EASY_TRANSFER = 63;
-  private static final int METHODID_EASY_TRANSFER_BY_PRIVATE = 64;
-  private static final int METHODID_CREATE_ADDRESS = 65;
-  private static final int METHODID_GENERATE_ADDRESS = 66;
-  private static final int METHODID_ADD_SIGN = 67;
-  private static final int METHODID_GET_SPENDING_KEY = 68;
-  private static final int METHODID_GET_EXPANDED_SPENDING_KEY = 69;
-  private static final int METHODID_GET_AK_FROM_ASK = 70;
-  private static final int METHODID_GET_NK_FROM_NSK = 71;
-  private static final int METHODID_GET_INCOMING_VIEWING_KEY = 72;
-  private static final int METHODID_GET_DIVERSIFIER = 73;
-  private static final int METHODID_GET_ZEN_PAYMENT_ADDRESS = 74;
-  private static final int METHODID_GET_NEW_SHIELDED_ADDRESS = 75;
-  private static final int METHODID_GET_RCM = 76;
-  private static final int METHODID_CREATE_SHIELDED_CONTRACT_PARAMETERS = 77;
-  private static final int METHODID_CREATE_SHIELDED_CONTRACT_PARAMETERS_WITHOUT_ASK = 78;
-  private static final int METHODID_GET_TRIGGER_INPUT_FOR_SHIELDED_TRC20CONTRACT = 79;
-  private static final int METHODID_GET_AVAILABLE_UNFREEZE_COUNT = 80;
-  private static final int METHODID_GET_CAN_WITHDRAW_UNFREEZE_AMOUNT = 81;
-  private static final int METHODID_GET_CAN_DELEGATED_MAX_SIZE = 82;
-  private static final int METHODID_GET_DELEGATED_RESOURCE_V2 = 83;
-  private static final int METHODID_GET_DELEGATED_RESOURCE_ACCOUNT_INDEX_V2 = 84;
-  private static final int METHODID_GET_BURN_TRX = 85;
-  private static final int METHODID_GET_BLOCK_BALANCE_TRACE = 86;
-  private static final int METHODID_CREATE_WITNESS2 = 87;
-  private static final int METHODID_WITHDRAW_BALANCE2 = 88;
-  private static final int METHODID_GET_TRANSACTION_LIST_FROM_PENDING = 89;
-  private static final int METHODID_GET_TRANSACTION_FROM_PENDING = 90;
-  private static final int METHODID_GET_PENDING_SIZE = 91;
-  private static final int METHODID_GET_BANDWIDTH_PRICES = 92;
-  private static final int METHODID_GET_ENERGY_PRICES = 93;
-  private static final int METHODID_GET_MEMO_FEE = 94;
+  private static final int METHODID_GET_CONTRACT = 36;
+  private static final int METHODID_GET_CONTRACT_INFO = 37;
+  private static final int METHODID_LIST_WITNESSES = 38;
+  private static final int METHODID_GET_BROKERAGE_INFO = 39;
+  private static final int METHODID_GET_REWARD_INFO = 40;
+  private static final int METHODID_GET_DELEGATED_RESOURCE = 41;
+  private static final int METHODID_GET_DELEGATED_RESOURCE_ACCOUNT_INDEX = 42;
+  private static final int METHODID_LIST_PROPOSALS = 43;
+  private static final int METHODID_GET_PROPOSAL_BY_ID = 44;
+  private static final int METHODID_GET_PAGINATED_PROPOSAL_LIST = 45;
+  private static final int METHODID_LIST_EXCHANGES = 46;
+  private static final int METHODID_GET_EXCHANGE_BY_ID = 47;
+  private static final int METHODID_GET_PAGINATED_EXCHANGE_LIST = 48;
+  private static final int METHODID_SCAN_SHIELDED_TRC20NOTES_BY_IVK = 49;
+  private static final int METHODID_SCAN_SHIELDED_TRC20NOTES_BY_OVK = 50;
+  private static final int METHODID_IS_SHIELDED_TRC20CONTRACT_NOTE_SPENT = 51;
+  private static final int METHODID_GET_MARKET_ORDER_BY_ACCOUNT = 52;
+  private static final int METHODID_GET_MARKET_ORDER_BY_ID = 53;
+  private static final int METHODID_GET_MARKET_PRICE_BY_PAIR = 54;
+  private static final int METHODID_GET_MARKET_ORDER_LIST_BY_PAIR = 55;
+  private static final int METHODID_GET_MARKET_PAIR_LIST = 56;
+  private static final int METHODID_GET_TRANSACTION_SIGN = 57;
+  private static final int METHODID_GET_TRANSACTION_SIGN2 = 58;
+  private static final int METHODID_EASY_TRANSFER_ASSET = 59;
+  private static final int METHODID_EASY_TRANSFER_ASSET_BY_PRIVATE = 60;
+  private static final int METHODID_EASY_TRANSFER = 61;
+  private static final int METHODID_EASY_TRANSFER_BY_PRIVATE = 62;
+  private static final int METHODID_CREATE_ADDRESS = 63;
+  private static final int METHODID_GENERATE_ADDRESS = 64;
+  private static final int METHODID_ADD_SIGN = 65;
+  private static final int METHODID_GET_SPENDING_KEY = 66;
+  private static final int METHODID_GET_EXPANDED_SPENDING_KEY = 67;
+  private static final int METHODID_GET_AK_FROM_ASK = 68;
+  private static final int METHODID_GET_NK_FROM_NSK = 69;
+  private static final int METHODID_GET_INCOMING_VIEWING_KEY = 70;
+  private static final int METHODID_GET_DIVERSIFIER = 71;
+  private static final int METHODID_GET_ZEN_PAYMENT_ADDRESS = 72;
+  private static final int METHODID_GET_NEW_SHIELDED_ADDRESS = 73;
+  private static final int METHODID_GET_RCM = 74;
+  private static final int METHODID_CREATE_SHIELDED_CONTRACT_PARAMETERS = 75;
+  private static final int METHODID_CREATE_SHIELDED_CONTRACT_PARAMETERS_WITHOUT_ASK = 76;
+  private static final int METHODID_GET_TRIGGER_INPUT_FOR_SHIELDED_TRC20CONTRACT = 77;
+  private static final int METHODID_GET_AVAILABLE_UNFREEZE_COUNT = 78;
+  private static final int METHODID_GET_CAN_WITHDRAW_UNFREEZE_AMOUNT = 79;
+  private static final int METHODID_GET_CAN_DELEGATED_MAX_SIZE = 80;
+  private static final int METHODID_GET_DELEGATED_RESOURCE_V2 = 81;
+  private static final int METHODID_GET_DELEGATED_RESOURCE_ACCOUNT_INDEX_V2 = 82;
+  private static final int METHODID_GET_BURN_TRX = 83;
+  private static final int METHODID_GET_BLOCK_BALANCE_TRACE = 84;
+  private static final int METHODID_CREATE_WITNESS2 = 85;
+  private static final int METHODID_WITHDRAW_BALANCE2 = 86;
+  private static final int METHODID_GET_TRANSACTION_LIST_FROM_PENDING = 87;
+  private static final int METHODID_GET_TRANSACTION_FROM_PENDING = 88;
+  private static final int METHODID_GET_PENDING_SIZE = 89;
+  private static final int METHODID_GET_BANDWIDTH_PRICES = 90;
+  private static final int METHODID_GET_ENERGY_PRICES = 91;
+  private static final int METHODID_GET_MEMO_FEE = 92;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -6549,14 +6401,6 @@ public final class WalletGrpc {
         case METHODID_GET_TRANSACTION_INFO_BY_BLOCK_NUM:
           serviceImpl.getTransactionInfoByBlockNum((org.tron.trident.api.GrpcAPI.NumberMessage) request,
               (io.grpc.stub.StreamObserver<org.tron.trident.proto.Response.TransactionInfoList>) responseObserver);
-          break;
-        case METHODID_GET_TRANSACTIONS_FROM_THIS2:
-          serviceImpl.getTransactionsFromThis2((org.tron.trident.api.GrpcAPI.AccountPaginated) request,
-              (io.grpc.stub.StreamObserver<org.tron.trident.api.GrpcAPI.TransactionListExtention>) responseObserver);
-          break;
-        case METHODID_GET_TRANSACTIONS_TO_THIS2:
-          serviceImpl.getTransactionsToThis2((org.tron.trident.api.GrpcAPI.AccountPaginated) request,
-              (io.grpc.stub.StreamObserver<org.tron.trident.api.GrpcAPI.TransactionListExtention>) responseObserver);
           break;
         case METHODID_GET_CONTRACT:
           serviceImpl.getContract((org.tron.trident.api.GrpcAPI.BytesMessage) request,
@@ -7057,20 +6901,6 @@ public final class WalletGrpc {
               org.tron.trident.proto.Response.TransactionInfoList>(
                 service, METHODID_GET_TRANSACTION_INFO_BY_BLOCK_NUM)))
         .addMethod(
-          getGetTransactionsFromThis2Method(),
-          io.grpc.stub.ServerCalls.asyncUnaryCall(
-            new MethodHandlers<
-              org.tron.trident.api.GrpcAPI.AccountPaginated,
-              org.tron.trident.api.GrpcAPI.TransactionListExtention>(
-                service, METHODID_GET_TRANSACTIONS_FROM_THIS2)))
-        .addMethod(
-          getGetTransactionsToThis2Method(),
-          io.grpc.stub.ServerCalls.asyncUnaryCall(
-            new MethodHandlers<
-              org.tron.trident.api.GrpcAPI.AccountPaginated,
-              org.tron.trident.api.GrpcAPI.TransactionListExtention>(
-                service, METHODID_GET_TRANSACTIONS_TO_THIS2)))
-        .addMethod(
           getGetContractMethod(),
           io.grpc.stub.ServerCalls.asyncUnaryCall(
             new MethodHandlers<
@@ -7553,8 +7383,6 @@ public final class WalletGrpc {
               .addMethod(getGetTransactionByIdMethod())
               .addMethod(getGetTransactionInfoByIdMethod())
               .addMethod(getGetTransactionInfoByBlockNumMethod())
-              .addMethod(getGetTransactionsFromThis2Method())
-              .addMethod(getGetTransactionsToThis2Method())
               .addMethod(getGetContractMethod())
               .addMethod(getGetContractInfoMethod())
               .addMethod(getListWitnessesMethod())
