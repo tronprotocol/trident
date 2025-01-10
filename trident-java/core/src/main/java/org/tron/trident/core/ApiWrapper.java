@@ -50,6 +50,7 @@ import org.tron.trident.proto.Contract.DelegateResourceContract;
 import org.tron.trident.proto.Contract.ExchangeCreateContract;
 import org.tron.trident.proto.Contract.ExchangeInjectContract;
 import org.tron.trident.proto.Contract.ExchangeTransactionContract;
+import org.tron.trident.proto.Contract.ExchangeWithdrawContract;
 import org.tron.trident.proto.Contract.FreezeBalanceContract;
 import org.tron.trident.proto.Contract.FreezeBalanceV2Contract;
 import org.tron.trident.proto.Contract.MarketCancelOrderContract;
@@ -2367,6 +2368,21 @@ public class ApiWrapper {
   }
 
   /**
+   * get block of one specified block
+   *
+   * @param blockIDOrNum block Id or block num
+   * @param detail contains detail? if false, no transactions are contained.
+   * @return BlockExtention
+   */
+  public BlockExtention getBlock(String blockIDOrNum, boolean detail) {
+    BlockReq blockReq = BlockReq.newBuilder()
+        .setIdOrNum(blockIDOrNum)
+        .setDetail(detail)
+        .build();
+    return blockingStub.getBlock(blockReq);
+  }
+
+  /**
    * GetBlockByIdOrNum
    *
    * @param blockIDOrNum block Id with hex or block num with long
@@ -2543,6 +2559,28 @@ public class ApiWrapper {
         .build();
     return createTransactionExtention(exchangeTransactionContract,
         ContractType.ExchangeTransactionContract);
+  }
+
+  /**
+   * create ExchangeWithdrawContract with parameters
+   *
+   * @param ownerAddress owner address
+   * @param exchangeId exchangeId
+   * @param tokenId tokenId
+   * @param quant quant
+   * @return ExchangeWithdrawContract
+   */
+  public TransactionExtention exchangeWithdraw(String ownerAddress, long exchangeId,
+      String tokenId, long quant) throws IllegalException {
+    ByteString rawOwner = parseAddress(ownerAddress);
+    ExchangeWithdrawContract exchangeWithdrawContract = ExchangeWithdrawContract.newBuilder()
+        .setOwnerAddress(rawOwner)
+        .setExchangeId(exchangeId)
+        .setTokenId(ByteString.copyFrom(tokenId.getBytes()))
+        .setQuant(quant)
+        .build();
+    return createTransactionExtention(exchangeWithdrawContract,
+        ContractType.ExchangeWithdrawContract);
   }
 
   /**
