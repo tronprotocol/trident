@@ -48,6 +48,9 @@ import org.tron.trident.proto.Contract.AssetIssueContract;
 import org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract;
 import org.tron.trident.proto.Contract.ClearABIContract;
 import org.tron.trident.proto.Contract.DelegateResourceContract;
+import org.tron.trident.proto.Contract.ExchangeCreateContract;
+import org.tron.trident.proto.Contract.ExchangeInjectContract;
+import org.tron.trident.proto.Contract.ExchangeTransactionContract;
 import org.tron.trident.proto.Contract.FreezeBalanceContract;
 import org.tron.trident.proto.Contract.FreezeBalanceV2Contract;
 import org.tron.trident.proto.Contract.ParticipateAssetIssueContract;
@@ -2508,6 +2511,77 @@ public class ApiWrapper {
             .setBuyTokenId(ByteString.copyFrom(buyTokenId.getBytes()))
             .build();
     return blockingStub.getMarketPriceByPair(param);
+  }
+
+  /**
+   * exchangeCreate
+   *
+   * @param ownerAddress address
+   * @param firstToken token id
+   * @param firstBalance first token id balance
+   * @param secondToken token id
+   * @param secondBalance second token id balance
+   * @return TransactionExtention
+   */
+  public TransactionExtention exchangeCreate(String ownerAddress, String firstToken,
+      long firstBalance, String secondToken, long secondBalance)
+      throws IllegalException {
+
+    ExchangeCreateContract exchangeCreateContract = ExchangeCreateContract.newBuilder()
+        .setOwnerAddress(parseAddress(ownerAddress))
+        .setFirstTokenId(ByteString.copyFrom(firstToken.getBytes()))
+        .setFirstTokenBalance(firstBalance)
+        .setSecondTokenId(ByteString.copyFrom(secondToken.getBytes()))
+        .setSecondTokenBalance(secondBalance).build();
+    return createTransactionExtention(exchangeCreateContract,
+        ContractType.ExchangeCreateContract);
+  }
+
+  /**
+   * exchangeInject
+   *
+   * @param ownerAddress owner
+   * @param exchangeId exchange id
+   * @param tokenId token id
+   * @param amount inject the amount of tokenId to exchangeId
+   * @return TransactionExtention
+   */
+  public TransactionExtention exchangeInject(String ownerAddress, long exchangeId, String tokenId,
+      long amount)
+      throws IllegalException {
+
+    ExchangeInjectContract exchangeInjectContract = ExchangeInjectContract.newBuilder()
+        .setOwnerAddress(parseAddress(ownerAddress))
+        .setExchangeId(exchangeId)
+        .setTokenId(ByteString.copyFrom(tokenId.getBytes()))
+        .setQuant(amount).build();
+    return createTransactionExtention(exchangeInjectContract,
+        ContractType.ExchangeInjectContract);
+  }
+
+  /**
+   * exchangeTransaction
+   *
+   * @param ownerAddress owner
+   * @param exchangeId exchange id
+   * @param tokenId sell token id
+   * @param amount inject the amount of tokenId to exchangeId
+   * @param expected amount of buyTokenId
+   * @return TransactionExtention
+   */
+  public TransactionExtention exchangeTransaction(String ownerAddress, long exchangeId,
+      String tokenId, long amount, long expected)
+      throws IllegalException {
+
+    ExchangeTransactionContract exchangeTransactionContract = ExchangeTransactionContract.newBuilder()
+        .setOwnerAddress(parseAddress(ownerAddress))
+        .setExchangeId(exchangeId)
+        .setTokenId(ByteString.copyFrom(tokenId.getBytes()))
+        .setQuant(amount)
+        .setExpected(exchangeId)
+        .build();
+    return createTransactionExtention(exchangeTransactionContract,
+        ContractType.ExchangeTransactionContract);
   }
 
   /**
