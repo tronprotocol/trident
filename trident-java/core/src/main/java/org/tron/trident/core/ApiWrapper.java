@@ -10,6 +10,7 @@ import io.grpc.stub.MetadataUtils;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 import org.bouncycastle.jcajce.provider.digest.SHA256;
 import org.bouncycastle.util.encoders.Hex;
@@ -18,14 +19,12 @@ import org.tron.trident.abi.datatypes.Function;
 import org.tron.trident.api.GrpcAPI;
 import org.tron.trident.api.GrpcAPI.AccountAddressMessage;
 import org.tron.trident.api.GrpcAPI.AccountIdMessage;
-import org.tron.trident.api.GrpcAPI.AccountPaginated;
 import org.tron.trident.api.GrpcAPI.BlockLimit;
 import org.tron.trident.api.GrpcAPI.BlockReq;
 import org.tron.trident.api.GrpcAPI.BytesMessage;
 import org.tron.trident.api.GrpcAPI.EmptyMessage;
 import org.tron.trident.api.GrpcAPI.NumberMessage;
 import org.tron.trident.api.GrpcAPI.PaginatedMessage;
-import org.tron.trident.api.GrpcAPI.TransactionListExtention;
 import org.tron.trident.api.WalletGrpc;
 import org.tron.trident.api.WalletSolidityGrpc;
 import org.tron.trident.core.contract.Contract;
@@ -50,6 +49,8 @@ import org.tron.trident.proto.Contract.ClearABIContract;
 import org.tron.trident.proto.Contract.DelegateResourceContract;
 import org.tron.trident.proto.Contract.FreezeBalanceContract;
 import org.tron.trident.proto.Contract.FreezeBalanceV2Contract;
+import org.tron.trident.proto.Contract.MarketCancelOrderContract;
+import org.tron.trident.proto.Contract.MarketSellAssetContract;
 import org.tron.trident.proto.Contract.ParticipateAssetIssueContract;
 import org.tron.trident.proto.Contract.ProposalApproveContract;
 import org.tron.trident.proto.Contract.ProposalCreateContract;
@@ -64,6 +65,8 @@ import org.tron.trident.proto.Contract.UnfreezeBalanceContract;
 import org.tron.trident.proto.Contract.UnfreezeBalanceV2Contract;
 import org.tron.trident.proto.Contract.UpdateAssetContract;
 import org.tron.trident.proto.Contract.UpdateBrokerageContract;
+import org.tron.trident.proto.Contract.UpdateEnergyLimitContract;
+import org.tron.trident.proto.Contract.UpdateSettingContract;
 import org.tron.trident.proto.Contract.VoteWitnessContract;
 import org.tron.trident.proto.Contract.WithdrawBalanceContract;
 import org.tron.trident.proto.Contract.WithdrawExpireUnfreezeContract;
@@ -317,8 +320,8 @@ public class ApiWrapper {
   }
 
   public Transaction signTransaction(TransactionExtention txnExt, KeyPair keyPair) {
-    byte[] txid = txnExt.getTxid().toByteArray();
-    byte[] signature = KeyPair.signTransaction(txid, keyPair);
+    byte[] txId = txnExt.getTxid().toByteArray();
+    byte[] signature = KeyPair.signTransaction(txId, keyPair);
     return txnExt.getTransaction().toBuilder().addSignature(ByteString.copyFrom(signature)).build();
   }
 
@@ -410,7 +413,7 @@ public class ApiWrapper {
    * @param txn the transaction to be estimated.
    */
   public long estimateBandwidth(Transaction txn) {
-    return txn.toBuilder().clearRet().build().getSerializedSize() + 64;
+    return txn.toBuilder().clearRet().build().getSerializedSize() + 64L;
   }
 
   /**
@@ -1084,9 +1087,9 @@ public class ApiWrapper {
    * @throws IllegalException if the parameters are not correct
    */
   public TransactionInfo getTransactionInfoById(String txID) throws IllegalException {
-    ByteString bsTxid = parseAddress(txID);
+    ByteString bsTxId = parseAddress(txID);
     BytesMessage request = BytesMessage.newBuilder()
-        .setValue(bsTxid)
+        .setValue(bsTxId)
         .build();
     TransactionInfo transactionInfo = blockingStub.getTransactionInfoById(request);
 
@@ -1104,9 +1107,9 @@ public class ApiWrapper {
    * @throws IllegalException if the parameters are not correct
    */
   public Transaction getTransactionById(String txID) throws IllegalException {
-    ByteString bsTxid = parseAddress(txID);
+    ByteString bsTxId = parseAddress(txID);
     BytesMessage request = BytesMessage.newBuilder()
-        .setValue(bsTxid)
+        .setValue(bsTxId)
         .build();
     Transaction transaction = blockingStub.getTransactionById(request);
 
@@ -1379,11 +1382,11 @@ public class ApiWrapper {
    */
   //1-17
   public Proposal getProposalById(String id) throws IllegalException {
-    ByteString bsTxid = ByteString.copyFrom(
+    ByteString bsTxId = ByteString.copyFrom(
         ByteBuffer.allocate(8).putLong(Long.parseLong(id)).array());
 
     BytesMessage request = BytesMessage.newBuilder()
-        .setValue(bsTxid)
+        .setValue(bsTxId)
         .build();
     Proposal proposal = blockingStub.getProposalById(request);
 
@@ -1420,11 +1423,11 @@ public class ApiWrapper {
    * @throws IllegalException if fail to get exchange pair
    */
   public Exchange getExchangeById(String id) throws IllegalException {
-    ByteString bsTxid = ByteString.copyFrom(
+    ByteString bsTxId = ByteString.copyFrom(
         ByteBuffer.allocate(8).putLong(Long.parseLong(id)).array());
 
     BytesMessage request = BytesMessage.newBuilder()
-        .setValue(bsTxid)
+        .setValue(bsTxId)
         .build();
     Exchange exchange = blockingStub.getExchangeById(request);
 
@@ -1464,8 +1467,9 @@ public class ApiWrapper {
         totalSupply, trxNum, icoNum, startTime, endTime, url, freeAssetNetLimit,
         publicFreeAssetNetLimit, precision, description);
 
-    for (String daysStr : frozenSupply.keySet()) {
-      String amountStr = frozenSupply.get(daysStr);
+    for (Entry<String, String> entry: frozenSupply.entrySet()) {
+      String daysStr = entry.getKey();
+      String amountStr = entry.getValue();
       long amount = Long.parseLong(amountStr);
       long days = Long.parseLong(daysStr);
       AssetIssueContract.FrozenSupply.Builder frozenBuilder = AssetIssueContract.FrozenSupply
@@ -2237,9 +2241,7 @@ public class ApiWrapper {
       String callData) {
     Contract cntr = getContract(contractAddr);
 
-    TransactionExtention txnExt = callWithoutBroadcastV2(ownerAddr, cntr, callData);
-
-    return txnExt;
+    return callWithoutBroadcastV2(ownerAddr, cntr, callData);
   }
 
 
@@ -2332,11 +2334,11 @@ public class ApiWrapper {
   }
 
   /**
-   * GetPaginatedExchangeList
+   * get paginated exchange list
    *
-   * @param offset todo
-   * @param limit todo
-   * @return todo
+   * @param offset offset
+   * @param limit limit
+   * @return exchange list
    */
   public ExchangeList getPaginatedExchangeList(long offset, long limit) {
     PaginatedMessage paginatedMessage = PaginatedMessage.newBuilder()
@@ -2347,11 +2349,11 @@ public class ApiWrapper {
   }
 
   /**
-   * GetPaginatedProposalList
+   * get paginated proposal list
    *
-   * @param offset todo
-   * @param limit todo
-   * @return todo
+   * @param offset offset
+   * @param limit limit
+   * @return proposal list
    */
   public ProposalList getPaginatedProposalList(long offset, long limit) {
     PaginatedMessage paginatedMessage = PaginatedMessage.newBuilder()
@@ -2362,50 +2364,10 @@ public class ApiWrapper {
   }
 
   /**
-   * GetTransactionsFromThis2
-   *
-   * @param address todo
-   * @param offset todo
-   * @param limit todo
-   * @return todo
-   */
-  public TransactionListExtention getTransactionsFromThis2(String address, long offset,
-      long limit) {
-    ByteString rawOwner = parseAddress(address);
-    Account account = Account.newBuilder().setAddress(rawOwner).build();
-    AccountPaginated accountPaginated = AccountPaginated.newBuilder()
-        .setAccount(account)
-        .setOffset(offset)
-        .setLimit(limit)
-        .build();
-    return blockingStub.getTransactionsFromThis2(accountPaginated);
-  }
-
-  /**
-   * GetTransactionsToThis2
-   *
-   * @param address todo
-   * @param offset todo
-   * @param limit todo
-   * @return todo
-   */
-  public TransactionListExtention getTransactionsToThis2(String address, long offset,
-      long limit) {
-    ByteString rawOwner = parseAddress(address);
-    Account account = Account.newBuilder().setAddress(rawOwner).build();
-    AccountPaginated accountPaginated = AccountPaginated.newBuilder()
-        .setAccount(account)
-        .setOffset(offset)
-        .setLimit(limit)
-        .build();
-    return blockingStub.getTransactionsToThis2(accountPaginated);
-  }
-
-  /**
    * GetBlockByIdOrNum
    *
-   * @param blockIDOrNum todo
-   * @return todo
+   * @param blockIDOrNum block Id with hex or block num with long
+   * @return Block
    */
   public Block getBlockByIdOrNum(String blockIDOrNum) {
     if (Numeric.isNumericString(blockIDOrNum)) {
@@ -2414,9 +2376,8 @@ public class ApiWrapper {
           .build();
       return blockingStub.getBlockByNum(numberMessage);
     } else if (ByteArray.isHexString(blockIDOrNum)) {
-      byte[] blockID = ByteArray.fromHexString(blockIDOrNum);
       BytesMessage bytesMessage = BytesMessage.newBuilder()
-          .setValue(ByteString.copyFrom(blockID))
+          .setValue(parseHex(blockIDOrNum))
           .build();
       return blockingStub.getBlockById(bytesMessage);
     } else {
@@ -2528,5 +2489,87 @@ public class ApiWrapper {
   public long getTransactionCountByBlockNum(long blockNum) {
     NumberMessage message = NumberMessage.newBuilder().setNum(blockNum).build();
     return blockingStub.getTransactionCountByBlockNum(message).getNum();
+  }
+
+  /**
+   * crete MarketCancelOrderContract with parameters
+   *
+   * @param ownerAddress owner address
+   * @param orderId existing order Id
+   * @return MarketCancelOrderContract
+   */
+  public TransactionExtention marketCancelOrder(String ownerAddress, String orderId)
+      throws IllegalException {
+    ByteString rawOwner = parseAddress(ownerAddress);
+    ByteString rawOrderId = parseHex(orderId);
+    MarketCancelOrderContract marketCancelOrderContract = MarketCancelOrderContract.newBuilder()
+        .setOwnerAddress(rawOwner)
+        .setOrderId(rawOrderId)
+        .build();
+    return createTransactionExtention(marketCancelOrderContract,
+        ContractType.MarketCancelOrderContract);
+  }
+
+  /**
+   * create MarketSellAssetContract with parameters
+   * @param ownerAddress owner address
+   * @param sellTokenId sell token Id, all digit is 0~9
+   * @param sellTokenQuantity sell token quantity
+   * @param buyTokenId buy token Id, all digit is 0~9
+   * @param buyTokenQuantity buy token quantity
+   * @return MarketSellAssetContract
+   */
+  public TransactionExtention marketSellAsset(String ownerAddress, String sellTokenId,
+      long sellTokenQuantity, String buyTokenId, long buyTokenQuantity) throws IllegalException {
+    ByteString rawOwner = parseAddress(ownerAddress);
+    MarketSellAssetContract marketSellAssetContract = MarketSellAssetContract.newBuilder()
+        .setOwnerAddress(rawOwner)
+        .setSellTokenId(ByteString.copyFrom(sellTokenId.getBytes()))
+        .setSellTokenQuantity(sellTokenQuantity)
+        .setBuyTokenId(ByteString.copyFrom(buyTokenId.getBytes()))
+        .setBuyTokenQuantity(buyTokenQuantity)
+        .build();
+    return createTransactionExtention(marketSellAssetContract,
+        ContractType.MarketSellAssetContract);
+  }
+
+  /**
+   * create UpdateEnergyLimitContract with parameters
+   * @param ownerAddress owner address
+   * @param contractAddress contract address
+   * @param originEnergyLimit origin energy limit, must be >=0
+   * @return UpdateEnergyLimitContract
+   */
+  public TransactionExtention updateEnergyLimit(String ownerAddress, String contractAddress,
+      long originEnergyLimit) throws IllegalException {
+    ByteString rawOwner = parseAddress(ownerAddress);
+    ByteString rawContract = parseAddress(contractAddress);
+    UpdateEnergyLimitContract updateEnergyLimitContract = UpdateEnergyLimitContract.newBuilder()
+        .setOwnerAddress(rawOwner)
+        .setContractAddress(rawContract)
+        .setOriginEnergyLimit(originEnergyLimit)
+        .build();
+    return createTransactionExtention(updateEnergyLimitContract,
+        ContractType.UpdateEnergyLimitContract);
+  }
+
+  /**
+   * create UpdateSettingContract with parameters
+   * @param ownerAddress owner address
+   * @param contractAddress contract address
+   * @param consumeUserResourcePercent  consume user resource percent if user trigger this contract, must be [0,100]
+   * @return UpdateSettingContract
+   */
+  public TransactionExtention updateSetting(String ownerAddress, String contractAddress,
+      long consumeUserResourcePercent) throws IllegalException {
+    ByteString rawOwner = parseAddress(ownerAddress);
+    ByteString rawContract = parseAddress(contractAddress);
+    UpdateSettingContract updateSettingContract = UpdateSettingContract.newBuilder()
+        .setOwnerAddress(rawOwner)
+        .setContractAddress(rawContract)
+        .setConsumeUserResourcePercent(consumeUserResourcePercent)
+        .build();
+    return createTransactionExtention(updateSettingContract,
+        ContractType.UpdateSettingContract);
   }
 }
