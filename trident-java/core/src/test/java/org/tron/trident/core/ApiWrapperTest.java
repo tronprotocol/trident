@@ -31,10 +31,10 @@ import org.tron.trident.proto.Response.ProposalList;
 import org.tron.trident.proto.Response.TransactionExtention;
 import org.tron.trident.proto.Response.TransactionReturn;
 
-public class ApiWrapperTest {
+class ApiWrapperTest {
 
   @Test
-  public void testGetNowBlockQuery() {
+  void testGetNowBlockQuery() {
     ApiWrapper client = ApiWrapper.ofShasta(KeyPair.generate().toPrivateKey());
     BlockExtention block = client.blockingStub.getNowBlock2(EmptyMessage.newBuilder().build());
 
@@ -43,7 +43,7 @@ public class ApiWrapperTest {
   }
 
   @Test
-  public void testGetNowBlockQueryWithTimeout() throws IllegalException {
+  void testGetNowBlockQueryWithTimeout() throws IllegalException {
     List<ClientInterceptor> clientInterceptors = new ArrayList<>();
     ApiWrapper client = new ApiWrapper(Constant.FULLNODE_NILE, Constant.FULLNODE_NILE_SOLIDITY,
         KeyPair.generate().toPrivateKey(), clientInterceptors,
@@ -55,7 +55,7 @@ public class ApiWrapperTest {
   }
 
   @Test
-  public void testSendTrc20Transaction() {
+  void testSendTrc20Transaction() {
     ApiWrapper client = ApiWrapper.ofNile(KeyPair.generate().toPrivateKey());
 
     // transfer(address,uint256) returns (bool)
@@ -87,7 +87,7 @@ public class ApiWrapperTest {
   }
 
   @Test
-  public void testGenerateAddress() {
+  void testGenerateAddress() {
     ApiWrapper.generateAddress();
   }
 
