@@ -1889,9 +1889,9 @@ public class ApiWrapper {
    */
   public TransactionExtention constantCall(String ownerAddr, String contractAddr,
       Function function) {
-    Contract cntr = getContract(contractAddr);
+    Contract contract = getContract(contractAddr);
 
-    return callWithoutBroadcast(ownerAddr, cntr, function);
+    return callWithoutBroadcast(ownerAddr, contract, function);
   }
 
   /**
@@ -1903,9 +1903,9 @@ public class ApiWrapper {
    * @return transaction builder. Users may set other fields, e.g. feeLimit
    */
   public TransactionBuilder triggerCall(String ownerAddr, String contractAddr, Function function) {
-    Contract cntr = getContract(contractAddr);
+    Contract contract = getContract(contractAddr);
 
-    TransactionExtention txnExt = callWithoutBroadcast(ownerAddr, cntr, function);
+    TransactionExtention txnExt = callWithoutBroadcast(ownerAddr, contract, function);
 
     return new TransactionBuilder(txnExt.getTransaction());
   }
@@ -2192,6 +2192,12 @@ public class ApiWrapper {
     return blockingStub.estimateEnergy(trigger);
   }
 
+  public Response.EstimateEnergyMessage estimateEnergyV2(String ownerAddr, String contractAddr,
+      String callData, long callValue, long tokenValue, String tokenId) {
+    //todo
+    return null;
+  }
+
   /**
    * make a trigger call. Trigger call consumes energy and bandwidth.
    *
@@ -2201,30 +2207,35 @@ public class ApiWrapper {
    * @return transaction builder. TransactionExtention detail.
    */
   public TransactionBuilder triggerCallV2(String ownerAddr, String contractAddr, String callData) {
-    Contract cntr = getContract(contractAddr);
+    Contract contract = getContract(contractAddr);
 
-    TransactionExtention txnExt = callWithoutBroadcastV2(ownerAddr, cntr, callData);
+    TransactionExtention txnExt = callWithoutBroadcastV2(ownerAddr, contract, callData);
 
     return new TransactionBuilder(txnExt.getTransaction());
   }
 
+  public TransactionBuilder triggerCallV2(String ownerAddr, String contractAddr, String callData,
+      long callValue, long tokenValue, String tokenId) {
+    //todo
+    return null;
+  }
 
   /**
    * call function without signature and broadcasting
    *
    * @param ownerAddr the caller
-   * @param cntr the contract
+   * @param contract the contract
    * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
    * @return TransactionExtention
    */
-  private TransactionExtention callWithoutBroadcastV2(String ownerAddr, Contract cntr,
+  private TransactionExtention callWithoutBroadcastV2(String ownerAddr, Contract contract,
       String callData) {
-    cntr.setOwnerAddr(parseAddress(ownerAddr));
+    contract.setOwnerAddr(parseAddress(ownerAddr));
     // Make a TriggerSmartContract contract
     TriggerSmartContract trigger =
         TriggerSmartContract.newBuilder()
-            .setOwnerAddress(cntr.getOwnerAddr())
-            .setContractAddress(cntr.getCntrAddr())
+            .setOwnerAddress(contract.getOwnerAddr())
+            .setContractAddress(contract.getCntrAddr())
             .setData(ByteString.copyFrom(ByteArray.fromHexString(callData)))
             .build();
 
@@ -2236,16 +2247,22 @@ public class ApiWrapper {
   /**
    * make a constant call - no broadcasting
    *
-   * @param ownerAddr the current caller.
-   * @param contractAddr smart contract address.
+   * @param ownerAddress the current caller.
+   * @param contractAddress smart contract address.
    * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
    * @return TransactionExtention.
    */
-  public TransactionExtention constantCallV2(String ownerAddr, String contractAddr,
+  public TransactionExtention constantCallV2(String ownerAddress, String contractAddress,
       String callData) {
-    Contract cntr = getContract(contractAddr);
+    Contract contract = getContract(contractAddress);
 
-    return callWithoutBroadcastV2(ownerAddr, cntr, callData);
+    return callWithoutBroadcastV2(ownerAddress, contract, callData);
+  }
+
+  public TransactionExtention constantCallV2(String ownerAddress, String contractAddress,
+      String callData, long callValue, long tokenValue, String tokenId) {
+    //todo
+    return null;
   }
 
 

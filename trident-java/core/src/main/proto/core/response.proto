@@ -93,6 +93,7 @@ message EasyTransferResponse {
 message SmartContractDataWrapper {
     SmartContract smart_contract = 1;
     bytes runtime_code = 2;
+    ContractState contract_state = 3;
 }
 
 message InternalTransaction {
