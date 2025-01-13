@@ -1935,7 +1935,38 @@ public class ApiWrapper {
     return blockingStub.triggerContract(trigger);
   }
 
+  /**
+   * make a triggerContractWithBroadcast
+   *
+   * @param ownerAddr the current caller
+   * @param contractAddr smart contract address
+   * @param function contract function
+   * @param callValue trx transfer amount
+   * @param feeLimit feeLimit
+   * @return String txn
+   */
+  public String triggerContractWithBroadcast(String ownerAddr, String contractAddr,
+      Function function, long callValue, long feeLimit) {
 
+    String encodedHex = FunctionEncoder.encode(function);
+
+    TriggerSmartContract trigger =
+        TriggerSmartContract.newBuilder()
+            .setOwnerAddress(ApiWrapper.parseAddress(ownerAddr))
+            .setContractAddress(ApiWrapper.parseAddress(contractAddr))
+            .setData(ApiWrapper.parseHex(encodedHex))
+            .setCallValue(callValue)
+            .build();
+
+    System.out.println("trigger:\n" + trigger);
+
+    TransactionExtention transactionExtention = blockingStub.triggerContract(trigger);
+
+    TransactionBuilder builder = new TransactionBuilder(transactionExtention.getTransaction());
+    builder.setFeeLimit(feeLimit);
+    Transaction signedTxn = signTransaction(builder.build());
+    return broadcastTransaction(signedTxn);
+  }
 
   /**
    * GetBlockBalance
