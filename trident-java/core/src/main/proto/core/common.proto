@@ -54,6 +54,8 @@ message SmartContract {
         Function = 2;
         Event = 3;
         Fallback = 4;
+        Receive = 5;
+        Error = 6;
       }
       message Param {
         bool indexed = 1;
@@ -103,4 +105,11 @@ message Note {
   string payment_address = 2;
   bytes rcm = 3;  // random 32
   bytes memo = 4;
+}
+
+message MarketOrderDetail {
+  bytes makerOrderId = 1;
+  bytes takerOrderId = 2;
+  int64 fillSellQuantity = 3;
+  int64 fillBuyQuantity = 4;
 }
