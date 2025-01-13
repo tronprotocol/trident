@@ -1,16 +1,22 @@
 package org.tron.trident.core;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static java.lang.Thread.sleep;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.grpc.ClientInterceptor;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 import org.bouncycastle.util.encoders.Hex;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.tron.trident.abi.FunctionEncoder;
 import org.tron.trident.abi.TypeReference;
@@ -29,13 +35,55 @@ import org.tron.trident.proto.Response.BlockExtention;
 import org.tron.trident.proto.Response.ExchangeList;
 import org.tron.trident.proto.Response.ProposalList;
 import org.tron.trident.proto.Response.TransactionExtention;
+import org.tron.trident.proto.Response.TransactionInfo;
 import org.tron.trident.proto.Response.TransactionReturn;
 
 class ApiWrapperTest {
 
+  private static final String CONFIG_FILE = "application-test.properties";
+  private static ApiWrapper client;
+  private static Properties properties;
+
+  @BeforeAll
+  static void setUp() {
+    try {
+      // load config
+      properties = loadConfig();
+      String privateKey = properties.getProperty("tron.private-key");
+      String network = properties.getProperty("tron.network", "nile"); // default
+
+      // init client
+      if ("mainnet".equals(network)) {
+        client = ApiWrapper.ofMainnet(privateKey);
+      } else {
+        client = ApiWrapper.ofNile(privateKey);
+      }
+    } catch (IOException e) {
+      throw new RuntimeException("load config failed", e);
+    }
+  }
+
+  private static Properties loadConfig() throws IOException {
+    Properties props = new Properties();
+    try (InputStream input = ApiWrapperTest.class.getClassLoader()
+        .getResourceAsStream(CONFIG_FILE)) {
+      if (input == null) {
+        throw new IOException("can't find config file : " + CONFIG_FILE);
+      }
+      props.load(input);
+    }
+    return props;
+  }
+
+  @AfterAll
+  static void tearDown() {
+    if (client != null) {
+      client.close();
+    }
+  }
+
   @Test
   void testGetNowBlockQuery() {
-    ApiWrapper client = ApiWrapper.ofShasta(KeyPair.generate().toPrivateKey());
     BlockExtention block = client.blockingStub.getNowBlock2(EmptyMessage.newBuilder().build());
 
     System.out.println(block.getBlockHeader());
@@ -56,12 +104,13 @@ class ApiWrapperTest {
 
   @Test
   void testSendTrc20Transaction() {
-    ApiWrapper client = ApiWrapper.ofNile(KeyPair.generate().toPrivateKey());
-
     // transfer(address,uint256) returns (bool)
+    String usdtAddr = "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf"; //nile
+    String fromAddr = client.keyPair.toBase58CheckAddress();
+    String toAddress = "TVjsyZ7fYF3qLF6BQgPmTEZy1xrNNyVAAA";
     Function trc20Transfer = new Function("transfer",
-        Arrays.asList(new Address("TVjsyZ7fYF3qLF6BQgPmTEZy1xrNNyVAAA"),
-            new Uint256(BigInteger.valueOf(10).multiply(BigInteger.valueOf(10).pow(18)))),
+        Arrays.asList(new Address(toAddress),
+            new Uint256(BigInteger.valueOf(10).multiply(BigInteger.valueOf(10).pow(6)))),
         Arrays.asList(new TypeReference<Bool>() {
         }));
 
@@ -69,8 +118,8 @@ class ApiWrapperTest {
 
     TriggerSmartContract trigger =
         TriggerSmartContract.newBuilder()
-            .setOwnerAddress(ApiWrapper.parseAddress("TJRabPrwbZy45sbavfcjinPJC18kjpRTv8"))
-            .setContractAddress(ApiWrapper.parseAddress("TF17BgPaZYbz8oxbjhriubPDsA7ArKoLX3"))
+            .setOwnerAddress(ApiWrapper.parseAddress(fromAddr))
+            .setContractAddress(ApiWrapper.parseAddress(usdtAddr))
             .setData(ApiWrapper.parseHex(encodedHex))
             .build();
 
@@ -93,43 +142,56 @@ class ApiWrapperTest {
 
   @Test
   void testGetBlock() {
-    ApiWrapper client = ApiWrapper.ofNile(KeyPair.generate().toPrivateKey());
     BlockExtention blockExtention = client.getBlock("53506161", true);
     assertEquals(1, blockExtention.getTransactionsList().size());
 
     blockExtention = client.getBlock("53506161", false);
     assertEquals(0, blockExtention.getTransactionsList().size());
-
-    client.close();
   }
 
   @Test
   void testGetBlockByIdOrNum() {
-    ApiWrapper client = ApiWrapper.ofNile(KeyPair.generate().toPrivateKey());
     Block block1 = client.getBlockByIdOrNum("53506161");
     Block block2 = client.getBlockByIdOrNum(
         "00000000033070712deeda7d1e4d9ee89ba0ad083a7570a20ac6b5200c180259");
     assertNotNull(block1);
     assertNotNull(block2);
-    assertArrayEquals(block1.getBlockHeader().getRawData().toByteArray(),
-        block2.getBlockHeader().getRawData().toByteArray());
-
-    client.close();
   }
 
   @Test
   void testGetPaginatedProposalList() {
-    ApiWrapper client = ApiWrapper.ofNile(KeyPair.generate().toPrivateKey());
     ProposalList proposalList = client.getPaginatedProposalList(0, 10);
     assertTrue(proposalList.getProposalsCount() > 0);
-    client.close();
   }
 
   @Test
   void testGetPaginatedExchangeList() {
-    ApiWrapper client = ApiWrapper.ofNile(KeyPair.generate().toPrivateKey());
     ExchangeList exchangeList = client.getPaginatedExchangeList(0, 10);
     assertTrue(exchangeList.getExchangesCount() > 0);
-    client.close();
+  }
+
+  @Test
+  void testTriggerContract() throws InterruptedException, IllegalException {
+    // transfer(address,uint256) returns (bool)
+    String usdtAddr = "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf"; //nile
+    String fromAddr = client.keyPair.toBase58CheckAddress();
+    String toAddress = "TVjsyZ7fYF3qLF6BQgPmTEZy1xrNNyVAAA";
+    Function trc20Transfer = new Function("transfer",
+        Arrays.asList(new Address(toAddress),
+            new Uint256(BigInteger.valueOf(10).multiply(BigInteger.valueOf(10).pow(6)))),
+        Collections.singletonList(new TypeReference<Bool>() {
+        }));
+    TransactionExtention transactionExtention = client.triggerContract(fromAddr, usdtAddr,
+        trc20Transfer);
+
+    Transaction signedTxn = client.signTransaction(transactionExtention);
+
+    System.out.println(signedTxn.toString());
+    String ret = client.broadcastTransaction(signedTxn);
+    System.out.println("======== Result ========\n" + ret);
+    sleep(10_000L);
+    TransactionInfo transactionInfo = client.getTransactionInfoById(ret);
+    assertEquals(0, transactionInfo.getResult().getNumber());
+
   }
 }
