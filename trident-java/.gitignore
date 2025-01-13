@@ -27,3 +27,4 @@ build/
 .vscode
 demo/
 /core/src/main/java/org/tron/trident/proto/
+/core/src/main/grpc/org/tron/trident/api/

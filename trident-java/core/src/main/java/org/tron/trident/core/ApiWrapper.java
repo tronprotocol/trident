@@ -1826,10 +1826,10 @@ public class ApiWrapper implements Api {
 
   public TransactionExtention updateBrokerage(String address, int brokerage)
       throws IllegalException {
-    ByteString ownerAddr = parseAddress(address);
+    ByteString ownerAddress = parseAddress(address);
     UpdateBrokerageContract upContract =
         UpdateBrokerageContract.newBuilder()
-            .setOwnerAddress(ownerAddr)
+            .setOwnerAddress(ownerAddress)
             .setBrokerage(brokerage)
             .build();
     return createTransactionExtention(upContract,
@@ -2610,10 +2610,10 @@ public class ApiWrapper implements Api {
    */
   @Override
   public SmartContractDataWrapper getContractInfo(String contractAddr) {
-    ByteString rawAddr = parseAddress(contractAddr);
+    ByteString rawAddress = parseAddress(contractAddr);
     BytesMessage param =
         BytesMessage.newBuilder()
-            .setValue(rawAddr)
+            .setValue(rawAddress)
             .build();
     return blockingStub.getContractInfo(param);
   }
@@ -2626,10 +2626,10 @@ public class ApiWrapper implements Api {
    */
   @Override
   public MarketOrderList getMarketOrderByAccount(String account) {
-    ByteString rawAddr = parseAddress(account);
+    ByteString rawAddress = parseAddress(account);
     BytesMessage param =
         BytesMessage.newBuilder()
-            .setValue(rawAddr)
+            .setValue(rawAddress)
             .build();
     return blockingStub.getMarketOrderByAccount(param);
   }

@@ -4,7 +4,6 @@ package org.tron.trident.core;
 import static java.lang.Thread.sleep;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.tron.trident.core.exceptions.IllegalException;
@@ -18,7 +17,7 @@ class ContractTest {
   @Disabled
   void testTransferTrc10() throws InterruptedException {
     ApiWrapper client = ApiWrapper.ofNile(
-        "the private key of from address TEPRbQxXQEpHpeEx8tK5xHVs7NWudAAZgu");
+        "the private key of from TEPRbQxXQEpHpeEx8tK5xHVs7NWudAAZgu");
     //specify your private key yourself
     TransactionExtention transactionExtention;
     try {
