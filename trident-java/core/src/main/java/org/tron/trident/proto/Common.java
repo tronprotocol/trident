@@ -3594,6 +3594,12 @@ public final class Common {
      * @return The trxHash.
      */
     com.google.protobuf.ByteString getTrxHash();
+
+    /**
+     * <code>int32 version = 11;</code>
+     * @return The version.
+     */
+    int getVersion();
   }
   /**
    * Protobuf type {@code protocol.SmartContract}
@@ -7384,6 +7390,17 @@ public final class Common {
       return trxHash_;
     }
 
+    public static final int VERSION_FIELD_NUMBER = 11;
+    private int version_ = 0;
+    /**
+     * <code>int32 version = 11;</code>
+     * @return The version.
+     */
+    @java.lang.Override
+    public int getVersion() {
+      return version_;
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -7427,6 +7444,9 @@ public final class Common {
       }
       if (!trxHash_.isEmpty()) {
         output.writeBytes(10, trxHash_);
+      }
+      if (version_ != 0) {
+        output.writeInt32(11, version_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -7476,6 +7496,10 @@ public final class Common {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(10, trxHash_);
       }
+      if (version_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(11, version_);
+      }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
@@ -7514,6 +7538,8 @@ public final class Common {
           .equals(other.getCodeHash())) return false;
       if (!getTrxHash()
           .equals(other.getTrxHash())) return false;
+      if (getVersion()
+          != other.getVersion()) return false;
       if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
@@ -7550,6 +7576,8 @@ public final class Common {
       hash = (53 * hash) + getCodeHash().hashCode();
       hash = (37 * hash) + TRX_HASH_FIELD_NUMBER;
       hash = (53 * hash) + getTrxHash().hashCode();
+      hash = (37 * hash) + VERSION_FIELD_NUMBER;
+      hash = (53 * hash) + getVersion();
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -7701,6 +7729,7 @@ public final class Common {
         originEnergyLimit_ = 0L;
         codeHash_ = com.google.protobuf.ByteString.EMPTY;
         trxHash_ = com.google.protobuf.ByteString.EMPTY;
+        version_ = 0;
         return this;
       }
 
@@ -7767,6 +7796,9 @@ public final class Common {
         }
         if (((from_bitField0_ & 0x00000200) != 0)) {
           result.trxHash_ = trxHash_;
+        }
+        if (((from_bitField0_ & 0x00000400) != 0)) {
+          result.version_ = version_;
         }
         result.bitField0_ |= to_bitField0_;
       }
@@ -7847,6 +7879,9 @@ public final class Common {
         if (other.getTrxHash() != com.google.protobuf.ByteString.EMPTY) {
           setTrxHash(other.getTrxHash());
         }
+        if (other.getVersion() != 0) {
+          setVersion(other.getVersion());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
@@ -7925,6 +7960,11 @@ public final class Common {
                 bitField0_ |= 0x00000200;
                 break;
               } // case 82
+              case 88: {
+                version_ = input.readInt32();
+                bitField0_ |= 0x00000400;
+                break;
+              } // case 88
               default: {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                   done = true; // was an endgroup tag
@@ -8387,6 +8427,38 @@ public final class Common {
       public Builder clearTrxHash() {
         bitField0_ = (bitField0_ & ~0x00000200);
         trxHash_ = getDefaultInstance().getTrxHash();
+        onChanged();
+        return this;
+      }
+
+      private int version_ ;
+      /**
+       * <code>int32 version = 11;</code>
+       * @return The version.
+       */
+      @java.lang.Override
+      public int getVersion() {
+        return version_;
+      }
+      /**
+       * <code>int32 version = 11;</code>
+       * @param value The version to set.
+       * @return This builder for chaining.
+       */
+      public Builder setVersion(int value) {
+
+        version_ = value;
+        bitField0_ |= 0x00000400;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 version = 11;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearVersion() {
+        bitField0_ = (bitField0_ & ~0x00000400);
+        version_ = 0;
         onChanged();
         return this;
       }
@@ -9864,37 +9936,37 @@ public final class Common {
       "n_name\030\003 \001(\t\022\021\n\tthreshold\030\004 \001(\003\022\021\n\tparen" +
       "t_id\030\005 \001(\005\022\022\n\noperations\030\006 \001(\014\022\033\n\004keys\030\007" +
       " \003(\0132\r.protocol.Key\"4\n\016PermissionType\022\t\n" +
-      "\005Owner\020\000\022\013\n\007Witness\020\001\022\n\n\006Active\020\002\"\203\007\n\rSm" +
+      "\005Owner\020\000\022\013\n\007Witness\020\001\022\n\n\006Active\020\002\"\224\007\n\rSm" +
       "artContract\022\026\n\016origin_address\030\001 \001(\014\022\030\n\020c" +
       "ontract_address\030\002 \001(\014\022(\n\003abi\030\003 \001(\0132\033.pro" +
       "tocol.SmartContract.ABI\022\020\n\010bytecode\030\004 \001(" +
       "\014\022\022\n\ncall_value\030\005 \001(\003\022%\n\035consume_user_re" +
       "source_percent\030\006 \001(\003\022\014\n\004name\030\007 \001(\t\022\033\n\023or" +
       "igin_energy_limit\030\010 \001(\003\022\021\n\tcode_hash\030\t \001" +
-      "(\014\022\020\n\010trx_hash\030\n \001(\014\032\370\004\n\003ABI\0221\n\006entrys\030\001" +
-      " \003(\0132!.protocol.SmartContract.ABI.Entry\032" +
-      "\275\004\n\005Entry\022\021\n\tanonymous\030\001 \001(\010\022\020\n\010constant" +
-      "\030\002 \001(\010\022\014\n\004name\030\003 \001(\t\0227\n\006inputs\030\004 \003(\0132\'.p" +
-      "rotocol.SmartContract.ABI.Entry.Param\0228\n" +
-      "\007outputs\030\005 \003(\0132\'.protocol.SmartContract." +
-      "ABI.Entry.Param\0229\n\004type\030\006 \001(\0162+.protocol" +
-      ".SmartContract.ABI.Entry.EntryType\022\017\n\007pa" +
-      "yable\030\007 \001(\010\022N\n\017stateMutability\030\010 \001(\01625.p" +
-      "rotocol.SmartContract.ABI.Entry.StateMut" +
-      "abilityType\0324\n\005Param\022\017\n\007indexed\030\001 \001(\010\022\014\n" +
-      "\004name\030\002 \001(\t\022\014\n\004type\030\003 \001(\t\"Y\n\tEntryType\022\024" +
-      "\n\020UnknownEntryType\020\000\022\017\n\013Constructor\020\001\022\014\n" +
-      "\010Function\020\002\022\t\n\005Event\020\003\022\014\n\010Fallback\020\004\"a\n\023" +
-      "StateMutabilityType\022\031\n\025UnknownMutability" +
-      "Type\020\000\022\010\n\004Pure\020\001\022\010\n\004View\020\002\022\016\n\nNonpayable" +
-      "\020\003\022\013\n\007Payable\020\004\"0\n\004Vote\022\024\n\014vote_address\030" +
-      "\001 \001(\014\022\022\n\nvote_count\030\002 \001(\003\"I\n\004Note\022\r\n\005val" +
-      "ue\030\001 \001(\003\022\027\n\017payment_address\030\002 \001(\t\022\013\n\003rcm" +
-      "\030\003 \001(\014\022\014\n\004memo\030\004 \001(\014*9\n\014ResourceCode\022\r\n\t" +
-      "BANDWIDTH\020\000\022\n\n\006ENERGY\020\001\022\016\n\nTRON_POWER\020\002*" +
-      "7\n\013AccountType\022\n\n\006Normal\020\000\022\016\n\nAssetIssue" +
-      "\020\001\022\014\n\010Contract\020\002B\030\n\026org.tron.trident.pro" +
-      "tob\006proto3"
+      "(\014\022\020\n\010trx_hash\030\n \001(\014\022\017\n\007version\030\013 \001(\005\032\370\004" +
+      "\n\003ABI\0221\n\006entrys\030\001 \003(\0132!.protocol.SmartCo" +
+      "ntract.ABI.Entry\032\275\004\n\005Entry\022\021\n\tanonymous\030" +
+      "\001 \001(\010\022\020\n\010constant\030\002 \001(\010\022\014\n\004name\030\003 \001(\t\0227\n" +
+      "\006inputs\030\004 \003(\0132\'.protocol.SmartContract.A" +
+      "BI.Entry.Param\0228\n\007outputs\030\005 \003(\0132\'.protoc" +
+      "ol.SmartContract.ABI.Entry.Param\0229\n\004type" +
+      "\030\006 \001(\0162+.protocol.SmartContract.ABI.Entr" +
+      "y.EntryType\022\017\n\007payable\030\007 \001(\010\022N\n\017stateMut" +
+      "ability\030\010 \001(\01625.protocol.SmartContract.A" +
+      "BI.Entry.StateMutabilityType\0324\n\005Param\022\017\n" +
+      "\007indexed\030\001 \001(\010\022\014\n\004name\030\002 \001(\t\022\014\n\004type\030\003 \001" +
+      "(\t\"Y\n\tEntryType\022\024\n\020UnknownEntryType\020\000\022\017\n" +
+      "\013Constructor\020\001\022\014\n\010Function\020\002\022\t\n\005Event\020\003\022" +
+      "\014\n\010Fallback\020\004\"a\n\023StateMutabilityType\022\031\n\025" +
+      "UnknownMutabilityType\020\000\022\010\n\004Pure\020\001\022\010\n\004Vie" +
+      "w\020\002\022\016\n\nNonpayable\020\003\022\013\n\007Payable\020\004\"0\n\004Vote" +
+      "\022\024\n\014vote_address\030\001 \001(\014\022\022\n\nvote_count\030\002 \001" +
+      "(\003\"I\n\004Note\022\r\n\005value\030\001 \001(\003\022\027\n\017payment_add" +
+      "ress\030\002 \001(\t\022\013\n\003rcm\030\003 \001(\014\022\014\n\004memo\030\004 \001(\014*9\n" +
+      "\014ResourceCode\022\r\n\tBANDWIDTH\020\000\022\n\n\006ENERGY\020\001" +
+      "\022\016\n\nTRON_POWER\020\002*7\n\013AccountType\022\n\n\006Norma" +
+      "l\020\000\022\016\n\nAssetIssue\020\001\022\014\n\010Contract\020\002B\030\n\026org" +
+      ".tron.trident.protob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -9929,7 +10001,7 @@ public final class Common {
     internal_static_protocol_SmartContract_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_SmartContract_descriptor,
-        new java.lang.String[] { "OriginAddress", "ContractAddress", "Abi", "Bytecode", "CallValue", "ConsumeUserResourcePercent", "Name", "OriginEnergyLimit", "CodeHash", "TrxHash", });
+        new java.lang.String[] { "OriginAddress", "ContractAddress", "Abi", "Bytecode", "CallValue", "ConsumeUserResourcePercent", "Name", "OriginEnergyLimit", "CodeHash", "TrxHash", "Version", });
     internal_static_protocol_SmartContract_ABI_descriptor =
       internal_static_protocol_SmartContract_descriptor.getNestedTypes().get(0);
     internal_static_protocol_SmartContract_ABI_fieldAccessorTable = new

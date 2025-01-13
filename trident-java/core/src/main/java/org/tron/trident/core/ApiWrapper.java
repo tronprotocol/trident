@@ -1912,6 +1912,32 @@ public class ApiWrapper {
 
 
   /**
+   * make a triggerContract
+   *
+   * @param ownerAddr the current caller
+   * @param contractAddr smart contract address
+   * @param function contract function
+   * @return TransactionExtention
+   */
+  public TransactionExtention triggerContract(String ownerAddr, String contractAddr, Function function) {
+
+    String encodedHex = FunctionEncoder.encode(function);
+
+    TriggerSmartContract trigger =
+        TriggerSmartContract.newBuilder()
+            .setOwnerAddress(ApiWrapper.parseAddress(ownerAddr))
+            .setContractAddress(ApiWrapper.parseAddress(contractAddr))
+            .setData(ApiWrapper.parseHex(encodedHex))
+            .build();
+
+    System.out.println("trigger:\n" + trigger);
+
+    return blockingStub.triggerContract(trigger);
+  }
+
+
+
+  /**
    * GetBlockBalance
    * Get all balance change operations in a block(Note: At present, the interface data can only be queried through the following official nodes
    * 47.241.20.47 & 161.117.85.97 &161.117.224.116 &161.117.83.38)
