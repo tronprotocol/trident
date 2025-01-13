@@ -10,6 +10,7 @@ import io.grpc.stub.MetadataUtils;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 import org.bouncycastle.jcajce.provider.digest.SHA256;
@@ -124,7 +125,7 @@ import org.tron.trident.utils.Numeric;
  * @since java version 1.8.0_231
  */
 
-public class ApiWrapper {
+public class ApiWrapper implements Api {
 
   public static final long TRANSACTION_DEFAULT_EXPIRATION_TIME = 60 * 1_000L; //60 seconds
 
@@ -323,22 +324,26 @@ public class ApiWrapper {
     return Hex.toHexString(raw.toByteArray());
   }
 
+  @Override
   public Transaction signTransaction(TransactionExtention txnExt, KeyPair keyPair) {
     byte[] txId = txnExt.getTxid().toByteArray();
     byte[] signature = KeyPair.signTransaction(txId, keyPair);
     return txnExt.getTransaction().toBuilder().addSignature(ByteString.copyFrom(signature)).build();
   }
 
+  @Override
   public Transaction signTransaction(Transaction txn, KeyPair keyPair) {
-    byte[] txid = calculateTransactionHash(txn);
-    byte[] signature = KeyPair.signTransaction(txid, keyPair);
+    byte[] txId = calculateTransactionHash(txn);
+    byte[] signature = KeyPair.signTransaction(txId, keyPair);
     return txn.toBuilder().addSignature(ByteString.copyFrom(signature)).build();
   }
 
+  @Override
   public Transaction signTransaction(TransactionExtention txnExt) {
     return signTransaction(txnExt, keyPair);
   }
 
+  @Override
   public Transaction signTransaction(Transaction txn) {
     return signTransaction(txn, keyPair);
   }
@@ -390,6 +395,7 @@ public class ApiWrapper {
    * @param contractType transaction type.
    * @param request transaction message object.
    */
+  @Override
   public TransactionExtention createTransactionExtention(Message request,
       Transaction.Contract.ContractType contractType) throws IllegalException {
     TransactionExtention.Builder trxExtBuilder = TransactionExtention.newBuilder();
@@ -416,6 +422,7 @@ public class ApiWrapper {
    *
    * @param txn the transaction to be estimated.
    */
+  @Override
   public long estimateBandwidth(Transaction txn) {
     return txn.toBuilder().clearRet().build().getSerializedSize() + 64L;
   }
@@ -468,6 +475,8 @@ public class ApiWrapper {
       case 20:
         responseCode = "OTHER_ERROR";
         break;
+      default:
+        responseCode = "UNKNOWN";
     }
     return responseCode;
   }
@@ -479,6 +488,7 @@ public class ApiWrapper {
    * @return a TransactionReturn object contains the broadcasting result
    * @throws RuntimeException if broadcastin fails
    */
+  @Override
   public String broadcastTransaction(Transaction txn) throws RuntimeException {
     TransactionReturn ret = blockingStub.broadcastTransaction(txn);
     if (!ret.getResult()) {
@@ -499,6 +509,7 @@ public class ApiWrapper {
    * @return TransactionExtention
    * @throws IllegalException if fail to transfer
    */
+  @Override
   public TransactionExtention transfer(String fromAddress, String toAddress, long amount)
       throws IllegalException {
 
@@ -524,6 +535,7 @@ public class ApiWrapper {
    * @return TransactionExtention
    * @throws IllegalException if fail to transfer trc10
    */
+  @Override
   public TransactionExtention transferTrc10(String fromAddress, String toAddress, int tokenId,
       long amount) throws IllegalException {
 
@@ -552,6 +564,7 @@ public class ApiWrapper {
    * @return TransactionExtention
    * @throws IllegalException if fail to freeze balance
    */
+  @Override
   public TransactionExtention freezeBalance(String ownerAddress, long frozenBalance,
       int frozenDuration, int resourceCode) throws IllegalException {
 
@@ -569,6 +582,7 @@ public class ApiWrapper {
    * @return TransactionExtention
    * @throws IllegalException if fail to freeze balance
    */
+  @Override
   public TransactionExtention freezeBalance(String ownerAddress, long frozenBalance,
       int frozenDuration, int resourceCode, String receiveAddress) throws IllegalException {
     ByteString rawFrom = parseAddress(ownerAddress);
@@ -595,6 +609,7 @@ public class ApiWrapper {
    * @return TransactionExtention
    * @throws IllegalException if fail to freeze balance
    */
+  @Override
   public TransactionExtention freezeBalanceV2(String ownerAddress, long frozenBalance,
       int resourceCode) throws IllegalException {
     ByteString rawOwner = parseAddress(ownerAddress);
@@ -617,6 +632,7 @@ public class ApiWrapper {
    * @return TransactionExtention
    * @throws IllegalException if fail to unfreeze balance
    */
+  @Override
   public TransactionExtention unfreezeBalance(String ownerAddress, int resourceCode)
       throws IllegalException {
 
@@ -632,6 +648,7 @@ public class ApiWrapper {
    * @return TransactionExtention
    * @throws IllegalException if fail to unfreeze balance
    */
+  @Override
   public TransactionExtention unfreezeBalance(String ownerAddress, int resourceCode,
       String receiveAddress) throws IllegalException {
 
@@ -656,6 +673,7 @@ public class ApiWrapper {
    * @return TransactionExtention
    * @throws IllegalException if fail to unfreeze balance
    */
+  @Override
   public TransactionExtention unfreezeBalanceV2(String ownerAddress, long unfreezeBalance,
       int resourceCode) throws IllegalException {
 
@@ -679,6 +697,7 @@ public class ApiWrapper {
    * @return TransactionExtention
    * @throws IllegalException if fail to delegate resource
    */
+  @Override
   public TransactionExtention cancelAllUnfreezeV2(String ownerAddress) throws IllegalException {
 
     CancelAllUnfreezeV2Contract cancelUnfreezeV2Contract =
@@ -705,15 +724,16 @@ public class ApiWrapper {
    * @return TransactionExtention
    * @throws IllegalException if fail to delegate resource
    */
+  @Override
   public TransactionExtention delegateResource(String ownerAddress, long balance, int resourceCode,
       String receiverAddress, boolean lock) throws IllegalException {
     ByteString rawOwner = parseAddress(ownerAddress);
-    ByteString rawReciever = parseAddress(receiverAddress);
+    ByteString rawReceiver = parseAddress(receiverAddress);
     DelegateResourceContract delegateResourceContract =
         DelegateResourceContract.newBuilder()
             .setOwnerAddress(rawOwner)
             .setBalance(balance)
-            .setReceiverAddress(rawReciever)
+            .setReceiverAddress(rawReceiver)
             .setLock(lock)
             .setResourceValue(resourceCode)
             .build();
@@ -738,16 +758,17 @@ public class ApiWrapper {
    * @return TransactionExtention
    * @throws IllegalException if fail to delegate resource
    */
+  @Override
   public TransactionExtention delegateResourceV2(String ownerAddress, long balance,
       int resourceCode, String receiverAddress, boolean lock, long lockPeriod)
       throws IllegalException {
     ByteString rawOwner = parseAddress(ownerAddress);
-    ByteString rawReciever = parseAddress(receiverAddress);
+    ByteString rawReceiver = parseAddress(receiverAddress);
     DelegateResourceContract delegateResourceContract =
         DelegateResourceContract.newBuilder()
             .setOwnerAddress(rawOwner)
             .setBalance(balance)
-            .setReceiverAddress(rawReciever)
+            .setReceiverAddress(rawReceiver)
             .setLock(lock)
             .setResourceValue(resourceCode)
             .build();
@@ -770,15 +791,16 @@ public class ApiWrapper {
    * @return TransactionExtention
    * @throws IllegalException if fail to undelegate resource
    */
+  @Override
   public TransactionExtention undelegateResource(String ownerAddress, long balance,
       int resourceCode, String receiverAddress) throws IllegalException {
     ByteString rawOwner = parseAddress(ownerAddress);
-    ByteString rawReciever = parseAddress(receiverAddress);
+    ByteString rawReceiver = parseAddress(receiverAddress);
     UnDelegateResourceContract unDelegateResourceContract =
         UnDelegateResourceContract.newBuilder()
             .setOwnerAddress(rawOwner)
             .setBalance(balance)
-            .setReceiverAddress(rawReciever)
+            .setReceiverAddress(rawReceiver)
             .setResourceValue(resourceCode)
             .build();
     return createTransactionExtention(unDelegateResourceContract,
@@ -794,6 +816,7 @@ public class ApiWrapper {
    * @return TransactionExtention
    * @throws IllegalException if fail to withdraw
    */
+  @Override
   public TransactionExtention withdrawExpireUnfreeze(String ownerAddress) throws IllegalException {
     ByteString rawOwner = parseAddress(ownerAddress);
     WithdrawExpireUnfreezeContract withdrawExpireUnfreezeContract =
@@ -811,6 +834,7 @@ public class ApiWrapper {
    *
    * @param ownerAddress owner address
    */
+  @Override
   public long getAvailableUnfreezeCount(String ownerAddress) {
     ByteString rawOwner = parseAddress(ownerAddress);
     GrpcAPI.GetAvailableUnfreezeCountRequestMessage getAvailableUnfreezeCountRequestMessage =
@@ -829,6 +853,7 @@ public class ApiWrapper {
    *
    * @param ownerAddress owner address
    */
+  @Override
   public long getCanWithdrawUnfreezeAmount(String ownerAddress) {
     ByteString rawOwner = parseAddress(ownerAddress);
     GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage getAvailableUnfreezeCountRequestMessage =
@@ -848,6 +873,7 @@ public class ApiWrapper {
    * @param ownerAddress owner address
    * @param type resource type, 0 is bandwidth, 1 is energy
    */
+  @Override
   public long getCanDelegatedMaxSize(String ownerAddress, int type) {
     ByteString rawFrom = parseAddress(ownerAddress);
     GrpcAPI.CanDelegatedMaxSizeRequestMessage getAvailableUnfreezeCountRequestMessage =
@@ -869,6 +895,7 @@ public class ApiWrapper {
    * @param toAddress to address
    * @return DelegatedResourceList
    */
+  @Override
   public DelegatedResourceList getDelegatedResourceV2(String fromAddress, String toAddress) {
     ByteString rawFrom = parseAddress(fromAddress);
     ByteString rawTo = parseAddress(toAddress);
@@ -889,6 +916,7 @@ public class ApiWrapper {
    * @return DelegatedResourceAccountIndex
    * @throws IllegalException if fail to freeze balance
    */
+  @Override
   public DelegatedResourceAccountIndex getDelegatedResourceAccountIndexV2(String address)
       throws IllegalException {
     ByteString rawAddress = parseAddress(address);
@@ -908,6 +936,7 @@ public class ApiWrapper {
    * @return TransactionExtention
    * IllegalNumException if fail to vote witness
    */
+  @Override
   public TransactionExtention voteWitness(String ownerAddress, HashMap<String, String> votes)
       throws IllegalException {
     ByteString rawFrom = parseAddress(ownerAddress);
@@ -924,6 +953,7 @@ public class ApiWrapper {
    * @return TransactionExtention
    * IllegalNumException if fail to create account
    */
+  @Override
   public TransactionExtention createAccount(String ownerAddress, String accountAddress)
       throws IllegalException {
     ByteString bsOwnerAddress = parseAddress(ownerAddress);
@@ -945,6 +975,7 @@ public class ApiWrapper {
    * IllegalNumException if fail to update account name
    */
   //only if account.getAccountName() == null can update name
+  @Override
   public TransactionExtention updateAccount(String address, String accountName)
       throws IllegalException {
     ByteString bsAddress = parseAddress(address);
@@ -965,6 +996,7 @@ public class ApiWrapper {
    * @return Block
    * @throws IllegalException if fail to get now block
    */
+  @Override
   public Block getNowBlock() throws IllegalException {
     Block block = blockingStub.getNowBlock(EmptyMessage.newBuilder().build());
     if (!block.hasBlockHeader()) {
@@ -980,6 +1012,7 @@ public class ApiWrapper {
    * @return BlockExtention block details
    * @throws IllegalException if the parameters are not correct
    */
+  @Override
   public BlockExtention getBlockByNum(long blockNum) throws IllegalException {
     NumberMessage.Builder builder = NumberMessage.newBuilder();
     builder.setNum(blockNum);
@@ -998,6 +1031,7 @@ public class ApiWrapper {
    * @return BlockListExtention
    * @throws IllegalException if the parameters are not correct
    */
+  @Override
   public BlockListExtention getBlockByLatestNum(long num) throws IllegalException {
     NumberMessage numberMessage = NumberMessage.newBuilder().setNum(num).build();
     BlockListExtention blockListExtention = blockingStub.getBlockByLatestNum2(numberMessage);
@@ -1017,6 +1051,7 @@ public class ApiWrapper {
    * @return BlockListExtention
    * @throws IllegalException if the parameters are not correct
    */
+  @Override
   public BlockListExtention getBlockByLimitNext(long startNum, long endNum)
       throws IllegalException {
     BlockLimit blockLimit = BlockLimit.newBuilder()
@@ -1041,6 +1076,7 @@ public class ApiWrapper {
    * @return NodeInfo
    * @throws IllegalException if fail to get nodeInfo
    */
+  @Override
   public NodeInfo getNodeInfo() throws IllegalException {
     NodeInfo nodeInfo = blockingStub.getNodeInfo(EmptyMessage.newBuilder().build());
 
@@ -1056,6 +1092,7 @@ public class ApiWrapper {
    * @return NodeList
    * @throws IllegalException if fail to get node list
    */
+  @Override
   public NodeList listNodes() throws IllegalException {
     NodeList nodeList = blockingStub.listNodes(EmptyMessage.newBuilder().build());
 
@@ -1072,6 +1109,7 @@ public class ApiWrapper {
    * @return TransactionInfoList
    * @throws IllegalException no transactions or the blockNum is incorrect
    */
+  @Override
   public TransactionInfoList getTransactionInfoByBlockNum(long blockNum) throws IllegalException {
     NumberMessage numberMessage = NumberMessage.newBuilder().setNum(blockNum).build();
     TransactionInfoList transactionInfoList = blockingStub.getTransactionInfoByBlockNum(
@@ -1090,6 +1128,7 @@ public class ApiWrapper {
    * @return TransactionInfo
    * @throws IllegalException if the parameters are not correct
    */
+  @Override
   public TransactionInfo getTransactionInfoById(String txID) throws IllegalException {
     ByteString bsTxId = parseAddress(txID);
     BytesMessage request = BytesMessage.newBuilder()
@@ -1110,6 +1149,7 @@ public class ApiWrapper {
    * @return Transaction
    * @throws IllegalException if the parameters are not correct
    */
+  @Override
   public Transaction getTransactionById(String txID) throws IllegalException {
     ByteString bsTxId = parseAddress(txID);
     BytesMessage request = BytesMessage.newBuilder()
@@ -1129,6 +1169,7 @@ public class ApiWrapper {
    * @param address address, default hexString
    * @return Account
    */
+  @Override
   public Account getAccount(String address) {
     ByteString bsAddress = parseAddress(address);
     AccountAddressMessage accountAddressMessage = AccountAddressMessage.newBuilder()
@@ -1143,6 +1184,7 @@ public class ApiWrapper {
    * @param address address, default hexString
    * @return AccountResourceMessage
    */
+  @Override
   public AccountResourceMessage getAccountResource(String address) {
     ByteString bsAddress = parseAddress(address);
     AccountAddressMessage account = AccountAddressMessage.newBuilder()
@@ -1157,6 +1199,7 @@ public class ApiWrapper {
    * @param address address, default hexString
    * @return AccountResourceMessage
    */
+  @Override
   public AccountNetMessage getAccountNet(String address) {
     ByteString bsAddress = parseAddress(address);
     AccountAddressMessage account = AccountAddressMessage.newBuilder()
@@ -1165,12 +1208,14 @@ public class ApiWrapper {
     return blockingStub.getAccountNet(account);
   }
 
+  @Override
   public long getAccountBalance(String address) {
     Account account = getAccount(address);
     return account.getBalance();
   }
 
 
+  @Override
   public Account getAccountById(String id) {
     ByteString bsId = ByteString.copyFrom(id.getBytes());
     AccountIdMessage accountId = AccountIdMessage.newBuilder()
@@ -1179,6 +1224,7 @@ public class ApiWrapper {
     return blockingStub.getAccountById(accountId);
   }
 
+  @Override
   public Transaction setAccountId(String id, String address) throws IllegalException {
     ByteString bsId = ByteString.copyFrom(id.getBytes());
     ByteString bsAddress = parseAddress(address);
@@ -1190,6 +1236,7 @@ public class ApiWrapper {
   }
 
   //use this method instead of setAccountId
+  @Override
   public TransactionExtention setAccountId2(String id, String address) throws IllegalException {
     ByteString bsId = ByteString.copyFrom(id.getBytes());
     ByteString bsAddress = parseAddress(address);
@@ -1206,6 +1253,7 @@ public class ApiWrapper {
    * @return ChainParameters
    * @throws IllegalException if fail to get chain parameters
    */
+  @Override
   public ChainParameters getChainParameters() throws IllegalException {
     ChainParameters chainParameters = blockingStub.getChainParameters(
         EmptyMessage.newBuilder().build());
@@ -1223,6 +1271,7 @@ public class ApiWrapper {
    * @param toAddress energy delegation information, default hexString
    * @return DelegatedResourceList
    */
+  @Override
   public DelegatedResourceList getDelegatedResource(String fromAddress,
       String toAddress) {
 
@@ -1242,6 +1291,7 @@ public class ApiWrapper {
    * @param address address,, default hexString
    * @return DelegatedResourceAccountIndex
    */
+  @Override
   public DelegatedResourceAccountIndex getDelegatedResourceAccountIndex(String address) {
 
     ByteString addressBS = parseAddress(address);
@@ -1259,6 +1309,7 @@ public class ApiWrapper {
    *
    * @return AssetIssueList
    */
+  @Override
   public AssetIssueList getAssetIssueList() {
     return blockingStub.getAssetIssueList(
         EmptyMessage.newBuilder().build());
@@ -1271,6 +1322,7 @@ public class ApiWrapper {
    * @param limit the amount of tokens per page
    * @return AssetIssueList, a list of Tokens that succeed the Token located at offset
    */
+  @Override
   public AssetIssueList getPaginatedAssetIssueList(long offset, long limit) {
     PaginatedMessage pageMessage = PaginatedMessage.newBuilder()
         .setOffset(offset)
@@ -1286,6 +1338,7 @@ public class ApiWrapper {
    * @param address the Token Issuer account address
    * @return AssetIssueList, a list of Tokens that succeed the Token located at offset
    */
+  @Override
   public AssetIssueList getAssetIssueByAccount(String address) {
     ByteString addressBS = parseAddress(address);
     AccountAddressMessage request = AccountAddressMessage.newBuilder()
@@ -1300,6 +1353,7 @@ public class ApiWrapper {
    * @param assetId the ID of the TRC10 token
    * @return AssetIssueContract, the token object, which contains the token name
    */
+  @Override
   public AssetIssueContract getAssetIssueById(String assetId) {
     ByteString assetIdBs = ByteString.copyFrom(assetId.getBytes());
     BytesMessage request = BytesMessage.newBuilder()
@@ -1315,6 +1369,7 @@ public class ApiWrapper {
    * @param name the name of the TRC10 token
    * @return AssetIssueContract, the token object, which contains the token name
    */
+  @Override
   public AssetIssueContract getAssetIssueByName(String name) {
     ByteString assetNameBs = ByteString.copyFrom(name.getBytes());
     BytesMessage request = BytesMessage.newBuilder()
@@ -1330,6 +1385,7 @@ public class ApiWrapper {
    * @param name the name of the TRC10 token
    * @return AssetIssueList
    */
+  @Override
   public AssetIssueList getAssetIssueListByName(String name) {
     ByteString assetNameBs = ByteString.copyFrom(name.getBytes());
     BytesMessage request = BytesMessage.newBuilder()
@@ -1349,6 +1405,7 @@ public class ApiWrapper {
    * @return TransactionExtention
    * @throws IllegalException if fail to participate AssetIssue
    */
+  @Override
   public TransactionExtention participateAssetIssue(String toAddress, String ownerAddress,
       String assertName, long amount) throws IllegalException {
 
@@ -1373,6 +1430,7 @@ public class ApiWrapper {
    *
    * @return ProposalList
    */
+  @Override
   public ProposalList listProposals() {
     return blockingStub.listProposals(EmptyMessage.newBuilder().build());
   }
@@ -1385,6 +1443,7 @@ public class ApiWrapper {
    * @throws IllegalException if fail to get proposal
    */
   //1-17
+  @Override
   public Proposal getProposalById(String id) throws IllegalException {
     ByteString bsTxId = ByteString.copyFrom(
         ByteBuffer.allocate(8).putLong(Long.parseLong(id)).array());
@@ -1405,6 +1464,7 @@ public class ApiWrapper {
    *
    * @return WitnessList
    */
+  @Override
   public WitnessList listWitnesses() {
     return blockingStub
         .listWitnesses(EmptyMessage.newBuilder().build());
@@ -1415,6 +1475,7 @@ public class ApiWrapper {
    *
    * @return ExchangeList
    */
+  @Override
   public ExchangeList listExchanges() {
     return blockingStub.listExchanges(EmptyMessage.newBuilder().build());
   }
@@ -1426,6 +1487,7 @@ public class ApiWrapper {
    * @return Exchange
    * @throws IllegalException if fail to get exchange pair
    */
+  @Override
   public Exchange getExchangeById(String id) throws IllegalException {
     ByteString bsTxId = ByteString.copyFrom(
         ByteBuffer.allocate(8).putLong(Long.parseLong(id)).array());
@@ -1461,6 +1523,7 @@ public class ApiWrapper {
    * @throws IllegalException if fail to create AssetIssue
    */
 
+  @Override
   public TransactionExtention createAssetIssue(String ownerAddress, String name, String abbr,
       long totalSupply, int trxNum, int icoNum, long startTime, long endTime,
       String url, long freeAssetNetLimit,
@@ -1506,6 +1569,7 @@ public class ApiWrapper {
    * @throws IllegalException if fail to create AssetIssue
    */
 
+  @Override
   public TransactionExtention createAssetIssue(String ownerAddress, String name, String abbr,
       long totalSupply, int trxNum, int icoNum, long startTime, long endTime,
       String url, long freeAssetNetLimit,
@@ -1519,6 +1583,7 @@ public class ApiWrapper {
         Transaction.Contract.ContractType.AssetIssueContract);
   }
 
+  @Override
   public AssetIssueContract.Builder assetIssueContractBuilder(String ownerAddress, String name,
       String abbr, long totalSupply, int trxNum, int icoNum, long startTime, long endTime,
       String url, long freeAssetNetLimit,
@@ -1553,6 +1618,7 @@ public class ApiWrapper {
    * @return TransactionExtention
    * @throws IllegalException if fail to update asset
    */
+  @Override
   public TransactionExtention updateAsset(String ownerAddress, String description, String url,
       long newLimit, long newPublicLimit) throws IllegalException {
     ByteString bsOwnerAddress = parseAddress(ownerAddress);
@@ -1573,6 +1639,7 @@ public class ApiWrapper {
    * @return TransactionExtention
    * @throws IllegalException if fail to unfreeze asset
    */
+  @Override
   public TransactionExtention unfreezeAsset(String ownerAddress) throws IllegalException {
     ByteString bsOwnerAddress = parseAddress(ownerAddress);
 
@@ -1589,6 +1656,7 @@ public class ApiWrapper {
    * @return TransactionExtention
    * @throws IllegalException if fail to update account permission
    */
+  @Override
   public TransactionExtention accountPermissionUpdate(AccountPermissionUpdateContract contract)
       throws IllegalException {
 
@@ -1602,6 +1670,7 @@ public class ApiWrapper {
    * @param trx transaction object
    * @return TransactionSignWeight
    */
+  @Override
   public TransactionSignWeight getTransactionSignWeight(Transaction trx) {
 
     return blockingStub.getTransactionSignWeight(trx);
@@ -1613,6 +1682,7 @@ public class ApiWrapper {
    * @param trx transaction object
    * @return TransactionApprovedList
    */
+  @Override
   public TransactionApprovedList getTransactionApprovedList(Transaction trx) {
 
     return blockingStub.getTransactionApprovedList(trx);
@@ -1626,6 +1696,7 @@ public class ApiWrapper {
    * @param address address, default hexString
    * @return Account
    */
+  @Override
   public Account getAccountSolidity(String address) {
     ByteString bsAddress = parseAddress(address);
     AccountAddressMessage accountAddressMessage = AccountAddressMessage.newBuilder()
@@ -1640,6 +1711,7 @@ public class ApiWrapper {
    * @return BlockExtention
    * @throws IllegalException if fail to get now block
    */
+  @Override
   public BlockExtention getNowBlockSolidity() throws IllegalException {
     BlockExtention blockExtention = blockingStubSolidity.getNowBlock2(
         EmptyMessage.newBuilder().build());
@@ -1657,10 +1729,11 @@ public class ApiWrapper {
    * @return Transaction
    * @throws IllegalException if the parameters are not correct
    */
+  @Override
   public Transaction getTransactionByIdSolidity(String txID) throws IllegalException {
-    ByteString bsTxid = parseHex(txID);
+    ByteString bsTxId = parseHex(txID);
     BytesMessage request = BytesMessage.newBuilder()
-        .setValue(bsTxid)
+        .setValue(bsTxId)
         .build();
     Transaction transaction = blockingStubSolidity.getTransactionById(request);
 
@@ -1676,6 +1749,7 @@ public class ApiWrapper {
    * @param address address, default hexString
    * @return NumberMessage
    */
+  @Override
   public NumberMessage getRewardSolidity(String address) {
     ByteString bsAddress = parseAddress(address);
     BytesMessage bytesMessage = BytesMessage.newBuilder()
@@ -1686,7 +1760,7 @@ public class ApiWrapper {
   //All other solidified APIs end
 
   public static VoteWitnessContract createVoteWitnessContract(ByteString ownerAddress,
-      HashMap<String, String> votes) {
+      Map<String, String> votes) {
     VoteWitnessContract.Builder builder = VoteWitnessContract.newBuilder();
     builder.setOwnerAddress(ownerAddress);
     for (String addressBase58 : votes.keySet()) {
@@ -1694,9 +1768,6 @@ public class ApiWrapper {
       long count = Long.parseLong(voteCount);
       VoteWitnessContract.Vote.Builder voteBuilder = VoteWitnessContract.Vote.newBuilder();
       ByteString voteAddress = parseAddress(addressBase58);
-      if (voteAddress == null) {
-        continue;
-      }
       voteBuilder.setVoteAddress(voteAddress);
       voteBuilder.setVoteCount(count);
       builder.addVotes(voteBuilder.build());
@@ -1765,6 +1836,7 @@ public class ApiWrapper {
         Transaction.Contract.ContractType.UpdateBrokerageContract);
   }
 
+  @Override
   public long getBrokerageInfo(String address) {
     ByteString sr = parseAddress(address);
     BytesMessage param =
@@ -1774,42 +1846,6 @@ public class ApiWrapper {
     return blockingStub.getBrokerageInfo(param).getNum();
   }
 
-    /*public void transferTrc20(String from, String to, String cntr, long feeLimit, long amount, int precision) {
-        System.out.println("============ TRC20 transfer =============");
-
-        // transfer(address _to,uint256 _amount) returns (bool)
-        // _to = TVjsyZ7fYF3qLF6BQgPmTEZy1xrNNyVAAA
-        // _amount = 10 * 10^18
-        Function trc20Transfer = new Function("transfer",
-            Arrays.asList(new Address(to),
-                new Uint256(BigInteger.valueOf(amount).multiply(BigInteger.valueOf(10).pow(precision)))),
-            Arrays.asList(new TypeReference<Bool>() {}));
-
-        String encodedHex = FunctionEncoder.encode(trc20Transfer);
-        TriggerSmartContract trigger =
-            TriggerSmartContract.newBuilder()
-                .setOwnerAddress(ApiWrapper.parseAddress(from))
-                .setContractAddress(ApiWrapper.parseAddress(cntr)) // JST
-                .setData(ApiWrapper.parseHex(encodedHex))
-                .build();
-
-        System.out.println("trigger:\n" + trigger);
-
-        TransactionExtention txnExt = blockingStub.triggerContract(trigger);
-        System.out.println("txn id => " + ApiWrapper.toHex(txnExt.getTxid().toByteArray()));
-        System.out.println("contsant result :" + txnExt.getConstantResult(0));
-
-        Transaction unsignedTxn = txnExt.getTransaction().toBuilder()
-            .setRawData(txnExt.getTransaction().getRawData().toBuilder().setFeeLimit(feeLimit))
-            .build();
-
-        Transaction signedTxn = signTransaction(unsignedTxn);
-
-        System.out.println(signedTxn.toString());
-        TransactionReturn ret = blockingStub.broadcastTransaction(signedTxn);
-        System.out.println("======== Result ========\n" + ret.toString());
-    }*/
-
   /**
    * Obtain a {@code Contract} object via an address
    *
@@ -1817,37 +1853,38 @@ public class ApiWrapper {
    * @return the smart contract obtained from the address
    * @throws Exception if contract address does not match
    */
+  @Override
   public Contract getContract(String contractAddress) {
-    ByteString rawAddr = parseAddress(contractAddress);
+    ByteString rawAddress = parseAddress(contractAddress);
     BytesMessage param =
         BytesMessage.newBuilder()
-            .setValue(rawAddr)
+            .setValue(rawAddress)
             .build();
 
-    SmartContract cntr = blockingStub.getContract(param);
+    SmartContract smartContract = blockingStub.getContract(param);
 
     return new Contract.Builder()
-        .setOriginAddr(cntr.getOriginAddress())
-        .setCntrAddr(cntr.getContractAddress())
-        .setBytecode(cntr.getBytecode())
-        .setName(cntr.getName())
-        .setAbi(cntr.getAbi())
-        .setOriginEnergyLimit(cntr.getOriginEnergyLimit())
-        .setConsumeUserResourcePercent(cntr.getConsumeUserResourcePercent())
+        .setOriginAddr(smartContract.getOriginAddress())
+        .setCntrAddr(smartContract.getContractAddress())
+        .setBytecode(smartContract.getBytecode())
+        .setName(smartContract.getName())
+        .setAbi(smartContract.getAbi())
+        .setOriginEnergyLimit(smartContract.getOriginEnergyLimit())
+        .setConsumeUserResourcePercent(smartContract.getConsumeUserResourcePercent())
         .build();
   }
 
   /**
    * Check whether a given method is in the contract.
    *
-   * @param cntr the smart contract.
+   * @param contract the smart contract.
    * @param function the smart contract function.
    * @return ture if function exists in the contract.
    */
-  private boolean isFuncInContract(Contract cntr, Function function) {
-    List<ContractFunction> functions = cntr.getFunctions();
-    for (int i = 0; i < functions.size(); i++) {
-      if (functions.get(i).getName().equalsIgnoreCase(function.getName())) {
+  private boolean isFuncInContract(Contract contract, Function function) {
+    List<ContractFunction> functions = contract.getFunctions();
+    for (ContractFunction contractFunction : functions) {
+      if (contractFunction.getName().equalsIgnoreCase(function.getName())) {
         return true;
       }
     }
@@ -1857,55 +1894,55 @@ public class ApiWrapper {
   /**
    * call function without signature and broadcasting
    *
-   * @param ownerAddr the caller
-   * @param cntr the contract
+   * @param ownerAddress the caller
+   * @param contract the contract
    * @param function the function called
    * @return TransactionExtention
    */
-  private TransactionExtention callWithoutBroadcast(String ownerAddr, Contract cntr,
+  private TransactionExtention callWithoutBroadcast(String ownerAddress, Contract contract,
       Function function) {
-    cntr.setOwnerAddr(parseAddress(ownerAddr));
+    contract.setOwnerAddr(parseAddress(ownerAddress));
     String encodedHex = FunctionEncoder.encode(function);
     // Make a TriggerSmartContract contract
     TriggerSmartContract trigger =
         TriggerSmartContract.newBuilder()
-            .setOwnerAddress(cntr.getOwnerAddr())
-            .setContractAddress(cntr.getCntrAddr())
+            .setOwnerAddress(contract.getOwnerAddr())
+            .setContractAddress(contract.getCntrAddr())
             .setData(parseHex(encodedHex))
             .build();
-
-    // System.out.println("trigger:\n" + trigger);
-
     return blockingStub.triggerConstantContract(trigger);
   }
 
   /**
    * make a constant call - no broadcasting
    *
-   * @param ownerAddr the current caller.
-   * @param contractAddr smart contract address.
+   * @param ownerAddress the current caller.
+   * @param contractAddress smart contract address.
    * @param function contract function.
    * @return TransactionExtention.
    */
-  public TransactionExtention constantCall(String ownerAddr, String contractAddr,
+  @Override
+  public TransactionExtention constantCall(String ownerAddress, String contractAddress,
       Function function) {
-    Contract contract = getContract(contractAddr);
+    Contract contract = getContract(contractAddress);
 
-    return callWithoutBroadcast(ownerAddr, contract, function);
+    return callWithoutBroadcast(ownerAddress, contract, function);
   }
 
   /**
    * make a trigger call. Trigger call consumes energy and bandwidth.
    *
-   * @param ownerAddr the current caller
-   * @param contractAddr smart contract address
+   * @param ownerAddress the current caller
+   * @param contractAddress smart contract address
    * @param function contract function
    * @return transaction builder. Users may set other fields, e.g. feeLimit
    */
-  public TransactionBuilder triggerCall(String ownerAddr, String contractAddr, Function function) {
-    Contract contract = getContract(contractAddr);
+  @Override
+  public TransactionBuilder triggerCall(String ownerAddress, String contractAddress,
+      Function function) {
+    Contract contract = getContract(contractAddress);
 
-    TransactionExtention txnExt = callWithoutBroadcast(ownerAddr, contract, function);
+    TransactionExtention txnExt = callWithoutBroadcast(ownerAddress, contract, function);
 
     return new TransactionBuilder(txnExt.getTransaction());
   }
@@ -1914,52 +1951,49 @@ public class ApiWrapper {
   /**
    * make a triggerContract
    *
-   * @param ownerAddr the current caller
-   * @param contractAddr smart contract address
+   * @param ownerAddress the current caller
+   * @param contractAddress smart contract address
    * @param function contract function
    * @return TransactionExtention
    */
-  public TransactionExtention triggerContract(String ownerAddr, String contractAddr, Function function) {
+  @Override
+  public TransactionExtention triggerContract(String ownerAddress, String contractAddress,
+      Function function) {
 
     String encodedHex = FunctionEncoder.encode(function);
 
     TriggerSmartContract trigger =
         TriggerSmartContract.newBuilder()
-            .setOwnerAddress(ApiWrapper.parseAddress(ownerAddr))
-            .setContractAddress(ApiWrapper.parseAddress(contractAddr))
+            .setOwnerAddress(ApiWrapper.parseAddress(ownerAddress))
+            .setContractAddress(ApiWrapper.parseAddress(contractAddress))
             .setData(ApiWrapper.parseHex(encodedHex))
             .build();
-
-    System.out.println("trigger:\n" + trigger);
-
     return blockingStub.triggerContract(trigger);
   }
 
   /**
    * make a triggerContractWithBroadcast
    *
-   * @param ownerAddr the current caller
-   * @param contractAddr smart contract address
+   * @param ownerAddress the current caller
+   * @param contractAddress smart contract address
    * @param function contract function
    * @param callValue trx transfer amount
    * @param feeLimit feeLimit
    * @return String txn
    */
-  public String triggerContractWithBroadcast(String ownerAddr, String contractAddr,
+  @Override
+  public String triggerContractWithBroadcast(String ownerAddress, String contractAddress,
       Function function, long callValue, long feeLimit) {
 
     String encodedHex = FunctionEncoder.encode(function);
 
     TriggerSmartContract trigger =
         TriggerSmartContract.newBuilder()
-            .setOwnerAddress(ApiWrapper.parseAddress(ownerAddr))
-            .setContractAddress(ApiWrapper.parseAddress(contractAddr))
+            .setOwnerAddress(ApiWrapper.parseAddress(ownerAddress))
+            .setContractAddress(ApiWrapper.parseAddress(contractAddress))
             .setData(ApiWrapper.parseHex(encodedHex))
             .setCallValue(callValue)
             .build();
-
-    System.out.println("trigger:\n" + trigger);
-
     TransactionExtention transactionExtention = blockingStub.triggerContract(trigger);
 
     TransactionBuilder builder = new TransactionBuilder(transactionExtention.getTransaction());
@@ -1977,6 +2011,7 @@ public class ApiWrapper {
    * @param blockNum block number
    * @return BlockBalanceTrace
    */
+  @Override
   public BlockBalanceTrace getBlockBalance(String blockId, long blockNum) {
     ByteString bsId = parseHex(blockId);
     BlockIdentifier blockIdentifier =
@@ -1993,6 +2028,7 @@ public class ApiWrapper {
    *
    * @return burn trx amount
    */
+  @Override
   public long getBurnTRX() {
     GrpcAPI.NumberMessage numberMessage = blockingStub.getBurnTrx(
         EmptyMessage.getDefaultInstance());
@@ -2008,6 +2044,7 @@ public class ApiWrapper {
    * @return TransactionExtention
    * @throws IllegalException if fail to create witness
    */
+  @Override
   public TransactionExtention createWitness(String ownerAddress, String url)
       throws IllegalException {
     ByteString rawOwner = parseAddress(ownerAddress);
@@ -2030,6 +2067,7 @@ public class ApiWrapper {
    * @return TransactionExtention
    * @throws IllegalException if fail to update witness
    */
+  @Override
   public TransactionExtention updateWitness(String ownerAddress, String updateUrl)
       throws IllegalException {
     ByteString rawOwner = parseAddress(ownerAddress);
@@ -2052,6 +2090,7 @@ public class ApiWrapper {
    * @return TransactionExtention
    * @throws IllegalException if fail to withdraw balance
    */
+  @Override
   public TransactionExtention withdrawBalance(String ownerAddress) throws IllegalException {
     ByteString rawOwner = parseAddress(ownerAddress);
     WithdrawBalanceContract withdrawBalanceContract =
@@ -2069,6 +2108,7 @@ public class ApiWrapper {
    *
    * @return get next maintenance time
    */
+  @Override
   public long getNextMaintenanceTime() {
     GrpcAPI.NumberMessage numberMessage = blockingStub.getNextMaintenanceTime(
         EmptyMessage.getDefaultInstance());
@@ -2085,7 +2125,8 @@ public class ApiWrapper {
    * @return TransactionExtention
    * @throws IllegalException if fail to proposal create
    */
-  public TransactionExtention proposalCreate(String ownerAddress, HashMap<Long, Long> parameters)
+  @Override
+  public TransactionExtention proposalCreate(String ownerAddress, Map<Long, Long> parameters)
       throws IllegalException {
     ByteString rawOwner = parseAddress(ownerAddress);
     ProposalCreateContract proposalCreateContract =
@@ -2107,6 +2148,7 @@ public class ApiWrapper {
    * @return TransactionExtention
    * @throws IllegalException if fail to approve proposal
    */
+  @Override
   public TransactionExtention approveProposal(String ownerAddress, long proposalId,
       boolean isAddApproval) throws IllegalException {
     ByteString rawOwner = parseAddress(ownerAddress);
@@ -2129,6 +2171,7 @@ public class ApiWrapper {
    * @return TransactionExtention
    * @throws IllegalException if fail to delete proposal
    */
+  @Override
   public TransactionExtention deleteProposal(String ownerAddress, long proposalId)
       throws IllegalException {
     ByteString rawOwner = parseAddress(ownerAddress);
@@ -2147,6 +2190,7 @@ public class ApiWrapper {
    *
    * @return transaction list information from pending pool
    */
+  @Override
   public GrpcAPI.TransactionIdList getTransactionListFromPending() {
     return blockingStub.getTransactionListFromPending(
         EmptyMessage.getDefaultInstance());
@@ -2158,6 +2202,7 @@ public class ApiWrapper {
    *
    * @return the size of the pending pool queue
    */
+  @Override
   public long getPendingSize() {
     GrpcAPI.NumberMessage pendingSize = blockingStub.getPendingSize(
         EmptyMessage.getDefaultInstance());
@@ -2173,10 +2218,11 @@ public class ApiWrapper {
    * @return Transaction
    * @throws IllegalException if fail to get transaction from pending
    */
+  @Override
   public Transaction getTransactionFromPending(String txId) throws IllegalException {
-    ByteString bsTxid = ByteString.copyFrom(ByteArray.fromHexString(txId));
+    ByteString bsTxId = ByteString.copyFrom(ByteArray.fromHexString(txId));
     BytesMessage request = BytesMessage.newBuilder()
-        .setValue(bsTxid)
+        .setValue(bsTxId)
         .build();
 
     return blockingStub.getTransactionFromPending(request);
@@ -2190,10 +2236,11 @@ public class ApiWrapper {
    * @param blockID block hash.eg:"00000000000f424013e51b18e0782a32fa079ddafdb2f4c343468cf8896dc887"
    * @return the size of the pending pool queue
    */
+  @Override
   public Block getBlockById(String blockID) {
-    ByteString bsBlockid = parseHex(blockID);
+    ByteString bsBlockId = parseHex(blockID);
     BytesMessage request = BytesMessage.newBuilder()
-        .setValue(bsBlockid)
+        .setValue(bsBlockId)
         .build();
     return blockingStub.getBlockById(request);
   }
@@ -2202,19 +2249,21 @@ public class ApiWrapper {
   /**
    * Estimate the energy required for the successful execution of smart contract transactions
    * This API is closed by default in tron node.
-   * To open this interface, the two coniguration items vm.estimateEnergy and vm.supportConstant must be enabled in the node configuration file at the same time.
+   * To open this interface, the two coniguration items vm.estimateEnergy and vm.supportConstant 
+   * must be enabled in the node configuration file at the same time.
    *
-   * @param ownerAddr Owner address that triggers the contract. If visible=true, use base58check format, otherwise use hex format.
+   * @param ownerAddress Owner address that triggers the contract. If visible=true, use base58check format, otherwise use hex format.
    * For constant call you can use the all-zero address.
-   * @param contractAddr Smart contract address.
+   * @param contractAddress Smart contract address.
    * @param function contract function
    * @return EstimateEnergyMessage. Estimated energy to run the contract
    */
-  public Response.EstimateEnergyMessage estimateEnergy(String ownerAddr, String contractAddr,
+  @Override
+  public Response.EstimateEnergyMessage estimateEnergy(String ownerAddress, String contractAddress,
       Function function) {
-    Contract cntr = getContract(contractAddr);
+    Contract cntr = getContract(contractAddress);
 
-    cntr.setOwnerAddr(parseAddress(ownerAddr));
+    cntr.setOwnerAddr(parseAddress(ownerAddress));
     String encodedHex = FunctionEncoder.encode(function);
     TriggerSmartContract trigger =
         TriggerSmartContract.newBuilder()
@@ -2227,32 +2276,39 @@ public class ApiWrapper {
 
   /**
    * Estimate the energy required for the successful execution of smart contract transactions
-   * This API is closed by default in tron node. To open this interface, the two configuration items vm.estimateEnergy and vm.supportConstant must be enabled in the node configuration file at the same time.
+   * This API is closed by default in tron node. To open this interface, the two configuration 
+   * items vm.estimateEnergy and vm.supportConstant must be enabled in the node configuration file 
+   * at the same time.
    *
-   * @param ownerAddr Owner address that triggers the contract. If visible=true, use base58check format, otherwise use hex format.
+   * @param ownerAddress Owner address that triggers the contract. If visible=true, use base58check
+   * format, otherwise use hex format.
    * For constant call you can use the all-zero address.
-   * @param contractAddr Smart contract address.
+   * @param contractAddress Smart contract address.
    * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
    * @return EstimateEnergyMessage. Estimated energy to run the contract
    */
-  public Response.EstimateEnergyMessage estimateEnergyV2(String ownerAddr, String contractAddr,
+  @Override
+  public Response.EstimateEnergyMessage estimateEnergyV2(String ownerAddress,
+      String contractAddress,
       String callData) {
-    Contract cntr = getContract(contractAddr);
+    Contract contract = getContract(contractAddress);
 
-    cntr.setOwnerAddr(parseAddress(ownerAddr));
+    contract.setOwnerAddr(parseAddress(ownerAddress));
     TriggerSmartContract trigger =
         TriggerSmartContract.newBuilder()
-            .setOwnerAddress(cntr.getOwnerAddr())
-            .setContractAddress(cntr.getCntrAddr())
+            .setOwnerAddress(contract.getOwnerAddr())
+            .setContractAddress(contract.getCntrAddr())
             .setData(ByteString.copyFrom(ByteArray.fromHexString(callData)))
             .build();
     return blockingStub.estimateEnergy(trigger);
   }
 
-  public Response.EstimateEnergyMessage estimateEnergyV2(String ownerAddr, String contractAddr,
+  @Override
+  public Response.EstimateEnergyMessage estimateEnergyV2(String ownerAddress,
+      String contractAddress,
       String callData, long callValue, long tokenValue, String tokenId) {
-    Contract contract = getContract(contractAddr);
-    TriggerSmartContract trigger = buildTrigger(ownerAddr, contract, callData, callValue,
+    Contract contract = getContract(contractAddress);
+    TriggerSmartContract trigger = buildTrigger(ownerAddress, contract, callData, callValue,
         tokenValue, tokenId);
     return blockingStub.estimateEnergy(trigger);
   }
@@ -2260,36 +2316,57 @@ public class ApiWrapper {
   /**
    * make a trigger call. Trigger call consumes energy and bandwidth.
    *
-   * @param ownerAddr the current caller
-   * @param contractAddr smart contract address
+   * @param ownerAddress the current caller
+   * @param contractAddress smart contract address
    * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
    * @return transaction builder. TransactionExtention detail.
    */
-  public TransactionBuilder triggerCallV2(String ownerAddr, String contractAddr, String callData) {
-    Contract contract = getContract(contractAddr);
+  @Override
+  public TransactionBuilder triggerCallV2(String ownerAddress, String contractAddress,
+      String callData) {
+    Contract contract = getContract(contractAddress);
 
-    TransactionExtention txnExt = callWithoutBroadcastV2(ownerAddr, contract, callData);
+    TransactionExtention txnExt = callWithoutBroadcastV2(ownerAddress, contract, callData);
 
     return new TransactionBuilder(txnExt.getTransaction());
   }
 
-  public TransactionBuilder triggerCallV2(String ownerAddr, String contractAddr, String callData,
-      long callValue, long tokenValue, String tokenId) {
-    //todo
-    return null;
+  /**
+   * make a trigger call. Trigger call consumes energy and bandwidth.
+   *
+   * @param ownerAddress the current caller
+   * @param contractAddress smart contract address
+   * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
+   * @param callValue callValue
+   * @param tokenValue tokenValue
+   * @param tokenId empty or integer
+   * @param feeLimit max fee allowed
+   * @return transaction builder. TransactionExtention detail.
+   */
+  @Override
+  public TransactionBuilder triggerCallV2(String ownerAddress, String contractAddress,
+      String callData,
+      long callValue, long tokenValue, String tokenId, long feeLimit) {
+    Contract contract = getContract(contractAddress);
+    TriggerSmartContract trigger = buildTrigger(ownerAddress, contract, callData, callValue,
+        tokenValue, tokenId);
+    TransactionExtention txnExt = blockingStub.triggerConstantContract(trigger);
+    TransactionBuilder builder = new TransactionBuilder(txnExt.getTransaction());
+    builder.setFeeLimit(feeLimit);
+    return builder;
   }
 
   /**
    * call function without signature and broadcasting
    *
-   * @param ownerAddr the caller
+   * @param ownerAddress the caller
    * @param contract the contract
    * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
    * @return TransactionExtention
    */
-  private TransactionExtention callWithoutBroadcastV2(String ownerAddr, Contract contract,
+  private TransactionExtention callWithoutBroadcastV2(String ownerAddress, Contract contract,
       String callData) {
-    contract.setOwnerAddr(parseAddress(ownerAddr));
+    contract.setOwnerAddr(parseAddress(ownerAddress));
     // Make a TriggerSmartContract contract
     TriggerSmartContract trigger =
         TriggerSmartContract.newBuilder()
@@ -2297,15 +2374,19 @@ public class ApiWrapper {
             .setContractAddress(contract.getCntrAddr())
             .setData(ByteString.copyFrom(ByteArray.fromHexString(callData)))
             .build();
-
-    // System.out.println("trigger:\n" + trigger);
-
     return blockingStub.triggerConstantContract(trigger);
   }
 
-  private TriggerSmartContract buildTrigger(String ownerAddr, Contract contract,
+  private TransactionExtention callWithoutBroadcastV2(String ownerAddress, Contract contract,
       String callData, long callValue, long tokenValue, String tokenId) {
-    contract.setOwnerAddr(parseAddress(ownerAddr));
+    TriggerSmartContract trigger = buildTrigger(ownerAddress, contract, callData, callValue,
+        tokenValue, tokenId);
+    return blockingStub.triggerConstantContract(trigger);
+  }
+
+  private TriggerSmartContract buildTrigger(String ownerAddress, Contract contract,
+      String callData, long callValue, long tokenValue, String tokenId) {
+    contract.setOwnerAddr(parseAddress(ownerAddress));
     TriggerSmartContract.Builder builder =
         TriggerSmartContract.newBuilder()
             .setOwnerAddress(contract.getOwnerAddr())
@@ -2327,6 +2408,7 @@ public class ApiWrapper {
    * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
    * @return TransactionExtention.
    */
+  @Override
   public TransactionExtention constantCallV2(String ownerAddress, String contractAddress,
       String callData) {
     Contract contract = getContract(contractAddress);
@@ -2334,10 +2416,24 @@ public class ApiWrapper {
     return callWithoutBroadcastV2(ownerAddress, contract, callData);
   }
 
+  /**
+   * make a constant call - no broadcasting.
+   *
+   * @param ownerAddress the current caller.
+   * @param contractAddress smart contract address.
+   * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
+   * @param callValue callValue
+   * @param tokenValue token Value
+   * @param tokenId token10 ID
+   * @
+   * @return TransactionExtention.
+   */
+  @Override
   public TransactionExtention constantCallV2(String ownerAddress, String contractAddress,
       String callData, long callValue, long tokenValue, String tokenId) {
-    //todo
-    return null;
+    Contract contract = getContract(contractAddress);
+
+    return callWithoutBroadcastV2(ownerAddress, contract, callData, callValue, tokenValue, tokenId);
   }
 
 
@@ -2350,6 +2446,7 @@ public class ApiWrapper {
    * Before the colon is the millisecond timestamp,
    * and after the colon is the bandwidth unit price in sun.
    */
+  @Override
   public Response.PricesResponseMessage getBandwidthPrices() {
     return blockingStub.getBandwidthPrices(EmptyMessage.getDefaultInstance());
   }
@@ -2364,6 +2461,7 @@ public class ApiWrapper {
    * Before the colon is the millisecond timestamp,
    * and after the colon is the bandwidth unit price in sun.
    */
+  @Override
   public Response.PricesResponseMessage getEnergyPrices() {
     return blockingStub.getEnergyPrices(EmptyMessage.getDefaultInstance());
   }
@@ -2378,6 +2476,7 @@ public class ApiWrapper {
    * Before the colon is the millisecond timestamp,
    * and after the colon is the bandwidth unit price in sun.
    */
+  @Override
   public Response.PricesResponseMessage getMemoFee() {
     return blockingStub.getMemoFee(EmptyMessage.getDefaultInstance());
   }
@@ -2392,6 +2491,7 @@ public class ApiWrapper {
    * Before the colon is the millisecond timestamp,
    * and after the colon is the bandwidth unit price in sun.
    */
+  @Override
   public Response.PricesResponseMessage getBandwidthPricesOnSolidity() {
     return blockingStubSolidity.getBandwidthPrices(EmptyMessage.getDefaultInstance());
   }
@@ -2406,6 +2506,7 @@ public class ApiWrapper {
    * Before the colon is the millisecond timestamp,
    * and after the colon is the bandwidth unit price in sun.
    */
+  @Override
   public Response.PricesResponseMessage getEnergyPricesOnSolidity() {
     return blockingStubSolidity.getEnergyPrices(EmptyMessage.getDefaultInstance());
   }
@@ -2417,6 +2518,7 @@ public class ApiWrapper {
    * @param contractAddress contract address
    * @return TransactionExtention
    */
+  @Override
   public TransactionExtention clearContractABI(String ownerAddress, String contractAddress)
       throws IllegalException {
     ByteString rawOwner = parseAddress(ownerAddress);
@@ -2436,6 +2538,7 @@ public class ApiWrapper {
    * @param limit limit
    * @return exchange list
    */
+  @Override
   public ExchangeList getPaginatedExchangeList(long offset, long limit) {
     PaginatedMessage paginatedMessage = PaginatedMessage.newBuilder()
         .setOffset(offset)
@@ -2451,6 +2554,7 @@ public class ApiWrapper {
    * @param limit limit
    * @return proposal list
    */
+  @Override
   public ProposalList getPaginatedProposalList(long offset, long limit) {
     PaginatedMessage paginatedMessage = PaginatedMessage.newBuilder()
         .setOffset(offset)
@@ -2466,6 +2570,7 @@ public class ApiWrapper {
    * @param detail contains detail? if false, no transactions are contained.
    * @return BlockExtention
    */
+  @Override
   public BlockExtention getBlock(String blockIDOrNum, boolean detail) {
     BlockReq blockReq = BlockReq.newBuilder()
         .setIdOrNum(blockIDOrNum)
@@ -2480,6 +2585,7 @@ public class ApiWrapper {
    * @param blockIDOrNum block Id with hex or block num with long
    * @return Block
    */
+  @Override
   public Block getBlockByIdOrNum(String blockIDOrNum) {
     if (Numeric.isNumericString(blockIDOrNum)) {
       NumberMessage numberMessage = NumberMessage.newBuilder()
@@ -2502,6 +2608,7 @@ public class ApiWrapper {
    * @param contractAddr contract address
    * @return SmartContractDataWrapper
    */
+  @Override
   public SmartContractDataWrapper getContractInfo(String contractAddr) {
     ByteString rawAddr = parseAddress(contractAddr);
     BytesMessage param =
@@ -2517,6 +2624,7 @@ public class ApiWrapper {
    * @param account account address
    * @return MarketOrderList
    */
+  @Override
   public MarketOrderList getMarketOrderByAccount(String account) {
     ByteString rawAddr = parseAddress(account);
     BytesMessage param =
@@ -2532,11 +2640,12 @@ public class ApiWrapper {
    * @param txn market transactionId
    * @return MarketOrder
    */
+  @Override
   public MarketOrder getMarketOrderById(String txn) {
-    ByteString rawAddr = parseHex(txn);
+    ByteString rawAddress = parseHex(txn);
     BytesMessage param =
         BytesMessage.newBuilder()
-            .setValue(rawAddr)
+            .setValue(rawAddress)
             .build();
     return blockingStub.getMarketOrderById(param);
   }
@@ -2548,6 +2657,7 @@ public class ApiWrapper {
    * @param buyTokenId market buy token id
    * @return MarketOrderList
    */
+  @Override
   public MarketOrderList getMarketOrderListByPair(String sellTokenId, String buyTokenId) {
     MarketOrderPair param =
         MarketOrderPair.newBuilder()
@@ -2562,6 +2672,7 @@ public class ApiWrapper {
    *
    * @return MarketOrderPairList
    */
+  @Override
   public MarketOrderPairList getMarketPairList() {
     return blockingStub.getMarketPairList(EmptyMessage.getDefaultInstance());
   }
@@ -2573,6 +2684,7 @@ public class ApiWrapper {
    * @param buyTokenId market buy token id
    * @return MarketPriceList
    */
+  @Override
   public MarketPriceList getMarketPriceByPair(String sellTokenId, String buyTokenId) {
     MarketOrderPair param =
         MarketOrderPair.newBuilder()
@@ -2592,6 +2704,7 @@ public class ApiWrapper {
    * @param secondBalance second token id balance
    * @return TransactionExtention
    */
+  @Override
   public TransactionExtention exchangeCreate(String ownerAddress, String firstToken,
       long firstBalance, String secondToken, long secondBalance)
       throws IllegalException {
@@ -2615,6 +2728,7 @@ public class ApiWrapper {
    * @param amount inject the amount of tokenId to exchangeId
    * @return TransactionExtention
    */
+  @Override
   public TransactionExtention exchangeInject(String ownerAddress, long exchangeId, String tokenId,
       long amount)
       throws IllegalException {
@@ -2638,6 +2752,7 @@ public class ApiWrapper {
    * @param expected amount of buyTokenId
    * @return TransactionExtention
    */
+  @Override
   public TransactionExtention exchangeTransaction(String ownerAddress, long exchangeId,
       String tokenId, long amount, long expected)
       throws IllegalException {
@@ -2662,6 +2777,7 @@ public class ApiWrapper {
    * @param quant quant
    * @return ExchangeWithdrawContract
    */
+  @Override
   public TransactionExtention exchangeWithdraw(String ownerAddress, long exchangeId,
       String tokenId, long quant) throws IllegalException {
     ByteString rawOwner = parseAddress(ownerAddress);
@@ -2680,6 +2796,7 @@ public class ApiWrapper {
    *
    * @return totalTransaction count
    */
+  @Override
   public long getTotalTransaction() {
     return blockingStub.totalTransaction(EmptyMessage.getDefaultInstance()).getNum();
   }
@@ -2690,6 +2807,7 @@ public class ApiWrapper {
    * @param blockNum block num
    * @return the transaction count in block
    */
+  @Override
   public long getTransactionCountByBlockNum(long blockNum) {
     NumberMessage message = NumberMessage.newBuilder().setNum(blockNum).build();
     return blockingStub.getTransactionCountByBlockNum(message).getNum();
@@ -2702,6 +2820,7 @@ public class ApiWrapper {
    * @param orderId existing order Id
    * @return MarketCancelOrderContract
    */
+  @Override
   public TransactionExtention marketCancelOrder(String ownerAddress, String orderId)
       throws IllegalException {
     ByteString rawOwner = parseAddress(ownerAddress);
@@ -2723,6 +2842,7 @@ public class ApiWrapper {
    * @param buyTokenQuantity buy token quantity
    * @return MarketSellAssetContract
    */
+  @Override
   public TransactionExtention marketSellAsset(String ownerAddress, String sellTokenId,
       long sellTokenQuantity, String buyTokenId, long buyTokenQuantity) throws IllegalException {
     ByteString rawOwner = parseAddress(ownerAddress);
@@ -2744,6 +2864,7 @@ public class ApiWrapper {
    * @param originEnergyLimit origin energy limit, must be >=0
    * @return UpdateEnergyLimitContract
    */
+  @Override
   public TransactionExtention updateEnergyLimit(String ownerAddress, String contractAddress,
       long originEnergyLimit) throws IllegalException {
     ByteString rawOwner = parseAddress(ownerAddress);
@@ -2764,6 +2885,7 @@ public class ApiWrapper {
    * @param consumeUserResourcePercent  consume user resource percent if user trigger this contract, must be [0,100]
    * @return UpdateSettingContract
    */
+  @Override
   public TransactionExtention updateSetting(String ownerAddress, String contractAddress,
       long consumeUserResourcePercent) throws IllegalException {
     ByteString rawOwner = parseAddress(ownerAddress);

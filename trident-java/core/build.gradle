@@ -39,3 +39,7 @@ protobuf {
     generatedFilesBaseDir = "$projectDir/src"
 }
 
+clean.doFirst {
+    delete "src/main/java/proto"
+}
+
