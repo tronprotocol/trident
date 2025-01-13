@@ -2220,8 +2220,10 @@ public class ApiWrapper {
 
   public Response.EstimateEnergyMessage estimateEnergyV2(String ownerAddr, String contractAddr,
       String callData, long callValue, long tokenValue, String tokenId) {
-    //todo
-    return null;
+    Contract contract = getContract(contractAddr);
+    TriggerSmartContract trigger = buildTrigger(ownerAddr, contract, callData, callValue,
+        tokenValue, tokenId);
+    return blockingStub.estimateEnergy(trigger);
   }
 
   /**
@@ -2268,6 +2270,22 @@ public class ApiWrapper {
     // System.out.println("trigger:\n" + trigger);
 
     return blockingStub.triggerConstantContract(trigger);
+  }
+
+  private TriggerSmartContract buildTrigger(String ownerAddr, Contract contract,
+      String callData, long callValue, long tokenValue, String tokenId) {
+    contract.setOwnerAddr(parseAddress(ownerAddr));
+    TriggerSmartContract.Builder builder =
+        TriggerSmartContract.newBuilder()
+            .setOwnerAddress(contract.getOwnerAddr())
+            .setContractAddress(contract.getCntrAddr())
+            .setData(ByteString.copyFrom(ByteArray.fromHexString(callData)))
+            .setCallValue(callValue);
+    if (tokenId != null && !tokenId.isEmpty()) {
+      builder.setCallTokenValue(tokenValue);
+      builder.setTokenId(Long.parseLong(tokenId));
+    }
+    return builder.build();
   }
 
   /**
