@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.google.protobuf.ByteString;
 import io.grpc.ClientInterceptor;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,13 +28,19 @@ import org.tron.trident.abi.datatypes.generated.Uint256;
 import org.tron.trident.api.GrpcAPI.EmptyMessage;
 import org.tron.trident.core.exceptions.IllegalException;
 import org.tron.trident.core.key.KeyPair;
+import org.tron.trident.core.utils.ByteArray;
 import org.tron.trident.proto.Chain;
 import org.tron.trident.proto.Chain.Block;
 import org.tron.trident.proto.Chain.Transaction;
 import org.tron.trident.proto.Contract.TriggerSmartContract;
 import org.tron.trident.proto.Response.BlockExtention;
 import org.tron.trident.proto.Response.ExchangeList;
+import org.tron.trident.proto.Response.MarketOrder;
+import org.tron.trident.proto.Response.MarketOrderList;
+import org.tron.trident.proto.Response.MarketOrderPairList;
+import org.tron.trident.proto.Response.MarketPriceList;
 import org.tron.trident.proto.Response.ProposalList;
+import org.tron.trident.proto.Response.SmartContractDataWrapper;
 import org.tron.trident.proto.Response.TransactionExtention;
 import org.tron.trident.proto.Response.TransactionInfo;
 import org.tron.trident.proto.Response.TransactionReturn;
@@ -168,6 +175,74 @@ class ApiWrapperTest {
   void testGetPaginatedExchangeList() {
     ExchangeList exchangeList = client.getPaginatedExchangeList(0, 10);
     assertTrue(exchangeList.getExchangesCount() > 0);
+  }
+
+  @Test
+  void testGetContractInfo() {
+    String usdtAddr = "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf"; //nile
+    SmartContractDataWrapper smartContractDataWrapper = client.getContractInfo(usdtAddr);
+    assertEquals(smartContractDataWrapper.getSmartContract().getName(), "TetherToken");
+    assertTrue(smartContractDataWrapper.getSmartContract().getAbi().getEntrysCount() > 0);
+    assertEquals(smartContractDataWrapper.getSmartContract().getContractAddress(),
+        ApiWrapper.parseAddress(usdtAddr));
+  }
+
+  @Test
+  void testGetMarketOrderByAccount() {
+    String account = "TEqZpKG8cLquDHNVGcHXJhEQMoWE653nBH"; //nile
+    MarketOrderList marketOrderList = client.getMarketOrderByAccount(account);
+    System.out.println(marketOrderList.getOrdersCount());
+    System.out.println(marketOrderList.getOrders(0).getOrderId());
+    assertTrue(marketOrderList.getOrdersCount() > 0);
+  }
+
+  @Test
+  void testGetMarketOrderListByPair() {
+    MarketOrderList marketOrderList = client.getMarketOrderListByPair("1000012", "_");
+    assertTrue(marketOrderList.getOrdersCount() > 0);
+    //4503c83790b5f739b58b94c28f1e98357c3dc98f6b6877c8ee792d3ea3a4465a
+    System.out.println("orderId: " +
+        ByteArray.toHexString(marketOrderList.getOrders(0).getOrderId().toByteArray()));
+
+    String addr = ByteArray.toHexString(
+        marketOrderList.getOrders(0).getOwnerAddress().toByteArray());
+    System.out.println("ownerAddress:" + addr);
+    Address address = new Address(addr);
+    //TEqZpKG8cLquDHNVGcHXJhEQMoWE653nBH
+    System.out.println(address);
+  }
+
+  @Test
+  void testGetMarketOrderById() throws IllegalException {
+    String orderId = "4503c83790b5f739b58b94c28f1e98357c3dc98f6b6877c8ee792d3ea3a4465a";
+    String ownerAddress = "TEqZpKG8cLquDHNVGcHXJhEQMoWE653nBH";
+    MarketOrder marketOrder = client.getMarketOrderById(orderId);
+    assertEquals(marketOrder.getOrderId(), ApiWrapper.parseHex(orderId));
+    assertEquals(marketOrder.getOwnerAddress(), ApiWrapper.parseAddress(ownerAddress));
+    assertEquals(marketOrder.getBuyTokenId(), ByteString.copyFrom("_".getBytes()));
+    assertEquals(marketOrder.getSellTokenId(), ByteString.copyFrom("1000012".getBytes()));
+  }
+
+  @Test
+  void testGetMarketPairList() {
+    MarketOrderPairList marketOrderPairList = client.getMarketPairList();
+    assertTrue(marketOrderPairList.getOrderPairCount() > 0);
+    String buyTokenId = marketOrderPairList.getOrderPair(0).getBuyTokenId().toStringUtf8();
+    String sellTokenId = marketOrderPairList.getOrderPair(0).getSellTokenId().toStringUtf8();
+    System.out.println(buyTokenId);
+    System.out.println(sellTokenId);
+  }
+
+  @Test
+  void testGetMarketPriceByPair() {
+    MarketPriceList marketPriceList = client.getMarketPriceByPair("1000012", "_");
+    assertTrue(marketPriceList.getPricesCount() > 0);
+    assertTrue(marketPriceList.getPrices(0).getBuyTokenQuantity() >= 0);
+  }
+
+  @Test
+  void testGetTransactionCountByBlockNum() {
+    assertTrue(client.getTransactionCountByBlockNum(53598255) > 0);
   }
 
   @Test
