@@ -342,8 +342,6 @@ public interface Api {
   TransactionExtention exchangeWithdraw(String ownerAddress, long exchangeId,
       String tokenId, long quant) throws IllegalException;
 
-  long getTotalTransaction();
-
   long getTransactionCountByBlockNum(long blockNum);
 
   TransactionExtention marketCancelOrder(String ownerAddress, String orderId)
