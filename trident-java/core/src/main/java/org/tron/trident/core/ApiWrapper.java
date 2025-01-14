@@ -2699,9 +2699,9 @@ public class ApiWrapper implements Api {
    * exchangeCreate
    *
    * @param ownerAddress address
-   * @param firstToken token id
+   * @param firstToken first token id. TRX is "_", else token10 ID
    * @param firstBalance first token id balance
-   * @param secondToken token id
+   * @param secondToken second token id. TRX is "_", else token10 ID
    * @param secondBalance second token id balance
    * @return TransactionExtention
    */
@@ -2744,7 +2744,7 @@ public class ApiWrapper implements Api {
   }
 
   /**
-   * exchangeTransaction
+   * create exchangeTransaction. alias is bancor transaction.
    *
    * @param ownerAddress owner
    * @param exchangeId exchange id

@@ -34,7 +34,7 @@ class ContractTest {
   static void setUp() {
     //specify your private key yourself
     client = ApiWrapper.ofNile(
-        "bc48b94db7a8ba3f9025eeff7c9fc09f57fbcf46cf422ea33d64492f292d2215");
+        "private key of TEPRbQxXQEpHpeEx8tK5xHVs7NWudAAZgu");
   }
 
   @Test
