@@ -45,50 +45,7 @@ import org.tron.trident.proto.Response.TransactionExtention;
 import org.tron.trident.proto.Response.TransactionInfo;
 import org.tron.trident.proto.Response.TransactionReturn;
 
-class ApiWrapperTest {
-
-  private static final String CONFIG_FILE = "application-test.properties";
-  private static ApiWrapper client;
-  private static Properties properties;
-
-  @BeforeAll
-  static void setUp() {
-    try {
-      // load config
-      properties = loadConfig();
-      String privateKey = properties.getProperty("tron.private-key");
-      String network = properties.getProperty("tron.network", "nile"); // default
-
-      // init client
-      if ("mainnet".equals(network)) {
-        client = ApiWrapper.ofMainnet(privateKey);
-      } else {
-        client = ApiWrapper.ofNile(privateKey);
-      }
-    } catch (IOException e) {
-      throw new RuntimeException("load config failed", e);
-    }
-  }
-
-  private static Properties loadConfig() throws IOException {
-    Properties props = new Properties();
-    try (InputStream input = ApiWrapperTest.class.getClassLoader()
-        .getResourceAsStream(CONFIG_FILE)) {
-      if (input == null) {
-        throw new IOException("can't find config file : " + CONFIG_FILE);
-      }
-      props.load(input);
-    }
-    return props;
-  }
-
-  @AfterAll
-  static void tearDown() {
-    if (client != null) {
-      client.close();
-    }
-  }
-
+class ApiWrapperTest extends BaseTest{
   @Test
   void testGetNowBlockQuery() {
     BlockExtention block = client.blockingStub.getNowBlock2(EmptyMessage.newBuilder().build());

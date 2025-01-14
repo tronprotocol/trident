@@ -9,6 +9,7 @@ import org.tron.trident.abi.datatypes.Type;
 import org.tron.trident.core.ApiWrapper;
 import org.tron.trident.core.exceptions.ContractCreateException;
 import org.tron.trident.core.transaction.TransactionBuilder;
+import org.tron.trident.core.utils.ByteArray;
 import org.tron.trident.proto.Common.SmartContract;
 import org.tron.trident.proto.Common.SmartContract.ABI;
 import org.tron.trident.proto.Common.SmartContract.ABI.Entry;
@@ -203,81 +204,40 @@ public class Contract {
     return constructor;
   }
 
-  public static class Builder {
-
-    protected ApiWrapper wrapper;
-    protected ByteString originAddr = ByteString.EMPTY;
-    protected ByteString cntrAddr = ByteString.EMPTY;
-    protected ABI abi;
-    protected ByteString bytecode;
-    protected long callValue = 0;
-    protected long consumeUserResourcePercent = 100;
-    protected String name = "";
-    protected long originEnergyLimit = 1;
-    protected ByteString codeHash = ByteString.EMPTY;
-    protected ByteString trxHash = ByteString.EMPTY;
-    protected ByteString ownerAddr = ByteString.EMPTY;
-
-    public Builder setWrapper(ApiWrapper wrapper) {
-      this.wrapper = wrapper;
-      return this;
+  /**
+   * create a CreateSmartContract object to get ready for deployment.
+   * please note if any deposit is made during deployment(@see callValue),
+   * the constructor of this contract must be payable
+   *
+   * @return TransactionBuilder object for signing and broadcasting
+   * @throws Exception if deployment duplicating / owner and origin address don't match
+   * @throws ContractCreateException if passes parameters but no constructor exists
+   */
+  public CreateSmartContract createSmartContract(List<Type<?>> buildParams) throws Exception {
+    //throws if deployed
+    if (!this.cntrAddr.isEmpty()) {
+      throw new ContractCreateException("This contract has already been deployed.");
+    }
+    //throws if origin address does not match owner address
+    if (!this.originAddr.equals(this.ownerAddr)) {
+      throw new ContractCreateException("Origin address and owner address mismatch.");
+    }
+    loadConstructor();
+    //throws if the contract does not have a constructor
+    if (null == this.constructor && !buildParams.isEmpty()) {
+      throw new ContractCreateException("The contract does not have a constructor.");
+    }
+    if (!buildParams.isEmpty()) {
+      this.constructor.encodeParameter(buildParams);
+      setBytecode(getBytecode().concat(this.constructor.getBytecode()));
     }
 
-    public Builder setOriginAddr(ByteString originAddr) {
-      this.originAddr = originAddr;
-      return this;
-    }
+    //create
+    CreateSmartContract.Builder createSmartContractBuilder = CreateSmartContract.newBuilder();
+    createSmartContractBuilder.setOwnerAddress(ownerAddr);
+    createSmartContractBuilder.setNewContract(toProto());
 
-    public Builder setCntrAddr(ByteString cntrAddr) {
-      this.cntrAddr = cntrAddr;
-      return this;
-    }
-
-    public Builder setAbi(ABI abi) {
-      this.abi = abi;
-      return this;
-    }
-
-    public Builder setAbi(String abiString) throws Exception {
-      ABI.Builder builder = ABI.newBuilder();
-      loadAbiFromJson(abiString, builder);
-      this.abi = builder.build();
-      return this;
-    }
-
-    public Builder setBytecode(ByteString bytecode) {
-      this.bytecode = bytecode;
-      return this;
-    }
-
-    public Builder setCallValue(long callValue) {
-      this.callValue = callValue;
-      return this;
-    }
-
-    public Builder setConsumeUserResourcePercent(long consumeUserResourcePercent) {
-      this.consumeUserResourcePercent = consumeUserResourcePercent;
-      return this;
-    }
-
-    public Builder setName(String name) {
-      this.name = name;
-      return this;
-    }
-
-    public Builder setOriginEnergyLimit(long originEnergyLimit) {
-      this.originEnergyLimit = originEnergyLimit;
-      return this;
-    }
-
-    public Builder setOwnerAddr(ByteString ownerAddr) {
-      this.ownerAddr = ownerAddr;
-      return this;
-    }
-
-    public Contract build() {
-      return new Contract(this);
-    }
+    return createSmartContractBuilder.build();
   }
 
   /**
@@ -376,38 +336,87 @@ public class Contract {
     return deploy(Collections.emptyList());
   }
 
-  /**
-   * create a CreateSmartContract object to get ready for deployment.
-   * please note if any deposit is made during deployment(@see callValue),
-   * the constructor of this contract must be payable
-   *
-   * @return TransactionBuilder object for signing and broadcasting
-   * @throws Exception if deployment duplicating / owner and origin address don't match
-   * @throws ContractCreateException if passes parameters but no constructor exists
-   */
-  public TransactionBuilder deploy(List<Type> buildParams) throws Exception {
-    //throws if deployed
-    if (!this.cntrAddr.isEmpty()) {
-      throw new ContractCreateException("This contract has already been deployed.");
-    }
-    //throws if origin address does not match owner address
-    if (!this.originAddr.equals(this.ownerAddr)) {
-      throw new ContractCreateException("Origin address and owner address mismatch.");
-    }
-    loadConstructor();
-    //throws if the contract does not have a constructor
-    if (null == this.constructor && !buildParams.isEmpty()) {
-      throw new ContractCreateException("The contract does not have a constructor.");
-    }
-    this.constructor.encodeParameter(buildParams);
-    setBytecode(getBytecode().concat(this.constructor.getBytecode()));
-    //create
-    CreateSmartContract.Builder createSmartContractBuilder = CreateSmartContract.newBuilder();
-    createSmartContractBuilder.setOwnerAddress(ownerAddr);
-    createSmartContractBuilder.setNewContract(toProto());
-
+  public TransactionBuilder deploy(List<Type<?>> buildParams) throws Exception {
+    CreateSmartContract createSmartContract = createSmartContract(buildParams);
     return new TransactionBuilder(
-        wrapper.blockingStub.deployContract(createSmartContractBuilder.build()).getTransaction());
+        wrapper.blockingStub.deployContract(createSmartContract).getTransaction());
+  }
+
+  public static class Builder {
+
+    //    protected ApiWrapper wrapper;
+    protected ByteString originAddr = ByteString.EMPTY;
+    protected ByteString cntrAddr = ByteString.EMPTY;
+    protected ABI abi;
+    protected ByteString bytecode;
+    protected long callValue = 0;
+    protected long consumeUserResourcePercent = 100;
+    protected String name = "";
+    protected long originEnergyLimit = 1;
+    protected ByteString codeHash = ByteString.EMPTY;
+    protected ByteString trxHash = ByteString.EMPTY;
+    protected ByteString ownerAddr = ByteString.EMPTY;
+
+//    public Builder setWrapper(ApiWrapper wrapper) {
+//      this.wrapper = wrapper;
+//      return this;
+//    }
+
+    public Builder setOriginAddr(ByteString originAddr) {
+      this.originAddr = originAddr;
+      return this;
+    }
+
+    public Builder setCntrAddr(ByteString cntrAddr) {
+      this.cntrAddr = cntrAddr;
+      return this;
+    }
+
+    public Builder setAbi(ABI abi) {
+      this.abi = abi;
+      return this;
+    }
+
+    public Builder setAbi(String abiString) throws Exception {
+      ABI.Builder builder = ABI.newBuilder();
+      loadAbiFromJson(abiString, builder);
+      this.abi = builder.build();
+      return this;
+    }
+
+    public Builder setBytecode(ByteString bytecode) {
+      this.bytecode = bytecode;
+      return this;
+    }
+
+    public Builder setCallValue(long callValue) {
+      this.callValue = callValue;
+      return this;
+    }
+
+    public Builder setConsumeUserResourcePercent(long consumeUserResourcePercent) {
+      this.consumeUserResourcePercent = consumeUserResourcePercent;
+      return this;
+    }
+
+    public Builder setName(String name) {
+      this.name = name;
+      return this;
+    }
+
+    public Builder setOriginEnergyLimit(long originEnergyLimit) {
+      this.originEnergyLimit = originEnergyLimit;
+      return this;
+    }
+
+    public Builder setOwnerAddr(ByteString ownerAddr) {
+      this.ownerAddr = ownerAddr;
+      return this;
+    }
+
+    public Contract build() {
+      return new Contract(this);
+    }
   }
 
   /**

@@ -2,8 +2,10 @@ package org.tron.trident.core;
 
 import com.google.protobuf.Message;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.tron.trident.abi.datatypes.Function;
+import org.tron.trident.abi.datatypes.Type;
 import org.tron.trident.api.GrpcAPI;
 import org.tron.trident.api.GrpcAPI.NumberMessage;
 import org.tron.trident.core.contract.Contract;
@@ -14,6 +16,7 @@ import org.tron.trident.proto.Chain.Block;
 import org.tron.trident.proto.Chain.Transaction;
 import org.tron.trident.proto.Contract.AccountPermissionUpdateContract;
 import org.tron.trident.proto.Contract.AssetIssueContract;
+import org.tron.trident.proto.Contract.CreateSmartContract;
 import org.tron.trident.proto.Response;
 import org.tron.trident.proto.Response.Account;
 import org.tron.trident.proto.Response.AccountNetMessage;
@@ -354,4 +357,20 @@ public interface Api {
 
   TransactionExtention updateSetting(String ownerAddress, String contractAddress,
       long consumeUserResourcePercent) throws IllegalException;
+
+  CreateSmartContract createSmartContract(String contractName, String address,
+      String ABI,
+      String code,
+      long value,
+      long consumeUserResourcePercent,
+      long originEnergyLimit,
+      long tokenValue,
+      String tokenId) throws Exception;
+
+  String deployContract(String contractName, String abiStr, String bytecode,
+      List<Type<?>> constructorParams,
+      long feeLimit, long consumeUserResourcePercent, long originEnergyLimit, long callValue)
+      throws Exception;
+
+  String deployContract(String name, String abiStr, String bytecode) throws Exception;
 }
