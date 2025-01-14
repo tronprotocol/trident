@@ -3,21 +3,30 @@ package org.tron.trident.core;
 
 import static java.lang.Thread.sleep;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.tron.trident.abi.FunctionEncoder;
+import org.tron.trident.abi.FunctionReturnDecoder;
+import org.tron.trident.abi.TypeReference;
+import org.tron.trident.abi.datatypes.Address;
+import org.tron.trident.abi.datatypes.Bool;
+import org.tron.trident.abi.datatypes.Function;
 import org.tron.trident.abi.datatypes.Type;
 import org.tron.trident.abi.datatypes.generated.Uint256;
 import org.tron.trident.core.contract.Contract;
 import org.tron.trident.core.exceptions.IllegalException;
 import org.tron.trident.core.transaction.TransactionBuilder;
+import org.tron.trident.core.utils.ByteArray;
 import org.tron.trident.proto.Chain.Transaction;
 import org.tron.trident.proto.Common.SmartContract;
+import org.tron.trident.proto.Response.EstimateEnergyMessage;
 import org.tron.trident.proto.Response.TransactionExtention;
 import org.tron.trident.proto.Response.TransactionInfo;
 import org.tron.trident.proto.Response.TransactionInfo.code;
@@ -127,4 +136,130 @@ class ContractTest extends BaseTest {
         10_000_000L, 1_000_000L);
     System.out.println("Transaction ID: " + txId);
   }
+
+
+  @Test
+  void testTriggerContract() throws InterruptedException, IllegalException {
+    // transfer(address,uint256) returns (bool)
+    String usdtAddr = "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf"; //nile
+    String fromAddr = client.keyPair.toBase58CheckAddress();
+    String toAddress = "TVjsyZ7fYF3qLF6BQgPmTEZy1xrNNyVAAA";
+    Function trc20Transfer = new Function("transfer",
+        Arrays.asList(new Address(toAddress),
+            new Uint256(BigInteger.valueOf(10).multiply(BigInteger.valueOf(10).pow(6)))),
+        Collections.singletonList(new TypeReference<Bool>() {
+        }));
+    TransactionExtention transactionExtention = client.triggerContract(fromAddr, usdtAddr,
+        trc20Transfer);
+
+    Transaction signedTxn = client.signTransaction(transactionExtention);
+
+    System.out.println(signedTxn.toString());
+    String ret = client.broadcastTransaction(signedTxn);
+    System.out.println("======== Result ========\n" + ret);
+    sleep(10_000L);
+    TransactionInfo transactionInfo = client.getTransactionInfoById(ret);
+    assertEquals(0, transactionInfo.getResult().getNumber());
+
+  }
+
+  @Test
+  void testTriggerContractWithBroadcast() throws InterruptedException, IllegalException {
+    //  function deposit() external payable returns (uint256 strxAmount);
+    String strx = "TZ8du1HkatTWDbS6FLZei4dQfjfpSm9mxp"; //nile
+    String fromAddr = client.keyPair.toBase58CheckAddress();
+    Function depositFunction = new Function("deposit",
+        Collections.emptyList(),
+        Collections.singletonList(new TypeReference<Uint256>() {
+        }));
+    String ret = client.triggerContractWithBroadcast(fromAddr, strx, depositFunction, 100,
+        500_000_000);
+    System.out.println(ret);
+    sleep(10_000L);
+    TransactionInfo transactionInfo = client.getTransactionInfoById(ret);
+    assertEquals(0, transactionInfo.getResult().getNumber());
+  }
+
+
+  @Test
+  void testEstimateEnergyV2() {
+    // transfer(address,uint256) returns (bool)
+    String usdtAddr = "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf"; //nile
+    String fromAddr = client.keyPair.toBase58CheckAddress();
+    String toAddress = "TVjsyZ7fYF3qLF6BQgPmTEZy1xrNNyVAAA";
+    Function trc20Transfer = new Function("transfer",
+        Arrays.asList(new Address(toAddress),
+            new Uint256(BigInteger.valueOf(10).multiply(BigInteger.valueOf(10).pow(6)))),
+        Collections.singletonList(new TypeReference<Bool>() {
+        }));
+    String encodedHex = FunctionEncoder.encode(trc20Transfer);
+    EstimateEnergyMessage estimateEnergyMessage = client.estimateEnergyV2(fromAddr, usdtAddr,
+        encodedHex);
+    System.out.println(estimateEnergyMessage.getEnergyRequired());
+    assertTrue(estimateEnergyMessage.getEnergyRequired() > 0);
+    assertTrue(estimateEnergyMessage.getResult().getResult());
+  }
+
+  @Test
+  void testEstimateEnergyV2WithCallValue() {
+    //  function deposit() external payable returns (uint256 strxAmount);
+    String strx = "TZ8du1HkatTWDbS6FLZei4dQfjfpSm9mxp"; //nile
+    String fromAddr = client.keyPair.toBase58CheckAddress();
+    Function depositFunction = new Function("deposit",
+        Collections.emptyList(),
+        Collections.singletonList(new TypeReference<Uint256>() {
+        }));
+    String encodedHex = FunctionEncoder.encode(depositFunction);
+    EstimateEnergyMessage estimateEnergyMessage = client.estimateEnergyV2(fromAddr, strx,
+        encodedHex, 1_000_000L, 0, "");
+    System.out.println(estimateEnergyMessage.getEnergyRequired());
+    assertTrue(estimateEnergyMessage.getEnergyRequired() > 0);
+    assertTrue(estimateEnergyMessage.getResult().getResult());
+  }
+
+  @Test
+  void testConstantCallV2() {
+    // balanceOf(address) returns (uint256)
+    String usdtAddr = "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf"; //nile
+    String ownerAddr = client.keyPair.toBase58CheckAddress();
+    String toAddress = "TVjsyZ7fYF3qLF6BQgPmTEZy1xrNNyVAAA";
+    Function balanceOfFunction = new Function("balanceOf",
+        Collections.singletonList(new Address(ownerAddr)),
+        Collections.singletonList(new TypeReference<Uint256>() {
+        }));
+    String encodedHex = FunctionEncoder.encode(balanceOfFunction);
+    TransactionExtention transactionExtention = client.constantCallV2(ownerAddr, usdtAddr,
+        encodedHex);
+    String hexResult = ByteArray.toHexString(
+        transactionExtention.getConstantResult(0).toByteArray());
+    System.out.println(hexResult);
+    List<Type> decoded = FunctionReturnDecoder.decode(hexResult,
+        balanceOfFunction.getOutputParameters());
+    assertFalse(decoded.isEmpty());
+    BigInteger balance = ((Uint256) decoded.get(0)).getValue();
+    assertTrue(balance.longValue() > 0);
+  }
+
+  @Test
+  void testTriggerCallV2() throws InterruptedException, IllegalException {
+    // transfer(address,uint256) returns (bool)
+    String usdtAddr = "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf"; //nile
+    String fromAddr = client.keyPair.toBase58CheckAddress();
+    String toAddress = "TVjsyZ7fYF3qLF6BQgPmTEZy1xrNNyVAAA";
+    Function trc20Transfer = new Function("transfer",
+        Arrays.asList(new Address(toAddress),
+            new Uint256(BigInteger.valueOf(1).multiply(BigInteger.valueOf(10).pow(6)))),
+        Collections.singletonList(new TypeReference<Bool>() {
+        }));
+    String encodedHex = FunctionEncoder.encode(trc20Transfer);
+    TransactionBuilder transactionBuilder = client.triggerCallV2(fromAddr, usdtAddr, encodedHex);
+    Transaction signedTxn = client.signTransaction(transactionBuilder.getTransaction());
+    String ret = client.broadcastTransaction(signedTxn);
+    System.out.println(ret);
+    sleep(10_000L);
+    TransactionInfo transactionInfo = client.getTransactionInfoById(ret);
+    assertEquals(code.SUCESS, transactionInfo.getResult());
+
+  }
+
 }

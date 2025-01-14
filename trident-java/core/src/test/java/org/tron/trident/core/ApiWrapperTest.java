@@ -1,23 +1,18 @@
 package org.tron.trident.core;
 
-import static java.lang.Thread.sleep;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.protobuf.ByteString;
 import io.grpc.ClientInterceptor;
-import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.Properties;
 import org.bouncycastle.util.encoders.Hex;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.tron.trident.abi.FunctionEncoder;
 import org.tron.trident.abi.TypeReference;
@@ -39,10 +34,10 @@ import org.tron.trident.proto.Response.MarketOrder;
 import org.tron.trident.proto.Response.MarketOrderList;
 import org.tron.trident.proto.Response.MarketOrderPairList;
 import org.tron.trident.proto.Response.MarketPriceList;
+import org.tron.trident.proto.Response.Proposal;
 import org.tron.trident.proto.Response.ProposalList;
 import org.tron.trident.proto.Response.SmartContractDataWrapper;
 import org.tron.trident.proto.Response.TransactionExtention;
-import org.tron.trident.proto.Response.TransactionInfo;
 import org.tron.trident.proto.Response.TransactionReturn;
 
 class ApiWrapperTest extends BaseTest{
@@ -202,45 +197,51 @@ class ApiWrapperTest extends BaseTest{
     assertTrue(client.getTransactionCountByBlockNum(53598255) > 0);
   }
 
-  @Test
-  void testTriggerContract() throws InterruptedException, IllegalException {
-    // transfer(address,uint256) returns (bool)
-    String usdtAddr = "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf"; //nile
-    String fromAddr = client.keyPair.toBase58CheckAddress();
-    String toAddress = "TVjsyZ7fYF3qLF6BQgPmTEZy1xrNNyVAAA";
-    Function trc20Transfer = new Function("transfer",
-        Arrays.asList(new Address(toAddress),
-            new Uint256(BigInteger.valueOf(10).multiply(BigInteger.valueOf(10).pow(6)))),
-        Collections.singletonList(new TypeReference<Bool>() {
-        }));
-    TransactionExtention transactionExtention = client.triggerContract(fromAddr, usdtAddr,
-        trc20Transfer);
-
-    Transaction signedTxn = client.signTransaction(transactionExtention);
-
-    System.out.println(signedTxn.toString());
-    String ret = client.broadcastTransaction(signedTxn);
-    System.out.println("======== Result ========\n" + ret);
-    sleep(10_000L);
-    TransactionInfo transactionInfo = client.getTransactionInfoById(ret);
-    assertEquals(0, transactionInfo.getResult().getNumber());
-
+  public static String bytesToHex(byte[] bytes) {
+    StringBuilder hex = new StringBuilder();
+    for (byte b : bytes) {
+      hex.append(String.format("%02X", b));
+    }
+    return hex.toString();
   }
 
   @Test
-  void testTriggerContractWithBroadcast() throws InterruptedException, IllegalException {
-    //  function deposit() external payable returns (uint256 strxAmount);
-    String strx = "TZ8du1HkatTWDbS6FLZei4dQfjfpSm9mxp"; //nile
-    String fromAddr = client.keyPair.toBase58CheckAddress();
-    Function depositFunction = new Function("deposit",
-        Collections.emptyList(),
-        Collections.singletonList(new TypeReference<Uint256>() {
-        }));
-    String ret = client.triggerContractWithBroadcast(fromAddr, strx, depositFunction, 100, 500_000_000);
-    System.out.println(ret);
-    sleep(10_000L);
-    TransactionInfo transactionInfo = client.getTransactionInfoById(ret);
-    assertEquals(0, transactionInfo.getResult().getNumber());
+  void testGetProposalById() throws IllegalException {
+    Proposal proposal = client.getProposalById("1");
+    String proposalAddr = "TD23EqH3ixYMYh8CMXKdHyQWjePi3KQvxV";
+    assertEquals(proposal.getProposerAddress(), ApiWrapper.parseAddress(proposalAddr));
+    assertTrue(proposal.getApprovalsCount() > 0);
+  }
+
+  @Test
+  void testEndianness() {
+    long number = 123456789L;
+
+    // Big-Endian
+    byte[] bigEndian = ByteBuffer.allocate(8)
+        .order(ByteOrder.BIG_ENDIAN)
+        .putLong(number)
+        .array();
+
+    // default (Big-Endian)
+    byte[] defaultEndian = ByteBuffer.allocate(8)
+        .putLong(number)
+        .array();
+
+    // Little-Endian
+    byte[] littleEndian = ByteBuffer.allocate(8)
+        .order(ByteOrder.LITTLE_ENDIAN)
+        .putLong(number)
+        .array();
+
+    byte[] wallet = ByteString.copyFrom(
+        ByteArray.fromLong(number)).toByteArray();
+
+    // print
+    System.out.println("Big-Endian: " + bytesToHex(bigEndian));
+    System.out.println("Little-Endian: " + bytesToHex(littleEndian));
+    System.out.println("wallet: " + bytesToHex(wallet));
+    System.out.println("default: " + bytesToHex(defaultEndian));
   }
 
 }

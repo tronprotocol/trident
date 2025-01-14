@@ -1455,23 +1455,17 @@ public class ApiWrapper implements Api {
    *
    * @param id proposal id
    * @return Proposal, proposal details
-   * @throws IllegalException if fail to get proposal
    */
   //1-17
   @Override
-  public Proposal getProposalById(String id) throws IllegalException {
+  public Proposal getProposalById(String id){
     ByteString bsTxId = ByteString.copyFrom(
-        ByteBuffer.allocate(8).putLong(Long.parseLong(id)).array());
+        ByteArray.fromLong(Long.parseLong(id)));
 
     BytesMessage request = BytesMessage.newBuilder()
         .setValue(bsTxId)
         .build();
-    Proposal proposal = blockingStub.getProposalById(request);
-
-    if (proposal.getApprovalsCount() == 0) {
-      throw new IllegalException();
-    }
-    return proposal;
+    return blockingStub.getProposalById(request);
   }
 
   /**
@@ -1505,7 +1499,7 @@ public class ApiWrapper implements Api {
   @Override
   public Exchange getExchangeById(String id) throws IllegalException {
     ByteString bsTxId = ByteString.copyFrom(
-        ByteBuffer.allocate(8).putLong(Long.parseLong(id)).array());
+        ByteArray.fromLong(Long.parseLong(id)));
 
     BytesMessage request = BytesMessage.newBuilder()
         .setValue(bsTxId)
@@ -1979,9 +1973,9 @@ public class ApiWrapper implements Api {
 
     TriggerSmartContract trigger =
         TriggerSmartContract.newBuilder()
-            .setOwnerAddress(ApiWrapper.parseAddress(ownerAddress))
-            .setContractAddress(ApiWrapper.parseAddress(contractAddress))
-            .setData(ApiWrapper.parseHex(encodedHex))
+            .setOwnerAddress(parseAddress(ownerAddress))
+            .setContractAddress(parseAddress(contractAddress))
+            .setData(parseHex(encodedHex))
             .build();
     return blockingStub.triggerContract(trigger);
   }
@@ -2004,9 +1998,9 @@ public class ApiWrapper implements Api {
 
     TriggerSmartContract trigger =
         TriggerSmartContract.newBuilder()
-            .setOwnerAddress(ApiWrapper.parseAddress(ownerAddress))
-            .setContractAddress(ApiWrapper.parseAddress(contractAddress))
-            .setData(ApiWrapper.parseHex(encodedHex))
+            .setOwnerAddress(parseAddress(ownerAddress))
+            .setContractAddress(parseAddress(contractAddress))
+            .setData(parseHex(encodedHex))
             .setCallValue(callValue)
             .build();
     TransactionExtention transactionExtention = blockingStub.triggerContract(trigger);

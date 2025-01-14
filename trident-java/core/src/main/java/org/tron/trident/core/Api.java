@@ -181,7 +181,7 @@ public interface Api {
   ProposalList listProposals();
 
   //1-17
-  Proposal getProposalById(String id) throws IllegalException;
+  Proposal getProposalById(String id);
 
   WitnessList listWitnesses();
 
