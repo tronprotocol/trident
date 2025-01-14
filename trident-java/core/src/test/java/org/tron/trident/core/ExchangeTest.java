@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.tron.trident.core.exceptions.IllegalException;
 import org.tron.trident.proto.Chain.Transaction;
@@ -29,6 +30,7 @@ public class ExchangeTest {
   }
 
   @Test
+  @Disabled("add private key to enable this case")
   void testExchange1() throws InterruptedException, IllegalException {
     // change the secondToken as necessary
     // this will cost 1024 TRX,
@@ -52,6 +54,7 @@ public class ExchangeTest {
   }
 
   @Test
+  @Disabled("add private key to enable this case")
   void testExchange2() throws InterruptedException, IllegalException {
     TransactionExtention transactionExtention = client.exchangeInject(testAddress, exchangeID, "_",
         100_000_000L);
@@ -69,6 +72,7 @@ public class ExchangeTest {
   }
 
   @Test
+  @Disabled("add private key to enable this case")
   void testExchange3() throws IllegalException, InterruptedException {
     TransactionExtention transactionExtention = client.exchangeWithdraw(testAddress, exchangeID,
         "1000587", 10_000_000L);
@@ -86,6 +90,7 @@ public class ExchangeTest {
   }
 
   @Test
+  @Disabled("add private key to enable this case")
   void testExchange4() throws IllegalException, InterruptedException {
     //expected should be smaller than left value in that exchange.
     TransactionExtention transactionExtention = client.exchangeTransaction(testAddress, exchangeID,

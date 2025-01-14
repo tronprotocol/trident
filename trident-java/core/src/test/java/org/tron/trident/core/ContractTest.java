@@ -38,7 +38,7 @@ class ContractTest {
   }
 
   @Test
-  @Disabled
+  @Disabled("add private key to enable this case")
   void testTransferTrc10() throws InterruptedException {
     TransactionExtention transactionExtention;
     try {
@@ -64,6 +64,7 @@ class ContractTest {
   }
 
   @Test
+  @Disabled("add private key to enable this case")
   void testDeployAndClearABI() throws InterruptedException {
     //first CreateSmartContract
     /**
