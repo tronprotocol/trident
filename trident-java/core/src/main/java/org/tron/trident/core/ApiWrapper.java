@@ -134,8 +134,8 @@ public class ApiWrapper implements Api {
   public final WalletGrpc.WalletBlockingStub blockingStub;
   public final WalletSolidityGrpc.WalletSolidityBlockingStub blockingStubSolidity;
   public final KeyPair keyPair;
-  public final ManagedChannel channel;
-  public final ManagedChannel channelSolidity;
+  private final ManagedChannel channel;
+  private final ManagedChannel channelSolidity;
 
   public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey) {
     channel = ManagedChannelBuilder.forTarget(grpcEndpoint).usePlaintext().build();
@@ -516,12 +516,12 @@ public class ApiWrapper implements Api {
     ByteString rawFrom = parseAddress(fromAddress);
     ByteString rawTo = parseAddress(toAddress);
 
-    TransferContract req = TransferContract.newBuilder()
+    TransferContract transferContract = TransferContract.newBuilder()
         .setOwnerAddress(rawFrom)
         .setToAddress(rawTo)
         .setAmount(amount)
         .build();
-    return createTransactionExtention(req,
+    return createTransactionExtention(transferContract,
         Transaction.Contract.ContractType.TransferContract);
   }
 
@@ -543,14 +543,14 @@ public class ApiWrapper implements Api {
     ByteString rawTo = parseAddress(toAddress);
     byte[] rawTokenId = Integer.toString(tokenId).getBytes();
 
-    TransferAssetContract req = TransferAssetContract.newBuilder()
+    TransferAssetContract transferAssetContract = TransferAssetContract.newBuilder()
         .setOwnerAddress(rawFrom)
         .setToAddress(rawTo)
         .setAssetName(ByteString.copyFrom(rawTokenId))
         .setAmount(amount)
         .build();
 
-    return createTransactionExtention(req,
+    return createTransactionExtention(transferAssetContract,
         Transaction.Contract.ContractType.TransferAssetContract);
   }
 
@@ -613,13 +613,13 @@ public class ApiWrapper implements Api {
   public TransactionExtention freezeBalanceV2(String ownerAddress, long frozenBalance,
       int resourceCode) throws IllegalException {
     ByteString rawOwner = parseAddress(ownerAddress);
-    FreezeBalanceV2Contract freezeBalanceContract =
+    FreezeBalanceV2Contract freezeBalanceV2Contract =
         FreezeBalanceV2Contract.newBuilder()
             .setOwnerAddress(rawOwner)
             .setFrozenBalance(frozenBalance)
             .setResourceValue(resourceCode)
             .build();
-    return createTransactionExtention(freezeBalanceContract,
+    return createTransactionExtention(freezeBalanceV2Contract,
         Transaction.Contract.ContractType.FreezeBalanceV2Contract);
   }
 
@@ -652,14 +652,14 @@ public class ApiWrapper implements Api {
   public TransactionExtention unfreezeBalance(String ownerAddress, int resourceCode,
       String receiveAddress) throws IllegalException {
 
-    UnfreezeBalanceContract unfreeze =
+    UnfreezeBalanceContract unfreezeBalanceContract =
         UnfreezeBalanceContract.newBuilder()
             .setOwnerAddress(parseAddress(ownerAddress))
             .setResourceValue(resourceCode)
             .setReceiverAddress(parseAddress(receiveAddress))
             .build();
 
-    return createTransactionExtention(unfreeze,
+    return createTransactionExtention(unfreezeBalanceContract,
         Transaction.Contract.ContractType.UnfreezeBalanceContract);
   }
 
@@ -677,14 +677,14 @@ public class ApiWrapper implements Api {
   public TransactionExtention unfreezeBalanceV2(String ownerAddress, long unfreezeBalance,
       int resourceCode) throws IllegalException {
 
-    UnfreezeBalanceV2Contract unfreeze =
+    UnfreezeBalanceV2Contract unfreezeBalanceV2Contract =
         UnfreezeBalanceV2Contract.newBuilder()
             .setOwnerAddress(parseAddress(ownerAddress))
             .setResourceValue(resourceCode)
             .setUnfreezeBalance(unfreezeBalance)
             .build();
 
-    return createTransactionExtention(unfreeze,
+    return createTransactionExtention(unfreezeBalanceV2Contract,
         Transaction.Contract.ContractType.UnfreezeBalanceV2Contract);
   }
 
@@ -959,10 +959,10 @@ public class ApiWrapper implements Api {
     ByteString bsOwnerAddress = parseAddress(ownerAddress);
     ByteString bsAccountAddress = parseAddress(accountAddress);
 
-    AccountCreateContract contract = createAccountCreateContract(bsOwnerAddress,
+    AccountCreateContract accountCreateContract = createAccountCreateContract(bsOwnerAddress,
         bsAccountAddress);
 
-    return createTransactionExtention(contract,
+    return createTransactionExtention(accountCreateContract,
         Transaction.Contract.ContractType.AccountCreateContract);
   }
 
@@ -982,10 +982,10 @@ public class ApiWrapper implements Api {
     byte[] bytesAccountName = accountName.getBytes();
     ByteString bsAccountName = ByteString.copyFrom(bytesAccountName);
 
-    AccountUpdateContract contract = createAccountUpdateContract(bsAccountName,
+    AccountUpdateContract accountUpdateContract = createAccountUpdateContract(bsAccountName,
         bsAddress);
 
-    return createTransactionExtention(contract,
+    return createTransactionExtention(accountUpdateContract,
         Transaction.Contract.ContractType.AccountUpdateContract);
   }
 
@@ -1229,9 +1229,9 @@ public class ApiWrapper implements Api {
     ByteString bsId = ByteString.copyFrom(id.getBytes());
     ByteString bsAddress = parseAddress(address);
 
-    SetAccountIdContract contract = createSetAccountIdContract(bsId, bsAddress);
+    SetAccountIdContract setAccountIdContract = createSetAccountIdContract(bsId, bsAddress);
 
-    return createTransactionExtention(contract,
+    return createTransactionExtention(setAccountIdContract,
         Transaction.Contract.ContractType.SetAccountIdContract).getTransaction();
   }
 
@@ -1241,9 +1241,9 @@ public class ApiWrapper implements Api {
     ByteString bsId = ByteString.copyFrom(id.getBytes());
     ByteString bsAddress = parseAddress(address);
 
-    SetAccountIdContract contract = createSetAccountIdContract(bsId, bsAddress);
+    SetAccountIdContract setAccountIdContract = createSetAccountIdContract(bsId, bsAddress);
 
-    return createTransactionExtention(contract,
+    return createTransactionExtention(setAccountIdContract,
         Transaction.Contract.ContractType.SetAccountIdContract);
   }
 
@@ -1413,14 +1413,15 @@ public class ApiWrapper implements Api {
     ByteString bsOwner = parseAddress(ownerAddress);
     ByteString bsName = ByteString.copyFrom(assertName.getBytes());
 
-    ParticipateAssetIssueContract builder = ParticipateAssetIssueContract.newBuilder()
+    ParticipateAssetIssueContract participateAssetIssueContract =
+        ParticipateAssetIssueContract.newBuilder()
         .setToAddress(bsTo)
         .setAssetName(bsName)
         .setOwnerAddress(bsOwner)
         .setAmount(amount)
         .build();
 
-    return createTransactionExtention(builder,
+    return createTransactionExtention(participateAssetIssueContract,
         Transaction.Contract.ContractType.ParticipateAssetIssueContract);
   }
 
@@ -1545,8 +1546,8 @@ public class ApiWrapper implements Api {
       frozenBuilder.setFrozenDays(days);
       builder.addFrozenSupply(frozenBuilder.build());
     }
-
-    return createTransactionExtention(builder.build(),
+    AssetIssueContract assetIssueContract = builder.build();
+    return createTransactionExtention(assetIssueContract,
         Transaction.Contract.ContractType.AssetIssueContract);
   }
 
@@ -1568,7 +1569,6 @@ public class ApiWrapper implements Api {
    * @return TransactionExtention
    * @throws IllegalException if fail to create AssetIssue
    */
-
   @Override
   public TransactionExtention createAssetIssue(String ownerAddress, String name, String abbr,
       long totalSupply, int trxNum, int icoNum, long startTime, long endTime,
@@ -1578,8 +1578,8 @@ public class ApiWrapper implements Api {
     AssetIssueContract.Builder builder = assetIssueContractBuilder(ownerAddress, name, abbr,
         totalSupply, trxNum, icoNum, startTime, endTime, url, freeAssetNetLimit,
         publicFreeAssetNetLimit, precision, description);
-
-    return createTransactionExtention(builder.build(),
+    AssetIssueContract assetIssueContract = builder.build();
+    return createTransactionExtention(assetIssueContract,
         Transaction.Contract.ContractType.AssetIssueContract);
   }
 
@@ -1625,10 +1625,10 @@ public class ApiWrapper implements Api {
     ByteString bsDescription = ByteString.copyFrom(description.getBytes());
     ByteString bsUrl = ByteString.copyFrom(url.getBytes());
 
-    UpdateAssetContract contract = createUpdateAssetContract(bsOwnerAddress,
+    UpdateAssetContract updateAssetContract = createUpdateAssetContract(bsOwnerAddress,
         bsDescription, bsUrl, newLimit, newPublicLimit);
 
-    return createTransactionExtention(contract,
+    return createTransactionExtention(updateAssetContract,
         Transaction.Contract.ContractType.UpdateAssetContract);
   }
 
@@ -1643,24 +1643,25 @@ public class ApiWrapper implements Api {
   public TransactionExtention unfreezeAsset(String ownerAddress) throws IllegalException {
     ByteString bsOwnerAddress = parseAddress(ownerAddress);
 
-    UnfreezeAssetContract contract = createUnfreezeAssetContract(bsOwnerAddress);
+    UnfreezeAssetContract unfreezeAssetContract = createUnfreezeAssetContract(bsOwnerAddress);
 
-    return createTransactionExtention(contract,
+    return createTransactionExtention(unfreezeAssetContract,
         Transaction.Contract.ContractType.UnfreezeAssetContract);
   }
 
   /**
    * Unfreeze a token that has passed the minimum freeze duration
    *
-   * @param contract AccountPermissionUpdateContract
+   * @param accountPermissionUpdateContract AccountPermissionUpdateContract
    * @return TransactionExtention
    * @throws IllegalException if fail to update account permission
    */
   @Override
-  public TransactionExtention accountPermissionUpdate(AccountPermissionUpdateContract contract)
+  public TransactionExtention accountPermissionUpdate(AccountPermissionUpdateContract
+      accountPermissionUpdateContract)
       throws IllegalException {
 
-    return createTransactionExtention(contract,
+    return createTransactionExtention(accountPermissionUpdateContract,
         Transaction.Contract.ContractType.AccountPermissionUpdateContract);
   }
 
@@ -1827,12 +1828,12 @@ public class ApiWrapper implements Api {
   public TransactionExtention updateBrokerage(String address, int brokerage)
       throws IllegalException {
     ByteString ownerAddress = parseAddress(address);
-    UpdateBrokerageContract upContract =
+    UpdateBrokerageContract updateBrokerageContract =
         UpdateBrokerageContract.newBuilder()
             .setOwnerAddress(ownerAddress)
             .setBrokerage(brokerage)
             .build();
-    return createTransactionExtention(upContract,
+    return createTransactionExtention(updateBrokerageContract,
         Transaction.Contract.ContractType.UpdateBrokerageContract);
   }
 
