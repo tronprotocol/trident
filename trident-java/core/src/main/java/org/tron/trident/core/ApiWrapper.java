@@ -2807,16 +2807,6 @@ public class ApiWrapper implements Api {
   }
 
   /**
-   * getTotalTransaction
-   *
-   * @return totalTransaction count
-   */
-  @Override
-  public long getTotalTransaction() {
-    return blockingStub.totalTransaction(EmptyMessage.getDefaultInstance()).getNum();
-  }
-
-  /**
    * getTransactionCountByBlockNum
    *
    * @param blockNum block num
