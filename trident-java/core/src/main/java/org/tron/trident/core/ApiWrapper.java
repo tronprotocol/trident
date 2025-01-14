@@ -1,5 +1,8 @@
 package org.tron.trident.core;
 
+import static org.tron.trident.core.utils.Utils.decodeFromBase58Check;
+import static org.tron.trident.core.utils.Utils.encodeParameter;
+
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Message;
 import io.grpc.ClientInterceptor;
@@ -7,16 +10,20 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.Metadata;
 import io.grpc.stub.MetadataUtils;
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.bouncycastle.jcajce.provider.digest.SHA256;
 import org.bouncycastle.util.encoders.Hex;
 import org.tron.trident.abi.FunctionEncoder;
 import org.tron.trident.abi.datatypes.Function;
+import org.tron.trident.abi.datatypes.Type;
 import org.tron.trident.api.GrpcAPI;
 import org.tron.trident.api.GrpcAPI.AccountAddressMessage;
 import org.tron.trident.api.GrpcAPI.AccountIdMessage;
@@ -37,6 +44,7 @@ import org.tron.trident.core.transaction.TransactionCapsule;
 import org.tron.trident.core.utils.ByteArray;
 import org.tron.trident.core.utils.Sha256Hash;
 import org.tron.trident.core.utils.Utils;
+import org.tron.trident.crypto.Hash;
 import org.tron.trident.proto.Chain.Block;
 import org.tron.trident.proto.Chain.Transaction;
 import org.tron.trident.proto.Chain.Transaction.Contract.ContractType;
@@ -47,6 +55,7 @@ import org.tron.trident.proto.Contract.AccountUpdateContract;
 import org.tron.trident.proto.Contract.AssetIssueContract;
 import org.tron.trident.proto.Contract.CancelAllUnfreezeV2Contract;
 import org.tron.trident.proto.Contract.ClearABIContract;
+import org.tron.trident.proto.Contract.CreateSmartContract;
 import org.tron.trident.proto.Contract.DelegateResourceContract;
 import org.tron.trident.proto.Contract.ExchangeCreateContract;
 import org.tron.trident.proto.Contract.ExchangeInjectContract;
@@ -131,6 +140,11 @@ public class ApiWrapper implements Api {
 
   public static final long GRPC_TIMEOUT = 30 * 1_000L; //30 seconds
 
+  public static final long FEE_LIMIT = 150_000_000L; //150 TRX
+
+  public static final long CONSUME_USER_RESOURCE_PERCENT = 100L;
+
+  public static final long ORIGIN_ENERGY_LIMIT = 100_000_000L;
   public final WalletGrpc.WalletBlockingStub blockingStub;
   public final WalletSolidityGrpc.WalletSolidityBlockingStub blockingStubSolidity;
   public final KeyPair keyPair;
@@ -2898,5 +2912,170 @@ public class ApiWrapper implements Api {
         .build();
     return createTransactionExtention(updateSettingContract,
         ContractType.UpdateSettingContract);
+  }
+
+  /**
+   *
+   * @param contractName contractName
+   * @param address ownerAddress
+   * @param ABI abiString
+   * @param code bytecode
+   * @param value callValue sun send to Contract
+   * @param consumeUserResourcePercent consumeUserResourcePercent,range 0-100
+   * @param originEnergyLimit originEnergyLimit
+   * @param tokenValue tokenValue
+   * @param tokenId trc10 id
+   * @return CreateSmartContract
+   * @throws Exception exception
+   */
+  @Override
+  public CreateSmartContract createSmartContract(
+      String contractName,
+      String address,
+      String ABI,
+      String code,
+      long value,
+      long consumeUserResourcePercent,
+      long originEnergyLimit,
+      long tokenValue,
+      String tokenId) throws Exception {
+
+    //abi
+    SmartContract.ABI.Builder abiBuilder = SmartContract.ABI.newBuilder();
+    Contract.loadAbiFromJson(ABI, abiBuilder);
+    SmartContract.ABI abi = abiBuilder.build();
+
+    SmartContract.Builder builder = SmartContract.newBuilder();
+    builder.setName(contractName);
+    builder.setOriginAddress(parseAddress(address));
+    builder.setAbi(abi);
+    builder
+        .setConsumeUserResourcePercent(consumeUserResourcePercent)
+        .setOriginEnergyLimit(originEnergyLimit);
+
+    if (value != 0) {
+
+      builder.setCallValue(value);
+    }
+//    byte[] byteCode = code.getBytes();
+//    if (null != libraryAddressPair) {
+//      byteCode = replaceLibraryAddress(code, libraryAddressPair, compilerVersion);
+//    } else {
+//      byteCode = Hex.decode(code);
+//    }
+
+    builder.setBytecode(parseHex(code));
+    CreateSmartContract.Builder createSmartContractBuilder = CreateSmartContract.newBuilder();
+    createSmartContractBuilder
+        .setOwnerAddress(parseAddress(address))
+        .setNewContract(builder.build());
+    if (tokenId != null && !tokenId.equalsIgnoreCase("") && !tokenId.equalsIgnoreCase("#")) {
+      createSmartContractBuilder.setCallTokenValue(tokenValue).setTokenId(Long.parseLong(tokenId));
+    }
+    return createSmartContractBuilder.build();
+  }
+
+  private static byte[] replaceLibraryAddress(String code, String libraryAddressPair,
+      String compilerVersion) {
+
+    String[] libraryAddressList = libraryAddressPair.split("[,]");
+
+    for (String cur : libraryAddressList) {
+      int lastPosition = cur.lastIndexOf(":");
+      if (-1 == lastPosition) {
+        throw new RuntimeException("libraryAddress delimit by ':'");
+      }
+      String libraryName = cur.substring(0, lastPosition);
+      String addr = cur.substring(lastPosition + 1);
+      String libraryAddressHex;
+      try {
+        libraryAddressHex = (new String(Hex.encode(decodeFromBase58Check(addr)),
+            "US-ASCII")).substring(2);
+      } catch (UnsupportedEncodingException e) {
+        throw new RuntimeException(e); // now ignore
+      }
+
+      String beReplaced;
+      if (compilerVersion == null) {
+        // old version
+        String repeated = new String(
+            new char[40 - libraryName.length() - 2])
+            .replace("\0", "_");
+        beReplaced = "__" + libraryName + repeated;
+      } else if (compilerVersion.equalsIgnoreCase("v5")) {
+        // 0.5.4 version
+        String libraryNameKeccak256 =
+            ByteArray.toHexString(
+                    Hash.sha3(ByteArray.fromString(libraryName)))
+                .substring(0, 34);
+        beReplaced = "__\\$" + libraryNameKeccak256 + "\\$__";
+      } else {
+        throw new RuntimeException("unknown compiler version.");
+      }
+
+      Matcher m = Pattern.compile(beReplaced).matcher(code);
+      code = m.replaceAll(libraryAddressHex);
+    }
+
+    return Hex.decode(code);
+  }
+  /**
+   * Deploy a smart contract
+   *
+   * @param contractName contract name
+   * @param abiStr abi
+   * @param bytecode bytecode
+   * @param constructorParams constructorParams, no Params set null or empty list
+   * @param feeLimit feeLimit
+   * @param consumeUserResourcePercent consumeUserResourcePercent,range 0-100
+   * @param originEnergyLimit originEnergyLimit
+   * @return String txn
+   */
+  @Override
+  public String deployContract(String contractName, String abiStr, String bytecode, List<Type<?>> constructorParams,
+      long feeLimit, long consumeUserResourcePercent, long originEnergyLimit, long callValue)
+      throws Exception {
+
+    if (constructorParams != null && !constructorParams.isEmpty()){
+      ByteString constructorParamsByteString = encodeParameter(constructorParams);
+      ByteString newByteCode = parseHex(bytecode).concat(constructorParamsByteString);
+      bytecode = ByteArray.toHexString(newByteCode.toByteArray());
+    }
+    System.out.println(bytecode);
+    CreateSmartContract createSmartContract = createSmartContract(
+        contractName, keyPair.toBase58CheckAddress(), abiStr, bytecode, callValue, consumeUserResourcePercent, originEnergyLimit, 0, null);
+
+    TransactionBuilder txBuilder = new TransactionBuilder(
+        blockingStub.deployContract(createSmartContract).getTransaction());
+
+    txBuilder.setFeeLimit(feeLimit);
+
+    // sign
+    Transaction transaction = signTransaction(txBuilder.getTransaction());
+
+    //broadcast
+    return broadcastTransaction(transaction);
+  }
+
+  /**
+   * Deploy a smart contract with default parameters
+   *
+   * @param name Contract name
+   * @param abiStr abi
+   * @param bytecode bytecode
+   * @return String txn
+   */
+  @Override
+  public String deployContract(String name, String abiStr, String bytecode) throws Exception {
+    return deployContract(
+        name,
+        abiStr,
+        bytecode,
+        null,
+        FEE_LIMIT,
+        CONSUME_USER_RESOURCE_PERCENT,
+        ORIGIN_ENERGY_LIMIT,
+        0L
+    );
   }
 }
