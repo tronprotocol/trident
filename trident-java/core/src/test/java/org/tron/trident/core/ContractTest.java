@@ -84,6 +84,10 @@ class ContractTest extends BaseTest {
     Transaction transaction = client.signTransaction(txBuilder.getTransaction());
     String txId = client.broadcastTransaction(transaction);
     System.out.println("Deploy contract transaction id: " + txId);
+    sleep(10_000L);
+
+    TransactionInfo transactionInfo = client.getTransactionInfoById(txId);
+    assertEquals(code.SUCESS, transactionInfo.getResult());
   }
 
   @Test
@@ -98,6 +102,10 @@ class ContractTest extends BaseTest {
 
     String txId = client.deployContract("testDeployContract", abiStr, bytecode);
     System.out.println("Transaction ID: " + txId);
+    sleep(10_000L);
+
+    TransactionInfo transactionInfo = client.getTransactionInfoById(txId);
+    assertEquals(code.SUCESS, transactionInfo.getResult());
   }
 
   @Test
@@ -116,6 +124,12 @@ class ContractTest extends BaseTest {
         constructorParams, 1000_000_000L, 100,
         10_000_000L, 0L);
     System.out.println("Transaction ID: " + txId);
+
+    sleep(10_000L);
+
+    TransactionInfo transactionInfo = client.getTransactionInfoById(txId);
+    assertEquals(code.SUCESS, transactionInfo.getResult());
+
   }
 
   @Test
@@ -135,6 +149,10 @@ class ContractTest extends BaseTest {
         constructorParams, 100_000_000L, 100,
         10_000_000L, 1_000_000L);
     System.out.println("Transaction ID: " + txId);
+    sleep(10_000L);
+
+    TransactionInfo transactionInfo = client.getTransactionInfoById(txId);
+    assertEquals(code.SUCESS, transactionInfo.getResult());
   }
 
 

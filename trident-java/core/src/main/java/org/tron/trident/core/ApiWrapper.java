@@ -132,7 +132,7 @@ public class ApiWrapper implements Api {
 
   public static final long TRANSACTION_DEFAULT_EXPIRATION_TIME = 60 * 1_000L; //60 seconds
 
-  public static final long GRPC_TIMEOUT = 30 * 1_000L; //30 seconds
+  public static final long GRPC_TIMEOUT = 60 * 1_000L; //30 seconds
 
   public static final long FEE_LIMIT = 150_000_000L; //150 TRX
 
@@ -1952,7 +1952,7 @@ public class ApiWrapper implements Api {
 
 
   /**
-   * make a triggerContract
+   * make a triggerContract, same with triggerCallV2
    *
    * @param ownerAddress the current caller
    * @param contractAddress smart contract address
@@ -1965,12 +1965,30 @@ public class ApiWrapper implements Api {
 
     String encodedHex = FunctionEncoder.encode(function);
 
-    TriggerSmartContract trigger =
-        TriggerSmartContract.newBuilder()
-            .setOwnerAddress(parseAddress(ownerAddress))
-            .setContractAddress(parseAddress(contractAddress))
-            .setData(parseHex(encodedHex))
-            .build();
+    TriggerSmartContract trigger = buildTrigger(ownerAddress, contractAddress, encodedHex, 0L, 0L,
+        null);
+    return blockingStub.triggerContract(trigger);
+  }
+
+  /**
+   * make a triggerContract, same with triggerCallV2
+   *
+   * @param ownerAddress the current caller
+   * @param contractAddress smart contract address
+   * @param function contract function
+   * @param callValue the amount of sun send to contract
+   * @param tokenValue the amount of tokenId
+   * @param tokenId tokenId
+   * @return TransactionExtention
+   */
+  @Override
+  public TransactionExtention triggerContract(String ownerAddress, String contractAddress,
+      Function function, long callValue, long tokenValue, String tokenId) {
+
+    String encodedHex = FunctionEncoder.encode(function);
+
+    TriggerSmartContract trigger = buildTrigger(ownerAddress, contractAddress, encodedHex,
+        callValue, tokenValue, tokenId);
     return blockingStub.triggerContract(trigger);
   }
 
@@ -1989,20 +2007,48 @@ public class ApiWrapper implements Api {
       Function function, long callValue, long feeLimit) {
 
     String encodedHex = FunctionEncoder.encode(function);
+    TriggerSmartContract trigger = buildTrigger(ownerAddress,
+        contractAddress, encodedHex, callValue, 0, null);
 
-    TriggerSmartContract trigger =
-        TriggerSmartContract.newBuilder()
-            .setOwnerAddress(parseAddress(ownerAddress))
-            .setContractAddress(parseAddress(contractAddress))
-            .setData(parseHex(encodedHex))
-            .setCallValue(callValue)
-            .build();
     TransactionExtention transactionExtention = blockingStub.triggerContract(trigger);
 
     TransactionBuilder builder = new TransactionBuilder(transactionExtention.getTransaction());
     builder.setFeeLimit(feeLimit);
     Transaction signedTxn = signTransaction(builder.build());
     return broadcastTransaction(signedTxn);
+  }
+
+  /**
+   * make a constant call - no broadcasting.
+   *
+   * @param ownerAddress the current caller.
+   * @param contractAddress smart contract address.
+   * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
+   * @return TransactionExtention.
+   */
+  @Override
+  public TransactionExtention constantCallV2(String ownerAddress, String contractAddress,
+      String callData) {
+    return callWithoutBroadcastV2(ownerAddress, contractAddress, callData);
+  }
+
+  /**
+   * make a constant call - no broadcasting.
+   *
+   * @param ownerAddress the current caller.
+   * @param contractAddress smart contract address.
+   * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
+   * @param callValue callValue
+   * @param tokenValue token Value
+   * @param tokenId token10 ID
+   * @
+   * @return TransactionExtention.
+   */
+  @Override
+  public TransactionExtention constantCallV2(String ownerAddress, String contractAddress,
+      String callData, long callValue, long tokenValue, String tokenId) {
+    return callWithoutBroadcastV2(ownerAddress, contractAddress, callData, callValue, tokenValue,
+        tokenId);
   }
 
   /**
@@ -2264,16 +2310,9 @@ public class ApiWrapper implements Api {
   @Override
   public Response.EstimateEnergyMessage estimateEnergy(String ownerAddress, String contractAddress,
       Function function) {
-    Contract cntr = getContract(contractAddress);
-
-    cntr.setOwnerAddr(parseAddress(ownerAddress));
     String encodedHex = FunctionEncoder.encode(function);
-    TriggerSmartContract trigger =
-        TriggerSmartContract.newBuilder()
-            .setOwnerAddress(cntr.getOwnerAddr())
-            .setContractAddress(cntr.getCntrAddr())
-            .setData(parseHex(encodedHex))
-            .build();
+    TriggerSmartContract trigger = buildTrigger(ownerAddress, contractAddress, encodedHex, 0L, 0L,
+        null);
     return blockingStub.estimateEnergy(trigger);
   }
 
@@ -2292,26 +2331,16 @@ public class ApiWrapper implements Api {
    */
   @Override
   public Response.EstimateEnergyMessage estimateEnergyV2(String ownerAddress,
-      String contractAddress,
-      String callData) {
-    Contract contract = getContract(contractAddress);
-
-    contract.setOwnerAddr(parseAddress(ownerAddress));
+      String contractAddress, String callData) {
     TriggerSmartContract trigger =
-        TriggerSmartContract.newBuilder()
-            .setOwnerAddress(contract.getOwnerAddr())
-            .setContractAddress(contract.getCntrAddr())
-            .setData(ByteString.copyFrom(ByteArray.fromHexString(callData)))
-            .build();
+        buildTrigger(ownerAddress, contractAddress, callData, 0L, 0L, null);
     return blockingStub.estimateEnergy(trigger);
   }
 
   @Override
   public Response.EstimateEnergyMessage estimateEnergyV2(String ownerAddress,
-      String contractAddress,
-      String callData, long callValue, long tokenValue, String tokenId) {
-    Contract contract = getContract(contractAddress);
-    TriggerSmartContract trigger = buildTrigger(ownerAddress, contract, callData, callValue,
+      String contractAddress, String callData, long callValue, long tokenValue, String tokenId) {
+    TriggerSmartContract trigger = buildTrigger(ownerAddress, contractAddress, callData, callValue,
         tokenValue, tokenId);
     return blockingStub.estimateEnergy(trigger);
   }
@@ -2327,9 +2356,8 @@ public class ApiWrapper implements Api {
   @Override
   public TransactionBuilder triggerCallV2(String ownerAddress, String contractAddress,
       String callData) {
-    Contract contract = getContract(contractAddress);
 
-    TransactionExtention txnExt = callWithoutBroadcastV2(ownerAddress, contract, callData);
+    TransactionExtention txnExt = callWithoutBroadcastV2(ownerAddress, contractAddress, callData);
 
     return new TransactionBuilder(txnExt.getTransaction());
   }
@@ -2350,8 +2378,7 @@ public class ApiWrapper implements Api {
   public TransactionBuilder triggerCallV2(String ownerAddress, String contractAddress,
       String callData,
       long callValue, long tokenValue, String tokenId, long feeLimit) {
-    Contract contract = getContract(contractAddress);
-    TriggerSmartContract trigger = buildTrigger(ownerAddress, contract, callData, callValue,
+    TriggerSmartContract trigger = buildTrigger(ownerAddress, contractAddress, callData, callValue,
         tokenValue, tokenId);
     TransactionExtention txnExt = blockingStub.triggerConstantContract(trigger);
     TransactionBuilder builder = new TransactionBuilder(txnExt.getTransaction());
@@ -2363,37 +2390,30 @@ public class ApiWrapper implements Api {
    * call function without signature and broadcasting
    *
    * @param ownerAddress the caller
-   * @param contract the contract
+   * @param contractAddress the contract address
    * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
    * @return TransactionExtention
    */
-  private TransactionExtention callWithoutBroadcastV2(String ownerAddress, Contract contract,
+  private TransactionExtention callWithoutBroadcastV2(String ownerAddress, String contractAddress,
       String callData) {
-    contract.setOwnerAddr(parseAddress(ownerAddress));
-    // Make a TriggerSmartContract contract
     TriggerSmartContract trigger =
-        TriggerSmartContract.newBuilder()
-            .setOwnerAddress(contract.getOwnerAddr())
-            .setContractAddress(contract.getCntrAddr())
-            .setData(ByteString.copyFrom(ByteArray.fromHexString(callData)))
-            .build();
+        buildTrigger(ownerAddress, contractAddress, callData, 0L, 0L, null);
     return blockingStub.triggerConstantContract(trigger);
   }
 
-  private TransactionExtention callWithoutBroadcastV2(String ownerAddress, Contract contract,
+  private TransactionExtention callWithoutBroadcastV2(String ownerAddress, String contractAddress,
       String callData, long callValue, long tokenValue, String tokenId) {
-    TriggerSmartContract trigger = buildTrigger(ownerAddress, contract, callData, callValue,
+    TriggerSmartContract trigger = buildTrigger(ownerAddress, contractAddress, callData, callValue,
         tokenValue, tokenId);
     return blockingStub.triggerConstantContract(trigger);
   }
 
-  private TriggerSmartContract buildTrigger(String ownerAddress, Contract contract,
+  private TriggerSmartContract buildTrigger(String ownerAddress, String contractAddress,
       String callData, long callValue, long tokenValue, String tokenId) {
-    contract.setOwnerAddr(parseAddress(ownerAddress));
     TriggerSmartContract.Builder builder =
         TriggerSmartContract.newBuilder()
-            .setOwnerAddress(contract.getOwnerAddr())
-            .setContractAddress(contract.getCntrAddr())
+            .setOwnerAddress(parseAddress(ownerAddress))
+            .setContractAddress(parseAddress(contractAddress))
             .setData(ByteString.copyFrom(ByteArray.fromHexString(callData)))
             .setCallValue(callValue);
     if (tokenId != null && !tokenId.isEmpty()) {
@@ -2402,43 +2422,6 @@ public class ApiWrapper implements Api {
     }
     return builder.build();
   }
-
-  /**
-   * make a constant call - no broadcasting
-   *
-   * @param ownerAddress the current caller.
-   * @param contractAddress smart contract address.
-   * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
-   * @return TransactionExtention.
-   */
-  @Override
-  public TransactionExtention constantCallV2(String ownerAddress, String contractAddress,
-      String callData) {
-    Contract contract = getContract(contractAddress);
-
-    return callWithoutBroadcastV2(ownerAddress, contract, callData);
-  }
-
-  /**
-   * make a constant call - no broadcasting.
-   *
-   * @param ownerAddress the current caller.
-   * @param contractAddress smart contract address.
-   * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
-   * @param callValue callValue
-   * @param tokenValue token Value
-   * @param tokenId token10 ID
-   * @return TransactionExtention.
-   * @
-   */
-  @Override
-  public TransactionExtention constantCallV2(String ownerAddress, String contractAddress,
-      String callData, long callValue, long tokenValue, String tokenId) {
-    Contract contract = getContract(contractAddress);
-
-    return callWithoutBroadcastV2(ownerAddress, contract, callData, callValue, tokenValue, tokenId);
-  }
-
 
   /**
    * GetBandwidthPrices
@@ -2954,7 +2937,7 @@ public class ApiWrapper implements Api {
   }
 
   /**
-   * Deploy a smart contract
+   * Deploy a smart contract, with sign and broadcast
    *
    * @param contractName contract name
    * @param abiStr abi
@@ -2976,7 +2959,6 @@ public class ApiWrapper implements Api {
       ByteString newByteCode = parseHex(bytecode).concat(constructorParamsByteString);
       bytecode = ByteArray.toHexString(newByteCode.toByteArray());
     }
-    System.out.println(bytecode);
     CreateSmartContract createSmartContract = createSmartContract(
         contractName, keyPair.toBase58CheckAddress(), abiStr, bytecode, callValue,
         consumeUserResourcePercent, originEnergyLimit, 0, null);
