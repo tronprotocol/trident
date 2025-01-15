@@ -1886,29 +1886,7 @@ public class ApiWrapper implements Api {
   }
 
   /**
-   * call function without signature and broadcasting
-   *
-   * @param ownerAddress the caller
-   * @param contract the contract
-   * @param function the function called
-   * @return TransactionExtention
-   */
-  private TransactionExtention callWithoutBroadcast(String ownerAddress, Contract contract,
-      Function function) {
-    contract.setOwnerAddr(parseAddress(ownerAddress));
-    String encodedHex = FunctionEncoder.encode(function);
-    // Make a TriggerSmartContract contract
-    TriggerSmartContract trigger =
-        TriggerSmartContract.newBuilder()
-            .setOwnerAddress(contract.getOwnerAddr())
-            .setContractAddress(contract.getCntrAddr())
-            .setData(parseHex(encodedHex))
-            .build();
-    return blockingStub.triggerConstantContract(trigger);
-  }
-
-  /**
-   * make a constant call - no broadcasting
+   * make a constant call - no broadcasting, no need to broadcast
    *
    * @param ownerAddress the current caller.
    * @param contractAddress smart contract address.
@@ -1918,13 +1896,49 @@ public class ApiWrapper implements Api {
   @Override
   public TransactionExtention constantCall(String ownerAddress, String contractAddress,
       Function function) {
-    Contract contract = getContract(contractAddress);
-
-    return callWithoutBroadcast(ownerAddress, contract, function);
+    String encodedHex = FunctionEncoder.encode(function);
+    TriggerSmartContract trigger = buildTrigger(ownerAddress, contractAddress, encodedHex, 0,
+        0, null);
+    return blockingStub.triggerConstantContract(trigger);
   }
 
   /**
-   * make a trigger call. Trigger call consumes energy and bandwidth.
+   * make a constant call - no broadcasting, no need to broadcast
+   *
+   * @param ownerAddress the current caller.
+   * @param contractAddress smart contract address.
+   * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
+   * @return TransactionExtention.
+   */
+  @Override
+  public TransactionExtention constantCallV2(String ownerAddress, String contractAddress,
+      String callData) {
+    TriggerSmartContract trigger =
+        buildTrigger(ownerAddress, contractAddress, callData, 0L, 0L, null);
+    return blockingStub.triggerConstantContract(trigger);
+  }
+
+  /**
+   * make a constant call - no broadcasting, no need to broadcast
+   *
+   * @param ownerAddress the current caller.
+   * @param contractAddress smart contract address.
+   * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
+   * @param callValue callValue
+   * @param tokenValue token Value
+   * @param tokenId token10 ID
+   * @return TransactionExtention.
+   */
+  @Override
+  public TransactionExtention constantCallV2(String ownerAddress, String contractAddress,
+      String callData, long callValue, long tokenValue, String tokenId) {
+    TriggerSmartContract trigger = buildTrigger(ownerAddress, contractAddress, callData, callValue,
+        tokenValue, tokenId);
+    return blockingStub.triggerConstantContract(trigger);
+  }
+
+  /**
+   * make a constant call - no broadcasting, no need to broadcast
    *
    * @param ownerAddress the current caller
    * @param contractAddress smart contract address
@@ -1934,16 +1948,54 @@ public class ApiWrapper implements Api {
   @Override
   public TransactionBuilder triggerCall(String ownerAddress, String contractAddress,
       Function function) {
-    Contract contract = getContract(contractAddress);
-
-    TransactionExtention txnExt = callWithoutBroadcast(ownerAddress, contract, function);
-
+    TransactionExtention txnExt = constantCall(ownerAddress, contractAddress, function);
     return new TransactionBuilder(txnExt.getTransaction());
   }
 
+  /**
+   * make a constant call - no broadcasting, no need to broadcast
+   *
+   * @param ownerAddress the current caller
+   * @param contractAddress smart contract address
+   * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
+   * @return transaction builder. TransactionExtention detail.
+   */
+  @Override
+  public TransactionBuilder triggerCallV2(String ownerAddress, String contractAddress,
+      String callData) {
+
+    TriggerSmartContract trigger =
+        buildTrigger(ownerAddress, contractAddress, callData, 0L, 0L, null);
+    TransactionExtention txnExt = blockingStub.triggerConstantContract(trigger);
+    return new TransactionBuilder(txnExt.getTransaction());
+  }
 
   /**
-   * make a triggerContract, same with triggerCallV2
+   * make a constant call - no broadcasting, no need to broadcast
+   *
+   * @param ownerAddress the current caller
+   * @param contractAddress smart contract address
+   * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
+   * @param callValue callValue
+   * @param tokenValue tokenValue
+   * @param tokenId empty or integer
+   * @param feeLimit max fee allowed
+   * @return transaction builder. TransactionExtention detail.
+   */
+  @Override
+  public TransactionBuilder triggerCallV2(String ownerAddress, String contractAddress,
+      String callData,
+      long callValue, long tokenValue, String tokenId, long feeLimit) {
+    TriggerSmartContract trigger = buildTrigger(ownerAddress, contractAddress, callData, callValue,
+        tokenValue, tokenId);
+    TransactionExtention txnExt = blockingStub.triggerConstantContract(trigger);
+    TransactionBuilder builder = new TransactionBuilder(txnExt.getTransaction());
+    builder.setFeeLimit(feeLimit);
+    return builder;
+  }
+
+  /**
+   * make a TriggerSmartContract, - no broadcasting. it can be broadcast later.
    *
    * @param ownerAddress the current caller
    * @param contractAddress smart contract address
@@ -1962,7 +2014,7 @@ public class ApiWrapper implements Api {
   }
 
   /**
-   * make a triggerContract, same with triggerCallV2
+   * make a TriggerSmartContract, - no broadcasting. it can be broadcast later.
    *
    * @param ownerAddress the current caller
    * @param contractAddress smart contract address
@@ -1984,7 +2036,7 @@ public class ApiWrapper implements Api {
   }
 
   /**
-   * make a triggerContractWithBroadcast
+   * make a TriggerSmartContract and broadcast it
    *
    * @param ownerAddress the current caller
    * @param contractAddress smart contract address
@@ -2007,39 +2059,6 @@ public class ApiWrapper implements Api {
     builder.setFeeLimit(feeLimit);
     Transaction signedTxn = signTransaction(builder.build());
     return broadcastTransaction(signedTxn);
-  }
-
-  /**
-   * make a constant call - no broadcasting.
-   *
-   * @param ownerAddress the current caller.
-   * @param contractAddress smart contract address.
-   * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
-   * @return TransactionExtention.
-   */
-  @Override
-  public TransactionExtention constantCallV2(String ownerAddress, String contractAddress,
-      String callData) {
-    return callWithoutBroadcastV2(ownerAddress, contractAddress, callData);
-  }
-
-  /**
-   * make a constant call - no broadcasting.
-   *
-   * @param ownerAddress the current caller.
-   * @param contractAddress smart contract address.
-   * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
-   * @param callValue callValue
-   * @param tokenValue token Value
-   * @param tokenId token10 ID
-   * @
-   * @return TransactionExtention.
-   */
-  @Override
-  public TransactionExtention constantCallV2(String ownerAddress, String contractAddress,
-      String callData, long callValue, long tokenValue, String tokenId) {
-    return callWithoutBroadcastV2(ownerAddress, contractAddress, callData, callValue, tokenValue,
-        tokenId);
   }
 
   /**
@@ -2336,68 +2355,9 @@ public class ApiWrapper implements Api {
     return blockingStub.estimateEnergy(trigger);
   }
 
-  /**
-   * make a trigger call. Trigger call consumes energy and bandwidth.
-   *
-   * @param ownerAddress the current caller
-   * @param contractAddress smart contract address
-   * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
-   * @return transaction builder. TransactionExtention detail.
-   */
-  @Override
-  public TransactionBuilder triggerCallV2(String ownerAddress, String contractAddress,
-      String callData) {
 
-    TransactionExtention txnExt = callWithoutBroadcastV2(ownerAddress, contractAddress, callData);
 
-    return new TransactionBuilder(txnExt.getTransaction());
-  }
 
-  /**
-   * make a trigger call. Trigger call consumes energy and bandwidth.
-   *
-   * @param ownerAddress the current caller
-   * @param contractAddress smart contract address
-   * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
-   * @param callValue callValue
-   * @param tokenValue tokenValue
-   * @param tokenId empty or integer
-   * @param feeLimit max fee allowed
-   * @return transaction builder. TransactionExtention detail.
-   */
-  @Override
-  public TransactionBuilder triggerCallV2(String ownerAddress, String contractAddress,
-      String callData,
-      long callValue, long tokenValue, String tokenId, long feeLimit) {
-    TriggerSmartContract trigger = buildTrigger(ownerAddress, contractAddress, callData, callValue,
-        tokenValue, tokenId);
-    TransactionExtention txnExt = blockingStub.triggerConstantContract(trigger);
-    TransactionBuilder builder = new TransactionBuilder(txnExt.getTransaction());
-    builder.setFeeLimit(feeLimit);
-    return builder;
-  }
-
-  /**
-   * call function without signature and broadcasting
-   *
-   * @param ownerAddress the caller
-   * @param contractAddress the contract address
-   * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
-   * @return TransactionExtention
-   */
-  private TransactionExtention callWithoutBroadcastV2(String ownerAddress, String contractAddress,
-      String callData) {
-    TriggerSmartContract trigger =
-        buildTrigger(ownerAddress, contractAddress, callData, 0L, 0L, null);
-    return blockingStub.triggerConstantContract(trigger);
-  }
-
-  private TransactionExtention callWithoutBroadcastV2(String ownerAddress, String contractAddress,
-      String callData, long callValue, long tokenValue, String tokenId) {
-    TriggerSmartContract trigger = buildTrigger(ownerAddress, contractAddress, callData, callValue,
-        tokenValue, tokenId);
-    return blockingStub.triggerConstantContract(trigger);
-  }
 
   private TriggerSmartContract buildTrigger(String ownerAddress, String contractAddress,
       String callData, long callValue, long tokenValue, String tokenId) {
