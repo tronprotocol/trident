@@ -848,7 +848,7 @@ public class ApiWrapper implements Api {
 
   /**
    * Stake2.0 API
-   * query the withdrawable balance at the specified timestamp
+   * query the withdrawable balance at the latest block timestamp
    *
    * @param ownerAddress owner address
    */
@@ -859,8 +859,31 @@ public class ApiWrapper implements Api {
         GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage.newBuilder()
             .setOwnerAddress(rawOwner)
             .build();
-    GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage responseMessage = blockingStub.getCanWithdrawUnfreezeAmount(
+    GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage responseMessage =
+        blockingStub.getCanWithdrawUnfreezeAmount(
         getAvailableUnfreezeCountRequestMessage);
+
+    return responseMessage.getAmount();
+  }
+
+  /**
+   * Stake2.0 API
+   * query the withdrawable balance at the specified timestamp
+   *
+   * @param ownerAddress owner address
+   * @param timestamp specified timestamp, milliseconds
+   */
+  @Override
+  public long getCanWithdrawUnfreezeAmount(String ownerAddress, long timestamp) {
+    ByteString rawOwner = parseAddress(ownerAddress);
+    GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage getAvailableUnfreezeCountRequestMessage =
+        GrpcAPI.CanWithdrawUnfreezeAmountRequestMessage.newBuilder()
+            .setOwnerAddress(rawOwner)
+            .setTimestamp(timestamp)
+            .build();
+    GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage responseMessage =
+        blockingStub.getCanWithdrawUnfreezeAmount(
+            getAvailableUnfreezeCountRequestMessage);
 
     return responseMessage.getAmount();
   }

@@ -40,7 +40,8 @@ import org.tron.trident.proto.Response.SmartContractDataWrapper;
 import org.tron.trident.proto.Response.TransactionExtention;
 import org.tron.trident.proto.Response.TransactionReturn;
 
-class ApiWrapperTest extends BaseTest{
+class ApiWrapperTest extends BaseTest {
+
   @Test
   void testGetNowBlockQuery() {
     BlockExtention block = client.blockingStub.getNowBlock2(EmptyMessage.newBuilder().build());
@@ -244,4 +245,11 @@ class ApiWrapperTest extends BaseTest{
     System.out.println("default: " + bytesToHex(defaultEndian));
   }
 
+  @Test
+  public void testGetCanWithdrawUnfreezeAmount() {
+    long amount1 = client.getCanWithdrawUnfreezeAmount(testAddress);
+    long amount2 = client.getCanWithdrawUnfreezeAmount(testAddress, 1736935059000L);
+    System.out.println("latest amount: " + amount1);
+    System.out.println("specified amount: " + amount2);
+  }
 }

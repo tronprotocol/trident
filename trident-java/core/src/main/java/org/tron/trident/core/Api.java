@@ -104,6 +104,8 @@ public interface Api {
 
   long getCanWithdrawUnfreezeAmount(String ownerAddress);
 
+  long getCanWithdrawUnfreezeAmount(String ownerAddress, long timestamp);
+
   long getCanDelegatedMaxSize(String ownerAddress, int type);
 
   DelegatedResourceList getDelegatedResourceV2(String fromAddress, String toAddress);
