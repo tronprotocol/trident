@@ -3,7 +3,6 @@ package org.tron.trident.core.utils;
 import com.google.protobuf.Any;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -125,13 +124,8 @@ public class Utils {
       }
       String libraryName = cur.substring(0, lastPosition);
       String address = cur.substring(lastPosition + 1);
-      String libraryAddressHex;
-      try {
-        libraryAddressHex = (new String(Hex.encode(decodeFromBase58Check(address)),
-            "US-ASCII")).substring(2);
-      } catch (UnsupportedEncodingException e) {
-        throw new RuntimeException(e); // now ignore
-      }
+      byte[] addressBytes = decodeFromBase58Check(address);
+      String libraryAddressHex = ByteArray.toHexString(addressBytes).substring(2);
 
       String beReplaced;
       if (compilerVersion == null) {
@@ -144,7 +138,7 @@ public class Utils {
         // 0.5.4 version
         String libraryNameKeccak256 =
             ByteArray.toHexString(
-                    Hash.sha3(ByteArray.fromString(libraryName)))
+                    Hash.sha3(libraryName.getBytes()))
                 .substring(0, 34);
         beReplaced = "__\\$" + libraryNameKeccak256 + "\\$__";
       } else {
@@ -155,6 +149,6 @@ public class Utils {
       code = m.replaceAll(libraryAddressHex);
     }
 
-    return Hex.decode(code);
+    return ByteArray.fromHexString(code);
   }
 }

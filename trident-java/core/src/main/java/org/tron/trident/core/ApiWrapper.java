@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 import org.bouncycastle.jcajce.provider.digest.SHA256;
-import org.bouncycastle.util.encoders.Hex;
 import org.tron.trident.abi.FunctionEncoder;
 import org.tron.trident.abi.datatypes.Function;
 import org.tron.trident.abi.datatypes.Type;
@@ -300,16 +299,8 @@ public class ApiWrapper implements Api {
     byte[] raw;
     if (address.startsWith("T")) {
       raw = Base58Check.base58ToBytes(address);
-    } else if (address.startsWith("41")) {
-      raw = Hex.decode(address);
-    } else if (address.startsWith("0x")) {
-      raw = Hex.decode(address.substring(2));
     } else {
-      try {
-        raw = Hex.decode(address);
-      } catch (Exception e) {
-        throw new IllegalArgumentException("Invalid address: " + address);
-      }
+      raw = ByteArray.fromHexString(address);
     }
     return ByteString.copyFrom(raw);
   }
@@ -325,11 +316,11 @@ public class ApiWrapper implements Api {
   }
 
   public static String toHex(byte[] raw) {
-    return Hex.toHexString(raw);
+    return ByteArray.toHexString(raw);
   }
 
   public static String toHex(ByteString raw) {
-    return Hex.toHexString(raw.toByteArray());
+    return toHex(raw.toByteArray());
   }
 
   @Override
@@ -503,8 +494,8 @@ public class ApiWrapper implements Api {
       String message = resolveResultCode(ret.getCodeValue()) + ", " + ret.getMessage();
       throw new RuntimeException(message);
     } else {
-      byte[] txid = calculateTransactionHash(txn);
-      return ByteString.copyFrom(Hex.encode(txid)).toStringUtf8();
+      byte[] txId = calculateTransactionHash(txn);
+      return ByteArray.toHexString(txId);
     }
   }
 

@@ -136,20 +136,4 @@ public class ByteArray {
     return bRet;
   }
 
-
-  public static byte[] fromString(String str) {
-    if (str == null) {
-      return null;
-    }
-
-    return str.getBytes();
-  }
-
-  public static String toStr(byte[] byteArray) {
-    if (byteArray == null) {
-      return null;
-    }
-
-    return new String(byteArray);
-  }
 }
