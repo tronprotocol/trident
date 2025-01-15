@@ -1892,7 +1892,9 @@ public class ApiWrapper implements Api {
    * @param contractAddress smart contract address.
    * @param function contract function.
    * @return TransactionExtention.
+   * @deprecated Use {@link #triggerConstantContract} instead.
    */
+  @Deprecated
   @Override
   public TransactionExtention constantCall(String ownerAddress, String contractAddress,
       Function function) {
@@ -1903,13 +1905,16 @@ public class ApiWrapper implements Api {
   }
 
   /**
+   *
    * make a constant call - no broadcasting, no need to broadcast
    *
    * @param ownerAddress the current caller.
    * @param contractAddress smart contract address.
    * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
    * @return TransactionExtention.
+   * @deprecated Use {@link #triggerConstantContract} instead.
    */
+  @Deprecated
   @Override
   public TransactionExtention constantCallV2(String ownerAddress, String contractAddress,
       String callData) {
@@ -1930,7 +1935,7 @@ public class ApiWrapper implements Api {
    * @return TransactionExtention.
    */
   @Override
-  public TransactionExtention constantCallV2(String ownerAddress, String contractAddress,
+  public TransactionExtention triggerConstantContract(String ownerAddress, String contractAddress,
       String callData, long callValue, long tokenValue, String tokenId) {
     TriggerSmartContract trigger = buildTrigger(ownerAddress, contractAddress, callData, callValue,
         tokenValue, tokenId);
@@ -1944,7 +1949,9 @@ public class ApiWrapper implements Api {
    * @param contractAddress smart contract address
    * @param function contract function
    * @return transaction builder. Users may set other fields, e.g. feeLimit
+   * @deprecated Use {@link #triggerConstantContract} instead.
    */
+  @Deprecated
   @Override
   public TransactionBuilder triggerCall(String ownerAddress, String contractAddress,
       Function function) {
@@ -1959,7 +1966,9 @@ public class ApiWrapper implements Api {
    * @param contractAddress smart contract address
    * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
    * @return transaction builder. TransactionExtention detail.
+   * @deprecated Use {@link #triggerConstantContract} instead.
    */
+  @Deprecated
   @Override
   public TransactionBuilder triggerCallV2(String ownerAddress, String contractAddress,
       String callData) {
@@ -1983,7 +1992,7 @@ public class ApiWrapper implements Api {
    * @return transaction builder. TransactionExtention detail.
    */
   @Override
-  public TransactionBuilder triggerCallV2(String ownerAddress, String contractAddress,
+  public TransactionBuilder triggerConstantContract(String ownerAddress, String contractAddress,
       String callData,
       long callValue, long tokenValue, String tokenId, long feeLimit) {
     TriggerSmartContract trigger = buildTrigger(ownerAddress, contractAddress, callData, callValue,
@@ -2354,11 +2363,7 @@ public class ApiWrapper implements Api {
         tokenValue, tokenId);
     return blockingStub.estimateEnergy(trigger);
   }
-
-
-
-
-
+  
   private TriggerSmartContract buildTrigger(String ownerAddress, String contractAddress,
       String callData, long callValue, long tokenValue, String tokenId) {
     TriggerSmartContract.Builder builder =

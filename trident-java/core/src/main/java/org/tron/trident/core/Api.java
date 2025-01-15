@@ -278,12 +278,12 @@ public interface Api {
 
   TransactionBuilder triggerCallV2(String ownerAddress, String contractAddress, String callData);
 
-  TransactionBuilder triggerCallV2(String ownerAddress, String contractAddress, String callData,
+  TransactionBuilder triggerConstantContract(String ownerAddress, String contractAddress, String callData,
       long callValue, long tokenValue, String tokenId, long feeLimit);
 
   TransactionExtention constantCallV2(String ownerAddress, String contractAddress, String callData);
 
-  TransactionExtention constantCallV2(String ownerAddress, String contractAddress, String callData,
+  TransactionExtention triggerConstantContract(String ownerAddress, String contractAddress, String callData,
       long callValue, long tokenValue, String tokenId);
 
   Response.PricesResponseMessage getBandwidthPrices();
