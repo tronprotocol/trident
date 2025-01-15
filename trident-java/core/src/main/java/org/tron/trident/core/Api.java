@@ -240,6 +240,9 @@ public interface Api {
   TransactionExtention triggerContract(String ownerAddress, String contractAddress,
       Function function);
 
+  TransactionExtention triggerContract(String ownerAddress, String contractAddress,
+      Function function, long callValue, long tokenValue, String tokenId);
+
   String triggerContractWithBroadcast(String ownerAddress, String contractAddress,
       Function function, long callValue, long feeLimit);
 
