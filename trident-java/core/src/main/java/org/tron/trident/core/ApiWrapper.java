@@ -2405,8 +2405,10 @@ public class ApiWrapper implements Api {
         TriggerSmartContract.newBuilder()
             .setOwnerAddress(parseAddress(ownerAddress))
             .setContractAddress(parseAddress(contractAddress))
-            .setData(ByteString.copyFrom(ByteArray.fromHexString(callData)))
-            .setCallValue(callValue);
+            .setData(ByteString.copyFrom(ByteArray.fromHexString(callData)));
+    if (callValue > 0){
+      builder.setCallValue(callValue);
+    }
     if (tokenId != null && !tokenId.isEmpty()) {
       builder.setCallTokenValue(tokenValue);
       builder.setTokenId(Long.parseLong(tokenId));
