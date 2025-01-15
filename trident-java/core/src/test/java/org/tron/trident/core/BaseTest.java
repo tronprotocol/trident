@@ -13,7 +13,7 @@ public class BaseTest {
   protected static final String CONFIG_FILE = "application-test.properties";
   protected static ApiWrapper client;
   protected static Properties properties;
-  protected String testAddress = "TEPRbQxXQEpHpeEx8tK5xHVs7NWudAAZgu";
+  protected static String testAddress;
 
   @BeforeAll
   static void setUp() {
@@ -22,6 +22,7 @@ public class BaseTest {
       properties = loadConfig();
       String privateKey = properties.getProperty("tron.private-key");
       client = ApiWrapper.ofNile(privateKey);
+      testAddress = client.keyPair.toBase58CheckAddress();
 
     } catch (IOException e) {
       throw new RuntimeException("load config failed", e);

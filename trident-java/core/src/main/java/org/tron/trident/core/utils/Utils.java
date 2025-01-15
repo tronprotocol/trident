@@ -3,12 +3,16 @@ package org.tron.trident.core.utils;
 import com.google.protobuf.Any;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.bouncycastle.util.encoders.Hex;
 import org.tron.trident.abi.TypeEncoder;
 import org.tron.trident.abi.datatypes.Type;
 import org.tron.trident.core.exceptions.ContractCreateException;
 import org.tron.trident.core.transaction.BlockId;
+import org.tron.trident.crypto.Hash;
 import org.tron.trident.proto.Chain;
 import org.tron.trident.proto.Contract;
 import org.tron.trident.proto.Response;
@@ -109,4 +113,48 @@ public class Utils {
     return ByteString.copyFrom(Hex.decode(builder.toString()));
   }
 
+  public static byte[] replaceLibraryAddress(String code, String libraryAddressPair,
+      String compilerVersion) {
+
+    String[] libraryAddressList = libraryAddressPair.split("[,]");
+
+    for (String cur : libraryAddressList) {
+      int lastPosition = cur.lastIndexOf(":");
+      if (-1 == lastPosition) {
+        throw new RuntimeException("libraryAddress delimit by ':'");
+      }
+      String libraryName = cur.substring(0, lastPosition);
+      String address = cur.substring(lastPosition + 1);
+      String libraryAddressHex;
+      try {
+        libraryAddressHex = (new String(Hex.encode(decodeFromBase58Check(address)),
+            "US-ASCII")).substring(2);
+      } catch (UnsupportedEncodingException e) {
+        throw new RuntimeException(e); // now ignore
+      }
+
+      String beReplaced;
+      if (compilerVersion == null) {
+        // old version
+        String repeated = new String(
+            new char[40 - libraryName.length() - 2])
+            .replace("\0", "_");
+        beReplaced = "__" + libraryName + repeated;
+      } else if (compilerVersion.equalsIgnoreCase("v5")) {
+        // 0.5.4 version
+        String libraryNameKeccak256 =
+            ByteArray.toHexString(
+                    Hash.sha3(ByteArray.fromString(libraryName)))
+                .substring(0, 34);
+        beReplaced = "__\\$" + libraryNameKeccak256 + "\\$__";
+      } else {
+        throw new RuntimeException("unknown compiler version.");
+      }
+
+      Matcher m = Pattern.compile(beReplaced).matcher(code);
+      code = m.replaceAll(libraryAddressHex);
+    }
+
+    return Hex.decode(code);
+  }
 }

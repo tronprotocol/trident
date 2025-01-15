@@ -1,6 +1,5 @@
 package org.tron.trident.core;
 
-import static org.tron.trident.core.utils.Utils.decodeFromBase58Check;
 import static org.tron.trident.core.utils.Utils.encodeParameter;
 
 import com.google.protobuf.ByteString;
@@ -10,15 +9,11 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.Metadata;
 import io.grpc.stub.MetadataUtils;
-import java.io.UnsupportedEncodingException;
-import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.bouncycastle.jcajce.provider.digest.SHA256;
 import org.bouncycastle.util.encoders.Hex;
 import org.tron.trident.abi.FunctionEncoder;
@@ -44,7 +39,6 @@ import org.tron.trident.core.transaction.TransactionCapsule;
 import org.tron.trident.core.utils.ByteArray;
 import org.tron.trident.core.utils.Sha256Hash;
 import org.tron.trident.core.utils.Utils;
-import org.tron.trident.crypto.Hash;
 import org.tron.trident.proto.Chain.Block;
 import org.tron.trident.proto.Chain.Transaction;
 import org.tron.trident.proto.Chain.Transaction.Contract.ContractType;
@@ -1429,11 +1423,11 @@ public class ApiWrapper implements Api {
 
     ParticipateAssetIssueContract participateAssetIssueContract =
         ParticipateAssetIssueContract.newBuilder()
-        .setToAddress(bsTo)
-        .setAssetName(bsName)
-        .setOwnerAddress(bsOwner)
-        .setAmount(amount)
-        .build();
+            .setToAddress(bsTo)
+            .setAssetName(bsName)
+            .setOwnerAddress(bsOwner)
+            .setAmount(amount)
+            .build();
 
     return createTransactionExtention(participateAssetIssueContract,
         Transaction.Contract.ContractType.ParticipateAssetIssueContract);
@@ -1458,7 +1452,7 @@ public class ApiWrapper implements Api {
    */
   //1-17
   @Override
-  public Proposal getProposalById(String id){
+  public Proposal getProposalById(String id) {
     ByteString bsTxId = ByteString.copyFrom(
         ByteArray.fromLong(Long.parseLong(id)));
 
@@ -1543,7 +1537,7 @@ public class ApiWrapper implements Api {
         totalSupply, trxNum, icoNum, startTime, endTime, url, freeAssetNetLimit,
         publicFreeAssetNetLimit, precision, description);
 
-    for (Entry<String, String> entry: frozenSupply.entrySet()) {
+    for (Entry<String, String> entry : frozenSupply.entrySet()) {
       String daysStr = entry.getKey();
       String amountStr = entry.getValue();
       long amount = Long.parseLong(amountStr);
@@ -2258,7 +2252,7 @@ public class ApiWrapper implements Api {
   /**
    * Estimate the energy required for the successful execution of smart contract transactions
    * This API is closed by default in tron node.
-   * To open this interface, the two coniguration items vm.estimateEnergy and vm.supportConstant 
+   * To open this interface, the two coniguration items vm.estimateEnergy and vm.supportConstant
    * must be enabled in the node configuration file at the same time.
    *
    * @param ownerAddress Owner address that triggers the contract. If visible=true, use base58check format, otherwise use hex format.
@@ -2285,8 +2279,8 @@ public class ApiWrapper implements Api {
 
   /**
    * Estimate the energy required for the successful execution of smart contract transactions
-   * This API is closed by default in tron node. To open this interface, the two configuration 
-   * items vm.estimateEnergy and vm.supportConstant must be enabled in the node configuration file 
+   * This API is closed by default in tron node. To open this interface, the two configuration
+   * items vm.estimateEnergy and vm.supportConstant must be enabled in the node configuration file
    * at the same time.
    *
    * @param ownerAddress Owner address that triggers the contract. If visible=true, use base58check
@@ -2434,8 +2428,8 @@ public class ApiWrapper implements Api {
    * @param callValue callValue
    * @param tokenValue token Value
    * @param tokenId token10 ID
-   * @
    * @return TransactionExtention.
+   * @
    */
   @Override
   public TransactionExtention constantCallV2(String ownerAddress, String contractAddress,
@@ -2834,6 +2828,7 @@ public class ApiWrapper implements Api {
 
   /**
    * create MarketSellAssetContract with parameters
+   *
    * @param ownerAddress owner address
    * @param sellTokenId sell token Id, all digit is 0~9
    * @param sellTokenQuantity sell token quantity
@@ -2858,6 +2853,7 @@ public class ApiWrapper implements Api {
 
   /**
    * create UpdateEnergyLimitContract with parameters
+   *
    * @param ownerAddress owner address
    * @param contractAddress contract address
    * @param originEnergyLimit origin energy limit, must be >=0
@@ -2879,9 +2875,10 @@ public class ApiWrapper implements Api {
 
   /**
    * create UpdateSettingContract with parameters
+   *
    * @param ownerAddress owner address
    * @param contractAddress contract address
-   * @param consumeUserResourcePercent  consume user resource percent if user trigger this contract, must be [0,100]
+   * @param consumeUserResourcePercent consume user resource percent if user trigger this contract, must be [0,100]
    * @return UpdateSettingContract
    */
   @Override
@@ -2899,7 +2896,6 @@ public class ApiWrapper implements Api {
   }
 
   /**
-   *
    * @param contractName contractName
    * @param address ownerAddress
    * @param ABI abiString
@@ -2913,96 +2909,50 @@ public class ApiWrapper implements Api {
    * @throws Exception exception
    */
   @Override
-  public CreateSmartContract createSmartContract(
-      String contractName,
-      String address,
-      String ABI,
-      String code,
-      long value,
-      long consumeUserResourcePercent,
-      long originEnergyLimit,
-      long tokenValue,
-      String tokenId) throws Exception {
+  public CreateSmartContract createSmartContract(String contractName, String address, String ABI,
+      String code, long value, long consumeUserResourcePercent, long originEnergyLimit,
+      long tokenValue, String tokenId) throws Exception {
 
     //abi
     SmartContract.ABI.Builder abiBuilder = SmartContract.ABI.newBuilder();
     Contract.loadAbiFromJson(ABI, abiBuilder);
     SmartContract.ABI abi = abiBuilder.build();
 
-    SmartContract.Builder builder = SmartContract.newBuilder();
-    builder.setName(contractName);
-    builder.setOriginAddress(parseAddress(address));
-    builder.setAbi(abi);
-    builder
+    SmartContract.Builder builder = SmartContract.newBuilder()
+        .setName(contractName)
+        .setOriginAddress(parseAddress(address))
+        .setAbi(abi)
         .setConsumeUserResourcePercent(consumeUserResourcePercent)
         .setOriginEnergyLimit(originEnergyLimit);
-
     if (value != 0) {
-
       builder.setCallValue(value);
     }
-//    byte[] byteCode = code.getBytes();
-//    if (null != libraryAddressPair) {
-//      byteCode = replaceLibraryAddress(code, libraryAddressPair, compilerVersion);
-//    } else {
-//      byteCode = Hex.decode(code);
-//    }
 
     builder.setBytecode(parseHex(code));
-    CreateSmartContract.Builder createSmartContractBuilder = CreateSmartContract.newBuilder();
-    createSmartContractBuilder
+    CreateSmartContract.Builder createSmartContractBuilder = CreateSmartContract.newBuilder()
         .setOwnerAddress(parseAddress(address))
         .setNewContract(builder.build());
     if (tokenId != null && !tokenId.equalsIgnoreCase("") && !tokenId.equalsIgnoreCase("#")) {
-      createSmartContractBuilder.setCallTokenValue(tokenValue).setTokenId(Long.parseLong(tokenId));
+      createSmartContractBuilder.setCallTokenValue(tokenValue)
+          .setTokenId(Long.parseLong(tokenId));
     }
     return createSmartContractBuilder.build();
   }
 
-  private static byte[] replaceLibraryAddress(String code, String libraryAddressPair,
-      String compilerVersion) {
+  @Override
+  public CreateSmartContract createSmartContract(String contractName, String address, String ABI,
+      String code, long value, long consumeUserResourcePercent, long originEnergyLimit,
+      long tokenValue, String tokenId, String libraryAddressPair, String compilerVersion)
+      throws Exception {
 
-    String[] libraryAddressList = libraryAddressPair.split("[,]");
-
-    for (String cur : libraryAddressList) {
-      int lastPosition = cur.lastIndexOf(":");
-      if (-1 == lastPosition) {
-        throw new RuntimeException("libraryAddress delimit by ':'");
-      }
-      String libraryName = cur.substring(0, lastPosition);
-      String addr = cur.substring(lastPosition + 1);
-      String libraryAddressHex;
-      try {
-        libraryAddressHex = (new String(Hex.encode(decodeFromBase58Check(addr)),
-            "US-ASCII")).substring(2);
-      } catch (UnsupportedEncodingException e) {
-        throw new RuntimeException(e); // now ignore
-      }
-
-      String beReplaced;
-      if (compilerVersion == null) {
-        // old version
-        String repeated = new String(
-            new char[40 - libraryName.length() - 2])
-            .replace("\0", "_");
-        beReplaced = "__" + libraryName + repeated;
-      } else if (compilerVersion.equalsIgnoreCase("v5")) {
-        // 0.5.4 version
-        String libraryNameKeccak256 =
-            ByteArray.toHexString(
-                    Hash.sha3(ByteArray.fromString(libraryName)))
-                .substring(0, 34);
-        beReplaced = "__\\$" + libraryNameKeccak256 + "\\$__";
-      } else {
-        throw new RuntimeException("unknown compiler version.");
-      }
-
-      Matcher m = Pattern.compile(beReplaced).matcher(code);
-      code = m.replaceAll(libraryAddressHex);
+    if (null != libraryAddressPair) {
+      byte[] byteCode = Utils.replaceLibraryAddress(code, libraryAddressPair, compilerVersion);
+      code = ByteArray.toHexString(byteCode);
     }
-
-    return Hex.decode(code);
+    return createSmartContract(contractName, address, ABI, code, value, consumeUserResourcePercent,
+        originEnergyLimit, tokenValue, tokenId);
   }
+
   /**
    * Deploy a smart contract
    *
@@ -3016,18 +2966,20 @@ public class ApiWrapper implements Api {
    * @return String txn
    */
   @Override
-  public String deployContract(String contractName, String abiStr, String bytecode, List<Type<?>> constructorParams,
+  public String deployContract(String contractName, String abiStr, String bytecode,
+      List<Type<?>> constructorParams,
       long feeLimit, long consumeUserResourcePercent, long originEnergyLimit, long callValue)
       throws Exception {
 
-    if (constructorParams != null && !constructorParams.isEmpty()){
+    if (constructorParams != null && !constructorParams.isEmpty()) {
       ByteString constructorParamsByteString = encodeParameter(constructorParams);
       ByteString newByteCode = parseHex(bytecode).concat(constructorParamsByteString);
       bytecode = ByteArray.toHexString(newByteCode.toByteArray());
     }
     System.out.println(bytecode);
     CreateSmartContract createSmartContract = createSmartContract(
-        contractName, keyPair.toBase58CheckAddress(), abiStr, bytecode, callValue, consumeUserResourcePercent, originEnergyLimit, 0, null);
+        contractName, keyPair.toBase58CheckAddress(), abiStr, bytecode, callValue,
+        consumeUserResourcePercent, originEnergyLimit, 0, null);
 
     TransactionBuilder txBuilder = new TransactionBuilder(
         blockingStub.deployContract(createSmartContract).getTransaction());
