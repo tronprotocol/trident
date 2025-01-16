@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.bouncycastle.util.encoders.Hex;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.tron.trident.abi.FunctionEncoder;
 import org.tron.trident.abi.TypeReference;
@@ -40,6 +41,7 @@ import org.tron.trident.proto.Response.SmartContractDataWrapper;
 import org.tron.trident.proto.Response.TransactionExtention;
 import org.tron.trident.proto.Response.TransactionReturn;
 
+@Disabled("add private key to enable this case")
 class ApiWrapperTest extends BaseTest {
 
   @Test
@@ -106,6 +108,9 @@ class ApiWrapperTest extends BaseTest {
     assertEquals(1, blockExtention.getTransactionsList().size());
 
     blockExtention = client.getBlock("53506161", false);
+    assertEquals(0, blockExtention.getTransactionsList().size());
+
+    blockExtention = client.getBlock();
     assertEquals(0, blockExtention.getTransactionsList().size());
   }
 

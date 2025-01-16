@@ -307,6 +307,8 @@ public interface Api {
 
   BlockExtention getBlock(String blockIDOrNum, boolean detail);
 
+  BlockExtention getBlock();
+
   Block getBlockByIdOrNum(String blockIDOrNum);
 
   SmartContractDataWrapper getContractInfo(String contractAddr);

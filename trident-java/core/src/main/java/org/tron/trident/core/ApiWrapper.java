@@ -2009,9 +2009,9 @@ public class ApiWrapper implements Api {
    * @param ownerAddress the current caller
    * @param contractAddress smart contract address
    * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
-   * @param callValue callValue
-   * @param tokenValue tokenValue
-   * @param tokenId empty or integer
+   * @param callValue TRX value
+   * @param tokenValue token value of token10
+   * @param tokenId empty or token10 ID
    * @param feeLimit max fee allowed
    * @return transaction builder. TransactionExtention detail.
    */
@@ -2387,7 +2387,10 @@ public class ApiWrapper implements Api {
         tokenValue, tokenId);
     return blockingStub.estimateEnergy(trigger);
   }
-  
+
+  /**
+   * construct TriggerSmartContract
+   */
   private TriggerSmartContract buildTrigger(String ownerAddress, String contractAddress,
       String callData, long callValue, long tokenValue, String tokenId) {
     TriggerSmartContract.Builder builder =
@@ -2535,7 +2538,7 @@ public class ApiWrapper implements Api {
    * get block of one specified block
    *
    * @param blockIDOrNum block Id or block num
-   * @param detail contains detail? if false, no transactions are contained.
+   * @param detail if false, no transactions are contained.
    * @return BlockExtention
    */
   @Override
@@ -2543,6 +2546,17 @@ public class ApiWrapper implements Api {
     BlockReq blockReq = BlockReq.newBuilder()
         .setIdOrNum(blockIDOrNum)
         .setDetail(detail)
+        .build();
+    return blockingStub.getBlock(blockReq);
+  }
+
+  /**
+   * get latest block header, no transactions are contained.
+   */
+  @Override
+  public BlockExtention getBlock() {
+    BlockReq blockReq = BlockReq.newBuilder()
+        .setDetail(false)
         .build();
     return blockingStub.getBlock(blockReq);
   }
@@ -2573,12 +2587,12 @@ public class ApiWrapper implements Api {
   /**
    * getContractInfo
    *
-   * @param contractAddr contract address
+   * @param contractAddress contract address
    * @return SmartContractDataWrapper
    */
   @Override
-  public SmartContractDataWrapper getContractInfo(String contractAddr) {
-    ByteString rawAddress = parseAddress(contractAddr);
+  public SmartContractDataWrapper getContractInfo(String contractAddress) {
+    ByteString rawAddress = parseAddress(contractAddress);
     BytesMessage param =
         BytesMessage.newBuilder()
             .setValue(rawAddress)
