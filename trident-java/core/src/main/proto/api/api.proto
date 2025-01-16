@@ -93,7 +93,7 @@ service Wallet {
 
   rpc GetChainParameters(EmptyMessage) returns (ChainParameters) {}
   // java-tron return default 0
-//  rpc TotalTransaction(EmptyMessage) returns (NumberMessage) {}
+  rpc TotalTransaction(EmptyMessage) returns (NumberMessage) {}
   rpc GetNextMaintenanceTime(EmptyMessage) returns (NumberMessage) {}
 
   rpc GetTransactionSignWeight(Transaction) returns (TransactionSignWeight) {}
