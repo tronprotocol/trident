@@ -2,17 +2,41 @@ plugins {
     id 'java-library'
 }
 
+def VERSION = '0.9.2'
+
 ext {
     bouncycastleVersion = '1.69'
     junitJupiterVersion = '5.4.2'
 }
 
+
 allprojects {
-    version '0.9.2'
+    version = VERSION
     group = 'org.tron.trident'
 
     repositories {
         mavenCentral()
+    }
+
+    tasks.withType(Javadoc) {
+        options.encoding = 'UTF-8'
+        options.charSet = 'UTF-8'
+        options.addStringOption('Xdoclint:none', '-quiet')
+
+        options {
+            tags = [
+                    'apiNote:a:API Note:',
+                    'implSpec:a:Implementation Requirements:',
+                    'implNote:a:Implementation Note:'
+            ]
+        }
+
+        exclude '**/internal/**'
+        exclude '**/impl/**'
+        failOnError = false
+
+        logging.captureStandardError LogLevel.INFO
+        logging.captureStandardOutput LogLevel.INFO
     }
 }
 
@@ -20,6 +44,10 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
     apply plugin: 'maven-publish'
+
+    tasks.withType(Jar) {
+        destinationDirectory = rootProject.file("build/libs")
+    }
 
     java {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -57,3 +85,56 @@ subprojects {
     }
 }
 
+def jarTasks = [
+        fatJar: tasks.register('fatJar', Jar) {
+            archiveBaseName = 'trident'
+            archiveVersion = VERSION
+            duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+            dependsOn subprojects.collect { project ->
+                project.tasks.withType(Jar)
+            }
+
+            from {
+                subprojects.collect { project ->
+                    project.sourceSets.main.output
+                }
+            }
+
+            from {
+                subprojects.collect { project ->
+                    project.configurations.runtimeClasspath.collect {
+                        it.isDirectory() ? it : zipTree(it)
+                    }
+                }
+            }
+
+        }
+]
+
+javadoc {
+    source subprojects.collect { project ->
+        project.sourceSets.main.allJava
+    }
+    classpath = files(subprojects.collect { project ->
+        project.sourceSets.main.compileClasspath
+    })
+}
+
+task javadocJar(type: Jar) {
+    archiveClassifier = 'javadoc'
+    archiveVersion = VERSION
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    archiveClassifier = 'sources'
+    archiveVersion = VERSION
+    from subprojects.collect { project ->
+        project.sourceSets.main.allSource
+    }
+}
+
+tasks.named('build') {
+    dependsOn fatJar, javadocJar, sourcesJar
+}
