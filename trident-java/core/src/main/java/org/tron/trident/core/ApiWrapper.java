@@ -131,7 +131,7 @@ public class ApiWrapper implements Api {
 
   public static final long TRANSACTION_DEFAULT_EXPIRATION_TIME = 60 * 1_000L; //60 seconds
 
-  public static final long GRPC_TIMEOUT = 60 * 1_000L; //30 seconds
+  public static final long GRPC_TIMEOUT = 30 * 1_000L; //30 seconds
 
   public static final long FEE_LIMIT = 150_000_000L; //150 TRX
 
@@ -492,6 +492,7 @@ public class ApiWrapper implements Api {
     TransactionReturn ret = blockingStub.broadcastTransaction(txn);
     if (!ret.getResult()) {
       String message = resolveResultCode(ret.getCodeValue()) + ", " + ret.getMessage();
+      System.out.println(message);
       throw new RuntimeException(message);
     } else {
       byte[] txId = calculateTransactionHash(txn);
