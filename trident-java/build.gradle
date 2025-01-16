@@ -8,7 +8,7 @@ ext {
 }
 
 allprojects {
-    version '0.9.1'
+    version '0.9.2'
     group = 'org.tron.trident'
 
     repositories {
