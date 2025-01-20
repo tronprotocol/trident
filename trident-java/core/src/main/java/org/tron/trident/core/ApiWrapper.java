@@ -433,51 +433,8 @@ public class ApiWrapper implements Api {
    * @return the corresponding message.
    */
   private String resolveResultCode(int code) {
-    String responseCode = "";
-    switch (code) {
-      case 0:
-        responseCode = "SUCCESS";
-        break;
-      case 1:
-        responseCode = "SIGERROR";
-        break;
-      case 2:
-        responseCode = "CONTRACT_VALIDATE_ERROR";
-        break;
-      case 3:
-        responseCode = "CONTRACT_EXE_ERROR";
-        break;
-      case 4:
-        responseCode = "BANDWITH_ERROR";
-        break;
-      case 5:
-        responseCode = "DUP_TRANSACTION_ERROR";
-        break;
-      case 6:
-        responseCode = "TAPOS_ERROR";
-        break;
-      case 7:
-        responseCode = "TOO_BIG_TRANSACTION_ERROR";
-        break;
-      case 8:
-        responseCode = "TRANSACTION_EXPIRATION_ERROR";
-        break;
-      case 9:
-        responseCode = "SERVER_BUSY";
-        break;
-      case 10:
-        responseCode = "NO_CONNECTION";
-        break;
-      case 11:
-        responseCode = "NOT_ENOUGH_EFFECTIVE_CONNECTION";
-        break;
-      case 20:
-        responseCode = "OTHER_ERROR";
-        break;
-      default:
-        responseCode = "UNKNOWN";
-    }
-    return responseCode;
+    TransactionReturn.response_code responseCode = TransactionReturn.response_code.forNumber(code);
+    return responseCode != null ? responseCode.name() : "";
   }
 
   /**

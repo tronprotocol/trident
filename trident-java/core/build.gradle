@@ -32,8 +32,15 @@ protobuf {
         }
     }
     generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                java { outputSubDir = "java" }
+            }
+        }
         all()*.plugins {
-            grpc { }
+            grpc {
+                outputSubDir = "java"
+            }
         }
     }
     generatedFilesBaseDir = "$projectDir/src"
