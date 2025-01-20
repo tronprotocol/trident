@@ -38,18 +38,24 @@ subprojects {
         }
     }
 
-    task sourcesJar(type: Jar, dependsOn: classes) {
+    tasks.register('sourcesJar', Jar) {
+        dependsOn classes
         classifier = 'sources'
         from sourceSets.main.allSource
     }
 
-    task javadocJar(type: Jar, dependsOn: javadoc) {
+    tasks.register('javadocJar', Jar) {
+        dependsOn javadoc
         classifier = 'javadoc'
         from javadoc.destinationDir
     }
 
-    task wrapper(type: Wrapper) {
+    tasks.register('wrapper', Wrapper) {
         gradleVersion = '6.6.1'
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        //options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
     }
 
     artifacts {

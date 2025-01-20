@@ -9,7 +9,6 @@ import org.tron.trident.abi.datatypes.Type;
 import org.tron.trident.core.ApiWrapper;
 import org.tron.trident.core.exceptions.ContractCreateException;
 import org.tron.trident.core.transaction.TransactionBuilder;
-import org.tron.trident.core.utils.ByteArray;
 import org.tron.trident.proto.Common.SmartContract;
 import org.tron.trident.proto.Common.SmartContract.ABI;
 import org.tron.trident.proto.Common.SmartContract.ABI.Entry;
@@ -48,7 +47,7 @@ public class Contract {
   protected ByteString trxHash = ByteString.EMPTY;
   //Current transaction owner's address, to call or trigger contract"
   protected ByteString ownerAddr = ByteString.EMPTY;
-  protected List<ContractFunction> functions = new ArrayList();
+  protected List<ContractFunction> functions = new ArrayList<>();
   //the constructor is loaded automatically from the abi, if has
   protected ContractConstructor constructor = null;
 
@@ -258,7 +257,7 @@ public class Contract {
         builder.setOwnerAddr(this.ownerAddr);
         //if has input
         if (0 != funcAbi.getInputsCount()) {
-          List params = funcAbi.getInputsList();
+          List<Param> params = funcAbi.getInputsList();
           builder.setInputParams(collectParams(params, 'p'));
           builder.setInputTypes(collectParams(params, 't'));
         }
@@ -295,7 +294,7 @@ public class Contract {
   }
 
   protected List<String> collectParams(List<Param> params, char flag) {
-    List<String> ret = new ArrayList();
+    List<String> ret = new ArrayList<>();
     switch (flag) {
       //p = param, t = type
       case 'p':

@@ -1974,8 +1974,7 @@ public class ApiWrapper implements Api {
    */
   @Override
   public TransactionBuilder triggerConstantContract(String ownerAddress, String contractAddress,
-      String callData,
-      long callValue, long tokenValue, String tokenId, long feeLimit) {
+      String callData, long callValue, long tokenValue, String tokenId, long feeLimit) {
     TriggerSmartContract trigger = buildTrigger(ownerAddress, contractAddress, callData, callValue,
         tokenValue, tokenId);
     TransactionExtention txnExt = blockingStub.triggerConstantContract(trigger);
