@@ -5,21 +5,21 @@ plugins {
 description 'Trident-Java gRPC core classes'
 
 dependencies {
-    implementation 'com.google.guava:guava:29.0-jre'
+    implementation "com.google.guava:guava:$googleGuavaVersion"
 
     implementation project(':utils')
     implementation project(':abi')
 
-    implementation 'io.grpc:grpc-netty-shaded:1.58.1'
-    implementation 'io.grpc:grpc-netty:1.58.1'
-    implementation 'io.grpc:grpc-okhttp:1.58.1'
-    implementation 'io.grpc:grpc-protobuf:1.58.1'
-    implementation 'io.grpc:grpc-stub:1.58.1'
+    implementation 'io.grpc:grpc-netty-shaded:1.60.0'
+    implementation 'io.grpc:grpc-netty:1.60.0'
+    implementation 'io.grpc:grpc-okhttp:1.60.0'
+    implementation 'io.grpc:grpc-protobuf:1.60.0'
+    implementation 'io.grpc:grpc-stub:1.60.0'
     compileOnly 'org.apache.tomcat:annotations-api:6.0.53' // necessary for Java 9+
     //json parsing
     implementation 'com.google.protobuf:protobuf-java-util:3.25.5'
 
-    implementation "org.bouncycastle:bcprov-jdk15on:$bouncycastleVersion"
+    implementation "org.bouncycastle:bcprov-jdk18on:$bouncycastleVersion"
 }
 
 protobuf {

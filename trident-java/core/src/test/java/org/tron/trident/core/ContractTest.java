@@ -48,6 +48,18 @@ class ContractTest extends BaseTest {
   }
 
   @Test
+  void testTransfer() throws InterruptedException, IllegalException {
+    TransactionExtention transactionExtention = client.transfer(testAddress, "TAB1TVw5N8g1FLcKxPD17h2A3eEpSXvMQd", 1_000_000L);
+    Transaction transaction = client.signTransaction(transactionExtention);
+    String txId = client.broadcastTransaction(transaction);
+
+    sleep(10_000L);
+
+    TransactionInfo transactionInfo = client.getTransactionInfoById(txId);
+    assertEquals(code.SUCESS, transactionInfo.getResult());
+  }
+
+  @Test
   void testDeployByContract() throws Exception {
     String abiStr = "{\"entrys\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"initTotal\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"balanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"i\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"j\",\"type\":\"uint256\"}],\"name\":\"set\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]}";
 

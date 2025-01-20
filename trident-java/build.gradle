@@ -3,8 +3,9 @@ plugins {
 }
 
 ext {
-    bouncycastleVersion = '1.69'
+    bouncycastleVersion = '1.78.1'
     junitJupiterVersion = '5.4.2'
+    googleGuavaVersion = '33.0.0-jre'
 }
 
 allprojects {
