@@ -228,8 +228,10 @@ public interface Api {
 
   Contract getContract(String contractAddress);
 
+  @Deprecated
   TransactionExtention constantCall(String ownerAddress, String contractAddress, Function function);
 
+  @Deprecated
   TransactionBuilder triggerCall(String ownerAddress, String contractAddress, Function function);
 
   TransactionExtention triggerContract(String ownerAddress, String contractAddress,
@@ -278,11 +280,13 @@ public interface Api {
   Response.EstimateEnergyMessage estimateEnergyV2(String ownerAddress, String contractAddress,
       String callData, long callValue, long tokenValue, String tokenId);
 
+  @Deprecated
   TransactionBuilder triggerCallV2(String ownerAddress, String contractAddress, String callData);
 
   TransactionBuilder triggerConstantContract(String ownerAddress, String contractAddress, String callData,
       long callValue, long tokenValue, String tokenId, long feeLimit);
 
+  @Deprecated
   TransactionExtention constantCallV2(String ownerAddress, String contractAddress, String callData);
 
   TransactionExtention triggerConstantContract(String ownerAddress, String contractAddress, String callData,
@@ -350,11 +354,11 @@ public interface Api {
       long consumeUserResourcePercent) throws IllegalException;
 
   CreateSmartContract createSmartContract(String contractName, String address, String ABI,
-      String code, long value, long consumeUserResourcePercent, long originEnergyLimit,
+      String code, long callValue, long consumeUserResourcePercent, long originEnergyLimit,
       long tokenValue, String tokenId) throws Exception;
 
   CreateSmartContract createSmartContract(String contractName, String address, String ABI,
-      String code, long value, long consumeUserResourcePercent, long originEnergyLimit,
+      String code, long callValue, long consumeUserResourcePercent, long originEnergyLimit,
       long tokenValue, String tokenId, String libraryAddressPair, String compilerVersion)
       throws Exception;
 

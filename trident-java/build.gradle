@@ -5,8 +5,9 @@ plugins {
 def VERSION = '0.9.2'
 
 ext {
-    bouncycastleVersion = '1.69'
+    bouncycastleVersion = '1.78.1'
     junitJupiterVersion = '5.4.2'
+    googleGuavaVersion = '33.0.0-jre'
 }
 
 
@@ -56,6 +57,11 @@ subprojects {
 
     dependencies {
         testImplementation "org.junit.jupiter:junit-jupiter:$junitJupiterVersion"
+
+        compileOnly 'org.projectlombok:lombok:1.18.12'
+        annotationProcessor 'org.projectlombok:lombok:1.18.12'
+        testCompileOnly 'org.projectlombok:lombok:1.18.12'
+        testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
     }
 
     test {
@@ -65,18 +71,24 @@ subprojects {
         }
     }
 
-    task sourcesJar(type: Jar, dependsOn: classes) {
+    tasks.register('sourcesJar', Jar) {
+        dependsOn classes
         classifier = 'sources'
         from sourceSets.main.allSource
     }
 
-    task javadocJar(type: Jar, dependsOn: javadoc) {
+    tasks.register('javadocJar', Jar) {
+        dependsOn javadoc
         classifier = 'javadoc'
         from javadoc.destinationDir
     }
 
-    task wrapper(type: Wrapper) {
+    tasks.register('wrapper', Wrapper) {
         gradleVersion = '6.6.1'
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        //options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
     }
 
     artifacts {

@@ -40,9 +40,7 @@ public class Utils {
       Chain.Transaction trx) {
     try {
       Any any = trx.getRawData().getContract(0).getParameter();
-      Contract.CreateSmartContract createSmartContract = any.unpack(
-          Contract.CreateSmartContract.class);
-      return createSmartContract;
+      return any.unpack(Contract.CreateSmartContract.class);
     } catch (InvalidProtocolBufferException e) {
       return null;
     }
@@ -94,7 +92,7 @@ public class Utils {
 
   public static byte[] decodeFromBase58Check(String addressBase58) {
     if (Strings.isEmpty(addressBase58)) {
-      System.out.println("Warning: Address is empty !!");
+      //System.out.println("Warning: Address is empty !!");
       return null;
     }
     byte[] address = decode58Check(addressBase58);

@@ -1,11 +1,15 @@
 package org.tron.trident.core;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.protobuf.ByteString;
 import io.grpc.ClientInterceptor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -99,7 +103,19 @@ class ApiWrapperTest extends BaseTest {
 
   @Test
   void testGenerateAddress() {
-    ApiWrapper.generateAddress();
+    KeyPair keyPair = ApiWrapper.generateAddress();
+    assertNotNull(keyPair);
+  }
+
+  @Test
+  void testResolveResultCode()
+      throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    Method method = client.getClass().getDeclaredMethod("resolveResultCode", int.class);
+    method.setAccessible(true);
+    String message = (String) method.invoke(client, 0);
+    assertEquals("SUCCESS", message);
+    message = (String) method.invoke(client, 13);
+    assertEquals("", message);
   }
 
   @Test
@@ -214,13 +230,13 @@ class ApiWrapperTest extends BaseTest {
   @Test
   void testGetProposalById() throws IllegalException {
     Proposal proposal = client.getProposalById("1");
-    String proposalAddr = "TD23EqH3ixYMYh8CMXKdHyQWjePi3KQvxV";
-    assertEquals(proposal.getProposerAddress(), ApiWrapper.parseAddress(proposalAddr));
+    String proposalAddress = "TD23EqH3ixYMYh8CMXKdHyQWjePi3KQvxV";
+    assertEquals(proposal.getProposerAddress(), ApiWrapper.parseAddress(proposalAddress));
     assertTrue(proposal.getApprovalsCount() > 0);
   }
 
   @Test
-  void testEndianness() {
+  void testEndian() {
     long number = 123456789L;
 
     // Big-Endian
@@ -234,27 +250,34 @@ class ApiWrapperTest extends BaseTest {
         .putLong(number)
         .array();
 
+    assertArrayEquals(bigEndian, defaultEndian);
+
     // Little-Endian
     byte[] littleEndian = ByteBuffer.allocate(8)
         .order(ByteOrder.LITTLE_ENDIAN)
         .putLong(number)
         .array();
 
+    assertNotEquals(bigEndian, littleEndian);
+
     byte[] wallet = ByteString.copyFrom(
         ByteArray.fromLong(number)).toByteArray();
 
+    assertArrayEquals(bigEndian, wallet);
     // print
-    System.out.println("Big-Endian: " + bytesToHex(bigEndian));
-    System.out.println("Little-Endian: " + bytesToHex(littleEndian));
-    System.out.println("wallet: " + bytesToHex(wallet));
-    System.out.println("default: " + bytesToHex(defaultEndian));
+//    System.out.println("Big-Endian: " + bytesToHex(bigEndian));
+//    System.out.println("Little-Endian: " + bytesToHex(littleEndian));
+//    System.out.println("wallet: " + bytesToHex(wallet));
+//    System.out.println("default: " + bytesToHex(defaultEndian));
   }
 
   @Test
   public void testGetCanWithdrawUnfreezeAmount() {
     long amount1 = client.getCanWithdrawUnfreezeAmount(testAddress);
     long amount2 = client.getCanWithdrawUnfreezeAmount(testAddress, 1736935059000L);
-    System.out.println("latest amount: " + amount1);
-    System.out.println("specified amount: " + amount2);
+//    System.out.println("latest amount: " + amount1);
+//    System.out.println("specified amount: " + amount2);
+    assertTrue(amount1 >= 0);
+    assertTrue(amount2 >= 0);
   }
 }

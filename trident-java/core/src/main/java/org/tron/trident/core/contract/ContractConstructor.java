@@ -14,7 +14,7 @@ public class ContractConstructor {
 
   private Entry rawConstructor;
 
-  private List paramTypes;
+  private List<String> paramTypes;
 
   private boolean payable;
 

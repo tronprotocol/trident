@@ -131,7 +131,7 @@ public class ApiWrapper implements Api {
 
   public static final long TRANSACTION_DEFAULT_EXPIRATION_TIME = 60 * 1_000L; //60 seconds
 
-  public static final long GRPC_TIMEOUT = 60 * 1_000L; //30 seconds
+  public static final long GRPC_TIMEOUT = 30 * 1_000L; //30 seconds
 
   public static final long FEE_LIMIT = 150_000_000L; //150 TRX
 
@@ -433,51 +433,8 @@ public class ApiWrapper implements Api {
    * @return the corresponding message.
    */
   private String resolveResultCode(int code) {
-    String responseCode = "";
-    switch (code) {
-      case 0:
-        responseCode = "SUCCESS";
-        break;
-      case 1:
-        responseCode = "SIGERROR";
-        break;
-      case 2:
-        responseCode = "CONTRACT_VALIDATE_ERROR";
-        break;
-      case 3:
-        responseCode = "CONTRACT_EXE_ERROR";
-        break;
-      case 4:
-        responseCode = "BANDWITH_ERROR";
-        break;
-      case 5:
-        responseCode = "DUP_TRANSACTION_ERROR";
-        break;
-      case 6:
-        responseCode = "TAPOS_ERROR";
-        break;
-      case 7:
-        responseCode = "TOO_BIG_TRANSACTION_ERROR";
-        break;
-      case 8:
-        responseCode = "TRANSACTION_EXPIRATION_ERROR";
-        break;
-      case 9:
-        responseCode = "SERVER_BUSY";
-        break;
-      case 10:
-        responseCode = "NO_CONNECTION";
-        break;
-      case 11:
-        responseCode = "NOT_ENOUGH_EFFECTIVE_CONNECTION";
-        break;
-      case 20:
-        responseCode = "OTHER_ERROR";
-        break;
-      default:
-        responseCode = "UNKNOWN";
-    }
-    return responseCode;
+    TransactionReturn.response_code responseCode = TransactionReturn.response_code.forNumber(code);
+    return responseCode != null ? responseCode.name() : "";
   }
 
   /**
@@ -492,6 +449,7 @@ public class ApiWrapper implements Api {
     TransactionReturn ret = blockingStub.broadcastTransaction(txn);
     if (!ret.getResult()) {
       String message = resolveResultCode(ret.getCodeValue()) + ", " + ret.getMessage();
+      //System.out.println(message);
       throw new RuntimeException(message);
     } else {
       byte[] txId = calculateTransactionHash(txn);
@@ -1883,11 +1841,15 @@ public class ApiWrapper implements Api {
     return new Contract.Builder()
         .setOriginAddr(smartContract.getOriginAddress())
         .setCntrAddr(smartContract.getContractAddress())
-        .setBytecode(smartContract.getBytecode())
-        .setName(smartContract.getName())
         .setAbi(smartContract.getAbi())
-        .setOriginEnergyLimit(smartContract.getOriginEnergyLimit())
+        .setBytecode(smartContract.getBytecode())
+        .setCallValue(smartContract.getCallValue())
         .setConsumeUserResourcePercent(smartContract.getConsumeUserResourcePercent())
+        .setName(smartContract.getName())
+        .setOriginEnergyLimit(smartContract.getOriginEnergyLimit())
+        .setCodeHash(smartContract.getCodeHash())
+        .setTrxHash(smartContract.getTrxHash())
+        .setVersion(smartContract.getVersion())
         .build();
   }
 
@@ -1951,10 +1913,11 @@ public class ApiWrapper implements Api {
    *
    * @param ownerAddress the current caller.
    * @param contractAddress smart contract address.
-   * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
-   * @param callValue callValue
-   * @param tokenValue token Value
-   * @param tokenId token10 ID
+   * @param callData The data passed along with a transaction that allows us to interact with smart
+   * contracts. It can be obtained by using {@link FunctionEncoder#encode}.
+   * @param callValue call Value. If TRX not used, use 0.
+   * @param tokenValue token Value, If token10 not used, use 0.
+   * @param tokenId token10 ID, If token10 not used, use null.
    * @return TransactionExtention.
    */
   @Override
@@ -2007,7 +1970,8 @@ public class ApiWrapper implements Api {
    *
    * @param ownerAddress the current caller
    * @param contractAddress smart contract address
-   * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
+   * @param callData The data passed along with a transaction that allows us to interact with smart
+   * contracts. It can be obtained by using {@link FunctionEncoder#encode}.
    * @param callValue TRX value
    * @param tokenValue token value of token10
    * @param tokenId empty or token10 ID
@@ -2016,8 +1980,7 @@ public class ApiWrapper implements Api {
    */
   @Override
   public TransactionBuilder triggerConstantContract(String ownerAddress, String contractAddress,
-      String callData,
-      long callValue, long tokenValue, String tokenId, long feeLimit) {
+      String callData, long callValue, long tokenValue, String tokenId, long feeLimit) {
     TriggerSmartContract trigger = buildTrigger(ownerAddress, contractAddress, callData, callValue,
         tokenValue, tokenId);
     TransactionExtention txnExt = blockingStub.triggerConstantContract(trigger);
@@ -2878,17 +2841,17 @@ public class ApiWrapper implements Api {
    * @param address ownerAddress
    * @param ABI abiString
    * @param code bytecode
-   * @param value callValue sun send to Contract
+   * @param callValue the amount of deposit TRX(unit sun), default is 0
    * @param consumeUserResourcePercent consumeUserResourcePercent,range 0-100
    * @param originEnergyLimit originEnergyLimit
-   * @param tokenValue tokenValue
-   * @param tokenId trc10 id
+   * @param tokenValue the amount of deposit token 10, default is 0
+   * @param tokenId the ID of token 10
    * @return CreateSmartContract
    * @throws Exception exception
    */
   @Override
   public CreateSmartContract createSmartContract(String contractName, String address, String ABI,
-      String code, long value, long consumeUserResourcePercent, long originEnergyLimit,
+      String code, long callValue, long consumeUserResourcePercent, long originEnergyLimit,
       long tokenValue, String tokenId) throws Exception {
 
     //abi
@@ -2902,8 +2865,8 @@ public class ApiWrapper implements Api {
         .setAbi(abi)
         .setConsumeUserResourcePercent(consumeUserResourcePercent)
         .setOriginEnergyLimit(originEnergyLimit);
-    if (value != 0) {
-      builder.setCallValue(value);
+    if (callValue != 0) {
+      builder.setCallValue(callValue);
     }
 
     builder.setBytecode(parseHex(code));
@@ -2917,9 +2880,24 @@ public class ApiWrapper implements Api {
     return createSmartContractBuilder.build();
   }
 
+  /**
+   * @param contractName contractName
+   * @param address ownerAddress
+   * @param ABI abiString
+   * @param code bytecode
+   * @param callValue the amount of deposit TRX(unit sun), default is 0
+   * @param consumeUserResourcePercent consumeUserResourcePercent,range 0-100
+   * @param originEnergyLimit originEnergyLimit
+   * @param tokenValue the amount of deposit token 10, default is 0
+   * @param tokenId the ID of token 10
+   * @param libraryAddressPair walletCli compatible
+   * @param compilerVersion walletCli compatible
+   * @return CreateSmartContract
+   * @throws Exception exception
+   */
   @Override
   public CreateSmartContract createSmartContract(String contractName, String address, String ABI,
-      String code, long value, long consumeUserResourcePercent, long originEnergyLimit,
+      String code, long callValue, long consumeUserResourcePercent, long originEnergyLimit,
       long tokenValue, String tokenId, String libraryAddressPair, String compilerVersion)
       throws Exception {
 
@@ -2927,7 +2905,7 @@ public class ApiWrapper implements Api {
       byte[] byteCode = Utils.replaceLibraryAddress(code, libraryAddressPair, compilerVersion);
       code = ByteArray.toHexString(byteCode);
     }
-    return createSmartContract(contractName, address, ABI, code, value, consumeUserResourcePercent,
+    return createSmartContract(contractName, address, ABI, code, callValue, consumeUserResourcePercent,
         originEnergyLimit, tokenValue, tokenId);
   }
 
