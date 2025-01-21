@@ -354,11 +354,11 @@ public interface Api {
       long consumeUserResourcePercent) throws IllegalException;
 
   CreateSmartContract createSmartContract(String contractName, String address, String ABI,
-      String code, long value, long consumeUserResourcePercent, long originEnergyLimit,
+      String code, long callValue, long consumeUserResourcePercent, long originEnergyLimit,
       long tokenValue, String tokenId) throws Exception;
 
   CreateSmartContract createSmartContract(String contractName, String address, String ABI,
-      String code, long value, long consumeUserResourcePercent, long originEnergyLimit,
+      String code, long callValue, long consumeUserResourcePercent, long originEnergyLimit,
       long tokenValue, String tokenId, String libraryAddressPair, String compilerVersion)
       throws Exception;
 

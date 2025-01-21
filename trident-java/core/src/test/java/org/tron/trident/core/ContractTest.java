@@ -30,6 +30,7 @@ import org.tron.trident.proto.Response.EstimateEnergyMessage;
 import org.tron.trident.proto.Response.TransactionExtention;
 import org.tron.trident.proto.Response.TransactionInfo;
 import org.tron.trident.proto.Response.TransactionInfo.code;
+import org.tron.trident.utils.Base58Check;
 
 @Disabled("add private key to enable this case")
 class ContractTest extends BaseTest {
@@ -290,6 +291,21 @@ class ContractTest extends BaseTest {
     TransactionInfo transactionInfo = client.getTransactionInfoById(ret);
     assertEquals(code.SUCESS, transactionInfo.getResult());
 
+  }
+
+  @Test
+  void testGetContract() {
+    //this is a CreatedByContract
+    Contract contract = client.getContract("TAhMH9fxh5mLRki46qFkLckChxTykTvsVY"); //nile
+
+    String originContractAddress = Base58Check.bytesToBase58(
+        contract.getOriginAddr().toByteArray());
+    Contract originContract = client.getContract(originContractAddress);
+    assertFalse(originContract.getBytecode().isEmpty());
+
+    assertTrue(contract.getTrxHash().toByteArray().length > 0);
+    assertTrue(contract.getCodeHash().toByteArray().length > 0);
+    assertEquals(0, contract.getVersion());
   }
 
 }

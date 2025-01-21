@@ -5,6 +5,8 @@ import com.google.protobuf.util.JsonFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.tron.trident.abi.datatypes.Type;
 import org.tron.trident.core.ApiWrapper;
 import org.tron.trident.core.exceptions.ContractCreateException;
@@ -32,23 +34,53 @@ import org.tron.trident.proto.Contract.CreateSmartContract;
 
 public class Contract {
 
+  @Getter
+  @Setter
   protected ApiWrapper wrapper;
-  protected ByteString originAddr = ByteString.EMPTY;
+  @Setter
+  @Getter
+  protected ByteString originAddr = ByteString.EMPTY;//who create it? normal or contract address
+  @Setter
+  @Getter
   protected ByteString cntrAddr = ByteString.EMPTY;
+  @Getter
   protected ABI abi;
+  @Setter
+  @Getter
   protected ByteString bytecode;
-  //the amount of deposit TRX, default is 0
+  //the amount of deposit TRX(unit sun), default is 0
+  @Setter
+  @Getter
   protected long callValue = 0;
   //the energy percent user consumes, default is 100%
+  @Setter
+  @Getter
   protected long consumeUserResourcePercent = 100;
+  @Setter
+  @Getter
   protected String name = "";
+  @Setter
+  @Getter
   protected long originEnergyLimit = 1;
+  @Setter
+  @Getter
   protected ByteString codeHash = ByteString.EMPTY;
+  @Setter
+  @Getter
   protected ByteString trxHash = ByteString.EMPTY;
+  @Setter
+  @Getter
+  protected int version = 0;
+
   //Current transaction owner's address, to call or trigger contract"
+  @Setter
+  @Getter
   protected ByteString ownerAddr = ByteString.EMPTY;
+  @Setter
+  @Getter
   protected List<ContractFunction> functions = new ArrayList<>();
   //the constructor is loaded automatically from the abi, if has
+  @Getter
   protected ContractConstructor constructor = null;
 
   public Contract(Contract cntr, String ownerAddr, ApiWrapper wrapper) {
@@ -85,122 +117,18 @@ public class Contract {
     this.consumeUserResourcePercent = builder.consumeUserResourcePercent;
     this.name = builder.name;
     this.originEnergyLimit = builder.originEnergyLimit;
+    this.codeHash = builder.codeHash;
+    this.trxHash = builder.trxHash;
+    this.version =  builder.version;
+
     this.ownerAddr = builder.ownerAddr;
     abiToFunctions();
-  }
-
-  public ApiWrapper getWrapper() {
-    return wrapper;
-  }
-
-  public void setWrapper(ApiWrapper wrapper) {
-    this.wrapper = wrapper;
-  }
-
-  public ByteString getOriginAddr() {
-    return originAddr;
-  }
-
-  public void setOriginAddr(ByteString originAddr) {
-    this.originAddr = originAddr;
-  }
-
-  public ByteString getCntrAddr() {
-    return cntrAddr;
-  }
-
-  public void setCntrAddr(ByteString cntrAddr) {
-    this.cntrAddr = cntrAddr;
-  }
-
-  public ABI getAbi() {
-    return abi;
-  }
-
-  public void setAbi(ABI abi) {
-    this.abi = abi;
   }
 
   public void setAbi(String abiString) throws Exception {
     ABI.Builder builder = ABI.newBuilder();
     loadAbiFromJson(abiString, builder);
     this.abi = builder.build();
-  }
-
-  public ByteString getBytecode() {
-    return bytecode;
-  }
-
-  public void setBytecode(ByteString bytecode) {
-    this.bytecode = bytecode;
-  }
-
-  public long getCallValue() {
-    return callValue;
-  }
-
-  public void setCallValue(long callValue) {
-    this.callValue = callValue;
-  }
-
-  public long getConsumeUserResourcePercent() {
-    return consumeUserResourcePercent;
-  }
-
-  public void setConsumeUserResourcePercent(long consumeUserResourcePercent) {
-    this.consumeUserResourcePercent = consumeUserResourcePercent;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public long getOriginEnergyLimit() {
-    return originEnergyLimit;
-  }
-
-  public void setOriginEnergyLimit(long originEnergyLimit) {
-    this.originEnergyLimit = originEnergyLimit;
-  }
-
-  public ByteString getCodeHash() {
-    return codeHash;
-  }
-
-  public void setCodeHash(ByteString codeHash) {
-    this.codeHash = codeHash;
-  }
-
-  public ByteString getTrxHash() {
-    return trxHash;
-  }
-
-  public void setTrxHash(ByteString trxHash) {
-    this.trxHash = trxHash;
-  }
-
-  public ByteString getOwnerAddr() {
-    return ownerAddr;
-  }
-
-  public void setOwnerAddr(ByteString ownerAddr) {
-    this.ownerAddr = ownerAddr;
-  }
-
-  public List<ContractFunction> getFunctions() {
-    return functions;
-  }
-
-  public void setFunctions(List<ContractFunction> functions) {
-    this.functions = functions;
-  }
-
-  public ContractConstructor getConstructor() {
-    return constructor;
   }
 
   /**
@@ -326,7 +254,9 @@ public class Contract {
         .setConsumeUserResourcePercent(consumeUserResourcePercent)
         .setName(name)
         .setOriginEnergyLimit(originEnergyLimit)
+        .setCodeHash(codeHash)
         .setTrxHash(trxHash)
+        .setVersion(version)
         .build();
   }
 
@@ -343,7 +273,6 @@ public class Contract {
 
   public static class Builder {
 
-    //    protected ApiWrapper wrapper;
     protected ByteString originAddr = ByteString.EMPTY;
     protected ByteString cntrAddr = ByteString.EMPTY;
     protected ABI abi;
@@ -354,12 +283,9 @@ public class Contract {
     protected long originEnergyLimit = 1;
     protected ByteString codeHash = ByteString.EMPTY;
     protected ByteString trxHash = ByteString.EMPTY;
-    protected ByteString ownerAddr = ByteString.EMPTY;
+    protected int version = 0;
 
-//    public Builder setWrapper(ApiWrapper wrapper) {
-//      this.wrapper = wrapper;
-//      return this;
-//    }
+    protected ByteString ownerAddr = ByteString.EMPTY;
 
     public Builder setOriginAddr(ByteString originAddr) {
       this.originAddr = originAddr;
@@ -408,6 +334,21 @@ public class Contract {
       return this;
     }
 
+    public Builder setCodeHash(ByteString codeHash) {
+      this.codeHash = codeHash;
+      return this;
+    }
+
+    public Builder setTrxHash(ByteString trxHash) {
+      this.trxHash = trxHash;
+      return this;
+    }
+
+    public Builder setVersion(int version) {
+      this.version = version;
+      return this;
+    }
+
     public Builder setOwnerAddr(ByteString ownerAddr) {
       this.ownerAddr = ownerAddr;
       return this;
@@ -433,7 +374,6 @@ public class Contract {
    * load abi from json format string
    *
    * @param abiString abi string in json format
-   * @return proto.Common.SmartContract.ABI
    * @throws Exception if the input is not valid JSON format or there are unknown fields in the input
    */
   public static void loadAbiFromJson(String abiString, ABI.Builder builder) throws Exception {
