@@ -124,7 +124,7 @@ public class Utils {
       String address = cur.substring(lastPosition + 1);
       byte[] addressBytes = decodeFromBase58Check(address);
       if (addressBytes == null){
-        throw new RuntimeException("invalid address");
+        throw new IllegalArgumentException("invalid address format");
       }
       String libraryAddressHex = ByteArray.toHexString(addressBytes).substring(2);
 
