@@ -14,6 +14,7 @@ import org.tron.trident.core.key.KeyPair;
 import org.tron.trident.core.transaction.TransactionBuilder;
 import org.tron.trident.proto.Chain.Block;
 import org.tron.trident.proto.Chain.Transaction;
+import org.tron.trident.proto.Common.SmartContract;
 import org.tron.trident.proto.Contract.AccountPermissionUpdateContract;
 import org.tron.trident.proto.Contract.AssetIssueContract;
 import org.tron.trident.proto.Contract.CreateSmartContract;
@@ -228,6 +229,8 @@ public interface Api {
 
   Contract getContract(String contractAddress);
 
+  SmartContract getSmartContract(String contractAddress);
+
   @Deprecated
   TransactionExtention constantCall(String ownerAddress, String contractAddress, Function function);
 
@@ -238,10 +241,13 @@ public interface Api {
       Function function);
 
   TransactionExtention triggerContract(String ownerAddress, String contractAddress,
+      String callData);
+
+  TransactionExtention triggerContract(String ownerAddress, String contractAddress,
       Function function, long callValue, long tokenValue, String tokenId);
 
-  String triggerContractWithBroadcast(String ownerAddress, String contractAddress,
-      Function function, long callValue, long feeLimit);
+  TransactionExtention triggerContract(String ownerAddress, String contractAddress,
+      String callData, long callValue, long tokenValue, String tokenId);
 
   BlockBalanceTrace getBlockBalance(String blockId, long blockNum);
 
@@ -283,14 +289,17 @@ public interface Api {
   @Deprecated
   TransactionBuilder triggerCallV2(String ownerAddress, String contractAddress, String callData);
 
-  TransactionBuilder triggerConstantContract(String ownerAddress, String contractAddress, String callData,
-      long callValue, long tokenValue, String tokenId, long feeLimit);
+  TransactionBuilder triggerConstantContract(String ownerAddress, String contractAddress,
+      String callData, long callValue, long tokenValue, String tokenId, long feeLimit);
 
   @Deprecated
   TransactionExtention constantCallV2(String ownerAddress, String contractAddress, String callData);
 
-  TransactionExtention triggerConstantContract(String ownerAddress, String contractAddress, String callData,
-      long callValue, long tokenValue, String tokenId);
+  TransactionExtention triggerConstantContract(String ownerAddress, String contractAddress,
+      String callData);
+
+  TransactionExtention triggerConstantContract(String ownerAddress, String contractAddress,
+      String callData, long callValue, long tokenValue, String tokenId);
 
   Response.PricesResponseMessage getBandwidthPrices();
 

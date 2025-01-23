@@ -1853,6 +1853,16 @@ public class ApiWrapper implements Api {
         .build();
   }
 
+  @Override
+  public SmartContract getSmartContract(String contractAddress) {
+    ByteString rawAddress = parseAddress(contractAddress);
+    BytesMessage param =
+        BytesMessage.newBuilder()
+            .setValue(rawAddress)
+            .build();
+    return blockingStub.getContract(param);
+  }
+
   /**
    * Check whether a given method is in the contract.
    *
@@ -1905,6 +1915,14 @@ public class ApiWrapper implements Api {
       String callData) {
     TriggerSmartContract trigger =
         buildTrigger(ownerAddress, contractAddress, callData, 0L, 0L, null);
+    return blockingStub.triggerConstantContract(trigger);
+  }
+
+  @Override
+  public TransactionExtention triggerConstantContract(String ownerAddress, String contractAddress,
+      String callData) {
+    TriggerSmartContract trigger = buildTrigger(ownerAddress, contractAddress, callData, 0,
+        0, null);
     return blockingStub.triggerConstantContract(trigger);
   }
 
@@ -2008,6 +2026,14 @@ public class ApiWrapper implements Api {
     return blockingStub.triggerContract(trigger);
   }
 
+  @Override
+  public TransactionExtention triggerContract(String ownerAddress, String contractAddress,
+      String callData) {
+    TriggerSmartContract trigger = buildTrigger(ownerAddress, contractAddress, callData, 0L, 0L,
+        null);
+    return blockingStub.triggerContract(trigger);
+  }
+
   /**
    * make a TriggerSmartContract, - no broadcasting. it can be broadcast later.
    *
@@ -2030,30 +2056,12 @@ public class ApiWrapper implements Api {
     return blockingStub.triggerContract(trigger);
   }
 
-  /**
-   * make a TriggerSmartContract and broadcast it
-   *
-   * @param ownerAddress the current caller
-   * @param contractAddress smart contract address
-   * @param function contract function
-   * @param callValue trx transfer amount
-   * @param feeLimit feeLimit
-   * @return String txn
-   */
   @Override
-  public String triggerContractWithBroadcast(String ownerAddress, String contractAddress,
-      Function function, long callValue, long feeLimit) {
-
-    String encodedHex = FunctionEncoder.encode(function);
-    TriggerSmartContract trigger = buildTrigger(ownerAddress,
-        contractAddress, encodedHex, callValue, 0, null);
-
-    TransactionExtention transactionExtention = blockingStub.triggerContract(trigger);
-
-    TransactionBuilder builder = new TransactionBuilder(transactionExtention.getTransaction());
-    builder.setFeeLimit(feeLimit);
-    Transaction signedTxn = signTransaction(builder.build());
-    return broadcastTransaction(signedTxn);
+  public TransactionExtention triggerContract(String ownerAddress, String contractAddress,
+      String callData, long callValue, long tokenValue, String tokenId) {
+    TriggerSmartContract trigger = buildTrigger(ownerAddress, contractAddress, callData,
+        callValue, tokenValue, tokenId);
+    return blockingStub.triggerContract(trigger);
   }
 
   /**
@@ -2565,12 +2573,12 @@ public class ApiWrapper implements Api {
   /**
    * getMarketOrderByAccount
    *
-   * @param account account address
+   * @param address account address
    * @return MarketOrderList
    */
   @Override
-  public MarketOrderList getMarketOrderByAccount(String account) {
-    ByteString rawAddress = parseAddress(account);
+  public MarketOrderList getMarketOrderByAccount(String address) {
+    ByteString rawAddress = parseAddress(address);
     BytesMessage param =
         BytesMessage.newBuilder()
             .setValue(rawAddress)
