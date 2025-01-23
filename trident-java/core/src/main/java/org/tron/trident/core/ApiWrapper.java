@@ -2031,32 +2031,6 @@ public class ApiWrapper implements Api {
   }
 
   /**
-   * make a TriggerSmartContract and broadcast it
-   *
-   * @param ownerAddress the current caller
-   * @param contractAddress smart contract address
-   * @param function contract function
-   * @param callValue trx transfer amount
-   * @param feeLimit feeLimit
-   * @return String txn
-   */
-  @Override
-  public String triggerContractWithBroadcast(String ownerAddress, String contractAddress,
-      Function function, long callValue, long feeLimit) {
-
-    String encodedHex = FunctionEncoder.encode(function);
-    TriggerSmartContract trigger = buildTrigger(ownerAddress,
-        contractAddress, encodedHex, callValue, 0, null);
-
-    TransactionExtention transactionExtention = blockingStub.triggerContract(trigger);
-
-    TransactionBuilder builder = new TransactionBuilder(transactionExtention.getTransaction());
-    builder.setFeeLimit(feeLimit);
-    Transaction signedTxn = signTransaction(builder.build());
-    return broadcastTransaction(signedTxn);
-  }
-
-  /**
    * GetBlockBalance
    * Get all balance change operations in a block(Note: At present, the interface data can only be queried through the following official nodes
    * 47.241.20.47 & 161.117.85.97 &161.117.224.116 &161.117.83.38)

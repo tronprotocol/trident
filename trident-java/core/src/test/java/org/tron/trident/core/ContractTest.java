@@ -195,24 +195,6 @@ class ContractTest extends BaseTest {
   }
 
   @Test
-  void testTriggerContractWithBroadcast() throws InterruptedException, IllegalException {
-    //  function deposit() external payable returns (uint256 strxAmount);
-    String strx = "TZ8du1HkatTWDbS6FLZei4dQfjfpSm9mxp"; //nile
-    String fromAddr = client.keyPair.toBase58CheckAddress();
-    Function depositFunction = new Function("deposit",
-        Collections.emptyList(),
-        Collections.singletonList(new TypeReference<Uint256>() {
-        }));
-    String ret = client.triggerContractWithBroadcast(fromAddr, strx, depositFunction, 100,
-        500_000_000);
-    System.out.println(ret);
-    sleep(10_000L);
-    TransactionInfo transactionInfo = client.getTransactionInfoById(ret);
-    assertEquals(0, transactionInfo.getResult().getNumber());
-  }
-
-
-  @Test
   void testEstimateEnergyV2() {
     // transfer(address,uint256) returns (bool)
     String usdtAddr = "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf"; //nile
