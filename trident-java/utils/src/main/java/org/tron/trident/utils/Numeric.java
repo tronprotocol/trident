@@ -253,7 +253,11 @@ public final class Numeric {
   }
 
   public static boolean isNumericString(String str) {
-    for (int i = str.length(); --i >= 0; ) {
+    if (str == null || str.isEmpty()) {
+      return false;
+    }
+
+    for (int i = 0; i < str.length(); i++) {
       if (!Character.isDigit(str.charAt(i))) {
         return false;
       }
