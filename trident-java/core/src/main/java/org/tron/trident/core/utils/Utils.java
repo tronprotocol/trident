@@ -118,13 +118,13 @@ public class Utils {
     for (String cur : libraryAddressList) {
       int lastPosition = cur.lastIndexOf(":");
       if (-1 == lastPosition) {
-        throw new IllegalArgumentException("libraryAddress delimit by ':'");
+        throw new RuntimeException("libraryAddress delimit by ':'");
       }
       String libraryName = cur.substring(0, lastPosition);
       String address = cur.substring(lastPosition + 1);
       byte[] addressBytes = decodeFromBase58Check(address);
       if (addressBytes == null){
-        throw new IllegalArgumentException("invalid address format");
+        throw new RuntimeException("invalid address");
       }
       String libraryAddressHex = ByteArray.toHexString(addressBytes).substring(2);
 
@@ -143,7 +143,7 @@ public class Utils {
                 .substring(0, 34);
         beReplaced = "__\\$" + libraryNameKeccak256 + "\\$__";
       } else {
-        throw new IllegalArgumentException("unknown compiler version.");
+        throw new RuntimeException("unknown compiler version.");
       }
 
       Matcher m = Pattern.compile(beReplaced).matcher(code);
