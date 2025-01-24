@@ -58,8 +58,8 @@ public class Utils {
     if (address.length != ADDRESS_SIZE) {
       return false;
     }
-    byte preFixbyte = address[0];
-    return preFixbyte == getAddressPreFixByte();
+    byte preFixByte = address[0];
+    return preFixByte == getAddressPreFixByte();
     // Other rule;
   }
 
@@ -73,21 +73,29 @@ public class Utils {
   }
 
   private static byte[] decode58Check(String input) {
-    byte[] decodeCheck = Base58.decode(input);
-    if (decodeCheck.length <= 4) {
+    if (Strings.isEmpty(input)) {
       return null;
     }
-    byte[] decodeData = new byte[decodeCheck.length - 4];
-    System.arraycopy(decodeCheck, 0, decodeData, 0, decodeData.length);
-    byte[] hash0 = Sha256Hash.hash(true, decodeData);
-    byte[] hash1 = Sha256Hash.hash(true, hash0);
-    if (hash1[0] == decodeCheck[decodeData.length]
-        && hash1[1] == decodeCheck[decodeData.length + 1]
-        && hash1[2] == decodeCheck[decodeData.length + 2]
-        && hash1[3] == decodeCheck[decodeData.length + 3]) {
-      return decodeData;
+    try {
+      byte[] decodeCheck = Base58.decode(input);
+      if (decodeCheck.length <= 4) {
+        return null;
+      }
+      byte[] decodeData = new byte[decodeCheck.length - 4];
+      System.arraycopy(decodeCheck, 0, decodeData, 0, decodeData.length);
+      byte[] hash0 = Sha256Hash.hash(true, decodeData);
+      byte[] hash1 = Sha256Hash.hash(true, hash0);
+      if (hash1[0] == decodeCheck[decodeData.length]
+          && hash1[1] == decodeCheck[decodeData.length + 1]
+          && hash1[2] == decodeCheck[decodeData.length + 2]
+          && hash1[3] == decodeCheck[decodeData.length + 3]) {
+        return decodeData;
+      }
+      return null;
+    } catch (Exception e) {
+      return null;
     }
-    return null;
+
   }
 
   public static byte[] decodeFromBase58Check(String addressBase58) {
@@ -112,6 +120,12 @@ public class Utils {
 
   public static byte[] replaceLibraryAddress(String code, String libraryAddressPair,
       String compilerVersion) {
+    if (Strings.isEmpty(code)) {
+      throw new IllegalArgumentException("code is empty");
+    }
+    if (Strings.isEmpty(libraryAddressPair)) {
+      throw new IllegalArgumentException("libraryAddressPair is empty");
+    }
 
     String[] libraryAddressList = libraryAddressPair.split("[,]");
 
@@ -123,7 +137,7 @@ public class Utils {
       String libraryName = cur.substring(0, lastPosition);
       String address = cur.substring(lastPosition + 1);
       byte[] addressBytes = decodeFromBase58Check(address);
-      if (addressBytes == null){
+      if (addressBytes == null) {
         throw new IllegalArgumentException("invalid address format");
       }
       String libraryAddressHex = ByteArray.toHexString(addressBytes).substring(2);
