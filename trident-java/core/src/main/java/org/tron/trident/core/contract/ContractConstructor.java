@@ -35,7 +35,7 @@ public class ContractConstructor {
     return this.rawConstructor;
   }
 
-  public List getParamTypes() {
+  public List<String> getParamTypes() {
     return this.paramTypes;
   }
 

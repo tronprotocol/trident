@@ -123,6 +123,9 @@ public class Utils {
       String libraryName = cur.substring(0, lastPosition);
       String address = cur.substring(lastPosition + 1);
       byte[] addressBytes = decodeFromBase58Check(address);
+      if (addressBytes == null){
+        throw new RuntimeException("invalid address");
+      }
       String libraryAddressHex = ByteArray.toHexString(addressBytes).substring(2);
 
       String beReplaced;
