@@ -7,17 +7,3 @@ description 'TRON Application Binary Interface (ABI) for working with smart cont
 dependencies {
     implementation project(':utils')
 }
-
-tasks.create('buildLib', Jar) {
-    baseName = 'trident'
-    version = null
-    from(sourceSets.main.output) {
-        include '/**'
-    }
-
-    from {
-        configurations.compile.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
-    }
-}

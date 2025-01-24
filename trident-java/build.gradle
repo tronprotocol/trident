@@ -1,8 +1,27 @@
-plugins {
-    id 'java-library'
+def VERSION = '0.9.2'
+
+buildscript {
+    repositories {
+        mavenLocal()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        maven {
+            url "https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public"
+        }
+        mavenCentral()
+    }
+    dependencies {
+        classpath "io.github.gradle-nexus:publish-plugin:1.1.0"
+        classpath 'com.github.jengelman.gradle.plugins:shadow:5.2.0'
+    }
 }
 
-def VERSION = '0.9.2'
+apply plugin: 'java'
+apply plugin: 'java-library'
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'maven-publish'
+apply plugin: 'ivy-publish'
 
 ext {
     bouncycastleVersion = '1.78.1'
@@ -10,10 +29,10 @@ ext {
     googleGuavaVersion = '33.0.0-jre'
 }
 
-
 allprojects {
     version = VERSION
-    group = 'org.tron.trident'
+    group = 'io.github.317787106'
+    //group = 'org.tron.trident'
 
     repositories {
         mavenCentral()
@@ -94,35 +113,16 @@ subprojects {
     artifacts {
         archives jar
         archives sourcesJar
+        archives javadocJar
     }
 }
 
-def jarTasks = [
-        fatJar: tasks.register('fatJar', Jar) {
-            archiveBaseName = 'trident'
-            archiveVersion = VERSION
-            duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
-            dependsOn subprojects.collect { project ->
-                project.tasks.withType(Jar)
-            }
-
-            from {
-                subprojects.collect { project ->
-                    project.sourceSets.main.output
-                }
-            }
-
-            from {
-                subprojects.collect { project ->
-                    project.configurations.runtimeClasspath.collect {
-                        it.isDirectory() ? it : zipTree(it)
-                    }
-                }
-            }
-
-        }
-]
+shadowJar {
+    baseName = 'trident'
+    classifier = null
+    version = null
+    zip64 = true
+}
 
 javadoc {
     source subprojects.collect { project ->
@@ -133,13 +133,13 @@ javadoc {
     })
 }
 
-task javadocJar(type: Jar) {
+tasks.register('javadocJar', Jar) {
     archiveClassifier = 'javadoc'
     archiveVersion = VERSION
     from javadoc
 }
 
-task sourcesJar(type: Jar) {
+tasks.register('sourcesJar', Jar) {
     archiveClassifier = 'sources'
     archiveVersion = VERSION
     from subprojects.collect { project ->
@@ -147,6 +147,93 @@ task sourcesJar(type: Jar) {
     }
 }
 
+tasks.register('buildLib', Jar) {
+    archiveVersion = VERSION
+    from subprojects.collect { project ->
+        project.sourceSets.main.output
+    }
+}
+
 tasks.named('build') {
-    dependsOn fatJar, javadocJar, sourcesJar
+    dependsOn javadocJar, sourcesJar, buildLib
+}
+
+artifacts {
+    archives jar
+    archives javadocJar
+    archives sourcesJar
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+
+            groupId = project.group
+            artifactId = 'trident'
+            version = project.version
+
+            pom {
+                name = 'trident'
+                description = 'Java implementation of trident'
+                url = 'https://github.com/317787106/trident'
+
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        name = 'jiangyuanshu'
+                        email = '317787106@qq.com'
+                    }
+                }
+
+                scm {
+                    connection = 'scm:git:git://github.com/317787106/trident.git'
+                    developerConnection = 'scm:git:ssh://github.com/317787106/trident.git'
+                    url = 'https://github.com/317787106/trident'
+                }
+            }
+        }
+    }
+
+    repositories {
+        mavenLocal()
+    }
+}
+
+publishing {
+    publications {
+        ivyJava(IvyPublication) {
+            from components.java
+
+            organisation = project.group
+            module = 'trident'
+            revision = project.version
+
+            descriptor {
+                status = 'release'
+                branch = 'feature/package_one_jar'
+
+                // 添加额外信息
+                extraInfo 'http://io.github.317787106', 'uGUJ0ozd', '1muUMAhUqK+m1gDebhNTB1zYliRLC5NBnZnvwzNDDoR0'
+
+                // 添加许可证信息
+                license {
+                    name = 'The Apache License, Version 2.0'
+                    url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                }
+            }
+        }
+    }
+
+    repositories {
+        ivy {
+            url = "${buildDir}/repo"
+        }
+    }
 }
