@@ -7,6 +7,12 @@ description 'Trident-Java gRPC core classes'
 def protobufVersion = '3.25.5'
 def grpcVersion = '1.60.0'
 
+configurations.all {
+    resolutionStrategy {
+        force("com.squareup.okio:okio:3.9.0")
+    }
+}
+
 dependencies {
     implementation "com.google.guava:guava:$googleGuavaVersion"
 
