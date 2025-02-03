@@ -21,7 +21,6 @@ apply plugin: 'java'
 apply plugin: 'java-library'
 apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'maven-publish'
-apply plugin: 'ivy-publish'
 
 ext {
     bouncycastleVersion = '1.78.1'
@@ -38,34 +37,40 @@ allprojects {
         mavenCentral()
     }
 
-    tasks.withType(Javadoc) {
-        options.encoding = 'UTF-8'
-        options.charSet = 'UTF-8'
-        options.addStringOption('Xdoclint:none', '-quiet')
+    tasks.withType(Javadoc).tap {
+        configureEach {
+            options.encoding = 'UTF-8'
+            options.charSet = 'UTF-8'
+            options.addStringOption('Xdoclint:none', '-quiet')
 
-        options {
-            tags = [
-                    'apiNote:a:API Note:',
-                    'implSpec:a:Implementation Requirements:',
-                    'implNote:a:Implementation Note:'
-            ]
+            options {
+                tags = [
+                        'apiNote:a:API Note:',
+                        'implSpec:a:Implementation Requirements:',
+                        'implNote:a:Implementation Note:'
+                ]
+            }
+
+            exclude '**/internal/**'
+            exclude '**/impl/**'
+            failOnError = false
+
+            logging.captureStandardError LogLevel.INFO
+            logging.captureStandardOutput LogLevel.INFO
         }
+    }
 
-        exclude '**/internal/**'
-        exclude '**/impl/**'
-        failOnError = false
-
-        logging.captureStandardError LogLevel.INFO
-        logging.captureStandardOutput LogLevel.INFO
+    configurations.configureEach {
+        resolutionStrategy{
+            force "com.google.guava:guava:$googleGuavaVersion"
+        }
     }
 }
 
 subprojects {
     apply plugin: 'java'
-    apply plugin: 'maven'
-    apply plugin: 'maven-publish'
 
-    tasks.withType(Jar) {
+    tasks.withType(Jar).configureEach {
         destinationDirectory = rootProject.file("build/libs")
     }
 
@@ -102,10 +107,6 @@ subprojects {
         from javadoc.destinationDir
     }
 
-    tasks.register('wrapper', Wrapper) {
-        gradleVersion = '6.6.1'
-    }
-
     tasks.withType(JavaCompile).configureEach {
         //options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
     }
@@ -118,9 +119,6 @@ subprojects {
 }
 
 shadowJar {
-    baseName = 'trident'
-    classifier = null
-    version = null
     zip64 = true
 }
 
@@ -197,43 +195,48 @@ publishing {
                     developerConnection = 'scm:git:ssh://github.com/317787106/trident.git'
                     url = 'https://github.com/317787106/trident'
                 }
+
+                // collect all dependencies of subprojects
+                withXml {
+                    def dependenciesNode = asNode().appendNode('dependencies')
+                    def seenDependencies = [] as Set
+                    subprojects.each { subproject ->
+                        {
+                            subproject.properties.configurations.implementation.allDependencies.each { dep ->
+                                {//println dep
+                                    if (dep.group != null && dep.name != null && dep.version != null && dep.group != group) {
+                                        def dependencyIdentifier = "${dep.group}:${dep.name}:${dep.version}"
+                                        //drop duplicate
+                                        if (!seenDependencies.contains(dependencyIdentifier)) {
+                                            seenDependencies << dependencyIdentifier
+                                            def dependencyNode = dependenciesNode.appendNode('dependency')
+                                            dependencyNode.appendNode('groupId', dep.group)
+                                            dependencyNode.appendNode('artifactId', dep.name)
+                                            dependencyNode.appendNode('version', dep.version)
+                                            dependencyNode.appendNode('scope', 'implementation')
+
+                                            // for exclusions
+                                            if (dep.excludeRules.size() > 0) {
+                                                def exclusions = dependencyNode.appendNode('exclusions')
+                                                dep.excludeRules.each { ExcludeRule ex ->
+                                                    def exclusion = exclusions.appendNode('exclusion')
+                                                    exclusion.appendNode('groupId', ex.group)
+                                                    exclusion.appendNode('artifactId', ex.module)
+                                                }
+                                            }
+                                        }
+                                    }// end if
+                                }
+                            }
+                        }
+                    }
+                }
+                //end withXml
             }
         }
     }
 
     repositories {
         mavenLocal()
-    }
-}
-
-publishing {
-    publications {
-        ivyJava(IvyPublication) {
-            from components.java
-
-            organisation = project.group
-            module = 'trident'
-            revision = project.version
-
-            descriptor {
-                status = 'release'
-                branch = 'feature/package_one_jar'
-
-                // 添加额外信息
-                extraInfo 'http://io.github.317787106', 'uGUJ0ozd', '1muUMAhUqK+m1gDebhNTB1zYliRLC5NBnZnvwzNDDoR0'
-
-                // 添加许可证信息
-                license {
-                    name = 'The Apache License, Version 2.0'
-                    url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                }
-            }
-        }
-    }
-
-    repositories {
-        ivy {
-            url = "${buildDir}/repo"
-        }
     }
 }

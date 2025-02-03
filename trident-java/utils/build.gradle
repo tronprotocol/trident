@@ -1,5 +1,5 @@
 plugins {
-
+    id 'java-library'
 }
 
 description 'Minimal set of trident utility classes'
@@ -7,7 +7,7 @@ description 'Minimal set of trident utility classes'
 dependencies {
     implementation 'io.vertx:vertx-core:4.5.10'
     implementation 'io.netty:netty-all:4.1.100.Final'
-    implementation "com.google.guava:guava:$googleGuavaVersion"
+    compileOnly "com.google.guava:guava:$googleGuavaVersion"
     implementation "org.bouncycastle:bcprov-jdk18on:$bouncycastleVersion"
 }
 
