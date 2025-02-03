@@ -141,8 +141,8 @@ public class ApiWrapper implements Api {
   public final WalletGrpc.WalletBlockingStub blockingStub;
   public final WalletSolidityGrpc.WalletSolidityBlockingStub blockingStubSolidity;
   public final KeyPair keyPair;
-  private final ManagedChannel channel;
-  private final ManagedChannel channelSolidity;
+  public final ManagedChannel channel;
+  public final ManagedChannel channelSolidity;
 
   public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey) {
     channel = ManagedChannelBuilder.forTarget(grpcEndpoint).usePlaintext().build();
@@ -1110,7 +1110,7 @@ public class ApiWrapper implements Api {
    */
   @Override
   public TransactionInfo getTransactionInfoById(String txID) throws IllegalException {
-    ByteString bsTxId = parseAddress(txID);
+    ByteString bsTxId = parseHex(txID);
     BytesMessage request = BytesMessage.newBuilder()
         .setValue(bsTxId)
         .build();
@@ -1131,7 +1131,7 @@ public class ApiWrapper implements Api {
    */
   @Override
   public Transaction getTransactionById(String txID) throws IllegalException {
-    ByteString bsTxId = parseAddress(txID);
+    ByteString bsTxId = parseHex(txID);
     BytesMessage request = BytesMessage.newBuilder()
         .setValue(bsTxId)
         .build();
