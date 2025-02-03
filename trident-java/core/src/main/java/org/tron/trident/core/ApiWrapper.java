@@ -1887,16 +1887,13 @@ public class ApiWrapper implements Api {
    * @param contractAddress smart contract address.
    * @param function contract function.
    * @return TransactionExtention.
-   * @deprecated Use {@link #triggerConstantContract} instead.
+   * @deprecated Use {@link #triggerConstantContract(String,String,Function)} instead.
    */
   @Deprecated
   @Override
   public TransactionExtention constantCall(String ownerAddress, String contractAddress,
       Function function) {
-    String encodedHex = FunctionEncoder.encode(function);
-    TriggerSmartContract trigger = buildTrigger(ownerAddress, contractAddress, encodedHex, 0,
-        0, null);
-    return blockingStub.triggerConstantContract(trigger);
+    return triggerConstantContract(ownerAddress, contractAddress, function);
   }
 
   /**
@@ -1907,22 +1904,27 @@ public class ApiWrapper implements Api {
    * @param contractAddress smart contract address.
    * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
    * @return TransactionExtention.
-   * @deprecated Use {@link #triggerConstantContract} instead.
+   * @deprecated Use {@link #triggerConstantContract(String,String,String)} instead.
    */
   @Deprecated
   @Override
   public TransactionExtention constantCallV2(String ownerAddress, String contractAddress,
       String callData) {
-    TriggerSmartContract trigger =
-        buildTrigger(ownerAddress, contractAddress, callData, 0L, 0L, null);
-    return blockingStub.triggerConstantContract(trigger);
+    return triggerConstantContract(ownerAddress, contractAddress, callData);
+  }
+
+  @Override
+  public TransactionExtention triggerConstantContract(String ownerAddress, String contractAddress,
+      Function function) {
+    String callData = FunctionEncoder.encode(function);
+    return triggerConstantContract(ownerAddress, contractAddress, callData);
   }
 
   @Override
   public TransactionExtention triggerConstantContract(String ownerAddress, String contractAddress,
       String callData) {
-    TriggerSmartContract trigger = buildTrigger(ownerAddress, contractAddress, callData, 0,
-        0, null);
+    TriggerSmartContract trigger = buildTrigger(ownerAddress, contractAddress, callData, 0L,
+        0L, null);
     return blockingStub.triggerConstantContract(trigger);
   }
 
@@ -1953,13 +1955,13 @@ public class ApiWrapper implements Api {
    * @param contractAddress smart contract address
    * @param function contract function
    * @return transaction builder. Users may set other fields, e.g. feeLimit
-   * @deprecated Use {@link #triggerConstantContract} instead.
+   * @deprecated Use {@link #triggerConstantContract(String,String,Function)} instead.
    */
   @Deprecated
   @Override
   public TransactionBuilder triggerCall(String ownerAddress, String contractAddress,
       Function function) {
-    TransactionExtention txnExt = constantCall(ownerAddress, contractAddress, function);
+    TransactionExtention txnExt = triggerConstantContract(ownerAddress, contractAddress, function);
     return new TransactionBuilder(txnExt.getTransaction());
   }
 
@@ -1970,16 +1972,13 @@ public class ApiWrapper implements Api {
    * @param contractAddress smart contract address
    * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
    * @return transaction builder. TransactionExtention detail.
-   * @deprecated Use {@link #triggerConstantContract} instead.
+   * @deprecated Use {@link #triggerConstantContract(String,String,String)} instead.
    */
   @Deprecated
   @Override
   public TransactionBuilder triggerCallV2(String ownerAddress, String contractAddress,
       String callData) {
-
-    TriggerSmartContract trigger =
-        buildTrigger(ownerAddress, contractAddress, callData, 0L, 0L, null);
-    TransactionExtention txnExt = blockingStub.triggerConstantContract(trigger);
+    TransactionExtention txnExt = triggerConstantContract(ownerAddress, contractAddress, callData);
     return new TransactionBuilder(txnExt.getTransaction());
   }
 
@@ -1999,12 +1998,9 @@ public class ApiWrapper implements Api {
   @Override
   public TransactionBuilder triggerConstantContract(String ownerAddress, String contractAddress,
       String callData, long callValue, long tokenValue, String tokenId, long feeLimit) {
-    TriggerSmartContract trigger = buildTrigger(ownerAddress, contractAddress, callData, callValue,
-        tokenValue, tokenId);
-    TransactionExtention txnExt = blockingStub.triggerConstantContract(trigger);
-    TransactionBuilder builder = new TransactionBuilder(txnExt.getTransaction());
-    builder.setFeeLimit(feeLimit);
-    return builder;
+    TransactionExtention txnExt = triggerConstantContract(ownerAddress, contractAddress, callData,
+        callValue, tokenValue, tokenId);
+    return new TransactionBuilder(txnExt.getTransaction()).setFeeLimit(feeLimit);
   }
 
   /**
@@ -2018,12 +2014,8 @@ public class ApiWrapper implements Api {
   @Override
   public TransactionExtention triggerContract(String ownerAddress, String contractAddress,
       Function function) {
-
     String encodedHex = FunctionEncoder.encode(function);
-
-    TriggerSmartContract trigger = buildTrigger(ownerAddress, contractAddress, encodedHex, 0L, 0L,
-        null);
-    return blockingStub.triggerContract(trigger);
+    return triggerContract(ownerAddress, contractAddress, encodedHex);
   }
 
   @Override
@@ -2048,12 +2040,9 @@ public class ApiWrapper implements Api {
   @Override
   public TransactionExtention triggerContract(String ownerAddress, String contractAddress,
       Function function, long callValue, long tokenValue, String tokenId) {
-
     String encodedHex = FunctionEncoder.encode(function);
-
-    TriggerSmartContract trigger = buildTrigger(ownerAddress, contractAddress, encodedHex,
-        callValue, tokenValue, tokenId);
-    return blockingStub.triggerContract(trigger);
+    return triggerContract(ownerAddress, contractAddress, encodedHex, callValue, tokenValue,
+        tokenId);
   }
 
   @Override

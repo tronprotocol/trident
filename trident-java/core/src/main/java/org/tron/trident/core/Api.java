@@ -296,6 +296,9 @@ public interface Api {
   TransactionExtention constantCallV2(String ownerAddress, String contractAddress, String callData);
 
   TransactionExtention triggerConstantContract(String ownerAddress, String contractAddress,
+      Function function);
+
+  TransactionExtention triggerConstantContract(String ownerAddress, String contractAddress,
       String callData);
 
   TransactionExtention triggerConstantContract(String ownerAddress, String contractAddress,

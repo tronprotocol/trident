@@ -1,27 +1,24 @@
 package org.tron.trident.core.utils;
 
-import com.google.protobuf.ByteString;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.tron.trident.core.ApiWrapper.generateAddress;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-import org.tron.trident.abi.datatypes.Address;
-import org.tron.trident.abi.datatypes.Uint;
-import org.tron.trident.abi.datatypes.generated.Uint256;
-import org.tron.trident.core.BaseTest;
-import org.tron.trident.core.exceptions.ContractCreateException;
-
+import com.google.protobuf.ByteString;
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.jupiter.api.Test;
+import org.tron.trident.abi.datatypes.Address;
+import org.tron.trident.abi.datatypes.generated.Uint256;
+import org.tron.trident.core.exceptions.ContractCreateException;
 import org.tron.trident.crypto.Hash;
 
-public class UtilsTest extends BaseTest {
+public class UtilsTest {
 
   @Test
   public void testAddressValid() {
@@ -68,6 +65,7 @@ public class UtilsTest extends BaseTest {
   @Test
   public void testEncodeParameter() throws ContractCreateException {
     List<org.tron.trident.abi.datatypes.Type<?>> params = new ArrayList<>();
+    String testAddress = generateAddress().toBase58CheckAddress();
     params.add(new Address(testAddress));
     params.add(new Uint256(256));
 
@@ -86,6 +84,7 @@ public class UtilsTest extends BaseTest {
                 Hash.sha3(libraryName.getBytes()))
             .substring(0, 34);
     String code = "__$" + libraryNameKeccak256 + "$__";
+    String testAddress = generateAddress().toBase58CheckAddress();
     String libraryAddressPair =  libraryName + ":" + testAddress;
 
     try {
