@@ -1110,7 +1110,7 @@ public class ApiWrapper implements Api {
    */
   @Override
   public TransactionInfo getTransactionInfoById(String txID) throws IllegalException {
-    ByteString bsTxId = parseHex(txID);
+    ByteString bsTxId = ByteString.copyFrom(ByteArray.fromHexString(txID));
     BytesMessage request = BytesMessage.newBuilder()
         .setValue(bsTxId)
         .build();
@@ -1131,7 +1131,7 @@ public class ApiWrapper implements Api {
    */
   @Override
   public Transaction getTransactionById(String txID) throws IllegalException {
-    ByteString bsTxId = parseHex(txID);
+    ByteString bsTxId = ByteString.copyFrom(ByteArray.fromHexString(txID));
     BytesMessage request = BytesMessage.newBuilder()
         .setValue(bsTxId)
         .build();
@@ -1706,7 +1706,7 @@ public class ApiWrapper implements Api {
    */
   @Override
   public Transaction getTransactionByIdSolidity(String txID) throws IllegalException {
-    ByteString bsTxId = parseHex(txID);
+    ByteString bsTxId = ByteString.copyFrom(ByteArray.fromHexString(txID));
     BytesMessage request = BytesMessage.newBuilder()
         .setValue(bsTxId)
         .build();
@@ -2075,7 +2075,7 @@ public class ApiWrapper implements Api {
    */
   @Override
   public BlockBalanceTrace getBlockBalance(String blockId, long blockNum) {
-    ByteString bsId = parseHex(blockId);
+    ByteString bsId = ByteString.copyFrom(ByteArray.fromHexString(blockId));
     BlockIdentifier blockIdentifier =
         BlockIdentifier.newBuilder()
             .setHash(bsId)
@@ -2300,7 +2300,7 @@ public class ApiWrapper implements Api {
    */
   @Override
   public Block getBlockById(String blockID) {
-    ByteString bsBlockId = parseHex(blockID);
+    ByteString bsBlockId = ByteString.copyFrom(ByteArray.fromHexString(blockID));
     BytesMessage request = BytesMessage.newBuilder()
         .setValue(bsBlockId)
         .build();
@@ -2546,7 +2546,7 @@ public class ApiWrapper implements Api {
       return blockingStub.getBlockByNum(numberMessage);
     } else if (ByteArray.isHexString(blockIDOrNum)) {
       BytesMessage bytesMessage = BytesMessage.newBuilder()
-          .setValue(parseHex(blockIDOrNum))
+          .setValue(ByteString.copyFrom(ByteArray.fromHexString(blockIDOrNum)))
           .build();
       return blockingStub.getBlockById(bytesMessage);
     } else {
@@ -2594,7 +2594,7 @@ public class ApiWrapper implements Api {
    */
   @Override
   public MarketOrder getMarketOrderById(String txn) {
-    ByteString rawAddress = parseHex(txn);
+    ByteString rawAddress = ByteString.copyFrom(ByteArray.fromHexString(txn));
     BytesMessage param =
         BytesMessage.newBuilder()
             .setValue(rawAddress)
@@ -2766,7 +2766,7 @@ public class ApiWrapper implements Api {
   public TransactionExtention marketCancelOrder(String ownerAddress, String orderId)
       throws IllegalException {
     ByteString rawOwner = parseAddress(ownerAddress);
-    ByteString rawOrderId = parseHex(orderId);
+    ByteString rawOrderId = ByteString.copyFrom(ByteArray.fromHexString(orderId));
     MarketCancelOrderContract marketCancelOrderContract = MarketCancelOrderContract.newBuilder()
         .setOwnerAddress(rawOwner)
         .setOrderId(rawOrderId)
@@ -2877,7 +2877,7 @@ public class ApiWrapper implements Api {
       builder.setCallValue(callValue);
     }
 
-    builder.setBytecode(parseHex(code));
+    builder.setBytecode(ByteString.copyFrom(ByteArray.fromHexString(code)));
     CreateSmartContract.Builder createSmartContractBuilder = CreateSmartContract.newBuilder()
         .setOwnerAddress(parseAddress(address))
         .setNewContract(builder.build());
@@ -2937,7 +2937,8 @@ public class ApiWrapper implements Api {
 
     if (constructorParams != null && !constructorParams.isEmpty()) {
       ByteString constructorParamsByteString = encodeParameter(constructorParams);
-      ByteString newByteCode = parseHex(bytecode).concat(constructorParamsByteString);
+      ByteString newByteCode = ByteString.copyFrom(ByteArray.fromHexString(bytecode))
+          .concat(constructorParamsByteString);
       bytecode = ByteArray.toHexString(newByteCode.toByteArray());
     }
     CreateSmartContract createSmartContract = createSmartContract(
