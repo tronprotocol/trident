@@ -86,7 +86,7 @@ class ApiWrapperTest extends BaseTest {
         TriggerSmartContract.newBuilder()
             .setOwnerAddress(ApiWrapper.parseAddress(fromAddr))
             .setContractAddress(ApiWrapper.parseAddress(usdtAddr))
-            .setData(ApiWrapper.parseHex(encodedHex))
+            .setData(ByteString.copyFrom(ByteArray.fromHexString(encodedHex)))
             .build();
 
     System.out.println("trigger:\n" + trigger);
@@ -191,7 +191,7 @@ class ApiWrapperTest extends BaseTest {
     String orderId = "4503c83790b5f739b58b94c28f1e98357c3dc98f6b6877c8ee792d3ea3a4465a";
     String ownerAddress = "TEqZpKG8cLquDHNVGcHXJhEQMoWE653nBH";
     MarketOrder marketOrder = client.getMarketOrderById(orderId);
-    assertEquals(marketOrder.getOrderId(), ApiWrapper.parseHex(orderId));
+    assertEquals(marketOrder.getOrderId(), ByteString.copyFrom(ByteArray.fromHexString(orderId)));
     assertEquals(marketOrder.getOwnerAddress(), ApiWrapper.parseAddress(ownerAddress));
     assertEquals(marketOrder.getBuyTokenId(), ByteString.copyFrom("_".getBytes()));
     assertEquals(marketOrder.getSellTokenId(), ByteString.copyFrom("1000012".getBytes()));

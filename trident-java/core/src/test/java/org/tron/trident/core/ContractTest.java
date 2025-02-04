@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.google.protobuf.ByteString;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
@@ -81,7 +82,7 @@ class ContractTest extends BaseTest {
     builder.setOwnerAddr(ApiWrapper.parseAddress(client.keyPair.toBase58CheckAddress()))
         .setOriginAddr(ApiWrapper.parseAddress(client.keyPair.toBase58CheckAddress()))
         .setAbi(abi)
-        .setBytecode(ApiWrapper.parseHex(bytecode))
+        .setBytecode(ByteString.copyFrom(ByteArray.fromHexString(bytecode)))
         .setCallValue(0L)
         .setConsumeUserResourcePercent(100)
         .setOriginEnergyLimit(10_000_000L);
