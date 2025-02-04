@@ -2794,14 +2794,18 @@ public class ApiWrapper implements Api {
    *
    * @param ownerAddress owner address
    * @param contractAddress contract address
-   * @param originEnergyLimit origin energy limit, must be >=0
+   * @param originEnergyLimit origin energy limit, must be > 0
    * @return UpdateEnergyLimitContract
+   * @throws IllegalException if originEnergyLimit is invalid
    */
   @Override
   public TransactionExtention updateEnergyLimit(String ownerAddress, String contractAddress,
       long originEnergyLimit) throws IllegalException {
     ByteString rawOwner = parseAddress(ownerAddress);
     ByteString rawContract = parseAddress(contractAddress);
+    if (originEnergyLimit <= 0) {
+      throw new IllegalException("origin energy limit must be > 0");
+    }
     UpdateEnergyLimitContract updateEnergyLimitContract = UpdateEnergyLimitContract.newBuilder()
         .setOwnerAddress(rawOwner)
         .setContractAddress(rawContract)
@@ -2818,12 +2822,16 @@ public class ApiWrapper implements Api {
    * @param contractAddress contract address
    * @param consumeUserResourcePercent consume user resource percent if user trigger this contract, must be [0,100]
    * @return UpdateSettingContract
+   * @throws IllegalException if consumeUserResourcePercent is invalid
    */
   @Override
   public TransactionExtention updateSetting(String ownerAddress, String contractAddress,
       long consumeUserResourcePercent) throws IllegalException {
     ByteString rawOwner = parseAddress(ownerAddress);
     ByteString rawContract = parseAddress(contractAddress);
+    if (consumeUserResourcePercent < 0 || consumeUserResourcePercent > 100) {
+      throw new IllegalException("percent not in [0, 100]");
+    }
     UpdateSettingContract updateSettingContract = UpdateSettingContract.newBuilder()
         .setOwnerAddress(rawOwner)
         .setContractAddress(rawContract)
