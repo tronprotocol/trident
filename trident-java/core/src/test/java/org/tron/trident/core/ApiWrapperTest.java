@@ -52,7 +52,7 @@ class ApiWrapperTest extends BaseTest {
   void testGetNowBlockQuery() {
     BlockExtention block = client.blockingStub.getNowBlock2(EmptyMessage.newBuilder().build());
 
-    System.out.println(block.getBlockHeader());
+    //System.out.println(block.getBlockHeader());
     assertTrue(block.getBlockHeader().getRawDataOrBuilder().getNumber() > 0);
   }
 
@@ -64,7 +64,7 @@ class ApiWrapperTest extends BaseTest {
         2000);
     Chain.Block block = client.getNowBlock();
 
-    System.out.println(block.getBlockHeader());
+    //System.out.println(block.getBlockHeader());
     assertTrue(block.getBlockHeader().getRawDataOrBuilder().getNumber() > 0);
   }
 
@@ -89,16 +89,16 @@ class ApiWrapperTest extends BaseTest {
             .setData(ByteString.copyFrom(ByteArray.fromHexString(encodedHex)))
             .build();
 
-    System.out.println("trigger:\n" + trigger);
+    //System.out.println("trigger:\n" + trigger);
 
     TransactionExtention txnExt = client.blockingStub.triggerContract(trigger);
-    System.out.println("txn id => " + Hex.toHexString(txnExt.getTxid().toByteArray()));
+    //System.out.println("txn id => " + Hex.toHexString(txnExt.getTxid().toByteArray()));
 
     Transaction signedTxn = client.signTransaction(txnExt);
 
-    System.out.println(signedTxn.toString());
+    //System.out.println(signedTxn.toString());
     TransactionReturn ret = client.blockingStub.broadcastTransaction(signedTxn);
-    System.out.println("======== Result ========\n" + ret.toString());
+    //System.out.println("======== Result ========\n" + ret.toString());
   }
 
   @Test
@@ -165,8 +165,8 @@ class ApiWrapperTest extends BaseTest {
   void testGetMarketOrderByAccount() {
     String account = "TEqZpKG8cLquDHNVGcHXJhEQMoWE653nBH"; //nile
     MarketOrderList marketOrderList = client.getMarketOrderByAccount(account);
-    System.out.println(marketOrderList.getOrdersCount());
-    System.out.println(marketOrderList.getOrders(0).getOrderId());
+    //System.out.println(marketOrderList.getOrdersCount());
+    //System.out.println(marketOrderList.getOrders(0).getOrderId());
     assertTrue(marketOrderList.getOrdersCount() > 0);
   }
 
@@ -175,15 +175,15 @@ class ApiWrapperTest extends BaseTest {
     MarketOrderList marketOrderList = client.getMarketOrderListByPair("1000012", "_");
     assertTrue(marketOrderList.getOrdersCount() > 0);
     //4503c83790b5f739b58b94c28f1e98357c3dc98f6b6877c8ee792d3ea3a4465a
-    System.out.println("orderId: " +
-        ByteArray.toHexString(marketOrderList.getOrders(0).getOrderId().toByteArray()));
+    //System.out.println("orderId: " +
+    //    ByteArray.toHexString(marketOrderList.getOrders(0).getOrderId().toByteArray()));
 
     String addr = ByteArray.toHexString(
         marketOrderList.getOrders(0).getOwnerAddress().toByteArray());
-    System.out.println("ownerAddress:" + addr);
+    //System.out.println("ownerAddress:" + addr);
     Address address = new Address(addr);
     //TEqZpKG8cLquDHNVGcHXJhEQMoWE653nBH
-    System.out.println(address);
+    //System.out.println(address);
   }
 
   @Test
@@ -203,8 +203,8 @@ class ApiWrapperTest extends BaseTest {
     assertTrue(marketOrderPairList.getOrderPairCount() > 0);
     String buyTokenId = marketOrderPairList.getOrderPair(0).getBuyTokenId().toStringUtf8();
     String sellTokenId = marketOrderPairList.getOrderPair(0).getSellTokenId().toStringUtf8();
-    System.out.println(buyTokenId);
-    System.out.println(sellTokenId);
+    //System.out.println(buyTokenId);
+    //System.out.println(sellTokenId);
   }
 
   @Test

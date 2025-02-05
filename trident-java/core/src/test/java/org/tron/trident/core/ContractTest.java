@@ -97,7 +97,7 @@ class ContractTest extends BaseTest {
     // 7. sign & broadcast
     Transaction transaction = client.signTransaction(txBuilder.getTransaction());
     String txId = client.broadcastTransaction(transaction);
-    System.out.println("Deploy contract transaction id: " + txId);
+    //System.out.println("Deploy contract transaction id: " + txId);
     sleep(10_000L);
 
     TransactionInfo transactionInfo = client.getTransactionInfoById(txId);
@@ -115,7 +115,7 @@ class ContractTest extends BaseTest {
             + "7a7a72305820b24fc247fdaf3644b3c4c94fcee380aa610ed83415061ff9e65d7fa94a5a50a00029";
 
     String txId = client.deployContract("testDeployContract", abiStr, bytecode);
-    System.out.println("Transaction ID: " + txId);
+    //System.out.println("Transaction ID: " + txId);
     sleep(10_000L);
 
     TransactionInfo transactionInfo = client.getTransactionInfoById(txId);
@@ -137,7 +137,7 @@ class ContractTest extends BaseTest {
     String txId = client.deployContract("testDConstructorParams", abiStr, bytecode,
         constructorParams, 1000_000_000L, 100,
         10_000_000L, 0L);
-    System.out.println("Transaction ID: " + txId);
+    //System.out.println("Transaction ID: " + txId);
 
     sleep(10_000L);
 
@@ -162,7 +162,7 @@ class ContractTest extends BaseTest {
     String txId = client.deployContract("testDConstructorParams", abiStr, bytecode,
         constructorParams, 100_000_000L, 100,
         10_000_000L, 1_000_000L);
-    System.out.println("Transaction ID: " + txId);
+    //System.out.println("Transaction ID: " + txId);
     sleep(10_000L);
 
     TransactionInfo transactionInfo = client.getTransactionInfoById(txId);
@@ -186,9 +186,9 @@ class ContractTest extends BaseTest {
 
     Transaction signedTxn = client.signTransaction(transactionExtention);
 
-    System.out.println(signedTxn.toString());
+    //System.out.println(signedTxn.toString());
     String ret = client.broadcastTransaction(signedTxn);
-    System.out.println("======== Result ========\n" + ret);
+    //System.out.println("======== Result ========\n" + ret);
     sleep(10_000L);
     TransactionInfo transactionInfo = client.getTransactionInfoById(ret);
     assertEquals(0, transactionInfo.getResult().getNumber());
@@ -209,7 +209,7 @@ class ContractTest extends BaseTest {
     String encodedHex = FunctionEncoder.encode(trc20Transfer);
     EstimateEnergyMessage estimateEnergyMessage = client.estimateEnergyV2(fromAddr, usdtAddr,
         encodedHex);
-    System.out.println(estimateEnergyMessage.getEnergyRequired());
+    //System.out.println(estimateEnergyMessage.getEnergyRequired());
     assertTrue(estimateEnergyMessage.getEnergyRequired() > 0);
     assertTrue(estimateEnergyMessage.getResult().getResult());
   }
@@ -226,7 +226,7 @@ class ContractTest extends BaseTest {
     String encodedHex = FunctionEncoder.encode(depositFunction);
     EstimateEnergyMessage estimateEnergyMessage = client.estimateEnergyV2(fromAddr, strx,
         encodedHex, 1_000_000L, 0, "");
-    System.out.println(estimateEnergyMessage.getEnergyRequired());
+    //System.out.println(estimateEnergyMessage.getEnergyRequired());
     assertTrue(estimateEnergyMessage.getEnergyRequired() > 0);
     assertTrue(estimateEnergyMessage.getResult().getResult());
   }
@@ -246,7 +246,7 @@ class ContractTest extends BaseTest {
         encodedHex);
     String hexResult = ByteArray.toHexString(
         transactionExtention.getConstantResult(0).toByteArray());
-    System.out.println(hexResult);
+    //System.out.println(hexResult);
     List<Type> decoded = FunctionReturnDecoder.decode(hexResult,
         balanceOfFunction.getOutputParameters());
     assertFalse(decoded.isEmpty());
@@ -269,7 +269,7 @@ class ContractTest extends BaseTest {
     TransactionBuilder transactionBuilder = client.triggerCallV2(fromAddr, usdtAddr, encodedHex);
     Transaction signedTxn = client.signTransaction(transactionBuilder.getTransaction());
     String ret = client.broadcastTransaction(signedTxn);
-    System.out.println(ret);
+    //System.out.println(ret);
     sleep(10_000L);
     TransactionInfo transactionInfo = client.getTransactionInfoById(ret);
     assertEquals(code.SUCESS, transactionInfo.getResult());

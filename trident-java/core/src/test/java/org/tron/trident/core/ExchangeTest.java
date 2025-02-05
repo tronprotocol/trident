@@ -40,7 +40,7 @@ public class ExchangeTest extends BaseTest {
     assertEquals(code.SUCESS, transactionInfo.getResult());
 
     exchangeID = transactionInfo.getExchangeId();
-    System.out.println("exchangeID:" + exchangeID);
+    //System.out.println("exchangeID:" + exchangeID);
     // visit this for more info: https://nile.trongrid.io/wallet/getexchangebyid?id={changeid}
     Exchange exchange = client.getExchangeById(String.valueOf(exchangeID));
     assertEquals(200_000_000L, exchange.getFirstTokenBalance());
@@ -60,8 +60,8 @@ public class ExchangeTest extends BaseTest {
 
     TransactionInfo transactionInfo = client.getTransactionInfoById(txId);
     assertEquals(code.SUCESS, transactionInfo.getResult());
-    System.out.println(
-        "exchange_inject_another_amount:" + transactionInfo.getExchangeInjectAnotherAmount());
+    //System.out.println(
+    //    "exchange_inject_another_amount:" + transactionInfo.getExchangeInjectAnotherAmount());
     assertTrue(transactionInfo.getExchangeInjectAnotherAmount() > 0);
   }
 
@@ -78,8 +78,8 @@ public class ExchangeTest extends BaseTest {
 
     TransactionInfo transactionInfo = client.getTransactionInfoById(txId);
     assertEquals(code.SUCESS, transactionInfo.getResult());
-    System.out.println(
-        "exchange_withdraw_another_amount:" + transactionInfo.getExchangeWithdrawAnotherAmount());
+    //System.out.println(
+    //    "exchange_withdraw_another_amount:" + transactionInfo.getExchangeWithdrawAnotherAmount());
     assertTrue(transactionInfo.getExchangeWithdrawAnotherAmount() > 0);
   }
 
@@ -97,8 +97,8 @@ public class ExchangeTest extends BaseTest {
 
     TransactionInfo transactionInfo = client.getTransactionInfoById(txId);
     assertEquals(code.SUCESS, transactionInfo.getResult());
-    System.out.println(
-        "exchange_received_amount:" + transactionInfo.getExchangeReceivedAmount());
+    //System.out.println(
+    //    "exchange_received_amount:" + transactionInfo.getExchangeReceivedAmount());
     assertTrue(transactionInfo.getExchangeReceivedAmount() > 0);
   }
 }

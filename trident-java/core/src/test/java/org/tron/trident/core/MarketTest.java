@@ -40,7 +40,7 @@ public class MarketTest extends BaseTest {
     assertEquals(code.SUCESS, transactionInfo.getResult());
     orderId = ByteArray.toHexString(transactionInfo.getOrderId().toByteArray());
 
-    System.out.println("orderId: " + orderId);
+    //System.out.println("orderId: " + orderId);
     MarketOrder marketOrder = client.getMarketOrderById(orderId);
     assertEquals(State.ACTIVE, marketOrder.getState());
   }

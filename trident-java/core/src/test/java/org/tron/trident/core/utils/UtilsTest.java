@@ -92,7 +92,7 @@ public class UtilsTest {
       assertNotNull(result);
       assertTrue(result.length > 0);
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      //System.out.println(e.getMessage());
       fail("Should not throw exception");
     }
 

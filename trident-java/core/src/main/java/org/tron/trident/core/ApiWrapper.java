@@ -138,6 +138,9 @@ public class ApiWrapper implements Api {
   public static final long CONSUME_USER_RESOURCE_PERCENT = 100L;
 
   public static final long ORIGIN_ENERGY_LIMIT = 100_000_000L;
+
+  public static final String TRX_SYMBOL_BYTES = "_";
+
   public final WalletGrpc.WalletBlockingStub blockingStub;
   public final WalletSolidityGrpc.WalletSolidityBlockingStub blockingStubSolidity;
   public final KeyPair keyPair;
@@ -2671,8 +2674,7 @@ public class ApiWrapper implements Api {
    */
   @Override
   public TransactionExtention exchangeInject(String ownerAddress, long exchangeId, String tokenId,
-      long amount)
-      throws IllegalException {
+      long amount) throws IllegalException {
 
     ExchangeInjectContract exchangeInjectContract = ExchangeInjectContract.newBuilder()
         .setOwnerAddress(parseAddress(ownerAddress))
@@ -2768,9 +2770,9 @@ public class ApiWrapper implements Api {
    * create MarketSellAssetContract with parameters
    *
    * @param ownerAddress owner address
-   * @param sellTokenId sell token Id, all digit is 0~9
+   * @param sellTokenId sell token Id, "_" or all digit with 0~9
    * @param sellTokenQuantity sell token quantity
-   * @param buyTokenId buy token Id, all digit is 0~9
+   * @param buyTokenId buy token Id, "_" or all digit with 0~9
    * @param buyTokenQuantity buy token quantity
    * @return MarketSellAssetContract
    */
@@ -2778,6 +2780,12 @@ public class ApiWrapper implements Api {
   public TransactionExtention marketSellAsset(String ownerAddress, String sellTokenId,
       long sellTokenQuantity, String buyTokenId, long buyTokenQuantity) throws IllegalException {
     ByteString rawOwner = parseAddress(ownerAddress);
+    if (!TRX_SYMBOL_BYTES.equalsIgnoreCase(sellTokenId) && Numeric.isNumericString(sellTokenId)) {
+      throw new IllegalException("sellTokenId is not a valid number");
+    }
+    if (!TRX_SYMBOL_BYTES.equalsIgnoreCase(buyTokenId) && Numeric.isNumericString(buyTokenId)) {
+      throw new IllegalException("buyTokenId is not a valid number");
+    }
     MarketSellAssetContract marketSellAssetContract = MarketSellAssetContract.newBuilder()
         .setOwnerAddress(rawOwner)
         .setSellTokenId(ByteString.copyFrom(sellTokenId.getBytes()))

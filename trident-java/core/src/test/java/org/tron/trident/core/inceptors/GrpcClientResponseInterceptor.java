@@ -23,7 +23,7 @@ public class GrpcClientResponseInterceptor implements ClientInterceptor {
                 /**
                  * write your interceptor logic here
                  */
-                System.out.println("do something ...");
+                //System.out.println("do something ...");
                 super.onMessage(message);
               }
             },
