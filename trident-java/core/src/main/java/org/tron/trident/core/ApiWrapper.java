@@ -2932,12 +2932,16 @@ public class ApiWrapper implements Api {
    * @param feeLimit feeLimit
    * @param consumeUserResourcePercent consumeUserResourcePercent,range 0-100
    * @param originEnergyLimit originEnergyLimit
+   * @param callValue TRX value
+   * @param tokenValue token value of token10
+   * @param tokenId token10 ID, no use set null or "" or "#"
    * @return String txn
    */
   @Override
   public String deployContract(String contractName, String abiStr, String bytecode,
       List<Type<?>> constructorParams,
-      long feeLimit, long consumeUserResourcePercent, long originEnergyLimit, long callValue)
+      long feeLimit, long consumeUserResourcePercent, long originEnergyLimit, long callValue,
+      String tokenId, long tokenValue)
       throws Exception {
 
     if (constructorParams != null && !constructorParams.isEmpty()) {
@@ -2948,7 +2952,7 @@ public class ApiWrapper implements Api {
     }
     CreateSmartContract createSmartContract = createSmartContract(
         contractName, keyPair.toBase58CheckAddress(), abiStr, bytecode, callValue,
-        consumeUserResourcePercent, originEnergyLimit, 0, null);
+        consumeUserResourcePercent, originEnergyLimit, tokenValue, tokenId);
 
     TransactionBuilder txBuilder = new TransactionBuilder(
         blockingStub.deployContract(createSmartContract).getTransaction());
@@ -2980,6 +2984,8 @@ public class ApiWrapper implements Api {
         FEE_LIMIT,
         CONSUME_USER_RESOURCE_PERCENT,
         ORIGIN_ENERGY_LIMIT,
+        0L,
+        null,
         0L
     );
   }
