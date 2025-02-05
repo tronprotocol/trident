@@ -24,8 +24,8 @@ public class ContractFunction {
   private Entry abi;
   private Contract cntr;
   private ByteString ownerAddr;
-  private List<String> inputParams = new ArrayList();
-  private List<String> inputTypes = new ArrayList();
+  private List<String> inputParams = new ArrayList<>();
+  private List<String> inputTypes = new ArrayList<>();
   private String output = "";
   private String outputType;
   private long callValue = 0;
@@ -150,8 +150,8 @@ public class ContractFunction {
     private Entry abi;
     private Contract cntr;
     private ByteString ownerAddr;
-    private List<String> inputParams = new ArrayList();
-    private List<String> inputTypes = new ArrayList();
+    private List<String> inputParams = new ArrayList<>();
+    private List<String> inputTypes = new ArrayList<>();
     private String output = "";
     private String outputType;
     private long callValue = 0;
@@ -179,12 +179,12 @@ public class ContractFunction {
       return this;
     }
 
-    public Builder setInputParams(List inputParams) {
+    public Builder setInputParams(List<String> inputParams) {
       this.inputParams = inputParams;
       return this;
     }
 
-    public Builder setInputTypes(List inputTypes) {
+    public Builder setInputTypes(List<String> inputTypes) {
       this.inputTypes = inputTypes;
       return this;
     }

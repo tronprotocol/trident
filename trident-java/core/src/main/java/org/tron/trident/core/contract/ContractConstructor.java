@@ -14,7 +14,7 @@ public class ContractConstructor {
 
   private Entry rawConstructor;
 
-  private List paramTypes;
+  private List<String> paramTypes;
 
   private boolean payable;
 
@@ -35,7 +35,7 @@ public class ContractConstructor {
     return this.rawConstructor;
   }
 
-  public List getParamTypes() {
+  public List<String> getParamTypes() {
     return this.paramTypes;
   }
 
@@ -47,12 +47,12 @@ public class ContractConstructor {
     return this.bytecode;
   }
 
-  public void encodeParameter(List<Type> params) throws ContractCreateException {
+  public void encodeParameter(List<Type<?>> params) throws ContractCreateException {
     if (params.size() != paramTypes.size()) {
       throw new ContractCreateException("Parameter amount doesn't match.");
     }
     StringBuilder builder = new StringBuilder();
-    for (Type p : params) {
+    for (Type<?> p : params) {
       builder.append(TypeEncoder.encode(p));
     }
     this.bytecode = ByteString.copyFrom(Hex.decode(builder.toString()));

@@ -125,4 +125,15 @@ public class ByteArray {
     }
     return x;
   }
+
+  public static boolean isHexString(String str) {
+    boolean bRet = false;
+    try {
+      ByteArray.fromHexString(str);
+      bRet = true;
+    } catch (Exception ignored) {
+    }
+    return bRet;
+  }
+
 }
