@@ -8,10 +8,11 @@ public class TokenValidatorTest {
 
   @Test
   public void testValidateTokenId() {
-    TokenValidator.validateTokenId("123");
+    TokenValidator.validateTokenId("1000058");
     TokenValidator.validateTokenId("");
-    TokenValidator.validateTokenId("#");
-    TokenValidator.validateTokenId("  123");
+    TokenValidator.validateTokenId("_");
+    TokenValidator.validateTokenId("  1000000");
+    TokenValidator.validateTokenId(null);
 
     try {
       TokenValidator.validateTokenId(" ");
@@ -30,23 +31,6 @@ public class TokenValidatorTest {
     try {
       TokenValidator.validateTokenId("-123");
 
-    } catch(Exception e){
-      assertEquals("Token ID must be a valid number", e.getMessage());
-    }
-
-  }
-
-  @Test
-  public void testValidateTrc10TokenId() {
-    TokenValidator.validateTrc10TokenId("1000000");
-    try {
-      TokenValidator.validateTrc10TokenId("999");
-    } catch(Exception e){
-      assertEquals("TRC10 token ID must ge 1000000", e.getMessage());
-    }
-
-    try {
-      TokenValidator.validateTrc10TokenId("abc");
     } catch(Exception e){
       assertEquals("Token ID must be a valid number", e.getMessage());
     }

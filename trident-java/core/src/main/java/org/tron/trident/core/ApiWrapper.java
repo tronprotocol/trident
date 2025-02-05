@@ -1,5 +1,11 @@
 package org.tron.trident.core;
 
+import static org.tron.trident.core.Constant.CONSUME_USER_RESOURCE_PERCENT;
+import static org.tron.trident.core.Constant.FEE_LIMIT;
+import static org.tron.trident.core.Constant.GRPC_TIMEOUT;
+import static org.tron.trident.core.Constant.ORIGIN_ENERGY_LIMIT;
+import static org.tron.trident.core.Constant.TRANSACTION_DEFAULT_EXPIRATION_TIME;
+import static org.tron.trident.core.Constant.TRX_SYMBOL_BYTES;
 import static org.tron.trident.core.utils.Utils.encodeParameter;
 
 import com.google.protobuf.ByteString;
@@ -129,18 +135,6 @@ import org.tron.trident.utils.Numeric;
  */
 
 public class ApiWrapper implements Api {
-
-  public static final long TRANSACTION_DEFAULT_EXPIRATION_TIME = 60 * 1_000L; //60 seconds
-
-  public static final long GRPC_TIMEOUT = 30 * 1_000L; //30 seconds
-
-  public static final long FEE_LIMIT = 150_000_000L; //150 TRX
-
-  public static final long CONSUME_USER_RESOURCE_PERCENT = 100L;
-
-  public static final long ORIGIN_ENERGY_LIMIT = 100_000_000L;
-
-  public static final String TRX_SYMBOL_BYTES = "_";
 
   public final WalletGrpc.WalletBlockingStub blockingStub;
   public final WalletSolidityGrpc.WalletSolidityBlockingStub blockingStubSolidity;
@@ -2935,7 +2929,7 @@ public class ApiWrapper implements Api {
    * @param originEnergyLimit originEnergyLimit
    * @param callValue TRX value
    * @param tokenValue token value of token10
-   * @param tokenId token10 ID, no use set null or "" or "#"
+   * @param tokenId token10 ID, no use set null or ""
    * @return String txn
    */
   @Override
@@ -2945,7 +2939,7 @@ public class ApiWrapper implements Api {
       String tokenId, long tokenValue)
       throws Exception {
 
-    TokenValidator.validateTrc10TokenId(tokenId);
+    TokenValidator.validateTokenId(tokenId);
 
     if (constructorParams != null && !constructorParams.isEmpty()) {
       ByteString constructorParamsByteString = encodeParameter(constructorParams);

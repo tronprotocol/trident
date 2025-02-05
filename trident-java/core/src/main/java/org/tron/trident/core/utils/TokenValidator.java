@@ -1,5 +1,7 @@
 package org.tron.trident.core.utils;
 
+import static org.tron.trident.core.Constant.TRX_SYMBOL_BYTES;
+
 import org.tron.trident.utils.Numeric;
 
 public class TokenValidator {
@@ -11,7 +13,7 @@ public class TokenValidator {
    */
   public static void validateTokenId(String tokenId) {
     // Return if it's a special marker
-    if (tokenId == null || tokenId.isEmpty() || "#".equals(tokenId)) {
+    if (tokenId == null || tokenId.isEmpty() || TRX_SYMBOL_BYTES.equals(tokenId)) {
       return;
     }
 
@@ -23,21 +25,12 @@ public class TokenValidator {
       throw new IllegalArgumentException("Token ID must be a valid number");
     }
 
-  }
-
-  /**
-   * check TRC10 ID
-   */
-  public static void validateTrc10TokenId(String tokenId) {
-    validateTokenId(tokenId);
-    try {
-      long tokenValue = Long.parseLong(tokenId.trim());
-      if (tokenValue < 1000000L) {
-        throw new IllegalArgumentException("TRC10 token ID must ge 1000000");
-      }
-    } catch (NumberFormatException e) {
-      throw new IllegalArgumentException("Invalid TRC10 token ID", e);
+    //range, start 1000000L
+    long tokenValue = Long.parseLong(trimmedTokenId);
+    if (tokenValue < 1000000L) {
+      throw new IllegalArgumentException("TRC10 token ID must ge 1000000");
     }
+
   }
 
 }
