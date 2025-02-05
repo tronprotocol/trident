@@ -37,6 +37,7 @@ import org.tron.trident.core.transaction.TransactionBuilder;
 import org.tron.trident.core.transaction.TransactionCapsule;
 import org.tron.trident.core.utils.ByteArray;
 import org.tron.trident.core.utils.Sha256Hash;
+import org.tron.trident.core.utils.TokenValidator;
 import org.tron.trident.core.utils.Utils;
 import org.tron.trident.proto.Chain.Block;
 import org.tron.trident.proto.Chain.Transaction;
@@ -2943,6 +2944,8 @@ public class ApiWrapper implements Api {
       long feeLimit, long consumeUserResourcePercent, long originEnergyLimit, long callValue,
       String tokenId, long tokenValue)
       throws Exception {
+
+    TokenValidator.validateTrc10TokenId(tokenId);
 
     if (constructorParams != null && !constructorParams.isEmpty()) {
       ByteString constructorParamsByteString = encodeParameter(constructorParams);
