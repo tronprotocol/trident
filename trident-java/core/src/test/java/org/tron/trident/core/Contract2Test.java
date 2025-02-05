@@ -59,7 +59,7 @@ public class Contract2Test extends BaseTest {
 
     Transaction transaction = client.signTransaction(txExt);
     String txId = client.broadcastTransaction(transaction);
-    System.out.println("txId1:" + txId);
+    //System.out.println("txId1:" + txId);
     sleep(10_000L);
 
     TransactionInfo transactionInfo = client.getTransactionInfoById(txId);
@@ -68,7 +68,7 @@ public class Contract2Test extends BaseTest {
     //verify abi not null
     ByteString contractAddress = transactionInfo.getContractAddress();
     contractWithT = Base58Check.bytesToBase58(contractAddress.toByteArray());
-    System.out.println("contract:" + contractWithT);
+    //System.out.println("contract:" + contractWithT);
 
     Contract contract = client.getContract(Hex.toHexString(contractAddress.toByteArray()));
     assertFalse(contract.getAbi().toString().isEmpty());
@@ -81,7 +81,7 @@ public class Contract2Test extends BaseTest {
 
     Transaction transaction = client.signTransaction(txExt);
     String txId = client.broadcastTransaction(transaction);
-    System.out.println("txId2:" + txId);
+    //System.out.println("txId2:" + txId);
 
     sleep(10_000L);
 
@@ -101,7 +101,7 @@ public class Contract2Test extends BaseTest {
 
     Transaction transaction = client.signTransaction(txExt);
     String txId = client.broadcastTransaction(transaction);
-    System.out.println("txId3:" + txId);
+    //System.out.println("txId3:" + txId);
 
     sleep(10_000L);
 
@@ -120,7 +120,7 @@ public class Contract2Test extends BaseTest {
 
     Transaction transaction = client.signTransaction(txExt);
     String txId = client.broadcastTransaction(transaction);
-    System.out.println("txId4:" + txId);
+    //System.out.println("txId4:" + txId);
 
     sleep(10_000L);
 

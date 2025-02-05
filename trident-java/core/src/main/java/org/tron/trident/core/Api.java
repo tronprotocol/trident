@@ -376,7 +376,7 @@ public interface Api {
 
   String deployContract(String contractName, String abiStr, String bytecode,
       List<Type<?>> constructorParams, long feeLimit, long consumeUserResourcePercent,
-      long originEnergyLimit, long callValue) throws Exception;
+      long originEnergyLimit, long callValue, String tokenId, long tokenValue) throws Exception;
 
   String deployContract(String name, String abiStr, String bytecode) throws Exception;
 }

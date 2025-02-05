@@ -1,5 +1,11 @@
 package org.tron.trident.core;
 
+import static org.tron.trident.core.Constant.CONSUME_USER_RESOURCE_PERCENT;
+import static org.tron.trident.core.Constant.FEE_LIMIT;
+import static org.tron.trident.core.Constant.GRPC_TIMEOUT;
+import static org.tron.trident.core.Constant.ORIGIN_ENERGY_LIMIT;
+import static org.tron.trident.core.Constant.TRANSACTION_DEFAULT_EXPIRATION_TIME;
+import static org.tron.trident.core.Constant.TRX_SYMBOL_BYTES;
 import static org.tron.trident.core.utils.Utils.encodeParameter;
 
 import com.google.protobuf.ByteString;
@@ -37,6 +43,7 @@ import org.tron.trident.core.transaction.TransactionBuilder;
 import org.tron.trident.core.transaction.TransactionCapsule;
 import org.tron.trident.core.utils.ByteArray;
 import org.tron.trident.core.utils.Sha256Hash;
+import org.tron.trident.core.utils.TokenValidator;
 import org.tron.trident.core.utils.Utils;
 import org.tron.trident.proto.Chain.Block;
 import org.tron.trident.proto.Chain.Transaction;
@@ -129,15 +136,6 @@ import org.tron.trident.utils.Numeric;
 
 public class ApiWrapper implements Api {
 
-  public static final long TRANSACTION_DEFAULT_EXPIRATION_TIME = 60 * 1_000L; //60 seconds
-
-  public static final long GRPC_TIMEOUT = 30 * 1_000L; //30 seconds
-
-  public static final long FEE_LIMIT = 150_000_000L; //150 TRX
-
-  public static final long CONSUME_USER_RESOURCE_PERCENT = 100L;
-
-  public static final long ORIGIN_ENERGY_LIMIT = 100_000_000L;
   public final WalletGrpc.WalletBlockingStub blockingStub;
   public final WalletSolidityGrpc.WalletSolidityBlockingStub blockingStubSolidity;
   public final KeyPair keyPair;
@@ -2671,8 +2669,7 @@ public class ApiWrapper implements Api {
    */
   @Override
   public TransactionExtention exchangeInject(String ownerAddress, long exchangeId, String tokenId,
-      long amount)
-      throws IllegalException {
+      long amount) throws IllegalException {
 
     ExchangeInjectContract exchangeInjectContract = ExchangeInjectContract.newBuilder()
         .setOwnerAddress(parseAddress(ownerAddress))
@@ -2768,9 +2765,9 @@ public class ApiWrapper implements Api {
    * create MarketSellAssetContract with parameters
    *
    * @param ownerAddress owner address
-   * @param sellTokenId sell token Id, all digit is 0~9
+   * @param sellTokenId sell token Id, "_" or all digit with 0~9
    * @param sellTokenQuantity sell token quantity
-   * @param buyTokenId buy token Id, all digit is 0~9
+   * @param buyTokenId buy token Id, "_" or all digit with 0~9
    * @param buyTokenQuantity buy token quantity
    * @return MarketSellAssetContract
    */
@@ -2778,6 +2775,12 @@ public class ApiWrapper implements Api {
   public TransactionExtention marketSellAsset(String ownerAddress, String sellTokenId,
       long sellTokenQuantity, String buyTokenId, long buyTokenQuantity) throws IllegalException {
     ByteString rawOwner = parseAddress(ownerAddress);
+    if (!TRX_SYMBOL_BYTES.equalsIgnoreCase(sellTokenId) && Numeric.isNumericString(sellTokenId)) {
+      throw new IllegalException("sellTokenId is not a valid number");
+    }
+    if (!TRX_SYMBOL_BYTES.equalsIgnoreCase(buyTokenId) && Numeric.isNumericString(buyTokenId)) {
+      throw new IllegalException("buyTokenId is not a valid number");
+    }
     MarketSellAssetContract marketSellAssetContract = MarketSellAssetContract.newBuilder()
         .setOwnerAddress(rawOwner)
         .setSellTokenId(ByteString.copyFrom(sellTokenId.getBytes()))
@@ -2924,13 +2927,19 @@ public class ApiWrapper implements Api {
    * @param feeLimit feeLimit
    * @param consumeUserResourcePercent consumeUserResourcePercent,range 0-100
    * @param originEnergyLimit originEnergyLimit
+   * @param callValue TRX value
+   * @param tokenValue token value of token10
+   * @param tokenId token10 ID, no use set null or ""
    * @return String txn
    */
   @Override
   public String deployContract(String contractName, String abiStr, String bytecode,
       List<Type<?>> constructorParams,
-      long feeLimit, long consumeUserResourcePercent, long originEnergyLimit, long callValue)
+      long feeLimit, long consumeUserResourcePercent, long originEnergyLimit, long callValue,
+      String tokenId, long tokenValue)
       throws Exception {
+
+    TokenValidator.validateTokenId(tokenId);
 
     if (constructorParams != null && !constructorParams.isEmpty()) {
       ByteString constructorParamsByteString = encodeParameter(constructorParams);
@@ -2940,7 +2949,7 @@ public class ApiWrapper implements Api {
     }
     CreateSmartContract createSmartContract = createSmartContract(
         contractName, keyPair.toBase58CheckAddress(), abiStr, bytecode, callValue,
-        consumeUserResourcePercent, originEnergyLimit, 0, null);
+        consumeUserResourcePercent, originEnergyLimit, tokenValue, tokenId);
 
     TransactionBuilder txBuilder = new TransactionBuilder(
         blockingStub.deployContract(createSmartContract).getTransaction());
@@ -2972,6 +2981,8 @@ public class ApiWrapper implements Api {
         FEE_LIMIT,
         CONSUME_USER_RESOURCE_PERCENT,
         ORIGIN_ENERGY_LIMIT,
+        0L,
+        null,
         0L
     );
   }

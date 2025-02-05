@@ -97,7 +97,7 @@ class ContractTest extends BaseTest {
     // 7. sign & broadcast
     Transaction transaction = client.signTransaction(txBuilder.getTransaction());
     String txId = client.broadcastTransaction(transaction);
-    System.out.println("Deploy contract transaction id: " + txId);
+    //System.out.println("Deploy contract transaction id: " + txId);
     sleep(10_000L);
 
     TransactionInfo transactionInfo = client.getTransactionInfoById(txId);
@@ -115,7 +115,7 @@ class ContractTest extends BaseTest {
             + "7a7a72305820b24fc247fdaf3644b3c4c94fcee380aa610ed83415061ff9e65d7fa94a5a50a00029";
 
     String txId = client.deployContract("testDeployContract", abiStr, bytecode);
-    System.out.println("Transaction ID: " + txId);
+    //System.out.println("Transaction ID: " + txId);
     sleep(10_000L);
 
     TransactionInfo transactionInfo = client.getTransactionInfoById(txId);
@@ -136,8 +136,8 @@ class ContractTest extends BaseTest {
 
     String txId = client.deployContract("testDConstructorParams", abiStr, bytecode,
         constructorParams, 1000_000_000L, 100,
-        10_000_000L, 0L);
-    System.out.println("Transaction ID: " + txId);
+        10_000_000L, 0L, null, 0L);
+    //System.out.println("Transaction ID: " + txId);
 
     sleep(10_000L);
 
@@ -161,8 +161,27 @@ class ContractTest extends BaseTest {
     //callValue 1TRX
     String txId = client.deployContract("testDConstructorParams", abiStr, bytecode,
         constructorParams, 100_000_000L, 100,
-        10_000_000L, 1_000_000L);
-    System.out.println("Transaction ID: " + txId);
+        10_000_000L, 1_000_000L, null, 0L);
+    //System.out.println("Transaction ID: " + txId);
+    sleep(10_000L);
+
+    TransactionInfo transactionInfo = client.getTransactionInfoById(txId);
+    assertEquals(code.SUCESS, transactionInfo.getResult());
+  }
+
+  @Test
+  void testDeployContractWithTRC10() throws Exception {
+
+    String abiStr = "{\"entrys\":[{\"inputs\":[],\"stateMutability\":\"payable\",\"type\":\"constructor\"},{\"inputs\":[{\"internalType\":\"address payable\",\"name\":\"toAddress\",\"type\":\"address\"},{\"internalType\":\"trcToken\",\"name\":\"id\",\"type\":\"trcToken\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"TransferTokenTo\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getResultInCon\",\"outputs\":[{\"internalType\":\"trcToken\",\"name\":\"\",\"type\":\"trcToken\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"msgTokenValueAndTokenIdTest\",\"outputs\":[{\"internalType\":\"trcToken\",\"name\":\"\",\"type\":\"trcToken\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"function\"}]}";
+     String bytecode = "60806040526000805560006001556000600255d3600081905550d260018190555034600281905550610332806100366000396000f3fe6080604052600436106100345760003560e01c806305c24200146100395780633be9ece71461005957806371dc08ce14610075575b600080fd5b610041610095565b60405161005093929190610214565b60405180910390f35b610073600480360381019061006e91906101a3565b6100ad565b005b61007d610135565b60405161008c93929190610214565b60405180910390f35b60008060008054600154600254925092509250909192565b8273ffffffffffffffffffffffffffffffffffffffff166108fc82908115029084801580156100db57600080fd5b5080678000000000000000111580156100f357600080fd5b5080620f42401015801561010657600080fd5b5060405160006040518083038185878a8ad094505050505015801561012f573d6000803e3d6000fd5b50505050565b600080600080d390506000d290506000349050828282955095509550505050909192565b600081359050610168816102b7565b6101718161024b565b905092915050565b600081359050610188816102ce565b92915050565b60008135905061019d816102e5565b92915050565b6000806000606084860312156101bc576101bb6102b2565b5b60006101ca86828701610159565b93505060206101db86828701610179565b92505060406101ec8682870161018e565b9150509250925092565b6101ff8161025d565b82525050565b61020e816102a8565b82525050565b600060608201905061022960008301866101f6565b6102366020830185610205565b6102436040830184610205565b949350505050565b600061025682610267565b9050919050565b6000819050919050565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b600074ffffffffffffffffffffffffffffffffffffffffff82169050919050565b6000819050919050565b600080fd5b6102c081610287565b81146102cb57600080fd5b50565b6102d78161025d565b81146102e257600080fd5b50565b6102ee816102a8565b81146102f957600080fd5b5056fea26474726f6e58221220fdf0f3a4587a08bebc9e8382b06c5f235f5836675d1cefa1cd29157296a52b8264736f6c63430008060033";
+
+    //callValue 1TRX
+    //tokenId 1000587
+    //tokenValue 10
+    String txId = client.deployContract("testDeployContractWithTRC10", abiStr, bytecode,
+        null, 100_000_000L, 100,
+        10_000_000L, 1_000_000L, "1000587", 10L);
+    //System.out.println("Transaction ID: " + txId);
     sleep(10_000L);
 
     TransactionInfo transactionInfo = client.getTransactionInfoById(txId);
@@ -186,9 +205,9 @@ class ContractTest extends BaseTest {
 
     Transaction signedTxn = client.signTransaction(transactionExtention);
 
-    System.out.println(signedTxn.toString());
+    //System.out.println(signedTxn.toString());
     String ret = client.broadcastTransaction(signedTxn);
-    System.out.println("======== Result ========\n" + ret);
+    //System.out.println("======== Result ========\n" + ret);
     sleep(10_000L);
     TransactionInfo transactionInfo = client.getTransactionInfoById(ret);
     assertEquals(0, transactionInfo.getResult().getNumber());
@@ -209,7 +228,7 @@ class ContractTest extends BaseTest {
     String encodedHex = FunctionEncoder.encode(trc20Transfer);
     EstimateEnergyMessage estimateEnergyMessage = client.estimateEnergyV2(fromAddr, usdtAddr,
         encodedHex);
-    System.out.println(estimateEnergyMessage.getEnergyRequired());
+    //System.out.println(estimateEnergyMessage.getEnergyRequired());
     assertTrue(estimateEnergyMessage.getEnergyRequired() > 0);
     assertTrue(estimateEnergyMessage.getResult().getResult());
   }
@@ -226,7 +245,7 @@ class ContractTest extends BaseTest {
     String encodedHex = FunctionEncoder.encode(depositFunction);
     EstimateEnergyMessage estimateEnergyMessage = client.estimateEnergyV2(fromAddr, strx,
         encodedHex, 1_000_000L, 0, "");
-    System.out.println(estimateEnergyMessage.getEnergyRequired());
+    //System.out.println(estimateEnergyMessage.getEnergyRequired());
     assertTrue(estimateEnergyMessage.getEnergyRequired() > 0);
     assertTrue(estimateEnergyMessage.getResult().getResult());
   }
@@ -246,7 +265,7 @@ class ContractTest extends BaseTest {
         encodedHex);
     String hexResult = ByteArray.toHexString(
         transactionExtention.getConstantResult(0).toByteArray());
-    System.out.println(hexResult);
+    //System.out.println(hexResult);
     List<Type> decoded = FunctionReturnDecoder.decode(hexResult,
         balanceOfFunction.getOutputParameters());
     assertFalse(decoded.isEmpty());
@@ -269,7 +288,7 @@ class ContractTest extends BaseTest {
     TransactionBuilder transactionBuilder = client.triggerCallV2(fromAddr, usdtAddr, encodedHex);
     Transaction signedTxn = client.signTransaction(transactionBuilder.getTransaction());
     String ret = client.broadcastTransaction(signedTxn);
-    System.out.println(ret);
+    //System.out.println(ret);
     sleep(10_000L);
     TransactionInfo transactionInfo = client.getTransactionInfoById(ret);
     assertEquals(code.SUCESS, transactionInfo.getResult());
