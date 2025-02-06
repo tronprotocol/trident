@@ -5,7 +5,7 @@ import static org.tron.trident.core.Constant.FEE_LIMIT;
 import static org.tron.trident.core.Constant.GRPC_TIMEOUT;
 import static org.tron.trident.core.Constant.ORIGIN_ENERGY_LIMIT;
 import static org.tron.trident.core.Constant.TRANSACTION_DEFAULT_EXPIRATION_TIME;
-import static org.tron.trident.core.Constant.TRX_SYMBOL_BYTES;
+import static org.tron.trident.core.Constant.TRX_SYMBOL;
 import static org.tron.trident.core.utils.Utils.encodeParameter;
 
 import com.google.protobuf.ByteString;
@@ -2775,10 +2775,10 @@ public class ApiWrapper implements Api {
   public TransactionExtention marketSellAsset(String ownerAddress, String sellTokenId,
       long sellTokenQuantity, String buyTokenId, long buyTokenQuantity) throws IllegalException {
     ByteString rawOwner = parseAddress(ownerAddress);
-    if (!TRX_SYMBOL_BYTES.equalsIgnoreCase(sellTokenId) && Numeric.isNumericString(sellTokenId)) {
+    if (!TRX_SYMBOL.equalsIgnoreCase(sellTokenId) && Numeric.isNumericString(sellTokenId)) {
       throw new IllegalException("sellTokenId is not a valid number");
     }
-    if (!TRX_SYMBOL_BYTES.equalsIgnoreCase(buyTokenId) && Numeric.isNumericString(buyTokenId)) {
+    if (!TRX_SYMBOL.equalsIgnoreCase(buyTokenId) && Numeric.isNumericString(buyTokenId)) {
       throw new IllegalException("buyTokenId is not a valid number");
     }
     MarketSellAssetContract marketSellAssetContract = MarketSellAssetContract.newBuilder()
