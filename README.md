@@ -68,12 +68,16 @@ Trident includes integration tests for running on the Nile testnet. If you want 
 ```
    //@Disabled("add private key to enable this case")
 ```
-2. Set the tron.private-key in the test configuration file in the core directory [here](trident-java/core/src/test/resources/application-test.properties).
+2. Set the tron.private-key and tron.tokenId in the test configuration file in the core directory [here](trident-java/core/src/test/resources/application-test.properties).
 
 
-` tron.private-key=xxx`
+``` 
+tron.private-key=xxx
+tron.tokenId=1000587
 
-**Note:** The account should have at least 1000 TRX, 100 USDT, and 1000 TRC10 token (token ID: 1000587) on the Nile testnet.
+```
+
+**Note:** The account should have at least 1000 TRX, 100 USDT, and 1000 TRC10 token on the Nile testnet. you can get testCoin from [nileex.io](https://nileex.io/join/getJoinPage).
 
 ## Contribution
 

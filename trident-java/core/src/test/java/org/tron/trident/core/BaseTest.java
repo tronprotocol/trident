@@ -14,6 +14,7 @@ public class BaseTest {
   protected static ApiWrapper client;
   protected static Properties properties;
   protected static String testAddress;
+  protected static String tokenId;
 
   @BeforeAll
   static void setUp() {
@@ -21,6 +22,9 @@ public class BaseTest {
       // load config
       properties = loadConfig();
       String privateKey = properties.getProperty("tron.private-key");
+
+      tokenId = properties.getProperty("tron.tokenId");
+
       client = ApiWrapper.ofNile(privateKey);
       testAddress = client.keyPair.toBase58CheckAddress();
 
