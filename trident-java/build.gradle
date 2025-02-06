@@ -1,6 +1,27 @@
-plugins {
-    id 'java-library'
+def VERSION = '0.9.2'
+group 'io.github.tronprotocol'
+
+buildscript {
+    repositories {
+        mavenLocal()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        maven {
+            url "https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public"
+        }
+        mavenCentral()
+    }
+    dependencies {
+        classpath "io.github.gradle-nexus:publish-plugin:1.1.0"
+        classpath 'com.github.jengelman.gradle.plugins:shadow:5.2.0'
+    }
 }
+
+apply plugin: 'java'
+apply plugin: 'java-library'
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'maven-publish'
 
 ext {
     bouncycastleVersion = '1.78.1'
@@ -9,18 +30,48 @@ ext {
 }
 
 allprojects {
-    version '0.9.2'
-    group = 'org.tron.trident'
+    version = VERSION
 
     repositories {
         mavenCentral()
+    }
+
+    tasks.withType(Javadoc).tap {
+        configureEach {
+            options.encoding = 'UTF-8'
+            options.charSet = 'UTF-8'
+            options.addStringOption('Xdoclint:none', '-quiet')
+
+            options {
+                tags = [
+                        'apiNote:a:API Note:',
+                        'implSpec:a:Implementation Requirements:',
+                        'implNote:a:Implementation Note:'
+                ]
+            }
+
+            exclude '**/internal/**'
+            exclude '**/impl/**'
+            failOnError = false
+
+            logging.captureStandardError LogLevel.INFO
+            logging.captureStandardOutput LogLevel.INFO
+        }
+    }
+
+    configurations.configureEach {
+        resolutionStrategy{
+            force "com.google.guava:guava:$googleGuavaVersion"
+        }
     }
 }
 
 subprojects {
     apply plugin: 'java'
-    apply plugin: 'maven'
-    apply plugin: 'maven-publish'
+
+    tasks.withType(Jar).configureEach {
+        destinationDirectory = rootProject.file("build/libs")
+    }
 
     java {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -55,10 +106,6 @@ subprojects {
         from javadoc.destinationDir
     }
 
-    tasks.register('wrapper', Wrapper) {
-        gradleVersion = '6.6.1'
-    }
-
     tasks.withType(JavaCompile).configureEach {
         //options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
     }
@@ -66,6 +113,50 @@ subprojects {
     artifacts {
         archives jar
         archives sourcesJar
+        archives javadocJar
     }
 }
 
+shadowJar {
+    zip64 = true
+}
+
+javadoc {
+    source subprojects.collect { project ->
+        project.sourceSets.main.allJava
+    }
+    classpath = files(subprojects.collect { project ->
+        project.sourceSets.main.compileClasspath
+    })
+}
+
+tasks.register('javadocJar', Jar) {
+    archiveClassifier = 'javadoc'
+    archiveVersion = VERSION
+    from javadoc
+}
+
+tasks.register('sourcesJar', Jar) {
+    archiveClassifier = 'sources'
+    archiveVersion = VERSION
+    from subprojects.collect { project ->
+        project.sourceSets.main.allSource
+    }
+}
+
+tasks.register('buildLib', Jar) {
+    archiveVersion = VERSION
+    from subprojects.collect { project ->
+        project.sourceSets.main.output
+    }
+}
+
+tasks.named('build') {
+    dependsOn javadocJar, sourcesJar, buildLib
+}
+
+artifacts {
+    archives jar
+    archives javadocJar
+    archives sourcesJar
+}

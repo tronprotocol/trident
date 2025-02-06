@@ -1,5 +1,6 @@
 plugins {
     id 'com.google.protobuf' version '0.8.12'
+    id 'java-library'
 }
 
 description 'Trident-Java gRPC core classes'
@@ -26,7 +27,7 @@ dependencies {
     implementation "io.grpc:grpc-stub:$grpcVersion"
     compileOnly 'org.apache.tomcat:annotations-api:6.0.53' // necessary for Java 9+
     //json parsing
-    implementation 'com.google.protobuf:protobuf-java-util:3.25.5'
+    implementation "com.google.protobuf:protobuf-java-util:$protobufVersion"
 
     implementation "org.bouncycastle:bcprov-jdk18on:$bouncycastleVersion"
 }
@@ -37,8 +38,7 @@ protobuf {
     }
     plugins {
         grpc {
-            // build failed if changed to 1.60.0
-            artifact = "io.grpc:protoc-gen-grpc-java:1.58.1"
+            artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion"
         }
     }
     generateProtoTasks {
@@ -57,6 +57,7 @@ protobuf {
 }
 
 clean.doFirst {
-    delete "src/main/java/proto"
+    delete "src/main/java/org/tron/trident/api"
+    delete "src/main/java/org/tron/trident/proto"
 }
 
