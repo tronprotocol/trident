@@ -7,7 +7,7 @@ description 'Minimal set of trident utility classes'
 dependencies {
     implementation 'io.vertx:vertx-core:4.5.10'
     implementation 'io.netty:netty-all:4.1.100.Final'
-    compileOnly "com.google.guava:guava:$googleGuavaVersion"
+    implementation "com.google.guava:guava:$googleGuavaVersion"
     implementation "org.bouncycastle:bcprov-jdk18on:$bouncycastleVersion"
 }
 
