@@ -12,7 +12,7 @@ Trident is a lightweight Java SDK for interacting with the TRON blockchain. It p
 - Transaction building and signing
 - TRC10/TRC20/TRC721 token support
 
-## Adding Guava to your build
+## Adding Trident to your build
 
 Trident-java is compiled with java version 1.8 and gradle 7.6.
 
