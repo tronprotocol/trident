@@ -79,6 +79,7 @@ message Transaction {
       JVM_STACK_OVER_FLOW = 12;
       UNKNOWN = 13;
       TRANSFER_FAILED = 14;
+      INVALID_CODE = 15;
     }
     int64 fee = 1;
     code ret = 2;
@@ -92,6 +93,8 @@ message Transaction {
     int64 exchange_withdraw_another_amount = 20;
     int64 exchange_id = 21;
     int64 shielded_transaction_fee = 22;
+    bytes orderId = 25;
+    repeated MarketOrderDetail orderDetails = 26;
 
     int64 withdraw_expire_amount = 27;
     map<string, int64> cancel_unfreezeV2_amount = 28;
@@ -103,7 +106,7 @@ message Transaction {
     bytes ref_block_hash = 4;
     int64 expiration = 8;
     repeated authority auths = 9;
-    // transaction note
+    // data not used
     bytes data = 10;
     // only support size = 1, repeated list here for extension
     repeated Contract contract = 11;

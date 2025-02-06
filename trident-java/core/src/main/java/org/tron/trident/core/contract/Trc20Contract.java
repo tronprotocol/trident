@@ -126,8 +126,6 @@ public class Trc20Contract extends Contract {
    * Returns the account balance of another account with address _owner.
    *
    * @param accountAddr The token owner's address
-   * @param callerAddr The caller's address
-   * @param cntrAddr The contract's address
    * @return the account balance of another account with address _owner
    */
   public BigInteger balanceOf(String accountAddr) {
@@ -245,8 +243,6 @@ public class Trc20Contract extends Contract {
    *
    * @param owner The address to be withdrew from.
    * @param spender The address of the withdrawer.
-   * @param callerAddr The caller's address
-   * @param cntrAddr The contract's address
    * @return the amount which _spender is still allowed to withdraw from _owner
    */
   public BigInteger allowance(String owner, String spender) {

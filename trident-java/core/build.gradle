@@ -4,38 +4,59 @@ plugins {
 
 description 'Trident-Java gRPC core classes'
 
+def protobufVersion = '3.25.5'
+def grpcVersion = '1.60.0'
+
+configurations.all {
+    resolutionStrategy {
+        force("com.squareup.okio:okio:3.9.0")
+    }
+}
+
 dependencies {
-    implementation 'com.google.guava:guava:29.0-jre'
+    implementation "com.google.guava:guava:$googleGuavaVersion"
 
     implementation project(':utils')
     implementation project(':abi')
 
-    implementation 'io.grpc:grpc-netty-shaded:1.58.1'
-    implementation 'io.grpc:grpc-netty:1.58.1'
-    implementation 'io.grpc:grpc-okhttp:1.58.1'
-    implementation 'io.grpc:grpc-protobuf:1.58.1'
-    implementation 'io.grpc:grpc-stub:1.58.1'
+    implementation "io.grpc:grpc-netty-shaded:$grpcVersion"
+    implementation "io.grpc:grpc-netty:$grpcVersion"
+    implementation "io.grpc:grpc-okhttp:$grpcVersion"
+    implementation "io.grpc:grpc-protobuf:$grpcVersion"
+    implementation "io.grpc:grpc-stub:$grpcVersion"
     compileOnly 'org.apache.tomcat:annotations-api:6.0.53' // necessary for Java 9+
     //json parsing
     implementation 'com.google.protobuf:protobuf-java-util:3.25.5'
 
-    implementation "org.bouncycastle:bcprov-jdk15on:$bouncycastleVersion"
+    implementation "org.bouncycastle:bcprov-jdk18on:$bouncycastleVersion"
 }
 
 protobuf {
     protoc {
-        artifact = 'com.google.protobuf:protoc:3.25.5'
+        artifact = "com.google.protobuf:protoc:$protobufVersion"
     }
     plugins {
         grpc {
-            artifact = 'io.grpc:protoc-gen-grpc-java:1.58.1'
+            // build failed if changed to 1.60.0
+            artifact = "io.grpc:protoc-gen-grpc-java:1.58.1"
         }
     }
     generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                java { outputSubDir = "java" }
+            }
+        }
         all()*.plugins {
-            grpc { }
+            grpc {
+                outputSubDir = "java"
+            }
         }
     }
     generatedFilesBaseDir = "$projectDir/src"
+}
+
+clean.doFirst {
+    delete "src/main/java/proto"
 }
 

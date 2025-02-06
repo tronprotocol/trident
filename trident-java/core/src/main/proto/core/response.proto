@@ -32,6 +32,7 @@ message TransactionReturn {
         NO_CONNECTION = 10;
         NOT_ENOUGH_EFFECTIVE_CONNECTION = 11;
         BLOCK_UNSOLIDIFIED = 12;
+
         OTHER_ERROR = 20;
     }
 
@@ -50,7 +51,10 @@ message TransactionExtention {
     bytes txid = 2;  // transaction id = sha256(transaction.raw_data)
     repeated bytes constant_result = 3;
     TransactionReturn result = 4;
-    int64 energy_used = 5; 
+    int64 energy_used = 5;
+    repeated TransactionInfo.Log logs = 6;
+    repeated InternalTransaction internal_transactions = 7;
+    int64 energy_penalty = 8;
 }
 
 message WitnessList {
@@ -93,6 +97,7 @@ message EasyTransferResponse {
 message SmartContractDataWrapper {
     SmartContract smart_contract = 1;
     bytes runtime_code = 2;
+    ContractState contract_state = 3;
 }
 
 message InternalTransaction {
@@ -112,6 +117,7 @@ message InternalTransaction {
     repeated CallValueInfo callValueInfo = 4;
     bytes note = 5;
     bool rejected = 6;
+    string extra = 7;
 }
 
 message ResourceReceipt {
@@ -122,6 +128,7 @@ message ResourceReceipt {
     int64 net_usage = 5;
     int64 net_fee = 6;
     Transaction.Result.contractResult result = 7;
+    int64 energy_penalty_total = 8;
 }
 
 message TransactionInfo {
@@ -157,6 +164,7 @@ message TransactionInfo {
 
     bytes orderId = 25;
     repeated MarketOrderDetail orderDetails = 26;
+    int64 packingFee = 27;
     int64 withdraw_expire_amount = 28;
     map<string, int64> cancel_unfreezeV2_amount = 29;
 }
@@ -285,13 +293,6 @@ message Account {
     int64 delegated_frozenV2_balance_for_bandwidth = 36;
     int64 acquired_delegated_frozenV2_balance_for_bandwidth = 37;
 
-}
-
-message MarketOrderDetail {
-    bytes makerOrderId = 1;
-    bytes takerOrderId = 2;
-    int64 fillSellQuantity = 3;
-    int64 fillBuyQuantity = 4;
 }
 
 message Proposal {

@@ -120,7 +120,6 @@ message MarketSellAssetContract {
   int64 sell_token_quantity = 3;
   bytes buy_token_id = 4;
   int64 buy_token_quantity = 5;  // min to receive
-  bytes pre_price_key = 6;       // order price position
 }
 
 message MarketCancelOrderContract {
@@ -142,6 +141,12 @@ message ProposalCreateContract {
 message ProposalDeleteContract {
   bytes owner_address = 1;
   int64 proposal_id = 2;
+}
+
+message ContractState {
+  int64 energy_usage = 1;
+  int64 energy_factor = 2;
+  int64 update_cycle = 3;
 }
 
 message CreateSmartContract {
