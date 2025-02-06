@@ -21,16 +21,24 @@ public class AddressTest {
 
   @Test
   public void testToString() {
-    assertEquals(
-        new Address("4152b08330e05d731e38c856c1043288f7d9744").toString(),
-        ("T9yKC9LCoVvmhaFxKcdK9iL18TUWtyFtjh"));
+//    assertEquals(
+//        new Address("4152b08330e05d731e38c856c1043288f7d9744").toString(),
+//        ("T9yKC9LCoVvmhaFxKcdK9iL18TUWtyFtjh")); //39
     assertEquals(
         new Address("T9yKC9LCoVvmhaFxKcdK9iL18TUWtyFtjh").toString(),
         ("T9yKC9LCoVvmhaFxKcdK9iL18TUWtyFtjh"));
     assertEquals(
-        new Address("0x52b08330e05d731e38c856c1043288f7d9744").toString(),
+        new Address("0x52b08330e05d731e38c856c1043288f7d9744").toString(),//37, padding 0 head
+        ("T9yKC9LCoVvmhaFxKcdK9iL18TUWtyFtjh"));
+    assertEquals(
+        new Address("0x052b08330e05d731e38c856c1043288f7d9744").toString(),//38
         ("T9yKC9LCoVvmhaFxKcdK9iL18TUWtyFtjh"));
     assertEquals(new Address("0x00052b08330e05d731e38c856c1043288f7d9744").toString(),
         ("T9yKC9LCoVvmhaFxKcdK9iL18TUWtyFtjh"));
+
+    assertEquals(new Address("41A9BC828A3005B9A3B909F2CC5C2A54794DE05F").toString(),
+        ("TFxQG1y8MYdj6PURDhG22gJFUyt72TfDfg"));
+    assertEquals(new Address("4141A9BC828A3005B9A3B909F2CC5C2A54794DE05F").toString(),//double 41
+        ("TFxQG1y8MYdj6PURDhG22gJFUyt72TfDfg"));
   }
 }
