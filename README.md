@@ -34,6 +34,18 @@ Add repo setting:
 </dependency>
 ```
 
+### Using Local Build
+
+You can use locally built packages by follow steps:
+
+1. Copy the compiled jar file to your project's `libs` directory
+2. Add the following to your project's `build.gradle`:
+```groovy
+dependencies {
+    implementation files('libs/trident-java-0.9.2.jar')
+}
+```
+
 ## Quick Start
 
 **Initialize client**
@@ -77,7 +89,6 @@ Trident includes integration tests for running on the Nile testnet. If you want 
 ``` 
 tron.private-key=xxx
 tron.tokenId=1000587
-
 ```
 
 **Note:** The account should have at least 1000 TRX, 100 USDT, and 1000 TRC10 token on the Nile testnet. you can get testCoin from [nileex.io](https://nileex.io/join/getJoinPage).
