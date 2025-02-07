@@ -38,7 +38,7 @@ Add repo setting:
 
 **Initialize client**
 ```java
-// Initialize with mainnet
+// Initialize with TronGrid mainnet 
 ApiWrapper client = ApiWrapper.ofMainnet("private_key", "api_key"); //api_key from TronGrid
 
 //Or Shasta test net 
@@ -46,6 +46,9 @@ ApiWrapper wrapper = ApiWrapper.ofShasta("private key");
 
 // Or nile testnet
 ApiWrapper client = ApiWrapper.ofNile("private_key");
+
+//Initialize with sepcial grpc endpoint
+ApiWrapper client = new ApiWrapper("grpc endpoint", "solidity grpc endpoint", "private_key");
 
 // Send TRX
 TransactionExtention transactionExtention = client.transfer("fromAddress", "toAddress", 100_000_000L); //100TRX
