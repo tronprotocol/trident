@@ -34,7 +34,7 @@ Add repo setting:
 </dependency>
 ```
 
-### Using Local Build
+### Using local build
 
 You can use locally built packages by follow steps:
 
