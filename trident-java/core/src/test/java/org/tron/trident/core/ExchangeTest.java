@@ -30,7 +30,7 @@ public class ExchangeTest extends BaseTest {
     // this will cost 1024 TRX,
     // unit of TRX is sun, the decimal of token 1000587 is 6.
     TransactionExtention transactionExtention = client.exchangeCreate(testAddress, "_",
-        200_000_000L, "1000587", 100_000_000L);
+        200_000_000L, tokenId, 100_000_000L);
     Transaction transaction = client.signTransaction(transactionExtention);
     String txId = client.broadcastTransaction(transaction);
 
@@ -69,7 +69,7 @@ public class ExchangeTest extends BaseTest {
   @Test
   void testExchangeWithdraw() throws IllegalException, InterruptedException {
     TransactionExtention transactionExtention = client.exchangeWithdraw(testAddress, exchangeID,
-        "1000587", 10_000_000L);
+        tokenId, 10_000_000L);
 
     Transaction transaction = client.signTransaction(transactionExtention);
     String txId = client.broadcastTransaction(transaction);

@@ -24,6 +24,6 @@ public final class Constant {
 
   public static final long ORIGIN_ENERGY_LIMIT = 100_000_000L;
 
-  public static final String TRX_SYMBOL_BYTES = "_";
+  public static final String TRX_SYMBOL = "_";
 
 }

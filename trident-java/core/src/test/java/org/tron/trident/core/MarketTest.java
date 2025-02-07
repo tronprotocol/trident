@@ -29,7 +29,7 @@ public class MarketTest extends BaseTest {
   void testMarketSellAsset() throws IllegalException, InterruptedException {
     //test MarketSellAssetContract
     TransactionExtention txExt = client.marketSellAsset(testAddress, "_",
-        100_000_000L, "1000587", 50_000_000L);
+        100_000_000L, tokenId, 50_000_000L);
 
     Transaction transaction = client.signTransaction(txExt);
     String txId = client.broadcastTransaction(transaction);

@@ -1,6 +1,6 @@
 package org.tron.trident.core.utils;
 
-import static org.tron.trident.core.Constant.TRX_SYMBOL_BYTES;
+import static org.tron.trident.core.Constant.TRX_SYMBOL;
 
 import org.tron.trident.utils.Numeric;
 
@@ -13,7 +13,7 @@ public class TokenValidator {
    */
   public static void validateTokenId(String tokenId) {
     // Return if it's a special marker
-    if (tokenId == null || tokenId.isEmpty() || TRX_SYMBOL_BYTES.equals(tokenId)) {
+    if (tokenId == null || tokenId.isEmpty() || TRX_SYMBOL.equals(tokenId)) {
       return;
     }
 
