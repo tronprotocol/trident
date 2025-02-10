@@ -84,7 +84,7 @@ public class Sha256Hash implements Serializable, Comparable<Sha256Hash> {
   }
 
   /**
-   * Use {@link #of(byte[])} instead: this old name is ambiguous.
+   * Use {@link #of(boolean, byte[])} instead: this old name is ambiguous.
    */
   @Deprecated
   public static Sha256Hash create(boolean isSha256, byte[] contents) {
@@ -118,7 +118,7 @@ public class Sha256Hash implements Serializable, Comparable<Sha256Hash> {
   }
 
   /**
-   * Use {@link #twiceOf(byte[])} instead: this old name is ambiguous.
+   * Use {@link #twiceOf(boolean, byte[])} instead: this old name is ambiguous.
    */
   @Deprecated
   public static Sha256Hash createDouble(boolean isSha256, byte[] contents) {
@@ -230,7 +230,7 @@ public class Sha256Hash implements Serializable, Comparable<Sha256Hash> {
 
   /**
    * Calculates the hash of hash on the given byte ranges. This is equivalent to concatenating the
-   * two ranges and then passing the result to {@link #hashTwice(byte[])}.
+   * two ranges and then passing the result to {@link #hashTwice(boolean,byte[])}.
    */
   public static byte[] hashTwice(boolean isSha256, byte[] input1, int offset1, int length1,
       byte[] input2, int offset2, int length2) {
