@@ -126,7 +126,7 @@ subprojects {
     }
     checkstyle {
         toolVersion = "8.7"
-        configFile = file("../core/src/main/resources/checkStyleAll.xml")
+        configFile = file("../config/checkstyle/checkStyleAll.xml")
     }
     checkstyleMain {
         source = 'src/main/java'
