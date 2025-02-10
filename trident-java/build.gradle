@@ -36,6 +36,7 @@ allprojects {
         mavenCentral()
     }
 
+
     tasks.withType(Javadoc).tap {
         configureEach {
             options.encoding = 'UTF-8'
@@ -60,7 +61,7 @@ allprojects {
     }
 
     configurations.configureEach {
-        resolutionStrategy{
+        resolutionStrategy {
             force "com.google.guava:guava:$googleGuavaVersion"
         }
     }
@@ -68,6 +69,7 @@ allprojects {
 
 subprojects {
     apply plugin: 'java'
+    apply plugin: 'checkstyle'
 
     tasks.withType(Jar).configureEach {
         destinationDirectory = rootProject.file("build/libs")
@@ -114,6 +116,25 @@ subprojects {
         archives jar
         archives sourcesJar
         archives javadocJar
+    }
+
+    configurations {
+        checkstyleConfig
+    }
+    configurations.named('checkstyleConfig') {
+        transitive = false
+    }
+    checkstyle {
+        toolVersion = "8.7"
+        configFile = file("../core/src/main/resources/checkStyleAll.xml")
+    }
+    checkstyleMain {
+        source = 'src/main/java'
+        exclude '**/trident/api/**'
+        exclude '**/trident/proto/**'
+    }
+    checkstyleTest {
+        source = files() //use empty files to ignore test class
     }
 }
 
