@@ -56,6 +56,16 @@ protobuf {
     generatedFilesBaseDir = "$projectDir/src"
 }
 
+tasks.named('processResources') {
+    dependsOn 'generateProto'
+    dependsOn 'extractProto'
+}
+
+tasks.named('processTestResources') {
+    dependsOn 'generateTestProto'
+    dependsOn 'extractTestProto'
+}
+
 clean.doFirst {
     delete "src/main/java/org/tron/trident/api"
     delete "src/main/java/org/tron/trident/proto"
