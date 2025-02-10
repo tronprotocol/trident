@@ -13,10 +13,10 @@
 
 package org.tron.trident.crypto.tuwenitypes;
 
-import io.vertx.core.buffer.Buffer;
-
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkElementIndex;
+
+import io.vertx.core.buffer.Buffer;
 
 final class MutableBufferWrappingBytes extends BufferWrappingBytes implements MutableBytes {
 

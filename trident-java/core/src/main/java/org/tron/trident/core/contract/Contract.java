@@ -25,10 +25,10 @@ import org.tron.trident.proto.Contract.CreateSmartContract;
  * <p>This class provides mutator and accessor methods for all
  * attributes. Besides, functions of smart contracts are wrapped
  * and can be easily viewed through {@link
- * org.tron.trident.core.contract.ContractFunction#toString()}</>
+ * org.tron.trident.core.contract.ContractFunction#toString()}
  *
  * @see org.tron.trident.core.contract.ContractFunction
- * @see org.tron.trident.proto.Common.SmartContract;
+ * @see org.tron.trident.proto.Common.SmartContract
  * @since jdk 1.8.0_231
  */
 
@@ -170,7 +170,7 @@ public class Contract {
   /**
    * Convert abi entries to ContractFunction objects
    *
-   * @see org.tron.trident.proto.Common.SmartContract.ABI.Entry;
+   * @see org.tron.trident.proto.Common.SmartContract.ABI.Entry
    * @see ContractFunction ;
    */
   protected void abiToFunctions() {
@@ -214,6 +214,7 @@ public class Contract {
           case 4:
             builder.setStateMutability("payable");
             break;
+          default:
         }
 
         functions.add(builder.build());
@@ -235,6 +236,7 @@ public class Contract {
           ret.add(p.getType());
         }
         break;
+      default:
     }
     return ret;
   }

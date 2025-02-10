@@ -45,7 +45,8 @@ public class Trc20Contract extends Contract {
   public String name() {
     Function name = new Function("name",
         Collections.emptyList(), Arrays.asList(new TypeReference<Utf8String>() {
-    }));
+        })
+    );
 
     TransactionExtention txnExt = wrapper.constantCall(
         Base58Check.bytesToBase58(ownerAddr.toByteArray()),
@@ -66,7 +67,8 @@ public class Trc20Contract extends Contract {
   public String symbol() {
     Function symbol = new Function("symbol",
         Collections.emptyList(), Arrays.asList(new TypeReference<Utf8String>() {
-    }));
+        })
+    );
 
     TransactionExtention txnExt = wrapper.constantCall(
         Base58Check.bytesToBase58(ownerAddr.toByteArray()),
@@ -88,7 +90,8 @@ public class Trc20Contract extends Contract {
   public BigInteger decimals() {
     Function decimals = new Function("decimals",
         Collections.emptyList(), Arrays.asList(new TypeReference<Uint8>() {
-    }));
+        })
+    );
 
     TransactionExtention txnExt = wrapper.constantCall(
         Base58Check.bytesToBase58(ownerAddr.toByteArray()),
@@ -109,7 +112,8 @@ public class Trc20Contract extends Contract {
   public BigInteger totalSupply() {
     Function totalSupply = new Function("totalSupply",
         Collections.emptyList(), Arrays.asList(new TypeReference<Uint256>() {
-    }));
+        })
+    );
 
     TransactionExtention txnExt = wrapper.constantCall(
         Base58Check.bytesToBase58(ownerAddr.toByteArray()),
@@ -131,7 +135,8 @@ public class Trc20Contract extends Contract {
   public BigInteger balanceOf(String accountAddr) {
     Function balanceOf = new Function("balanceOf",
         Arrays.asList(new Address(accountAddr)), Arrays.asList(new TypeReference<Uint256>() {
-    }));
+        })
+    );
 
     TransactionExtention txnExt = wrapper.constantCall(
         Base58Check.bytesToBase58(ownerAddr.toByteArray()),

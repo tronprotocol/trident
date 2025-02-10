@@ -13,10 +13,10 @@
 
 package org.tron.trident.crypto.tuwenitypes;
 
-import java.util.Arrays;
-
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkElementIndex;
+
+import java.util.Arrays;
 
 class MutableArrayWrappingBytes extends ArrayWrappingBytes implements MutableBytes {
 

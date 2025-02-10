@@ -24,11 +24,6 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.UnaryOperator;
-
-import org.tron.trident.crypto.tuwenitypes.MutableBytes;
-import org.tron.trident.crypto.tuwenitypes.Bytes;
-import org.tron.trident.crypto.tuwenitypes.Bytes32;
-import org.tron.trident.crypto.tuwenitypes.UInt256;
 import org.bouncycastle.asn1.sec.SECNamedCurves;
 import org.bouncycastle.asn1.x9.X9ECParameters;
 import org.bouncycastle.asn1.x9.X9IntegerConverter;
@@ -46,6 +41,10 @@ import org.bouncycastle.math.ec.ECAlgorithms;
 import org.bouncycastle.math.ec.ECPoint;
 import org.bouncycastle.math.ec.FixedPointCombMultiplier;
 import org.bouncycastle.math.ec.custom.sec.SecP256K1Curve;
+import org.tron.trident.crypto.tuwenitypes.Bytes;
+import org.tron.trident.crypto.tuwenitypes.Bytes32;
+import org.tron.trident.crypto.tuwenitypes.MutableBytes;
+import org.tron.trident.crypto.tuwenitypes.UInt256;
 
 /*
  * Adapted from the BitcoinJ ECKey (Apache 2 License) implementation:
@@ -106,6 +105,24 @@ public class SECP256K1 {
    */
   public static boolean verify(final Bytes data, final Signature signature, final PublicKey pub) {
     return verifyDefault(data, signature, pub);
+  }
+
+  /**
+   * Verifies the given ECDSA signature using the public key bytes against the message bytes,
+   * previously passed through a preprocessor function, which is normally a hashing function.
+   *
+   * @param data The data to verify.
+   * @param signature ASN.1 encoded signature.
+   * @param pub The public key bytes to use.
+   * @param preprocessor The function to apply to the data before verifying the signature, normally
+   * a hashing function.
+   * @return True if the verification is successful.
+   */
+  public static boolean verify(
+      final Bytes data, final Signature signature, final PublicKey pub,
+      final UnaryOperator<Bytes> preprocessor) {
+    assert preprocessor != null : "preprocessor must not be null";
+    return verify(preprocessor.apply(data), signature, pub);
   }
 
   /**
@@ -268,24 +285,6 @@ public class SECP256K1 {
   }
 
   /**
-   * Verifies the given ECDSA signature using the public key bytes against the message bytes,
-   * previously passed through a preprocessor function, which is normally a hashing function.
-   *
-   * @param data The data to verify.
-   * @param signature ASN.1 encoded signature.
-   * @param pub The public key bytes to use.
-   * @param preprocessor The function to apply to the data before verifying the signature, normally
-   * a hashing function.
-   * @return True if the verification is successful.
-   */
-  public static boolean verify(
-      final Bytes data, final Signature signature, final PublicKey pub,
-      final UnaryOperator<Bytes> preprocessor) {
-    assert preprocessor != null : "preprocessor must not be null";
-    return verify(preprocessor.apply(data), signature, pub);
-  }
-
-  /**
    * Calculates an ECDH key agreement between the private and the public key.
    *
    * @param privKey The private key.
@@ -395,6 +394,15 @@ public class SECP256K1 {
       return PublicKey.create(Bytes.wrap(Arrays.copyOfRange(point.getEncoded(false), 1, 65)));
     }
 
+    public static PublicKey create(final BigInteger key) {
+      assert key != null;
+      return create(toBytes64(key.toByteArray()));
+    }
+
+    public static PublicKey create(final Bytes encoded) {
+      return new PublicKey(encoded);
+    }
+
     private static Bytes toBytes64(final byte[] backing) {
       if (backing.length == BYTE_LENGTH) {
         return Bytes.wrap(backing);
@@ -405,15 +413,6 @@ public class SECP256K1 {
         Bytes.wrap(backing).copyTo(res, BYTE_LENGTH - backing.length);
         return res;
       }
-    }
-
-    public static PublicKey create(final BigInteger key) {
-      assert key != null;
-      return create(toBytes64(key.toByteArray()));
-    }
-
-    public static PublicKey create(final Bytes encoded) {
-      return new PublicKey(encoded);
     }
 
     public static Optional<PublicKey> recoverFromSignature(final Bytes32 dataHash,

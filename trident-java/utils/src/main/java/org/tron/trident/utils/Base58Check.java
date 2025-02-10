@@ -20,7 +20,8 @@ import org.bouncycastle.jcajce.provider.digest.SHA256;
 public final class Base58Check {
   /*---- Static functions ----*/
 
-  // Adds the checksum and converts to Base58Check. Note that the caller needs to prepend the version byte(s).
+  // Adds the checksum and converts to Base58Check.
+  // Note that the caller needs to prepend the version byte(s).
   public static String bytesToBase58(byte[] data) {
     return rawBytesToBase58(addCheckHash(data));
   }
@@ -61,8 +62,8 @@ public final class Base58Check {
     }
   }
 
-  // Converts the given Base58Check string to a byte array, verifies the checksum, and removes the checksum to return
-  // the payload. The caller is responsible for handling the version byte(s).
+  // Converts the given Base58Check string to a byte array, verifies the checksum, and removes the
+  // checksum to return the payload. The caller is responsible for handling the version byte(s).
   public static byte[] base58ToBytes(String s) {
     byte[] concat = base58ToRawBytes(s);
     byte[] data = Arrays.copyOf(concat, concat.length - 4);
@@ -81,7 +82,8 @@ public final class Base58Check {
     return data;
   }
 
-  // Converts the given Base58Check string to a byte array, without checking or removing the trailing 4-byte checksum.
+  // Converts the given Base58Check string to a byte array, without checking or removing the
+  // trailing 4-byte checksum.
   static byte[] base58ToRawBytes(String s) {
     // Parse base-58 string
     BigInteger num = BigInteger.ZERO;

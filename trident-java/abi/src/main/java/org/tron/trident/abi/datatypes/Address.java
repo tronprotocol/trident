@@ -42,12 +42,12 @@ public class Address implements Type<String> {
   }
 
   public Address(String value) {
-    if (value.startsWith("T")) {//length = 34
+    if (value.startsWith("T")) { //length = 34
       byte[] rawValue = Base58Check.base58ToBytes(value);
       this.value = new Uint(DEFAULT_LENGTH, Numeric.toBigInt(Arrays.copyOfRange(rawValue, 1, 21)));
     } else if (value.startsWith("41") && value.length() == 42) {
       this.value = new Uint(DEFAULT_LENGTH, Numeric.toBigInt(value.substring(2)));
-    } else {//40
+    } else { //40
       // ETH compatible
       this.value = new Uint(DEFAULT_LENGTH, Numeric.toBigInt(value));
     }
