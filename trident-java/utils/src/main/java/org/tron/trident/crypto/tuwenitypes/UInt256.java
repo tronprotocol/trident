@@ -848,13 +848,13 @@ public final class UInt256 implements UInt256Value<UInt256> {
     switch (firstIntBytes) {
       case 4:
         bytes.set(j++, (byte) (this.ints[i] >>> 24));
-        break;
+        // fall through
       case 3:
         bytes.set(j++, (byte) ((this.ints[i] >>> 16) & 0xFF));
-        break;
+        // fall through
       case 2:
         bytes.set(j++, (byte) ((this.ints[i] >>> 8) & 0xFF));
-        break;
+        // fall through
       case 1:
         bytes.set(j++, (byte) (this.ints[i] & 0xFF));
         break;
