@@ -249,6 +249,9 @@ public interface Api {
   TransactionExtention triggerContract(String ownerAddress, String contractAddress,
       String callData, long callValue, long tokenValue, String tokenId);
 
+  TransactionExtention triggerContract(String ownerAddress, String contractAddress,
+      String callData, long callValue, long tokenValue, String tokenId, long feeLimit);
+
   BlockBalanceTrace getBlockBalance(String blockId, long blockNum);
 
   long getBurnTRX();
@@ -292,7 +295,7 @@ public interface Api {
   @Deprecated
   TransactionExtention constantCallV2(String ownerAddress, String contractAddress, String callData);
 
-  TransactionBuilder triggerConstantContract(String ownerAddress, String contractAddress,
+  TransactionExtention triggerConstantContract(String ownerAddress, String contractAddress,
       String callData, long callValue, long tokenValue, String tokenId, long feeLimit);
 
   TransactionExtention triggerConstantContract(String ownerAddress, String contractAddress,
@@ -374,9 +377,9 @@ public interface Api {
       long tokenValue, String tokenId, String libraryAddressPair, String compilerVersion)
       throws Exception;
 
-  String deployContract(String contractName, String abiStr, String bytecode,
+  TransactionExtention deployContract(String contractName, String abiStr, String bytecode,
       List<Type<?>> constructorParams, long feeLimit, long consumeUserResourcePercent,
       long originEnergyLimit, long callValue, String tokenId, long tokenValue) throws Exception;
 
-  String deployContract(String name, String abiStr, String bytecode) throws Exception;
+  TransactionExtention deployContract(String name, String abiStr, String bytecode) throws Exception;
 }

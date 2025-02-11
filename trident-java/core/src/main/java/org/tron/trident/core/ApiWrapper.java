@@ -314,6 +314,33 @@ public class ApiWrapper implements Api {
     return toHex(raw.toByteArray());
   }
 
+  public static TransactionExtention updateTransactionFeeLimit(
+      TransactionExtention transactionExtention,
+      long feeLimit
+  ) {
+    if (transactionExtention == null || feeLimit <= 0L) {
+      return transactionExtention;
+    }
+
+    try {
+      Transaction transaction = transactionExtention.getTransaction();
+
+      Transaction newTransaction = transaction.toBuilder()
+          .setRawData(
+              transaction.getRawData().toBuilder()
+                  .setFeeLimit(feeLimit)
+                  .build()
+          )
+          .build();
+      return transactionExtention.toBuilder()
+          .setTransaction(newTransaction)
+          .build();
+
+    } catch (Exception e) {
+      return transactionExtention;
+    }
+  }
+
   @Override
   public Transaction signTransaction(TransactionExtention txnExt, KeyPair keyPair) {
     byte[] txId = txnExt.getTxid().toByteArray();
@@ -348,6 +375,9 @@ public class ApiWrapper implements Api {
       //trx.setTransactionCreate(true);
       CreateSmartContract contract = Utils.getSmartContractFromTransaction(
           trx.getTransaction());
+      if (contract == null) {
+        throw new Exception("contract is null");
+      }
       long percent = contract.getNewContract().getConsumeUserResourcePercent();
       if (percent < 0 || percent > 100) {
         throw new Exception("percent must be >= 0 and <= 100");
@@ -1816,7 +1846,6 @@ public class ApiWrapper implements Api {
    *
    * @param contractAddress smart contract address
    * @return the smart contract obtained from the address
-   * @throws Exception if contract address does not match
    */
   @Override
   public Contract getContract(String contractAddress) {
@@ -1949,14 +1978,14 @@ public class ApiWrapper implements Api {
    * @param tokenValue token value of token10
    * @param tokenId empty or token10 ID
    * @param feeLimit max fee allowed
-   * @return transaction builder. TransactionExtention detail.
+   * @return TransactionExtention
    */
   @Override
-  public TransactionBuilder triggerConstantContract(String ownerAddress, String contractAddress,
+  public TransactionExtention triggerConstantContract(String ownerAddress, String contractAddress,
       String callData, long callValue, long tokenValue, String tokenId, long feeLimit) {
     TransactionExtention txnExt = triggerConstantContract(ownerAddress, contractAddress, callData,
         callValue, tokenValue, tokenId);
-    return new TransactionBuilder(txnExt.getTransaction()).setFeeLimit(feeLimit);
+    return updateTransactionFeeLimit(txnExt, feeLimit);
   }
 
   /**
@@ -2041,6 +2070,14 @@ public class ApiWrapper implements Api {
     TriggerSmartContract trigger = buildTrigger(ownerAddress, contractAddress, callData,
         callValue, tokenValue, tokenId);
     return blockingStub.triggerContract(trigger);
+  }
+
+  @Override
+  public TransactionExtention triggerContract(String ownerAddress, String contractAddress,
+      String callData, long callValue, long tokenValue, String tokenId, long feeLimit) {
+    TransactionExtention transactionExtention = triggerContract(ownerAddress, contractAddress,
+        callData, callValue, tokenValue, tokenId);
+    return updateTransactionFeeLimit(transactionExtention, feeLimit);
   }
 
   /**
@@ -2908,7 +2945,7 @@ public class ApiWrapper implements Api {
   }
 
   /**
-   * Deploy a smart contract, with sign and broadcast
+   * Deploy a smart contract - no broadcasting
    *
    * @param contractName contract name
    * @param abiStr abi
@@ -2920,10 +2957,10 @@ public class ApiWrapper implements Api {
    * @param callValue TRX value
    * @param tokenValue token value of token10
    * @param tokenId token10 ID, no use set null or ""
-   * @return String txn
+   * @return TransactionExtention
    */
   @Override
-  public String deployContract(String contractName, String abiStr, String bytecode,
+  public TransactionExtention deployContract(String contractName, String abiStr, String bytecode,
       List<Type<?>> constructorParams,
       long feeLimit, long consumeUserResourcePercent, long originEnergyLimit, long callValue,
       String tokenId, long tokenValue)
@@ -2941,28 +2978,24 @@ public class ApiWrapper implements Api {
         contractName, keyPair.toBase58CheckAddress(), abiStr, bytecode, callValue,
         consumeUserResourcePercent, originEnergyLimit, tokenValue, tokenId);
 
-    TransactionBuilder txBuilder = new TransactionBuilder(
-        blockingStub.deployContract(createSmartContract).getTransaction());
 
-    txBuilder.setFeeLimit(feeLimit);
+    TransactionExtention transactionExtention =
+        blockingStub.deployContract(createSmartContract);
 
-    // sign
-    Transaction transaction = signTransaction(txBuilder.getTransaction());
-
-    //broadcast
-    return broadcastTransaction(transaction);
+    return updateTransactionFeeLimit(transactionExtention, feeLimit);
   }
 
   /**
-   * Deploy a smart contract with default parameters
+   * Deploy a smart contract with default parameters - no broadcasting
    *
    * @param name Contract name
    * @param abiStr abi
    * @param bytecode bytecode
-   * @return String txn
+   * @return TransactionExtention
    */
   @Override
-  public String deployContract(String name, String abiStr, String bytecode) throws Exception {
+  public TransactionExtention deployContract(String name, String abiStr,
+      String bytecode) throws Exception {
     return deployContract(
         name,
         abiStr,
