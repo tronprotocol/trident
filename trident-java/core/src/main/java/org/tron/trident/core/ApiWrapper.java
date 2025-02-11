@@ -314,31 +314,18 @@ public class ApiWrapper implements Api {
     return toHex(raw.toByteArray());
   }
 
-  public static TransactionExtention updateTransactionFeeLimit(
-      TransactionExtention transactionExtention,
-      long feeLimit
-  ) {
+  private TransactionExtention updateTransactionFeeLimit(TransactionExtention transactionExtention,
+      long feeLimit) {
     if (transactionExtention == null || feeLimit <= 0L) {
       return transactionExtention;
     }
-
-    try {
-      Transaction transaction = transactionExtention.getTransaction();
-
-      Transaction newTransaction = transaction.toBuilder()
-          .setRawData(
-              transaction.getRawData().toBuilder()
-                  .setFeeLimit(feeLimit)
-                  .build()
-          )
-          .build();
-      return transactionExtention.toBuilder()
-          .setTransaction(newTransaction)
-          .build();
-
-    } catch (Exception e) {
-      return transactionExtention;
-    }
+    Transaction transaction = transactionExtention.getTransaction();
+    Transaction newTransaction = transaction.toBuilder()
+        .setRawData(transaction.getRawData().toBuilder().setFeeLimit(feeLimit).build())
+        .build();
+    return transactionExtention.toBuilder()
+        .setTransaction(newTransaction)
+        .build();
   }
 
   @Override
@@ -840,7 +827,7 @@ public class ApiWrapper implements Api {
             .build();
     GrpcAPI.CanWithdrawUnfreezeAmountResponseMessage responseMessage =
         blockingStub.getCanWithdrawUnfreezeAmount(
-        getAvailableUnfreezeCountRequestMessage);
+            getAvailableUnfreezeCountRequestMessage);
 
     return responseMessage.getAmount();
   }
@@ -1906,7 +1893,7 @@ public class ApiWrapper implements Api {
    * @param contractAddress smart contract address.
    * @param function contract function.
    * @return TransactionExtention.
-   * @deprecated Use {@link #triggerConstantContract(String,String,Function)} instead.
+   * @deprecated Use {@link #triggerConstantContract(String, String, Function)} instead.
    */
   @Deprecated
   @Override
@@ -1916,14 +1903,13 @@ public class ApiWrapper implements Api {
   }
 
   /**
-   *
    * make a constant call - no broadcasting, no need to broadcast
    *
    * @param ownerAddress the current caller.
    * @param contractAddress smart contract address.
    * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
    * @return TransactionExtention.
-   * @deprecated Use {@link #triggerConstantContract(String,String,String)} instead.
+   * @deprecated Use {@link #triggerConstantContract(String, String, String)} instead.
    */
   @Deprecated
   @Override
@@ -1995,7 +1981,7 @@ public class ApiWrapper implements Api {
    * @param contractAddress smart contract address
    * @param function contract function
    * @return transaction builder. Users may set other fields, e.g. feeLimit
-   * @deprecated Use {@link #triggerConstantContract(String,String,Function)} instead.
+   * @deprecated Use {@link #triggerConstantContract(String, String, Function)} instead.
    */
   @Deprecated
   @Override
@@ -2012,7 +1998,7 @@ public class ApiWrapper implements Api {
    * @param contractAddress smart contract address
    * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
    * @return transaction builder. TransactionExtention detail.
-   * @deprecated Use {@link #triggerConstantContract(String,String,String)} instead.
+   * @deprecated Use {@link #triggerConstantContract(String, String, String)} instead.
    */
   @Deprecated
   @Override
@@ -2726,12 +2712,12 @@ public class ApiWrapper implements Api {
 
     ExchangeTransactionContract exchangeTransactionContract =
         ExchangeTransactionContract.newBuilder()
-        .setOwnerAddress(parseAddress(ownerAddress))
-        .setExchangeId(exchangeId)
-        .setTokenId(ByteString.copyFrom(tokenId.getBytes()))
-        .setQuant(amount)
-        .setExpected(exchangeId)
-        .build();
+            .setOwnerAddress(parseAddress(ownerAddress))
+            .setExchangeId(exchangeId)
+            .setTokenId(ByteString.copyFrom(tokenId.getBytes()))
+            .setQuant(amount)
+            .setExpected(exchangeId)
+            .build();
     return createTransactionExtention(exchangeTransactionContract,
         ContractType.ExchangeTransactionContract);
   }
@@ -2977,7 +2963,6 @@ public class ApiWrapper implements Api {
     CreateSmartContract createSmartContract = createSmartContract(
         contractName, keyPair.toBase58CheckAddress(), abiStr, bytecode, callValue,
         consumeUserResourcePercent, originEnergyLimit, tokenValue, tokenId);
-
 
     TransactionExtention transactionExtention =
         blockingStub.deployContract(createSmartContract);
