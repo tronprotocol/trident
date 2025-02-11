@@ -13,9 +13,14 @@
 
 package org.tron.trident.crypto.tuwenitypes;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkElementIndex;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static java.lang.String.format;
+import static java.nio.ByteOrder.BIG_ENDIAN;
+
 import io.netty.buffer.ByteBuf;
 import io.vertx.core.buffer.Buffer;
-
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.math.BigInteger;
@@ -29,10 +34,6 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 import java.util.Random;
-
-import static com.google.common.base.Preconditions.*;
-import static java.lang.String.format;
-import static java.nio.ByteOrder.BIG_ENDIAN;
 
 /**
  * A value made of bytes.

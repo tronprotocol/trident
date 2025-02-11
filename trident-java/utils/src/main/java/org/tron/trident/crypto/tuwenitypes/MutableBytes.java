@@ -13,13 +13,14 @@
 
 package org.tron.trident.crypto.tuwenitypes;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkElementIndex;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static java.lang.String.format;
+
 import io.netty.buffer.ByteBuf;
 import io.vertx.core.buffer.Buffer;
-
 import java.nio.ByteBuffer;
-
-import static com.google.common.base.Preconditions.*;
-import static java.lang.String.format;
 
 /**
  * A mutable {@link Bytes} value.

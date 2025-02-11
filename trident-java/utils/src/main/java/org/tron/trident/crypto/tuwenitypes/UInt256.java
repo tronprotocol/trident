@@ -13,10 +13,10 @@
 
 package org.tron.trident.crypto.tuwenitypes;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 import java.math.BigInteger;
 import java.util.Arrays;
-
-import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * An unsigned 256-bit precision number.
@@ -25,8 +25,8 @@ import static com.google.common.base.Preconditions.checkArgument;
  */
 public final class UInt256 implements UInt256Value<UInt256> {
 
-  private final static int MAX_CONSTANT = 64;
-  private final static BigInteger BI_MAX_CONSTANT = BigInteger.valueOf(MAX_CONSTANT);
+  private static final int MAX_CONSTANT = 64;
+  private static final BigInteger BI_MAX_CONSTANT = BigInteger.valueOf(MAX_CONSTANT);
   private static UInt256[] CONSTANTS = new UInt256[MAX_CONSTANT + 1];
 
   static {
@@ -39,19 +39,19 @@ public final class UInt256 implements UInt256Value<UInt256> {
   /**
    * The minimum value of a UInt256
    */
-  public final static UInt256 MIN_VALUE = valueOf(0);
+  public static final UInt256 MIN_VALUE = valueOf(0);
   /**
    * The maximum value of a UInt256
    */
-  public final static UInt256 MAX_VALUE = new UInt256(Bytes32.ZERO.not());
+  public static final UInt256 MAX_VALUE = new UInt256(Bytes32.ZERO.not());
   /**
    * The value 0
    */
-  public final static UInt256 ZERO = valueOf(0);
+  public static final UInt256 ZERO = valueOf(0);
   /**
    * The value 1
    */
-  public final static UInt256 ONE = valueOf(1);
+  public static final UInt256 ONE = valueOf(1);
 
   private static final int INTS_SIZE = 32 / 4;
   // The mask is used to obtain the value of an int as if it were unsigned.
@@ -857,6 +857,8 @@ public final class UInt256 implements UInt256Value<UInt256> {
         // fall through
       case 1:
         bytes.set(j++, (byte) (this.ints[i] & 0xFF));
+        break;
+      default:
     }
     ++i;
     for (; i < INTS_SIZE; ++i, j += 4) {

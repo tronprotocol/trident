@@ -13,11 +13,11 @@
 
 package org.tron.trident.crypto.tuwenitypes;
 
-import java.nio.ByteBuffer;
-import java.util.Arrays;
-
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkElementIndex;
+
+import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 class ByteBufferWrappingBytes extends AbstractBytes {
 

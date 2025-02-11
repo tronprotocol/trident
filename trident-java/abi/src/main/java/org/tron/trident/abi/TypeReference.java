@@ -132,8 +132,8 @@ public abstract class TypeReference<T extends org.tron.trident.abi.datatypes.Typ
     }
   }
 
-  public abstract static class StaticArrayTypeReference<T extends org.tron.trident.abi.datatypes.Type>
-      extends TypeReference<T> {
+  public abstract static class StaticArrayTypeReference<T extends
+      org.tron.trident.abi.datatypes.Type> extends TypeReference<T> {
 
     private final int size;
 

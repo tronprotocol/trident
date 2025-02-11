@@ -360,17 +360,15 @@ public class TypeDecoder {
       final BiFunction<List<T>, String, T> consumer) {
     try {
       Class<T> classType = typeReference.getClassType();
-      Constructor<?> constructor =
-          Arrays.stream(classType.getDeclaredConstructors())
-              .filter(
-                  declaredConstructor ->
-                      Arrays.stream(declaredConstructor.getParameterTypes())
-                          .allMatch(Type.class::isAssignableFrom))
-              .findAny()
-              .orElseThrow(
-                  () ->
-                      new RuntimeException(
-                          "TypeReferenced struct must contain a constructor with types that extend Type"));
+      Constructor<?> constructor = Arrays.stream(classType.getDeclaredConstructors())
+          .filter(
+              declaredConstructor ->
+                  Arrays.stream(declaredConstructor.getParameterTypes())
+                      .allMatch(Type.class::isAssignableFrom))
+          .findAny()
+          .orElseThrow(() ->
+              new RuntimeException(
+                  "TypeReferenced struct must contain a constructor with types that extend Type"));
       final int length = constructor.getParameterCount();
       List<T> elements = new ArrayList<>(length);
 
@@ -414,18 +412,16 @@ public class TypeDecoder {
   private static <T extends Type> T instantiateStruct(
       final TypeReference<T> typeReference, final List<T> parameters) {
     try {
-      Constructor ctor =
-          Arrays.stream(typeReference.getClassType().getDeclaredConstructors())
-              .filter(
-                  declaredConstructor ->
-                      Arrays.stream(declaredConstructor.getParameterTypes())
-                          .allMatch(Type.class::isAssignableFrom))
-              .findAny()
-              .orElseThrow(
-                  () ->
-                      new RuntimeException(
-                          "TypeReference struct must contain a constructor with types that extend Type"));
-      ;
+      Constructor ctor = Arrays.stream(typeReference.getClassType().getDeclaredConstructors())
+          .filter(
+              declaredConstructor ->
+                  Arrays.stream(declaredConstructor.getParameterTypes())
+                      .allMatch(Type.class::isAssignableFrom))
+          .findAny()
+          .orElseThrow(() ->
+              new RuntimeException(
+                  "TypeReference struct must contain a constructor with types that extend Type"));
+
       ctor.setAccessible(true);
       return (T) ctor.newInstance(parameters.toArray());
     } catch (ReflectiveOperationException e) {
@@ -471,17 +467,15 @@ public class TypeDecoder {
       final BiFunction<List<T>, String, T> consumer) {
     try {
       final Class<T> classType = typeReference.getClassType();
-      Constructor<?> constructor =
-          Arrays.stream(classType.getDeclaredConstructors())
-              .filter(
-                  declaredConstructor ->
-                      Arrays.stream(declaredConstructor.getParameterTypes())
-                          .allMatch(Type.class::isAssignableFrom))
-              .findAny()
-              .orElseThrow(
-                  () ->
-                      new RuntimeException(
-                          "TypeReferenced struct must contain a constructor with types that extend Type"));
+      Constructor<?> constructor = Arrays.stream(classType.getDeclaredConstructors())
+          .filter(
+              declaredConstructor ->
+                  Arrays.stream(declaredConstructor.getParameterTypes())
+                      .allMatch(Type.class::isAssignableFrom))
+          .findAny()
+          .orElseThrow(() ->
+              new RuntimeException(
+                  "TypeReferenced struct must contain a constructor with types that extend Type"));
       final int length = constructor.getParameterCount();
       final Map<Integer, T> parameters = new HashMap<>();
       int staticOffset = 0;

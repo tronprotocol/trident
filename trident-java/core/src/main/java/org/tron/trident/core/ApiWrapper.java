@@ -224,12 +224,6 @@ public class ApiWrapper implements Api {
     channelSolidity.shutdown();
   }
 
-    /*public ApiWrapper(Channel channel, String hexPrivateKey) {
-        blockingStub = WalletGrpc.newBlockingStub(channel);
-        blockingStubSolidity = WalletSolidityGrpc.newBlockingStub(channel);
-        keyPair = SECP256K1.KeyPair.create(SECP256K1.PrivateKey.create(Bytes32.fromHexString(hexPrivateKey)));
-    }*/
-
   /**
    * The constructor for main net. Use TronGrid as default
    *
@@ -352,7 +346,7 @@ public class ApiWrapper implements Api {
 
     if (contractType == Transaction.Contract.ContractType.CreateSmartContract) {
       //trx.setTransactionCreate(true);
-      org.tron.trident.proto.Contract.CreateSmartContract contract = Utils.getSmartContractFromTransaction(
+      CreateSmartContract contract = Utils.getSmartContractFromTransaction(
           trx.getTransaction());
       long percent = contract.getNewContract().getConsumeUserResourcePercent();
       if (percent < 0 || percent > 100) {
@@ -795,8 +789,8 @@ public class ApiWrapper implements Api {
         GrpcAPI.GetAvailableUnfreezeCountRequestMessage.newBuilder()
             .setOwnerAddress(rawOwner)
             .build();
-    GrpcAPI.GetAvailableUnfreezeCountResponseMessage responseMessage = blockingStub.getAvailableUnfreezeCount(
-        getAvailableUnfreezeCountRequestMessage);
+    GrpcAPI.GetAvailableUnfreezeCountResponseMessage responseMessage =
+        blockingStub.getAvailableUnfreezeCount(getAvailableUnfreezeCountRequestMessage);
 
     return responseMessage.getCount();
   }
@@ -858,8 +852,8 @@ public class ApiWrapper implements Api {
             .setOwnerAddress(rawFrom)
             .setType(type)
             .build();
-    GrpcAPI.CanDelegatedMaxSizeResponseMessage responseMessage = blockingStub.getCanDelegatedMaxSize(
-        getAvailableUnfreezeCountRequestMessage);
+    GrpcAPI.CanDelegatedMaxSizeResponseMessage responseMessage =
+        blockingStub.getCanDelegatedMaxSize(getAvailableUnfreezeCountRequestMessage);
 
     return responseMessage.getMaxSize();
   }
@@ -909,7 +903,7 @@ public class ApiWrapper implements Api {
    * Vote for witnesses
    *
    * @param ownerAddress owner address
-   * @param votes <vote address, vote count>
+   * @param votes map of vote address -> vote count
    * @return TransactionExtention
    * IllegalNumException if fail to vote witness
    */
@@ -1038,8 +1032,8 @@ public class ApiWrapper implements Api {
     BlockListExtention blockListExtention = blockingStub.getBlockByLimitNext2(blockLimit);
 
     if (endNum - startNum > 100) {
-      throw new IllegalException(
-          "The difference between startNum and endNum cannot be greater than 100, please check it.");
+      throw new IllegalException("The difference between startNum and endNum cannot be greater "
+          + "than 100, please check it.");
     }
     if (blockListExtention.getBlockCount() == 0) {
       throw new IllegalException();
@@ -1489,12 +1483,11 @@ public class ApiWrapper implements Api {
    * @param url Token official website url, default hexString
    * @param freeAssetNetLimit Token free asset net limit
    * @param publicFreeAssetNetLimit Token public free asset net limit
-   * @param frozenSupply HashMap<frozenDay, frozenAmount>
+   * @param frozenSupply HashMap of frozenDay -> frozenAmount
    * @param description Token description, default hexString
    * @return TransactionExtention
    * @throws IllegalException if fail to create AssetIssue
    */
-
   @Override
   public TransactionExtention createAssetIssue(String ownerAddress, String name, String abbr,
       long totalSupply, int trxNum, int icoNum, long startTime, long endTime,
@@ -1950,6 +1943,27 @@ public class ApiWrapper implements Api {
    *
    * @param ownerAddress the current caller
    * @param contractAddress smart contract address
+   * @param callData The data passed along with a transaction that allows us to interact with smart
+   * contracts. It can be obtained by using {@link FunctionEncoder#encode}.
+   * @param callValue TRX value
+   * @param tokenValue token value of token10
+   * @param tokenId empty or token10 ID
+   * @param feeLimit max fee allowed
+   * @return transaction builder. TransactionExtention detail.
+   */
+  @Override
+  public TransactionBuilder triggerConstantContract(String ownerAddress, String contractAddress,
+      String callData, long callValue, long tokenValue, String tokenId, long feeLimit) {
+    TransactionExtention txnExt = triggerConstantContract(ownerAddress, contractAddress, callData,
+        callValue, tokenValue, tokenId);
+    return new TransactionBuilder(txnExt.getTransaction()).setFeeLimit(feeLimit);
+  }
+
+  /**
+   * make a constant call - no broadcasting, no need to broadcast
+   *
+   * @param ownerAddress the current caller
+   * @param contractAddress smart contract address
    * @param function contract function
    * @return transaction builder. Users may set other fields, e.g. feeLimit
    * @deprecated Use {@link #triggerConstantContract(String,String,Function)} instead.
@@ -1977,27 +1991,6 @@ public class ApiWrapper implements Api {
       String callData) {
     TransactionExtention txnExt = triggerConstantContract(ownerAddress, contractAddress, callData);
     return new TransactionBuilder(txnExt.getTransaction());
-  }
-
-  /**
-   * make a constant call - no broadcasting, no need to broadcast
-   *
-   * @param ownerAddress the current caller
-   * @param contractAddress smart contract address
-   * @param callData The data passed along with a transaction that allows us to interact with smart
-   * contracts. It can be obtained by using {@link FunctionEncoder#encode}.
-   * @param callValue TRX value
-   * @param tokenValue token value of token10
-   * @param tokenId empty or token10 ID
-   * @param feeLimit max fee allowed
-   * @return transaction builder. TransactionExtention detail.
-   */
-  @Override
-  public TransactionBuilder triggerConstantContract(String ownerAddress, String contractAddress,
-      String callData, long callValue, long tokenValue, String tokenId, long feeLimit) {
-    TransactionExtention txnExt = triggerConstantContract(ownerAddress, contractAddress, callData,
-        callValue, tokenValue, tokenId);
-    return new TransactionBuilder(txnExt.getTransaction()).setFeeLimit(feeLimit);
   }
 
   /**
@@ -2354,7 +2347,7 @@ public class ApiWrapper implements Api {
             .setOwnerAddress(parseAddress(ownerAddress))
             .setContractAddress(parseAddress(contractAddress))
             .setData(ByteString.copyFrom(ByteArray.fromHexString(callData)));
-    if (callValue > 0){
+    if (callValue > 0) {
       builder.setCallValue(callValue);
     }
     if (tokenId != null && !tokenId.isEmpty()) {
@@ -2694,7 +2687,8 @@ public class ApiWrapper implements Api {
       String tokenId, long amount, long expected)
       throws IllegalException {
 
-    ExchangeTransactionContract exchangeTransactionContract = ExchangeTransactionContract.newBuilder()
+    ExchangeTransactionContract exchangeTransactionContract =
+        ExchangeTransactionContract.newBuilder()
         .setOwnerAddress(parseAddress(ownerAddress))
         .setExchangeId(exchangeId)
         .setTokenId(ByteString.copyFrom(tokenId.getBytes()))
@@ -2909,8 +2903,8 @@ public class ApiWrapper implements Api {
       byte[] byteCode = Utils.replaceLibraryAddress(code, libraryAddressPair, compilerVersion);
       code = ByteArray.toHexString(byteCode);
     }
-    return createSmartContract(contractName, address, ABI, code, callValue, consumeUserResourcePercent,
-        originEnergyLimit, tokenValue, tokenId);
+    return createSmartContract(contractName, address, ABI, code, callValue,
+        consumeUserResourcePercent, originEnergyLimit, tokenValue, tokenId);
   }
 
   /**

@@ -13,10 +13,10 @@
 
 package org.tron.trident.crypto.tuwenitypes;
 
-import java.nio.ByteBuffer;
-
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkElementIndex;
+
+import java.nio.ByteBuffer;
 
 public class MutableByteBufferWrappingBytes extends ByteBufferWrappingBytes implements
     MutableBytes {

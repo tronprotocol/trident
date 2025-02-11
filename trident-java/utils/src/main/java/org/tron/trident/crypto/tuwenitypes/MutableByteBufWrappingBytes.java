@@ -13,10 +13,10 @@
 
 package org.tron.trident.crypto.tuwenitypes;
 
-import io.netty.buffer.ByteBuf;
-
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkElementIndex;
+
+import io.netty.buffer.ByteBuf;
 
 final class MutableByteBufWrappingBytes extends ByteBufWrappingBytes implements MutableBytes {
 

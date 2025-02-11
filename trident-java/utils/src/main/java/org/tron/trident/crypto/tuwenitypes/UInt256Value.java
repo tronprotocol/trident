@@ -13,7 +13,6 @@
 
 package org.tron.trident.crypto.tuwenitypes;
 
-
 import java.math.BigInteger;
 
 /**
@@ -59,6 +58,14 @@ public interface UInt256Value<T extends UInt256Value<T>> extends Comparable<T> {
   /**
    * Returns a value that is {@code (this + value)}.
    *
+   * @param value The amount to be added to this value.
+   * @return {@code this + value}
+   */
+  T add(long value);
+
+  /**
+   * Returns a value that is {@code (this + value)}.
+   *
    * <p>
    * This notation can be used in Kotlin with the {@code +} operator.
    *
@@ -96,14 +103,6 @@ public interface UInt256Value<T extends UInt256Value<T>> extends Comparable<T> {
     }
     return result;
   }
-
-  /**
-   * Returns a value that is {@code (this + value)}.
-   *
-   * @param value The amount to be added to this value.
-   * @return {@code this + value}
-   */
-  T add(long value);
 
   /**
    * Returns a value that is {@code (this + value)}.
@@ -161,6 +160,14 @@ public interface UInt256Value<T extends UInt256Value<T>> extends Comparable<T> {
   /**
    * Returns a value that is {@code (this - value)}.
    *
+   * @param value The amount to be subtracted from this value.
+   * @return {@code this - value}
+   */
+  T subtract(long value);
+
+  /**
+   * Returns a value that is {@code (this - value)}.
+   *
    * @param value the amount to be subtracted to this value
    * @return {@code this - value}
    * @throws ArithmeticException if the result of the addition overflows
@@ -172,14 +179,6 @@ public interface UInt256Value<T extends UInt256Value<T>> extends Comparable<T> {
     }
     return result;
   }
-
-  /**
-   * Returns a value that is {@code (this - value)}.
-   *
-   * @param value The amount to be subtracted from this value.
-   * @return {@code this - value}
-   */
-  T subtract(long value);
 
   /**
    * Returns a value that is {@code (this - value)}.

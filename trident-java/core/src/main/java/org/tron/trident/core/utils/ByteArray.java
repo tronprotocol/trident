@@ -132,6 +132,7 @@ public class ByteArray {
       ByteArray.fromHexString(str);
       bRet = true;
     } catch (Exception ignored) {
+      return false;
     }
     return bRet;
   }
