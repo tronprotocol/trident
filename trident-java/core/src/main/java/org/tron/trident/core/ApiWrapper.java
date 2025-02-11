@@ -456,7 +456,8 @@ public class ApiWrapper implements Api {
   public String broadcastTransaction(Transaction txn) throws RuntimeException {
     TransactionReturn ret = blockingStub.broadcastTransaction(txn);
     if (!ret.getResult()) {
-      String message = resolveResultCode(ret.getCodeValue()) + ", " + ret.getMessage();
+      String errorMessage = new String(ret.getMessage().toByteArray());
+      String message = resolveResultCode(ret.getCodeValue()) + ", " + errorMessage;
       //System.out.println(message);
       throw new RuntimeException(message);
     } else {
