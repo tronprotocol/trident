@@ -33,7 +33,7 @@ import org.tron.trident.proto.Response.TransactionInfo;
 import org.tron.trident.proto.Response.TransactionInfo.code;
 import org.tron.trident.utils.Base58Check;
 
-//@Disabled("add private key to enable this case")
+@Disabled("add private key to enable this case")
 class ContractTest extends BaseTest {
 
   @Test
