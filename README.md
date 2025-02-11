@@ -42,7 +42,7 @@ You can use locally built packages by follow steps:
 2. Add the following to your project's `build.gradle`:
 ```groovy
 dependencies {
-    implementation files('libs/trident-java-0.9.2.jar')
+    implementation files('libs/trident-0.9.2.jar')
 }
 ```
 
@@ -54,12 +54,12 @@ dependencies {
 ApiWrapper client = ApiWrapper.ofMainnet("private_key", "api_key"); //api_key from TronGrid
 
 //Or Shasta test net 
-ApiWrapper wrapper = ApiWrapper.ofShasta("private key");
+ApiWrapper client = ApiWrapper.ofShasta("private key");
 
 // Or nile testnet
 ApiWrapper client = ApiWrapper.ofNile("private_key");
 
-//Initialize with sepcial grpc endpoint
+//Initialize with special grpc endpoint
 ApiWrapper client = new ApiWrapper("grpc endpoint", "solidity grpc endpoint", "private_key");
 
 // Send TRX
@@ -68,7 +68,7 @@ TransactionExtention transactionExtention = client.transfer("fromAddress", "toAd
 Transaction signedTxn = client.signTransaction(transactionExtention);
 // Broadcast
 String txId = client.broadcastTransaction(signedTxn);
-System.out.println("txId is " + signedTxn.toString());
+System.out.println("txId is " + txId.toString());
 ```
 
 ## Documentation
@@ -77,7 +77,7 @@ System.out.println("txId is " + signedTxn.toString());
 
 
 ## Build instructions
-Trident includes integration tests for running on the Nile testnet. If you want to run test cases involving write operations on the blockchain, such as transfers or deploy contract and so on, please follow the steps:
+Trident includes integration tests for running on the Nile testnet. If you want to run test cases involving write operations on the blockchain, such as transfer or deploy contract and so on, please follow the steps:
 
 1. Uncomment the Disabled function in the unit test cases.
 ```
