@@ -43,6 +43,16 @@ You can use locally built packages by follow steps:
 ```groovy
 dependencies {
     implementation files('libs/trident-0.9.2.jar')
+    implementation "com.google.guava:guava:33.0.0-jre"
+    implementation "io.grpc:grpc-netty-shaded:1.60.0"
+    implementation "io.grpc:grpc-netty:1.60.0"
+    implementation "io.grpc:grpc-okhttp:1.60.0"
+    implementation "io.grpc:grpc-protobuf:1.60.0"
+    implementation "io.grpc:grpc-stub:1.60.0"
+    implementation "com.google.protobuf:protobuf-java-util:3.25.5"
+    implementation "org.bouncycastle:bcprov-jdk18on:1.78.1"
+    implementation "io.vertx:vertx-core:4.5.10"
+    implementation "io.netty:netty-all:4.1.100.Final"
 }
 ```
 
@@ -68,7 +78,7 @@ TransactionExtention transactionExtention = client.transfer("fromAddress", "toAd
 Transaction signedTxn = client.signTransaction(transactionExtention);
 // Broadcast
 String txId = client.broadcastTransaction(signedTxn);
-System.out.println("txId is " + txId.toString());
+System.out.println("txId is " + txId);
 ```
 
 ## Documentation
