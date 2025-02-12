@@ -238,20 +238,20 @@ public interface Api {
   TransactionBuilder triggerCall(String ownerAddress, String contractAddress, Function function);
 
   TransactionExtention triggerContract(String ownerAddress, String contractAddress,
-      Function function) throws IllegalException;
+      Function function) throws Exception;
 
   TransactionExtention triggerContract(String ownerAddress, String contractAddress,
-      String callData) throws IllegalException;
+      String callData) throws Exception;
 
   TransactionExtention triggerContract(String ownerAddress, String contractAddress,
-      Function function, long callValue, long tokenValue, String tokenId) throws IllegalException;
+      Function function, long callValue, long tokenValue, String tokenId) throws Exception;
 
   TransactionExtention triggerContract(String ownerAddress, String contractAddress,
-      String callData, long callValue, long tokenValue, String tokenId) throws IllegalException;
+      String callData, long callValue, long tokenValue, String tokenId) throws Exception;
 
   TransactionExtention triggerContract(String ownerAddress, String contractAddress,
       String callData, long callValue, long tokenValue, String tokenId, long feeLimit)
-      throws IllegalException;
+      throws Exception;
 
   BlockBalanceTrace getBlockBalance(String blockId, long blockNum);
 
