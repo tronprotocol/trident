@@ -238,19 +238,20 @@ public interface Api {
   TransactionBuilder triggerCall(String ownerAddress, String contractAddress, Function function);
 
   TransactionExtention triggerContract(String ownerAddress, String contractAddress,
-      Function function);
+      Function function) throws IllegalException;
 
   TransactionExtention triggerContract(String ownerAddress, String contractAddress,
-      String callData);
+      String callData) throws IllegalException;
 
   TransactionExtention triggerContract(String ownerAddress, String contractAddress,
-      Function function, long callValue, long tokenValue, String tokenId);
+      Function function, long callValue, long tokenValue, String tokenId) throws IllegalException;
 
   TransactionExtention triggerContract(String ownerAddress, String contractAddress,
-      String callData, long callValue, long tokenValue, String tokenId);
+      String callData, long callValue, long tokenValue, String tokenId) throws IllegalException;
 
   TransactionExtention triggerContract(String ownerAddress, String contractAddress,
-      String callData, long callValue, long tokenValue, String tokenId, long feeLimit);
+      String callData, long callValue, long tokenValue, String tokenId, long feeLimit)
+      throws IllegalException;
 
   BlockBalanceTrace getBlockBalance(String blockId, long blockNum);
 
@@ -294,9 +295,6 @@ public interface Api {
 
   @Deprecated
   TransactionExtention constantCallV2(String ownerAddress, String contractAddress, String callData);
-
-  TransactionExtention triggerConstantContract(String ownerAddress, String contractAddress,
-      String callData, long callValue, long tokenValue, String tokenId, long feeLimit);
 
   TransactionExtention triggerConstantContract(String ownerAddress, String contractAddress,
       Function function);

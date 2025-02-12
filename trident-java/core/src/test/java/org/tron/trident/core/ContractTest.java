@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.google.protobuf.ByteString;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
@@ -26,7 +25,6 @@ import org.tron.trident.core.exceptions.IllegalException;
 import org.tron.trident.core.transaction.TransactionBuilder;
 import org.tron.trident.core.utils.ByteArray;
 import org.tron.trident.proto.Chain.Transaction;
-import org.tron.trident.proto.Common.SmartContract;
 import org.tron.trident.proto.Response.EstimateEnergyMessage;
 import org.tron.trident.proto.Response.TransactionExtention;
 import org.tron.trident.proto.Response.TransactionInfo;
@@ -292,7 +290,7 @@ class ContractTest extends BaseTest {
         }));
     String encodedHex = FunctionEncoder.encode(trc20Transfer);
     TransactionExtention transactionExtention = client.triggerConstantContract(fromAddr, usdtAddr, encodedHex,
-        0L, 0L, null, 100_000_000L);
+        0L, 0L, null);
     long energy = transactionExtention.getEnergyUsed();
     assertTrue(energy > 0);
   }
