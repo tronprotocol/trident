@@ -238,16 +238,20 @@ public interface Api {
   TransactionBuilder triggerCall(String ownerAddress, String contractAddress, Function function);
 
   TransactionExtention triggerContract(String ownerAddress, String contractAddress,
-      Function function);
+      Function function) throws Exception;
 
   TransactionExtention triggerContract(String ownerAddress, String contractAddress,
-      String callData);
+      String callData) throws Exception;
 
   TransactionExtention triggerContract(String ownerAddress, String contractAddress,
-      Function function, long callValue, long tokenValue, String tokenId);
+      Function function, long callValue, long tokenValue, String tokenId) throws Exception;
 
   TransactionExtention triggerContract(String ownerAddress, String contractAddress,
-      String callData, long callValue, long tokenValue, String tokenId);
+      String callData, long callValue, long tokenValue, String tokenId) throws Exception;
+
+  TransactionExtention triggerContract(String ownerAddress, String contractAddress,
+      String callData, long callValue, long tokenValue, String tokenId, long feeLimit)
+      throws Exception;
 
   BlockBalanceTrace getBlockBalance(String blockId, long blockNum);
 
@@ -291,9 +295,6 @@ public interface Api {
 
   @Deprecated
   TransactionExtention constantCallV2(String ownerAddress, String contractAddress, String callData);
-
-  TransactionBuilder triggerConstantContract(String ownerAddress, String contractAddress,
-      String callData, long callValue, long tokenValue, String tokenId, long feeLimit);
 
   TransactionExtention triggerConstantContract(String ownerAddress, String contractAddress,
       Function function);
@@ -374,9 +375,9 @@ public interface Api {
       long tokenValue, String tokenId, String libraryAddressPair, String compilerVersion)
       throws Exception;
 
-  String deployContract(String contractName, String abiStr, String bytecode,
+  TransactionExtention deployContract(String contractName, String abiStr, String bytecode,
       List<Type<?>> constructorParams, long feeLimit, long consumeUserResourcePercent,
       long originEnergyLimit, long callValue, String tokenId, long tokenValue) throws Exception;
 
-  String deployContract(String name, String abiStr, String bytecode) throws Exception;
+  TransactionExtention deployContract(String name, String abiStr, String bytecode) throws Exception;
 }
