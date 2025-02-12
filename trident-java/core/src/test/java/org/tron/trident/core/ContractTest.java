@@ -157,7 +157,7 @@ class ContractTest extends BaseTest {
 
 
   @Test
-  void testTriggerContract() throws InterruptedException, IllegalException {
+  void testTriggerContract() throws Exception {
     // transfer(address,uint256) returns (bool)
     String usdtAddr = "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf"; //nile
     String fromAddr = client.keyPair.toBase58CheckAddress();

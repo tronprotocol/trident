@@ -235,7 +235,8 @@ public class ApiWrapper implements Api {
    *
    * @param hexPrivateKey the binding private key. Operations require private key will all use this unless the private key is specified elsewhere.
    * @return a ApiWrapper object
-   * @deprecated This method will only be available before TronGrid prohibits the use without API key
+   * @deprecated Since 0.9.3, scheduled for removal in future versions.
+   * This method will only be available before TronGrid prohibits the use without API key
    */
   @Deprecated
   public static ApiWrapper ofMainnet(String hexPrivateKey) {
@@ -484,8 +485,6 @@ public class ApiWrapper implements Api {
           Sha256Hash.hash(true, trxExtBuilder.getTransaction().getRawData().toByteArray())));
       retBuilder.setResult(true).setCode(TransactionReturn.response_code.SUCCESS);
     } catch (Exception e) {
-      retBuilder.setResult(false).setCode(TransactionReturn.response_code.OTHER_ERROR)
-          .setMessage(ByteString.copyFromUtf8(e.getClass() + " : " + e.getMessage()));
       throw new IllegalException("createTransactionExtention error," + e.getMessage());
     }
     trxExtBuilder.setResult(retBuilder);
@@ -1889,7 +1888,8 @@ public class ApiWrapper implements Api {
    * @param contractAddress smart contract address.
    * @param function contract function.
    * @return TransactionExtention.
-   * @deprecated Use {@link #triggerConstantContract(String, String, Function)} instead.
+   * @deprecated Since 0.9.3, scheduled for removal in future versions.
+   * Use {@link #triggerConstantContract(String, String, Function)} instead.
    */
   @Deprecated
   @Override
@@ -1905,7 +1905,8 @@ public class ApiWrapper implements Api {
    * @param contractAddress smart contract address.
    * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
    * @return TransactionExtention.
-   * @deprecated Use {@link #triggerConstantContract(String, String, String)} instead.
+   * @deprecated Since 0.9.3, scheduled for removal in future versions.
+   * Use {@link #triggerConstantContract(String, String, String)} instead.
    */
   @Deprecated
   @Override
@@ -1914,12 +1915,19 @@ public class ApiWrapper implements Api {
     return triggerConstantContract(ownerAddress, contractAddress, callData);
   }
 
+  /**
+   * @see #triggerContract(String, String, String)
+   */
   @Override
   public TransactionExtention triggerConstantContract(String ownerAddress, String contractAddress,
       Function function) {
     String callData = FunctionEncoder.encode(function);
     return triggerConstantContract(ownerAddress, contractAddress, callData);
   }
+
+  /**
+   * @see #triggerConstantContract(String, String, String, long, long, String)
+   */
 
   @Override
   public TransactionExtention triggerConstantContract(String ownerAddress, String contractAddress,
@@ -1955,7 +1963,8 @@ public class ApiWrapper implements Api {
    * @param contractAddress smart contract address
    * @param function contract function
    * @return transaction builder. Users may set other fields, e.g. feeLimit
-   * @deprecated Use {@link #triggerConstantContract(String, String, Function)} instead.
+   * @deprecated Since 0.9.3, scheduled for removal in future versions.
+   * Use {@link #triggerConstantContract(String, String, Function)} instead.
    */
   @Deprecated
   @Override
@@ -1972,7 +1981,8 @@ public class ApiWrapper implements Api {
    * @param contractAddress smart contract address
    * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
    * @return transaction builder. TransactionExtention detail.
-   * @deprecated Use {@link #triggerConstantContract(String, String, String)} instead.
+   * @deprecated Since 0.9.3, scheduled for removal in future versions.
+   * Use {@link #triggerConstantContract(String, String, String)} instead.
    */
   @Deprecated
   @Override
@@ -1993,14 +2003,17 @@ public class ApiWrapper implements Api {
    */
   @Override
   public TransactionExtention triggerContract(String ownerAddress, String contractAddress,
-      Function function) throws IllegalException {
+      Function function) throws Exception {
     String encodedHex = FunctionEncoder.encode(function);
     return triggerContract(ownerAddress, contractAddress, encodedHex);
   }
 
+  /**
+   * @see #triggerContract(String, String, String, long, long, String, long)
+   */
   @Override
   public TransactionExtention triggerContract(String ownerAddress, String contractAddress,
-      String callData) throws IllegalException {
+      String callData) throws Exception {
     return triggerContract(ownerAddress, contractAddress, callData, 0L, 0L, null);
   }
 
@@ -2009,37 +2022,53 @@ public class ApiWrapper implements Api {
    *
    * @param ownerAddress the current caller
    * @param contractAddress smart contract address
-   * @param function contract function
+   * @param function the contract function to call
    * @param callValue the amount of sun send to contract
    * @param tokenValue the amount of tokenId
    * @param tokenId tokenId
    * @return TransactionExtention
+   * @throws Exception if fail
    */
   @Override
   public TransactionExtention triggerContract(String ownerAddress, String contractAddress,
-      Function function, long callValue, long tokenValue, String tokenId) throws IllegalException {
+      Function function, long callValue, long tokenValue, String tokenId) throws Exception {
     String encodedHex = FunctionEncoder.encode(function);
     return triggerContract(ownerAddress, contractAddress, encodedHex, callValue, tokenValue,
         tokenId);
   }
 
+  /**
+   * @see #triggerContract(String, String, String, long, long, String, long)
+   */
   @Override
   public TransactionExtention triggerContract(String ownerAddress, String contractAddress,
-      String callData, long callValue, long tokenValue, String tokenId) throws IllegalException {
+      String callData, long callValue, long tokenValue, String tokenId) throws Exception {
 
     return triggerContract(ownerAddress, contractAddress,
         callData, callValue, tokenValue, tokenId, 0L);
   }
 
+  /**
+   * make a TriggerSmartContract, - no broadcasting. it can be broadcast later.
+   *
+   * @param ownerAddress the current caller
+   * @param contractAddress smart contract address
+   * @param callData the encoded function call data
+   * @param callValue the amount of sun send to contract
+   * @param tokenValue the amount of tokenId
+   * @param tokenId tokenId
+   * @param feeLimit fee unit:SUN
+   * @return TransactionExtention
+   * @throws Exception if fail
+   */
   @Override
   public TransactionExtention triggerContract(String ownerAddress, String contractAddress,
       String callData, long callValue, long tokenValue, String tokenId, long feeLimit)
-      throws IllegalException {
+      throws Exception {
     TriggerSmartContract trigger = buildTrigger(ownerAddress, contractAddress, callData,
         callValue, tokenValue, tokenId);
 
     return createTransactionExtention(trigger, ContractType.TriggerSmartContract, feeLimit);
-
 
   }
 
@@ -2921,6 +2950,7 @@ public class ApiWrapper implements Api {
    * @param tokenValue token value of token10
    * @param tokenId token10 ID, no use set null or ""
    * @return TransactionExtention
+   * @throws Exception exception if fail
    */
   @Override
   public TransactionExtention deployContract(String contractName, String abiStr, String bytecode,
@@ -2946,12 +2976,7 @@ public class ApiWrapper implements Api {
   }
 
   /**
-   * Deploy a smart contract with default parameters - no broadcasting
-   *
-   * @param name Contract name
-   * @param abiStr abi
-   * @param bytecode bytecode
-   * @return TransactionExtention
+   * @see #deployContract(String, String, String, List, long, long, long, long, String, long)
    */
   @Override
   public TransactionExtention deployContract(String name, String abiStr,
