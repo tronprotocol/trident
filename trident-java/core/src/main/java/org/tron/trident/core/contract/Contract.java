@@ -119,7 +119,7 @@ public class Contract {
     this.originEnergyLimit = builder.originEnergyLimit;
     this.codeHash = builder.codeHash;
     this.trxHash = builder.trxHash;
-    this.version =  builder.version;
+    this.version = builder.version;
 
     this.ownerAddr = builder.ownerAddr;
     abiToFunctions();
@@ -379,6 +379,12 @@ public class Contract {
    * @throws Exception if the input is not valid JSON format or there are unknown fields in the input
    */
   public static void loadAbiFromJson(String abiString, ABI.Builder builder) throws Exception {
+    if (abiString == null || abiString.isEmpty()) {
+      return;
+    }
+    if (!abiString.trim().startsWith("{")) {
+      abiString = "{\"entrys\":" + abiString + "}";
+    }
     JsonFormat.parser().ignoringUnknownFields().merge(abiString, builder);
   }
 
