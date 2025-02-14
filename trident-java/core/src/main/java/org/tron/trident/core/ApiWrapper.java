@@ -280,18 +280,18 @@ public class ApiWrapper implements Api {
       throw new IllegalArgumentException("headBlock or solidBlock should not null");
     }
 
-    this.defaultHeadBlock = headBlock;
-    this.defaultSolidBlock = solidBlock;
-    this.useDefaultBlocks = true;
+    defaultHeadBlock = headBlock;
+    defaultSolidBlock = solidBlock;
+    useDefaultBlocks = true;
   }
 
   /**
    * clearDefaultBlocks
    */
   public void clearDefaultBlocks() {
-    this.defaultHeadBlock = null;
-    this.defaultSolidBlock = null;
-    this.useDefaultBlocks = false;
+    defaultHeadBlock = null;
+    defaultSolidBlock = null;
+    useDefaultBlocks = false;
   }
 
   /**
