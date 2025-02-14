@@ -141,6 +141,11 @@ public class ApiWrapper implements Api {
   public final ManagedChannel channel;
   public final ManagedChannel channelSolidity;
 
+  private BlockExtention defaultHeadBlock;
+  private BlockExtention defaultSolidBlock;
+  private boolean useDefaultBlocks = false;
+
+
   public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey) {
     channel = ManagedChannelBuilder.forTarget(grpcEndpoint).usePlaintext().build();
     channelSolidity = ManagedChannelBuilder.forTarget(grpcEndpointSolidity).usePlaintext().build();
@@ -263,6 +268,30 @@ public class ApiWrapper implements Api {
    */
   public static ApiWrapper ofNile(String hexPrivateKey) {
     return new ApiWrapper(Constant.FULLNODE_NILE, Constant.FULLNODE_NILE_SOLIDITY, hexPrivateKey);
+  }
+
+  /**
+   * setDefaultBlocks
+   * @param headBlock headBlock, use timeStamp in local build
+   * @param solidBlock solidBlock, use blockNum in local build
+   */
+  public void setDefaultBlocks(BlockExtention headBlock, BlockExtention solidBlock) {
+    if (headBlock == null || solidBlock == null) {
+      throw new IllegalArgumentException("headBlock or solidBlock should not null");
+    }
+
+    this.defaultHeadBlock = headBlock;
+    this.defaultSolidBlock = solidBlock;
+    this.useDefaultBlocks = true;
+  }
+
+  /**
+   * clearDefaultBlocks
+   */
+  public void clearDefaultBlocks() {
+    this.defaultHeadBlock = null;
+    this.defaultSolidBlock = null;
+    this.useDefaultBlocks = false;
   }
 
   /**
@@ -436,9 +465,18 @@ public class ApiWrapper implements Api {
 
   private TransactionCapsule createTransaction(
       Message message, Transaction.Contract.ContractType contractType) throws Exception {
-    BlockReq blockReq = BlockReq.newBuilder().setDetail(false).build();
-    BlockExtention solidHeadBlock = blockingStubSolidity.getBlock(blockReq);
-    BlockExtention headBlock = blockingStub.getBlock(blockReq);
+
+    BlockExtention solidHeadBlock;
+    BlockExtention headBlock;
+
+    if (useDefaultBlocks && defaultSolidBlock != null && defaultHeadBlock != null) {
+      solidHeadBlock = defaultSolidBlock;
+      headBlock = defaultHeadBlock;
+    } else {
+      BlockReq blockReq = BlockReq.newBuilder().setDetail(false).build();
+      solidHeadBlock = blockingStubSolidity.getBlock(blockReq);
+      headBlock = blockingStub.getBlock(blockReq);
+    }
 
     return createTransactionCapsuleWithoutValidate(message, contractType, solidHeadBlock,
         headBlock);

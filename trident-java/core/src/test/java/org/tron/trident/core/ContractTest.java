@@ -20,11 +20,15 @@ import org.tron.trident.abi.datatypes.Bool;
 import org.tron.trident.abi.datatypes.Function;
 import org.tron.trident.abi.datatypes.Type;
 import org.tron.trident.abi.datatypes.generated.Uint256;
+import org.tron.trident.api.GrpcAPI.BlockReq;
 import org.tron.trident.core.contract.Contract;
 import org.tron.trident.core.exceptions.IllegalException;
 import org.tron.trident.core.transaction.TransactionBuilder;
+import org.tron.trident.core.transaction.TransactionCapsule;
 import org.tron.trident.core.utils.ByteArray;
+import org.tron.trident.proto.Chain.BlockHeader;
 import org.tron.trident.proto.Chain.Transaction;
+import org.tron.trident.proto.Response.BlockExtention;
 import org.tron.trident.proto.Response.EstimateEnergyMessage;
 import org.tron.trident.proto.Response.TransactionExtention;
 import org.tron.trident.proto.Response.TransactionInfo;
@@ -58,6 +62,7 @@ class ContractTest extends BaseTest {
     TransactionInfo transactionInfo = client.getTransactionInfoById(txId);
     assertEquals(code.SUCESS, transactionInfo.getResult());
   }
+
 
   @Test
   void testDeployContract() throws Exception {
@@ -293,6 +298,29 @@ class ContractTest extends BaseTest {
         0L, 0L, null);
     long energy = transactionExtention.getEnergyUsed();
     assertTrue(energy > 0);
+  }
+
+  @Test
+  public void testDefaultBlocksSettings() throws Exception {
+
+    BlockReq blockReq = BlockReq.newBuilder().setDetail(false).build();
+    BlockExtention mockSolidBlock = client.blockingStubSolidity.getBlock(blockReq);
+    BlockExtention mockHeadBlock = client.blockingStub.getBlock(blockReq);
+
+    // set default
+    client.setDefaultBlocks(mockHeadBlock, mockSolidBlock);
+
+    TransactionExtention transactionExtention = client.transfer(testAddress, "TAB1TVw5N8g1FLcKxPD17h2A3eEpSXvMQd", 1_000_000L);
+    Transaction transaction = client.signTransaction(transactionExtention);
+    String txId = client.broadcastTransaction(transaction);
+
+    sleep(10_000L);
+
+    TransactionInfo transactionInfo = client.getTransactionInfoById(txId);
+    assertEquals(code.SUCESS, transactionInfo.getResult());
+
+    // clean
+    client.clearDefaultBlocks();
   }
 
 }
