@@ -2010,7 +2010,7 @@ public class ApiWrapper implements Api {
   public TransactionExtention triggerContract(String ownerAddress, String contractAddress,
       Function function) throws Exception {
     String encodedHex = FunctionEncoder.encode(function);
-    return triggerContract(ownerAddress, contractAddress, encodedHex);
+    return triggerContract(ownerAddress, contractAddress, encodedHex, 0L, 0L, null, FEE_LIMIT);
   }
 
   /**
