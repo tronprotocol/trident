@@ -284,10 +284,14 @@ public interface Api {
   Response.EstimateEnergyMessage estimateEnergy(String ownerAddress, String contractAddress,
       Function function);
 
+  @Deprecated
   Response.EstimateEnergyMessage estimateEnergyV2(String ownerAddress, String contractAddress,
       String callData);
 
-  Response.EstimateEnergyMessage estimateEnergyV2(String ownerAddress, String contractAddress,
+  Response.EstimateEnergyMessage estimateEnergy(String ownerAddress,
+      String contractAddress, String callData);
+
+  Response.EstimateEnergyMessage estimateEnergy(String ownerAddress, String contractAddress,
       String callData, long callValue, long tokenValue, String tokenId);
 
   @Deprecated
@@ -301,6 +305,9 @@ public interface Api {
 
   TransactionExtention triggerConstantContract(String ownerAddress, String contractAddress,
       String callData);
+
+  TransactionExtention triggerConstantContract(String ownerAddress, String contractAddress,
+      Function function, long callValue, long tokenValue, String tokenId);
 
   TransactionExtention triggerConstantContract(String ownerAddress, String contractAddress,
       String callData, long callValue, long tokenValue, String tokenId);

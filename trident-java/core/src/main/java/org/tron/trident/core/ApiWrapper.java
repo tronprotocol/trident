@@ -1935,6 +1935,15 @@ public class ApiWrapper implements Api {
     return triggerConstantContract(ownerAddress, contractAddress, callData, 0L, 0L, null);
   }
 
+  @Override
+  public TransactionExtention triggerConstantContract(String ownerAddress, String contractAddress,
+      Function function, long callValue, long tokenValue, String tokenId) {
+    String callData = FunctionEncoder.encode(function);
+    TriggerSmartContract trigger = buildTrigger(ownerAddress, contractAddress, callData, callValue,
+        tokenValue, tokenId);
+    return blockingStub.triggerConstantContract(trigger);
+  }
+
   /**
    * make a constant call - no broadcasting, no need to broadcast
    *
@@ -1953,7 +1962,6 @@ public class ApiWrapper implements Api {
     TriggerSmartContract trigger = buildTrigger(ownerAddress, contractAddress, callData, callValue,
         tokenValue, tokenId);
     return blockingStub.triggerConstantContract(trigger);
-
   }
 
   /**
@@ -2069,7 +2077,6 @@ public class ApiWrapper implements Api {
         callValue, tokenValue, tokenId);
 
     return createTransactionExtention(trigger, ContractType.TriggerSmartContract, feeLimit);
-
   }
 
   /**
@@ -2349,9 +2356,17 @@ public class ApiWrapper implements Api {
    * @param contractAddress Smart contract address.
    * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
    * @return EstimateEnergyMessage. Estimated energy to run the contract
+   * @deprecated Since 0.9.3, scheduled for removal in future versions.
+   * Use {@link #estimateEnergy(String, String, String)} instead.
    */
   @Override
   public Response.EstimateEnergyMessage estimateEnergyV2(String ownerAddress,
+      String contractAddress, String callData) {
+    return estimateEnergy(ownerAddress,contractAddress,callData);
+  }
+
+  @Override
+  public Response.EstimateEnergyMessage estimateEnergy(String ownerAddress,
       String contractAddress, String callData) {
     TriggerSmartContract trigger =
         buildTrigger(ownerAddress, contractAddress, callData, 0L, 0L, null);
@@ -2359,7 +2374,7 @@ public class ApiWrapper implements Api {
   }
 
   @Override
-  public Response.EstimateEnergyMessage estimateEnergyV2(String ownerAddress,
+  public Response.EstimateEnergyMessage estimateEnergy(String ownerAddress,
       String contractAddress, String callData, long callValue, long tokenValue, String tokenId) {
     TriggerSmartContract trigger = buildTrigger(ownerAddress, contractAddress, callData, callValue,
         tokenValue, tokenId);
@@ -2371,18 +2386,15 @@ public class ApiWrapper implements Api {
    */
   private TriggerSmartContract buildTrigger(String ownerAddress, String contractAddress,
       String callData, long callValue, long tokenValue, String tokenId) {
+    TokenValidator.validateTokenId(tokenId);
     TriggerSmartContract.Builder builder =
         TriggerSmartContract.newBuilder()
             .setOwnerAddress(parseAddress(ownerAddress))
             .setContractAddress(parseAddress(contractAddress))
-            .setData(ByteString.copyFrom(ByteArray.fromHexString(callData)));
-    if (callValue > 0) {
-      builder.setCallValue(callValue);
-    }
-    if (tokenId != null && !tokenId.isEmpty()) {
-      builder.setCallTokenValue(tokenValue);
-      builder.setTokenId(Long.parseLong(tokenId));
-    }
+            .setData(ByteString.copyFrom(ByteArray.fromHexString(callData)))
+            .setCallValue(callValue)
+            .setCallTokenValue(tokenValue)
+            .setTokenId(Long.parseLong(tokenId));
     return builder.build();
   }
 
