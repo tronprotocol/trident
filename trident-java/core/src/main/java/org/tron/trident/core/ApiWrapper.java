@@ -462,7 +462,7 @@ public class ApiWrapper implements Api {
    *
    * @param contractType transaction type.
    * @param request transaction message object.
-   * @param feeLimit fee unit:SUN
+   * @param feeLimit fee unit:SUN, only used in CreateSmartContract and TriggerSmartContract
    */
   private TransactionExtention createTransactionExtention(Message request,
       Transaction.Contract.ContractType contractType, long feeLimit) throws IllegalException {
@@ -471,14 +471,19 @@ public class ApiWrapper implements Api {
     try {
       TransactionCapsule trx = createTransaction(request, contractType);
 
-      if (feeLimit > 0L) {
-        Transaction transaction = trx.getTransaction();
-        Transaction newTransaction = transaction.toBuilder()
-            .setRawData(transaction.getRawData().toBuilder().setFeeLimit(feeLimit).build())
-            .build();
-        trxExtBuilder.setTransaction(newTransaction);
-      } else {
+      if (contractType != Transaction.Contract.ContractType.CreateSmartContract &&
+          contractType != ContractType.TriggerSmartContract) {
         trxExtBuilder.setTransaction(trx.getTransaction());
+      } else {
+        if (feeLimit <= 0L) {
+          throw new IllegalException("feeLimit must be > 0");
+        } else {
+          Transaction transaction = trx.getTransaction();
+          Transaction newTransaction = transaction.toBuilder()
+              .setRawData(transaction.getRawData().toBuilder().setFeeLimit(feeLimit).build())
+              .build();
+          trxExtBuilder.setTransaction(newTransaction);
+        }
       }
 
       trxExtBuilder.setTxid(ByteString.copyFrom(
@@ -1993,7 +1998,7 @@ public class ApiWrapper implements Api {
   }
 
   /**
-   * make a TriggerSmartContract, - no broadcasting. it can be broadcast later.
+   * make a TriggerSmartContract using default feeLimit (150 TRX), - no broadcasting. it can be broadcast later.
    *
    * @param ownerAddress the current caller
    * @param contractAddress smart contract address
@@ -2009,16 +2014,18 @@ public class ApiWrapper implements Api {
   }
 
   /**
+   * make a TriggerSmartContract using default feeLimit (150 TRX), - no broadcasting. it can be broadcast later.
+   *
    * @see #triggerContract(String, String, String, long, long, String, long)
    */
   @Override
   public TransactionExtention triggerContract(String ownerAddress, String contractAddress,
       String callData) throws Exception {
-    return triggerContract(ownerAddress, contractAddress, callData, 0L, 0L, null);
+    return triggerContract(ownerAddress, contractAddress, callData, 0L, 0L, null, FEE_LIMIT);
   }
 
   /**
-   * make a TriggerSmartContract, - no broadcasting. it can be broadcast later.
+   * make a TriggerSmartContract using default feeLimit (150 TRX), - no broadcasting. it can be broadcast later.
    *
    * @param ownerAddress the current caller
    * @param contractAddress smart contract address
@@ -2034,18 +2041,20 @@ public class ApiWrapper implements Api {
       Function function, long callValue, long tokenValue, String tokenId) throws Exception {
     String encodedHex = FunctionEncoder.encode(function);
     return triggerContract(ownerAddress, contractAddress, encodedHex, callValue, tokenValue,
-        tokenId);
+        tokenId, FEE_LIMIT);
   }
 
   /**
+   * make a TriggerSmartContract using default feeLimit (150 TRX), - no broadcasting. it can be broadcast later.
+   *
    * @see #triggerContract(String, String, String, long, long, String, long)
    */
   @Override
   public TransactionExtention triggerContract(String ownerAddress, String contractAddress,
       String callData, long callValue, long tokenValue, String tokenId) throws Exception {
 
-    return triggerContract(ownerAddress, contractAddress,
-        callData, callValue, tokenValue, tokenId, 0L);
+    return triggerContract(ownerAddress, contractAddress, callData, callValue, tokenValue, tokenId,
+        FEE_LIMIT);
   }
 
   /**
