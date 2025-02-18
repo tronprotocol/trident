@@ -172,8 +172,9 @@ class ContractTest extends BaseTest {
             new Uint256(BigInteger.valueOf(10).multiply(BigInteger.valueOf(10).pow(6)))),
         Collections.singletonList(new TypeReference<Bool>() {
         }));
+    String encodedHex = FunctionEncoder.encode(trc20Transfer);
     TransactionExtention transactionExtention = client.triggerContract(fromAddr, usdtAddr,
-        trc20Transfer);
+        encodedHex, 0, 0, null, Constant.FEE_LIMIT);
 
     Transaction signedTxn = client.signTransaction(transactionExtention);
 

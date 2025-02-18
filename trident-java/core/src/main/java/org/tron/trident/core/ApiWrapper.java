@@ -471,8 +471,8 @@ public class ApiWrapper implements Api {
     try {
       TransactionCapsule trx = createTransaction(request, contractType);
 
-      if (contractType != Transaction.Contract.ContractType.CreateSmartContract &&
-          contractType != ContractType.TriggerSmartContract) {
+      if (contractType != Transaction.Contract.ContractType.CreateSmartContract
+          && contractType != ContractType.TriggerSmartContract) {
         trxExtBuilder.setTransaction(trx.getTransaction());
       } else {
         if (feeLimit <= 0L) {
@@ -1921,7 +1921,7 @@ public class ApiWrapper implements Api {
   }
 
   /**
-   * @see #triggerContract(String, String, String)
+   * @see #triggerConstantContract(String, String, String)
    */
   @Override
   public TransactionExtention triggerConstantContract(String ownerAddress, String contractAddress,
@@ -1933,7 +1933,6 @@ public class ApiWrapper implements Api {
   /**
    * @see #triggerConstantContract(String, String, String, long, long, String)
    */
-
   @Override
   public TransactionExtention triggerConstantContract(String ownerAddress, String contractAddress,
       String callData) {
@@ -1998,66 +1997,6 @@ public class ApiWrapper implements Api {
   }
 
   /**
-   * make a TriggerSmartContract using default feeLimit (150 TRX), - no broadcasting. it can be broadcast later.
-   *
-   * @param ownerAddress the current caller
-   * @param contractAddress smart contract address
-   * @param function contract function
-   * @return TransactionExtention
-   * @throws IllegalException if fail
-   */
-  @Override
-  public TransactionExtention triggerContract(String ownerAddress, String contractAddress,
-      Function function) throws Exception {
-    String encodedHex = FunctionEncoder.encode(function);
-    return triggerContract(ownerAddress, contractAddress, encodedHex, 0L, 0L, null, FEE_LIMIT);
-  }
-
-  /**
-   * make a TriggerSmartContract using default feeLimit (150 TRX), - no broadcasting. it can be broadcast later.
-   *
-   * @see #triggerContract(String, String, String, long, long, String, long)
-   */
-  @Override
-  public TransactionExtention triggerContract(String ownerAddress, String contractAddress,
-      String callData) throws Exception {
-    return triggerContract(ownerAddress, contractAddress, callData, 0L, 0L, null, FEE_LIMIT);
-  }
-
-  /**
-   * make a TriggerSmartContract using default feeLimit (150 TRX), - no broadcasting. it can be broadcast later.
-   *
-   * @param ownerAddress the current caller
-   * @param contractAddress smart contract address
-   * @param function the contract function to call
-   * @param callValue the amount of sun send to contract
-   * @param tokenValue the amount of tokenId
-   * @param tokenId tokenId
-   * @return TransactionExtention
-   * @throws Exception if fail
-   */
-  @Override
-  public TransactionExtention triggerContract(String ownerAddress, String contractAddress,
-      Function function, long callValue, long tokenValue, String tokenId) throws Exception {
-    String encodedHex = FunctionEncoder.encode(function);
-    return triggerContract(ownerAddress, contractAddress, encodedHex, callValue, tokenValue,
-        tokenId, FEE_LIMIT);
-  }
-
-  /**
-   * make a TriggerSmartContract using default feeLimit (150 TRX), - no broadcasting. it can be broadcast later.
-   *
-   * @see #triggerContract(String, String, String, long, long, String, long)
-   */
-  @Override
-  public TransactionExtention triggerContract(String ownerAddress, String contractAddress,
-      String callData, long callValue, long tokenValue, String tokenId) throws Exception {
-
-    return triggerContract(ownerAddress, contractAddress, callData, callValue, tokenValue, tokenId,
-        FEE_LIMIT);
-  }
-
-  /**
    * make a TriggerSmartContract, - no broadcasting. it can be broadcast later.
    *
    * @param ownerAddress the current caller
@@ -2078,7 +2017,6 @@ public class ApiWrapper implements Api {
         callValue, tokenValue, tokenId);
 
     return createTransactionExtention(trigger, ContractType.TriggerSmartContract, feeLimit);
-
   }
 
   /**
@@ -2985,6 +2923,7 @@ public class ApiWrapper implements Api {
   }
 
   /**
+   * Deploy a smart contract using default feeLimit (150 TRX) - no broadcasting
    * @see #deployContract(String, String, String, List, long, long, long, long, String, long)
    */
   @Override

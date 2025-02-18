@@ -238,18 +238,6 @@ public interface Api {
   TransactionBuilder triggerCall(String ownerAddress, String contractAddress, Function function);
 
   TransactionExtention triggerContract(String ownerAddress, String contractAddress,
-      Function function) throws Exception;
-
-  TransactionExtention triggerContract(String ownerAddress, String contractAddress,
-      String callData) throws Exception;
-
-  TransactionExtention triggerContract(String ownerAddress, String contractAddress,
-      Function function, long callValue, long tokenValue, String tokenId) throws Exception;
-
-  TransactionExtention triggerContract(String ownerAddress, String contractAddress,
-      String callData, long callValue, long tokenValue, String tokenId) throws Exception;
-
-  TransactionExtention triggerContract(String ownerAddress, String contractAddress,
       String callData, long callValue, long tokenValue, String tokenId, long feeLimit)
       throws Exception;
 
