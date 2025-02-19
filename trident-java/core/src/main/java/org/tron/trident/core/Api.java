@@ -366,6 +366,4 @@ public interface Api {
   TransactionExtention deployContract(String contractName, String abiStr, String bytecode,
       List<Type<?>> constructorParams, long feeLimit, long consumeUserResourcePercent,
       long originEnergyLimit, long callValue, String tokenId, long tokenValue) throws Exception;
-
-  TransactionExtention deployContract(String name, String abiStr, String bytecode) throws Exception;
 }

@@ -71,7 +71,7 @@ class ContractTest extends BaseTest {
             + "7a7a72305820b24fc247fdaf3644b3c4c94fcee380aa610ed83415061ff9e65d7fa94a5a50a00029";
 
     TransactionExtention transactionExtention = client.deployContract("testDeployContract", abiStr,
-        bytecode);
+        bytecode, null, Constant.FEE_LIMIT, 0, 1_000_000L, 0, null , 0);
 
     Transaction transaction = client.signTransaction(transactionExtention.getTransaction());
     String txId = client.broadcastTransaction(transaction);

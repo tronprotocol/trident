@@ -2827,7 +2827,10 @@ public class ApiWrapper implements Api {
   public CreateSmartContract createSmartContract(String contractName, String address, String ABI,
       String code, long callValue, long consumeUserResourcePercent, long originEnergyLimit,
       long tokenValue, String tokenId) throws Exception {
-
+    if (callValue < 0) {
+      throw new IllegalException("callValue must be >= 0");
+    }
+    TokenValidator.validateTokenId(tokenId);
     //abi
     SmartContract.ABI.Builder abiBuilder = SmartContract.ABI.newBuilder();
     Contract.loadAbiFromJson(ABI, abiBuilder);
@@ -2838,12 +2841,9 @@ public class ApiWrapper implements Api {
         .setOriginAddress(parseAddress(address))
         .setAbi(abi)
         .setConsumeUserResourcePercent(consumeUserResourcePercent)
-        .setOriginEnergyLimit(originEnergyLimit);
-    if (callValue != 0) {
-      builder.setCallValue(callValue);
-    }
-
-    builder.setBytecode(ByteString.copyFrom(ByteArray.fromHexString(code)));
+        .setOriginEnergyLimit(originEnergyLimit)
+        .setCallValue(callValue)
+        .setBytecode(ByteString.copyFrom(ByteArray.fromHexString(code)));
     CreateSmartContract.Builder createSmartContractBuilder = CreateSmartContract.newBuilder()
         .setOwnerAddress(parseAddress(address))
         .setNewContract(builder.build());
@@ -2920,26 +2920,5 @@ public class ApiWrapper implements Api {
 
     return createTransactionExtention(createSmartContract,
         ContractType.CreateSmartContract, feeLimit);
-  }
-
-  /**
-   * Deploy a smart contract using default feeLimit (150 TRX) - no broadcasting
-   * @see #deployContract(String, String, String, List, long, long, long, long, String, long)
-   */
-  @Override
-  public TransactionExtention deployContract(String name, String abiStr,
-      String bytecode) throws Exception {
-    return deployContract(
-        name,
-        abiStr,
-        bytecode,
-        null,
-        FEE_LIMIT,
-        CONSUME_USER_RESOURCE_PERCENT,
-        ORIGIN_ENERGY_LIMIT,
-        0L,
-        null,
-        0L
-    );
   }
 }
