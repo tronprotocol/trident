@@ -123,7 +123,7 @@ public class AbiUtils {
 
   private static ABI.Entry.Param parseParam(JsonObject paramObject) throws Exception {
     String type = getString(paramObject, "type", null);
-    String name =  getString(paramObject, "type", null);
+    String name =  getString(paramObject, "name", null);
     if (type == null || name == null) {
       throw new IllegalArgumentException("Missing type or name in parameter");
     }
