@@ -1957,7 +1957,6 @@ public class ApiWrapper implements Api {
     TriggerSmartContract trigger = buildTrigger(ownerAddress, contractAddress, callData, callValue,
         tokenValue, tokenId);
     return blockingStub.triggerConstantContract(trigger);
-
   }
 
   /**
@@ -2318,14 +2317,16 @@ public class ApiWrapper implements Api {
    */
   private TriggerSmartContract buildTrigger(String ownerAddress, String contractAddress,
       String callData, long callValue, long tokenValue, String tokenId) {
+    if (callValue < 0) {
+      throw new IllegalArgumentException("callValue must be >= 0");
+    }
+    TokenValidator.validateTokenId(tokenId);
     TriggerSmartContract.Builder builder =
         TriggerSmartContract.newBuilder()
             .setOwnerAddress(parseAddress(ownerAddress))
             .setContractAddress(parseAddress(contractAddress))
-            .setData(ByteString.copyFrom(ByteArray.fromHexString(callData)));
-    if (callValue > 0) {
-      builder.setCallValue(callValue);
-    }
+            .setData(ByteString.copyFrom(ByteArray.fromHexString(callData)))
+            .setCallValue(callValue);
     if (tokenId != null && !tokenId.isEmpty()) {
       builder.setCallTokenValue(tokenValue);
       builder.setTokenId(Long.parseLong(tokenId));
@@ -2828,7 +2829,7 @@ public class ApiWrapper implements Api {
       String code, long callValue, long consumeUserResourcePercent, long originEnergyLimit,
       long tokenValue, String tokenId) throws Exception {
     if (callValue < 0) {
-      throw new IllegalException("callValue must be >= 0");
+      throw new IllegalArgumentException("callValue must be >= 0");
     }
     TokenValidator.validateTokenId(tokenId);
     //abi
@@ -2847,7 +2848,7 @@ public class ApiWrapper implements Api {
     CreateSmartContract.Builder createSmartContractBuilder = CreateSmartContract.newBuilder()
         .setOwnerAddress(parseAddress(address))
         .setNewContract(builder.build());
-    if (tokenId != null && !tokenId.equalsIgnoreCase("") && !tokenId.equalsIgnoreCase("#")) {
+    if (tokenId != null && !tokenId.equalsIgnoreCase("")) {
       createSmartContractBuilder.setCallTokenValue(tokenValue)
           .setTokenId(Long.parseLong(tokenId));
     }

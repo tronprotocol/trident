@@ -71,7 +71,7 @@ class ContractTest extends BaseTest {
             + "7a7a72305820b24fc247fdaf3644b3c4c94fcee380aa610ed83415061ff9e65d7fa94a5a50a00029";
 
     TransactionExtention transactionExtention = client.deployContract("testDeployContract", abiStr,
-        bytecode, null, Constant.FEE_LIMIT, 0, 1_000_000L, 0, null , 0);
+        bytecode, null, Constant.FEE_LIMIT, 0, 1_000_000L, 0, null, 0);
 
     Transaction transaction = client.signTransaction(transactionExtention.getTransaction());
     String txId = client.broadcastTransaction(transaction);
@@ -316,6 +316,20 @@ class ContractTest extends BaseTest {
         Collections.singletonList(new TypeReference<Bool>() {
         }));
     String encodedHex = FunctionEncoder.encode(trc20Transfer);
+    try {
+      client.triggerConstantContract(fromAddr, usdtAddr,
+          encodedHex, -1L, 0L, null);
+      assert false;
+    } catch (Exception e) {
+      assert e instanceof IllegalArgumentException;
+    }
+    try {
+      client.triggerConstantContract(fromAddr, usdtAddr,
+          encodedHex, 0L, 0L, "999999");
+      assert false;
+    } catch (Exception e) {
+      assert e instanceof IllegalArgumentException;
+    }
     TransactionExtention transactionExtention = client.triggerConstantContract(fromAddr, usdtAddr,
         encodedHex, 0L, 0L, null);
     long energy = transactionExtention.getEnergyUsed();
