@@ -284,11 +284,12 @@ public interface Api {
   Response.EstimateEnergyMessage estimateEnergy(String ownerAddress, String contractAddress,
       Function function);
 
+  Response.EstimateEnergyMessage estimateEnergy(String ownerAddress,
+      String contractAddress, String callData, long callValue, long tokenValue, String tokenId);
+
+  @Deprecated
   Response.EstimateEnergyMessage estimateEnergyV2(String ownerAddress, String contractAddress,
       String callData);
-
-  Response.EstimateEnergyMessage estimateEnergyV2(String ownerAddress, String contractAddress,
-      String callData, long callValue, long tokenValue, String tokenId);
 
   @Deprecated
   TransactionBuilder triggerCallV2(String ownerAddress, String contractAddress, String callData);
