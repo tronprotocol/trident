@@ -1,25 +1,23 @@
 package org.tron.trident.core.contract.abi;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import org.tron.trident.proto.Common.SmartContract.ABI;
 
 public class AbiUtils {
 
-  public static void loadAbiFromJson(String abiString, ABI.Builder builder) throws Exception {
+  public static void loadAbiFromJson(String abiString, ABI.Builder builder) {
     if (abiString == null || abiString.isEmpty()) {
       return;
     }
 
-    JsonElement jsonElement = JsonParser.parseString(abiString);
-
-    if (jsonElement.isJsonObject()) {
-      JsonObject jsonObject = jsonElement.getAsJsonObject();
-
-      if (jsonObject.has("entrys")) {
-        abiString = jsonObject.get("entrys").toString();
+    Object jsonElement = JSON.parse(abiString);
+    
+    if (jsonElement instanceof JSONObject) {
+      JSONObject jsonObject = (JSONObject) jsonElement;
+      if (jsonObject.containsKey("entrys")) {
+        abiString = jsonObject.getString("entrys");
       }
     }
 
@@ -27,39 +25,45 @@ public class AbiUtils {
     builder.mergeFrom(abi);
   }
 
-  public static ABI jsonStr2ABI(String jsonStr) throws Exception {
+  public static ABI jsonStr2ABI(String jsonStr) {
     if (jsonStr == null) {
       throw new IllegalArgumentException("ABI json string cannot be null");
     }
 
-    JsonArray jsonRoot = parseJsonToArray(jsonStr);
-    if (jsonRoot == null) {
-      throw new IllegalArgumentException("Invalid ABI json format");
-    }
+    JSONArray abiEntryArray = getABIEntryArray(jsonStr);
 
     ABI.Builder abiBuilder = ABI.newBuilder();
-    for (JsonElement element : jsonRoot) {
-      ABI.Entry entry = parseAbiEntry(element.getAsJsonObject());
+    for (Object abiEntryObject : abiEntryArray) {
+      ABI.Entry entry = parseAbiEntry((JSONObject) abiEntryObject);
       abiBuilder.addEntrys(entry);
     }
     return abiBuilder.build();
   }
 
-  private static JsonArray parseJsonToArray(String jsonStr) throws Exception {
-    JsonElement jsonElement = JsonParser.parseString(jsonStr);
-    if (jsonElement.isJsonObject()) {
-      JsonObject jsonObject = jsonElement.getAsJsonObject();
-      if (!jsonObject.has("entrys")) {
-        throw new IllegalArgumentException("Missing entrys field in ABI json object");
-      }
-      return jsonObject.getAsJsonArray("entrys");
-    } else if (jsonElement.isJsonArray()) {
-      return jsonElement.getAsJsonArray();
+  private static JSONArray getABIEntryArray(String jsonStr) {
+    Object jsonElement = JSON.parse(jsonStr);
+    if (jsonElement instanceof JSONArray) {
+      return (JSONArray) jsonElement;
     }
-    throw new IllegalArgumentException("Invalid ABI json: must be array or object with entrys");
+
+    if (!(jsonElement instanceof JSONObject)) {
+      throw new IllegalArgumentException("Invalid ABI json: must be array or object with entrys");
+    }
+
+    JSONObject jsonObject = (JSONObject) jsonElement;
+    if (!jsonObject.containsKey("entrys")) {
+      throw new IllegalArgumentException("Missing entrys field in ABI json object");
+    }
+
+    Object entryObject = jsonObject.get("entrys");
+    if (!(entryObject instanceof JSONArray)) {
+      throw new IllegalArgumentException("entrys field must be an array");
+    }
+    
+    return (JSONArray) entryObject;
   }
 
-  private static ABI.Entry parseAbiEntry(JsonObject abiObject) throws Exception {
+  private static ABI.Entry parseAbiEntry(JSONObject abiObject) {
     // Get basic fields
     String type = getString(abiObject, "type", null);
     if (type == null) {
@@ -81,7 +85,7 @@ public class AbiUtils {
     return entryBuilder.build();
   }
 
-  private static ABI.Entry.Builder buildBaseEntry(JsonObject abiObject) {
+  private static ABI.Entry.Builder buildBaseEntry(JSONObject abiObject) {
     ABI.Entry.Builder builder = ABI.Entry.newBuilder()
         .setAnonymous(getBoolean(abiObject, "anonymous", false))
         .setConstant(getBoolean(abiObject, "constant", false));
@@ -94,10 +98,10 @@ public class AbiUtils {
     return builder;
   }
 
-  private static void processInputs(JsonObject abiObject,
-      ABI.Entry.Builder entryBuilder, String type) throws Exception {
+  private static void processInputs(JSONObject abiObject,
+      ABI.Entry.Builder entryBuilder, String type) {
 
-    JsonArray inputs = getJsonArray(abiObject, "inputs");
+    JSONArray inputs = getJsonArray(abiObject, "inputs");
     if (inputs == null) {
       // Inputs are optional for fallback and receive functions
       if (!("fallback".equalsIgnoreCase(type) || "receive".equalsIgnoreCase(type))) {
@@ -106,22 +110,22 @@ public class AbiUtils {
       return;
     }
 
-    for (JsonElement input : inputs) {
-      entryBuilder.addInputs(parseParam(input.getAsJsonObject()));
+    for (Object input : inputs) {
+      entryBuilder.addInputs(parseParam((JSONObject) input));
     }
   }
 
-  private static void processOutputs(JsonObject abiObject,
-      ABI.Entry.Builder entryBuilder) throws Exception {
-    JsonArray outputs = getJsonArray(abiObject, "outputs");
+  private static void processOutputs(JSONObject abiObject,
+      ABI.Entry.Builder entryBuilder) {
+    JSONArray outputs = getJsonArray(abiObject, "outputs");
     if (outputs != null) {
-      for (JsonElement output : outputs) {
-        entryBuilder.addOutputs(parseParam(output.getAsJsonObject()));
+      for (Object output : outputs) {
+        entryBuilder.addOutputs(parseParam((JSONObject) output));
       }
     }
   }
 
-  private static ABI.Entry.Param parseParam(JsonObject paramObject) throws Exception {
+  private static ABI.Entry.Param parseParam(JSONObject paramObject) {
     String type = getString(paramObject, "type", null);
     String name =  getString(paramObject, "name", null);
     if (type == null || name == null) {
@@ -136,7 +140,7 @@ public class AbiUtils {
   }
 
   private static void setTypeRelatedProperties(ABI.Entry.Builder entryBuilder, 
-                                             JsonObject abiObject, 
+                                             JSONObject abiObject, 
                                              String type) {
     entryBuilder.setType(getEntryType(type))
         .setPayable(getBoolean(abiObject, "payable", false));
@@ -148,16 +152,16 @@ public class AbiUtils {
   }
 
   // Utility methods
-  private static boolean getBoolean(JsonObject obj, String key, boolean defaultValue) {
-    return obj.has(key) ? obj.get(key).getAsBoolean() : defaultValue;
+  private static boolean getBoolean(JSONObject obj, String key, boolean defaultValue) {
+    return obj.containsKey(key) ? obj.getBoolean(key) : defaultValue;
   }
 
-  private static String getString(JsonObject obj, String key, String defaultValue) {
-    return obj.has(key) ? obj.get(key).getAsString() : defaultValue;
+  private static String getString(JSONObject obj, String key, String defaultValue) {
+    return obj.containsKey(key) ? obj.getString(key) : defaultValue;
   }
 
-  private static JsonArray getJsonArray(JsonObject obj, String key) {
-    return obj.has(key) ? obj.get(key).getAsJsonArray() : null;
+  private static JSONArray getJsonArray(JSONObject obj, String key) {
+    return obj.containsKey(key) ? obj.getJSONArray(key) : null;
   }
 
   private static ABI.Entry.EntryType getEntryType(String type) {
