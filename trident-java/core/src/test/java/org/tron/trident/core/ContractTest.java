@@ -71,7 +71,7 @@ class ContractTest extends BaseTest {
             + "7a7a72305820b24fc247fdaf3644b3c4c94fcee380aa610ed83415061ff9e65d7fa94a5a50a00029";
 
     TransactionExtention transactionExtention = client.deployContract("testDeployContract", abiStr,
-        bytecode, null, Constant.FEE_LIMIT, 0, 1_000_000L, 0, null, 0);
+        bytecode, null, 150_000_000L, 0, 1_000_000L, 0, null, 0);
 
     Transaction transaction = client.signTransaction(transactionExtention.getTransaction());
     String txId = client.broadcastTransaction(transaction);
@@ -174,7 +174,7 @@ class ContractTest extends BaseTest {
         }));
     String encodedHex = FunctionEncoder.encode(trc20Transfer);
     TransactionExtention transactionExtention = client.triggerContract(fromAddr, usdtAddr,
-        encodedHex, 0, 0, null, Constant.FEE_LIMIT);
+        encodedHex, 0, 0, null, 150_000_000L);
 
     Transaction signedTxn = client.signTransaction(transactionExtention);
 
