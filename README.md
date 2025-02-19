@@ -53,6 +53,7 @@ dependencies {
     implementation "org.bouncycastle:bcprov-jdk18on:1.78.1"
     implementation "io.vertx:vertx-core:4.5.10"
     implementation "io.netty:netty-all:4.1.100.Final"
+    implementation "com.alibaba.fastjson2:fastjson2:2.0.55"
 }
 ```
 

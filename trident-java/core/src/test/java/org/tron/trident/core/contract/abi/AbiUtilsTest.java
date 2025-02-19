@@ -232,6 +232,10 @@ class AbiUtilsTest {
     AbiUtils.loadAbiFromJson("", builder);
     assertEquals(0, builder.getEntrysCount());
 
+    AbiUtils.loadAbiFromJson("[]", builder);
+    System.out.println(builder.toString());
+    assertEquals(0, builder.getEntrysCount());
+
     AbiUtils.loadAbiFromJson(null, builder);
     assertEquals(0, builder.getEntrysCount());
 
@@ -324,7 +328,9 @@ class AbiUtilsTest {
         + "    \"type\": \"function\","
         + "    \"name\": \"transfer\","
         + "    \"stateMutability\": \"payable\","
-        + "    \"inputs\": []"
+        + "    \"inputs\": [],"
+        + "    \"constant\": false,"
+        + "    \"payable\": true"
         + "}]}";
 
     ABI.Builder builder = ABI.newBuilder();
@@ -336,6 +342,8 @@ class AbiUtilsTest {
     ABI.Entry entry = abi.getEntrys(0);
     assertEquals(ABI.Entry.EntryType.Function, entry.getType());
     assertEquals(ABI.Entry.StateMutabilityType.Payable, entry.getStateMutability());
+    assertFalse(entry.getConstant());
+    assertTrue(entry.getPayable());
   }
 
   @Test
