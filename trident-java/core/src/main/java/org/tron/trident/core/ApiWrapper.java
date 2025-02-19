@@ -1,10 +1,10 @@
 package org.tron.trident.core;
 
-import static org.tron.trident.core.Constant.CONSUME_USER_RESOURCE_PERCENT;
-import static org.tron.trident.core.Constant.FEE_LIMIT;
 import static org.tron.trident.core.Constant.GRPC_TIMEOUT;
-import static org.tron.trident.core.Constant.ORIGIN_ENERGY_LIMIT;
 import static org.tron.trident.core.Constant.TRANSACTION_DEFAULT_EXPIRATION_TIME;
+import static org.tron.trident.core.utils.TokenValidator.validateCallValue;
+import static org.tron.trident.core.utils.TokenValidator.validateTokenId;
+import static org.tron.trident.core.utils.TokenValidator.validateTokenValue;
 import static org.tron.trident.core.utils.Utils.encodeParameter;
 
 import com.google.protobuf.ByteString;
@@ -42,7 +42,6 @@ import org.tron.trident.core.transaction.TransactionBuilder;
 import org.tron.trident.core.transaction.TransactionCapsule;
 import org.tron.trident.core.utils.ByteArray;
 import org.tron.trident.core.utils.Sha256Hash;
-import org.tron.trident.core.utils.TokenValidator;
 import org.tron.trident.core.utils.Utils;
 import org.tron.trident.proto.Chain.Block;
 import org.tron.trident.proto.Chain.Transaction;
@@ -2317,10 +2316,9 @@ public class ApiWrapper implements Api {
    */
   private TriggerSmartContract buildTrigger(String ownerAddress, String contractAddress,
       String callData, long callValue, long tokenValue, String tokenId) {
-    if (callValue < 0) {
-      throw new IllegalArgumentException("callValue must be >= 0");
-    }
-    TokenValidator.validateTokenId(tokenId);
+    validateCallValue(callValue);
+    validateTokenId(tokenId);
+    validateTokenValue(tokenValue);
     TriggerSmartContract.Builder builder =
         TriggerSmartContract.newBuilder()
             .setOwnerAddress(parseAddress(ownerAddress))
@@ -2745,8 +2743,8 @@ public class ApiWrapper implements Api {
   public TransactionExtention marketSellAsset(String ownerAddress, String sellTokenId,
       long sellTokenQuantity, String buyTokenId, long buyTokenQuantity) throws IllegalException {
     ByteString rawOwner = parseAddress(ownerAddress);
-    TokenValidator.validateTokenId(sellTokenId);
-    TokenValidator.validateTokenId(buyTokenId);
+    validateTokenId(sellTokenId);
+    validateTokenId(buyTokenId);
 
     MarketSellAssetContract marketSellAssetContract = MarketSellAssetContract.newBuilder()
         .setOwnerAddress(rawOwner)
@@ -2828,10 +2826,9 @@ public class ApiWrapper implements Api {
   public CreateSmartContract createSmartContract(String contractName, String address, String ABI,
       String code, long callValue, long consumeUserResourcePercent, long originEnergyLimit,
       long tokenValue, String tokenId) throws Exception {
-    if (callValue < 0) {
-      throw new IllegalArgumentException("callValue must be >= 0");
-    }
-    TokenValidator.validateTokenId(tokenId);
+    validateCallValue(callValue);
+    validateTokenId(tokenId);
+    validateTokenValue(tokenValue);
     //abi
     SmartContract.ABI.Builder abiBuilder = SmartContract.ABI.newBuilder();
     Contract.loadAbiFromJson(ABI, abiBuilder);
@@ -2906,9 +2903,9 @@ public class ApiWrapper implements Api {
       long feeLimit, long consumeUserResourcePercent, long originEnergyLimit, long callValue,
       String tokenId, long tokenValue)
       throws Exception {
-
-    TokenValidator.validateTokenId(tokenId);
-
+    validateCallValue(callValue);
+    validateTokenId(tokenId);
+    validateTokenValue(tokenValue);
     if (constructorParams != null && !constructorParams.isEmpty()) {
       ByteString constructorParamsByteString = encodeParameter(constructorParams);
       ByteString newByteCode = ByteString.copyFrom(ByteArray.fromHexString(bytecode))
