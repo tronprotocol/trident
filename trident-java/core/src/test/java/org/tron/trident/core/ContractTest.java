@@ -49,7 +49,8 @@ class ContractTest extends BaseTest {
 
   @Test
   void testTransfer() throws InterruptedException, IllegalException {
-    TransactionExtention transactionExtention = client.transfer(testAddress, "TAB1TVw5N8g1FLcKxPD17h2A3eEpSXvMQd", 1_000_000L);
+    TransactionExtention transactionExtention = client.transfer(testAddress,
+        "TAB1TVw5N8g1FLcKxPD17h2A3eEpSXvMQd", 1_000_000L);
     Transaction transaction = client.signTransaction(transactionExtention);
     String txId = client.broadcastTransaction(transaction);
 
@@ -69,7 +70,8 @@ class ContractTest extends BaseTest {
             + "810290910101528051600390829060029081106100de57fe5b6020908102909101015280518190849081106100f657fe5b906020019060200201519150509190505600a16562"
             + "7a7a72305820b24fc247fdaf3644b3c4c94fcee380aa610ed83415061ff9e65d7fa94a5a50a00029";
 
-    TransactionExtention transactionExtention = client.deployContract("testDeployContract", abiStr, bytecode);
+    TransactionExtention transactionExtention = client.deployContract("testDeployContract", abiStr,
+        bytecode, null, 150_000_000L, 0, 1_000_000L, 0, null, 0);
 
     Transaction transaction = client.signTransaction(transactionExtention.getTransaction());
     String txId = client.broadcastTransaction(transaction);
@@ -92,7 +94,8 @@ class ContractTest extends BaseTest {
         new Uint256(BigInteger.valueOf(100))  // initTotal 100
     );
 
-    TransactionExtention transactionExtention = client.deployContract("testDConstructorParams", abiStr, bytecode,
+    TransactionExtention transactionExtention = client.deployContract("testDConstructorParams",
+        abiStr, bytecode,
         constructorParams, 1000_000_000L, 100,
         10_000_000L, 0L, null, 0L);
     //System.out.println("Transaction ID: " + txId);
@@ -120,7 +123,8 @@ class ContractTest extends BaseTest {
     );
 
     //callValue 1TRX
-    TransactionExtention transactionExtention = client.deployContract("testDConstructorParams", abiStr, bytecode,
+    TransactionExtention transactionExtention = client.deployContract("testDConstructorParams",
+        abiStr, bytecode,
         constructorParams, 100_000_000L, 100,
         10_000_000L, 1_000_000L, null, 0L);
 
@@ -142,7 +146,8 @@ class ContractTest extends BaseTest {
     //callValue 1TRX
     //tokenId
     //tokenValue 10
-    TransactionExtention transactionExtention = client.deployContract("testDeployContractWithTRC10", abiStr, bytecode,
+    TransactionExtention transactionExtention = client.deployContract("testDeployContractWithTRC10",
+        abiStr, bytecode,
         null, 100_000_000L, 100,
         10_000_000L, 1_000_000L, tokenId, 10L);
     //System.out.println("Transaction ID: " + txId);
@@ -167,8 +172,9 @@ class ContractTest extends BaseTest {
             new Uint256(BigInteger.valueOf(10).multiply(BigInteger.valueOf(10).pow(6)))),
         Collections.singletonList(new TypeReference<Bool>() {
         }));
+    String encodedHex = FunctionEncoder.encode(trc20Transfer);
     TransactionExtention transactionExtention = client.triggerContract(fromAddr, usdtAddr,
-        trc20Transfer);
+        encodedHex, 0, 0, null, 150_000_000L);
 
     Transaction signedTxn = client.signTransaction(transactionExtention);
 
@@ -179,6 +185,27 @@ class ContractTest extends BaseTest {
     TransactionInfo transactionInfo = client.getTransactionInfoById(ret);
     assertEquals(0, transactionInfo.getResult().getNumber());
 
+  }
+
+  @Test
+  void testTriggerContractWithFeeLimit() {
+    // transfer(address,uint256) returns (bool)
+    String usdtAddr = "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf"; //nile
+    String fromAddr = client.keyPair.toBase58CheckAddress();
+    String toAddress = "TVjsyZ7fYF3qLF6BQgPmTEZy1xrNNyVAAA";
+    Function trc20Transfer = new Function("transfer",
+        Arrays.asList(new Address(toAddress),
+            new Uint256(BigInteger.valueOf(10).multiply(BigInteger.valueOf(10).pow(6)))),
+        Collections.singletonList(new TypeReference<Bool>() {
+        }));
+    String encodedHex = FunctionEncoder.encode(trc20Transfer);
+    try {
+      client.triggerContract(fromAddr, usdtAddr,
+          encodedHex, 0L, 0L, null, 0L);
+      assert false;
+    } catch (Exception e) {
+      assertTrue(e instanceof IllegalException);
+    }
   }
 
   @Test
@@ -289,8 +316,22 @@ class ContractTest extends BaseTest {
         Collections.singletonList(new TypeReference<Bool>() {
         }));
     String encodedHex = FunctionEncoder.encode(trc20Transfer);
-    TransactionExtention transactionExtention = client.triggerConstantContract(fromAddr, usdtAddr, encodedHex,
-        0L, 0L, null);
+    try {
+      client.triggerConstantContract(fromAddr, usdtAddr,
+          encodedHex, -1L, 0L, null);
+      assert false;
+    } catch (Exception e) {
+      assert e instanceof IllegalArgumentException;
+    }
+    try {
+      client.triggerConstantContract(fromAddr, usdtAddr,
+          encodedHex, 0L, 0L, "999999");
+      assert false;
+    } catch (Exception e) {
+      assert e instanceof IllegalArgumentException;
+    }
+    TransactionExtention transactionExtention = client.triggerConstantContract(fromAddr, usdtAddr,
+        encodedHex, 0L, 0L, null);
     long energy = transactionExtention.getEnergyUsed();
     assertTrue(energy > 0);
   }

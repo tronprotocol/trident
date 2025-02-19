@@ -238,18 +238,6 @@ public interface Api {
   TransactionBuilder triggerCall(String ownerAddress, String contractAddress, Function function);
 
   TransactionExtention triggerContract(String ownerAddress, String contractAddress,
-      Function function) throws Exception;
-
-  TransactionExtention triggerContract(String ownerAddress, String contractAddress,
-      String callData) throws Exception;
-
-  TransactionExtention triggerContract(String ownerAddress, String contractAddress,
-      Function function, long callValue, long tokenValue, String tokenId) throws Exception;
-
-  TransactionExtention triggerContract(String ownerAddress, String contractAddress,
-      String callData, long callValue, long tokenValue, String tokenId) throws Exception;
-
-  TransactionExtention triggerContract(String ownerAddress, String contractAddress,
       String callData, long callValue, long tokenValue, String tokenId, long feeLimit)
       throws Exception;
 
@@ -378,6 +366,4 @@ public interface Api {
   TransactionExtention deployContract(String contractName, String abiStr, String bytecode,
       List<Type<?>> constructorParams, long feeLimit, long consumeUserResourcePercent,
       long originEnergyLimit, long callValue, String tokenId, long tokenValue) throws Exception;
-
-  TransactionExtention deployContract(String name, String abiStr, String bytecode) throws Exception;
 }

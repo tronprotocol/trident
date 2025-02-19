@@ -1,10 +1,10 @@
 package org.tron.trident.core;
 
-import static org.tron.trident.core.Constant.CONSUME_USER_RESOURCE_PERCENT;
-import static org.tron.trident.core.Constant.FEE_LIMIT;
 import static org.tron.trident.core.Constant.GRPC_TIMEOUT;
-import static org.tron.trident.core.Constant.ORIGIN_ENERGY_LIMIT;
 import static org.tron.trident.core.Constant.TRANSACTION_DEFAULT_EXPIRATION_TIME;
+import static org.tron.trident.core.utils.TokenValidator.validateCallValue;
+import static org.tron.trident.core.utils.TokenValidator.validateTokenId;
+import static org.tron.trident.core.utils.TokenValidator.validateTokenValue;
 import static org.tron.trident.core.utils.Utils.encodeParameter;
 
 import com.google.protobuf.ByteString;
@@ -42,7 +42,6 @@ import org.tron.trident.core.transaction.TransactionBuilder;
 import org.tron.trident.core.transaction.TransactionCapsule;
 import org.tron.trident.core.utils.ByteArray;
 import org.tron.trident.core.utils.Sha256Hash;
-import org.tron.trident.core.utils.TokenValidator;
 import org.tron.trident.core.utils.Utils;
 import org.tron.trident.proto.Chain.Block;
 import org.tron.trident.proto.Chain.Transaction;
@@ -462,7 +461,7 @@ public class ApiWrapper implements Api {
    *
    * @param contractType transaction type.
    * @param request transaction message object.
-   * @param feeLimit fee unit:SUN
+   * @param feeLimit fee unit:SUN, only used in CreateSmartContract and TriggerSmartContract
    */
   private TransactionExtention createTransactionExtention(Message request,
       Transaction.Contract.ContractType contractType, long feeLimit) throws IllegalException {
@@ -471,14 +470,19 @@ public class ApiWrapper implements Api {
     try {
       TransactionCapsule trx = createTransaction(request, contractType);
 
-      if (feeLimit > 0L) {
-        Transaction transaction = trx.getTransaction();
-        Transaction newTransaction = transaction.toBuilder()
-            .setRawData(transaction.getRawData().toBuilder().setFeeLimit(feeLimit).build())
-            .build();
-        trxExtBuilder.setTransaction(newTransaction);
-      } else {
+      if (contractType != Transaction.Contract.ContractType.CreateSmartContract
+          && contractType != ContractType.TriggerSmartContract) {
         trxExtBuilder.setTransaction(trx.getTransaction());
+      } else {
+        if (feeLimit <= 0L) {
+          throw new IllegalException("feeLimit must be > 0");
+        } else {
+          Transaction transaction = trx.getTransaction();
+          Transaction newTransaction = transaction.toBuilder()
+              .setRawData(transaction.getRawData().toBuilder().setFeeLimit(feeLimit).build())
+              .build();
+          trxExtBuilder.setTransaction(newTransaction);
+        }
       }
 
       trxExtBuilder.setTxid(ByteString.copyFrom(
@@ -1916,7 +1920,7 @@ public class ApiWrapper implements Api {
   }
 
   /**
-   * @see #triggerContract(String, String, String)
+   * @see #triggerConstantContract(String, String, String)
    */
   @Override
   public TransactionExtention triggerConstantContract(String ownerAddress, String contractAddress,
@@ -1928,7 +1932,6 @@ public class ApiWrapper implements Api {
   /**
    * @see #triggerConstantContract(String, String, String, long, long, String)
    */
-
   @Override
   public TransactionExtention triggerConstantContract(String ownerAddress, String contractAddress,
       String callData) {
@@ -1953,7 +1956,6 @@ public class ApiWrapper implements Api {
     TriggerSmartContract trigger = buildTrigger(ownerAddress, contractAddress, callData, callValue,
         tokenValue, tokenId);
     return blockingStub.triggerConstantContract(trigger);
-
   }
 
   /**
@@ -1997,62 +1999,6 @@ public class ApiWrapper implements Api {
    *
    * @param ownerAddress the current caller
    * @param contractAddress smart contract address
-   * @param function contract function
-   * @return TransactionExtention
-   * @throws IllegalException if fail
-   */
-  @Override
-  public TransactionExtention triggerContract(String ownerAddress, String contractAddress,
-      Function function) throws Exception {
-    String encodedHex = FunctionEncoder.encode(function);
-    return triggerContract(ownerAddress, contractAddress, encodedHex);
-  }
-
-  /**
-   * @see #triggerContract(String, String, String, long, long, String, long)
-   */
-  @Override
-  public TransactionExtention triggerContract(String ownerAddress, String contractAddress,
-      String callData) throws Exception {
-    return triggerContract(ownerAddress, contractAddress, callData, 0L, 0L, null);
-  }
-
-  /**
-   * make a TriggerSmartContract, - no broadcasting. it can be broadcast later.
-   *
-   * @param ownerAddress the current caller
-   * @param contractAddress smart contract address
-   * @param function the contract function to call
-   * @param callValue the amount of sun send to contract
-   * @param tokenValue the amount of tokenId
-   * @param tokenId tokenId
-   * @return TransactionExtention
-   * @throws Exception if fail
-   */
-  @Override
-  public TransactionExtention triggerContract(String ownerAddress, String contractAddress,
-      Function function, long callValue, long tokenValue, String tokenId) throws Exception {
-    String encodedHex = FunctionEncoder.encode(function);
-    return triggerContract(ownerAddress, contractAddress, encodedHex, callValue, tokenValue,
-        tokenId);
-  }
-
-  /**
-   * @see #triggerContract(String, String, String, long, long, String, long)
-   */
-  @Override
-  public TransactionExtention triggerContract(String ownerAddress, String contractAddress,
-      String callData, long callValue, long tokenValue, String tokenId) throws Exception {
-
-    return triggerContract(ownerAddress, contractAddress,
-        callData, callValue, tokenValue, tokenId, 0L);
-  }
-
-  /**
-   * make a TriggerSmartContract, - no broadcasting. it can be broadcast later.
-   *
-   * @param ownerAddress the current caller
-   * @param contractAddress smart contract address
    * @param callData the encoded function call data
    * @param callValue the amount of sun send to contract
    * @param tokenValue the amount of tokenId
@@ -2069,7 +2015,6 @@ public class ApiWrapper implements Api {
         callValue, tokenValue, tokenId);
 
     return createTransactionExtention(trigger, ContractType.TriggerSmartContract, feeLimit);
-
   }
 
   /**
@@ -2371,14 +2316,15 @@ public class ApiWrapper implements Api {
    */
   private TriggerSmartContract buildTrigger(String ownerAddress, String contractAddress,
       String callData, long callValue, long tokenValue, String tokenId) {
+    validateCallValue(callValue);
+    validateTokenId(tokenId);
+    validateTokenValue(tokenValue);
     TriggerSmartContract.Builder builder =
         TriggerSmartContract.newBuilder()
             .setOwnerAddress(parseAddress(ownerAddress))
             .setContractAddress(parseAddress(contractAddress))
-            .setData(ByteString.copyFrom(ByteArray.fromHexString(callData)));
-    if (callValue > 0) {
-      builder.setCallValue(callValue);
-    }
+            .setData(ByteString.copyFrom(ByteArray.fromHexString(callData)))
+            .setCallValue(callValue);
     if (tokenId != null && !tokenId.isEmpty()) {
       builder.setCallTokenValue(tokenValue);
       builder.setTokenId(Long.parseLong(tokenId));
@@ -2797,8 +2743,8 @@ public class ApiWrapper implements Api {
   public TransactionExtention marketSellAsset(String ownerAddress, String sellTokenId,
       long sellTokenQuantity, String buyTokenId, long buyTokenQuantity) throws IllegalException {
     ByteString rawOwner = parseAddress(ownerAddress);
-    TokenValidator.validateTokenId(sellTokenId);
-    TokenValidator.validateTokenId(buyTokenId);
+    validateTokenId(sellTokenId);
+    validateTokenId(buyTokenId);
 
     MarketSellAssetContract marketSellAssetContract = MarketSellAssetContract.newBuilder()
         .setOwnerAddress(rawOwner)
@@ -2880,7 +2826,9 @@ public class ApiWrapper implements Api {
   public CreateSmartContract createSmartContract(String contractName, String address, String ABI,
       String code, long callValue, long consumeUserResourcePercent, long originEnergyLimit,
       long tokenValue, String tokenId) throws Exception {
-
+    validateCallValue(callValue);
+    validateTokenId(tokenId);
+    validateTokenValue(tokenValue);
     //abi
     SmartContract.ABI.Builder abiBuilder = SmartContract.ABI.newBuilder();
     Contract.loadAbiFromJson(ABI, abiBuilder);
@@ -2891,16 +2839,13 @@ public class ApiWrapper implements Api {
         .setOriginAddress(parseAddress(address))
         .setAbi(abi)
         .setConsumeUserResourcePercent(consumeUserResourcePercent)
-        .setOriginEnergyLimit(originEnergyLimit);
-    if (callValue != 0) {
-      builder.setCallValue(callValue);
-    }
-
-    builder.setBytecode(ByteString.copyFrom(ByteArray.fromHexString(code)));
+        .setOriginEnergyLimit(originEnergyLimit)
+        .setCallValue(callValue)
+        .setBytecode(ByteString.copyFrom(ByteArray.fromHexString(code)));
     CreateSmartContract.Builder createSmartContractBuilder = CreateSmartContract.newBuilder()
         .setOwnerAddress(parseAddress(address))
         .setNewContract(builder.build());
-    if (tokenId != null && !tokenId.equalsIgnoreCase("") && !tokenId.equalsIgnoreCase("#")) {
+    if (tokenId != null && !tokenId.equalsIgnoreCase("")) {
       createSmartContractBuilder.setCallTokenValue(tokenValue)
           .setTokenId(Long.parseLong(tokenId));
     }
@@ -2958,9 +2903,9 @@ public class ApiWrapper implements Api {
       long feeLimit, long consumeUserResourcePercent, long originEnergyLimit, long callValue,
       String tokenId, long tokenValue)
       throws Exception {
-
-    TokenValidator.validateTokenId(tokenId);
-
+    validateCallValue(callValue);
+    validateTokenId(tokenId);
+    validateTokenValue(tokenValue);
     if (constructorParams != null && !constructorParams.isEmpty()) {
       ByteString constructorParamsByteString = encodeParameter(constructorParams);
       ByteString newByteCode = ByteString.copyFrom(ByteArray.fromHexString(bytecode))
@@ -2973,25 +2918,5 @@ public class ApiWrapper implements Api {
 
     return createTransactionExtention(createSmartContract,
         ContractType.CreateSmartContract, feeLimit);
-  }
-
-  /**
-   * @see #deployContract(String, String, String, List, long, long, long, long, String, long)
-   */
-  @Override
-  public TransactionExtention deployContract(String name, String abiStr,
-      String bytecode) throws Exception {
-    return deployContract(
-        name,
-        abiStr,
-        bytecode,
-        null,
-        FEE_LIMIT,
-        CONSUME_USER_RESOURCE_PERCENT,
-        ORIGIN_ENERGY_LIMIT,
-        0L,
-        null,
-        0L
-    );
   }
 }

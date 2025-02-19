@@ -5,6 +5,13 @@ import static org.tron.trident.core.Constant.TRX_SYMBOL;
 import org.tron.trident.utils.Numeric;
 
 public class TokenValidator {
+
+  public static void validateCallValue(long callValue) {
+    if (callValue < 0) {
+      throw new IllegalArgumentException("callValue must be >= 0");
+    }
+  }
+
   /**
    * Validates the general format and value of a token ID
    *
@@ -30,7 +37,12 @@ public class TokenValidator {
     if (tokenValue < 1000000L) {
       throw new IllegalArgumentException("TRC10 token ID must ge 1000000");
     }
+  }
 
+  public static void validateTokenValue(long tokenValue) {
+    if (tokenValue < 0) {
+      throw new IllegalArgumentException("tokenValue must be >= 0");
+    }
   }
 
 }
