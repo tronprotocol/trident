@@ -112,16 +112,13 @@ public class AbiUtils {
     }
 
     // Build basic Entry
-    ABI.Entry.Builder entryBuilder = buildBaseEntry(entryObj);
+    ABI.Entry.Builder entryBuilder = buildBaseEntry(entryObj, entryType);
     
     // Process input parameters
     processInputs(entryObj, entryBuilder, entryType);
 
     // Process output parameters
     processOutputs(entryObj, entryBuilder);
-
-    // Set type-related properties
-    setTypeRelatedProperties(entryBuilder, entryObj, entryType);
 
     return entryBuilder.build();
   }
@@ -130,18 +127,34 @@ public class AbiUtils {
    * Builds a base ABI entry with common fields.
    *
    * @param entryObj Source JSON object containing entry information
-   * @return ABI.Entry.Builder object with common fields，include anonymous/constant/payable/name
+   * @param entryType The entry type (function, event, etc.)
+   * @return ABI.Entry.Builder object with common fields，including:
+   *         - anonymous
+   *         - constant
+   *         - name
+   *         - entryType
+   *         - payable
+   *         - stateMutability
    * @throws IllegalArgumentException if required fields are missing or invalid
    */
-  private static ABI.Entry.Builder buildBaseEntry(JSONObject entryObj) {
+  private static ABI.Entry.Builder buildBaseEntry(JSONObject entryObj, String entryType) {
+    // Set fields in the order defined in protobuf schema
     ABI.Entry.Builder builder = ABI.Entry.newBuilder()
         .setAnonymous(entryObj.getBooleanValue("anonymous", false))
-        .setConstant(entryObj.getBooleanValue("constant", false))
-        .setPayable(entryObj.getBooleanValue("payable", false));
+        .setConstant(entryObj.getBooleanValue("constant", false));
 
     String name = entryObj.getString("name");
     if (name != null) {
       builder.setName(name);
+    }
+
+    builder.setType(getEntryType(entryType));
+
+    builder.setPayable(entryObj.getBooleanValue("payable", false));
+
+    String stateMutability = entryObj.getString("stateMutability");
+    if (stateMutability != null) {
+      builder.setStateMutability(getStateMutability(stateMutability));
     }
 
     return builder;
@@ -154,7 +167,7 @@ public class AbiUtils {
    * @param abiObject JSON object containing the ABI entry information
    * @param entryBuilder Builder to populate with input parameters
    * @param type The entry type (function, event, etc.)
-   * @throws IllegalArgumentException if inputs are missing for non-fallback/receive functions
+   * @throws IllegalArgumentException if inputs are missing for not-fallback/receive functions
    */
   private static void processInputs(JSONObject abiObject,
       ABI.Entry.Builder entryBuilder, String type) {
@@ -163,7 +176,7 @@ public class AbiUtils {
     if (inputs == null) {
       // Inputs are optional for fallback and receive functions
       if (!("fallback".equalsIgnoreCase(type) || "receive".equalsIgnoreCase(type))) {
-        throw new IllegalArgumentException("Missing inputs for non-fallback/receive function");
+        throw new IllegalArgumentException("Missing inputs for not-fallback/receive function");
       }
       return;
     }
@@ -211,30 +224,11 @@ public class AbiUtils {
   }
 
   /**
-   * Sets type-related properties for an ABI entry.
-   * This includes entry type and state mutability.
-   *
-   * @param entryBuilder Builder to populate with type-related properties
-   * @param abiObject Source JSON object containing entry information
-   * @param type The entry type string
-   */
-  private static void setTypeRelatedProperties(ABI.Entry.Builder entryBuilder, 
-                                             JSONObject abiObject, 
-                                             String type) {
-    entryBuilder.setType(getEntryType(type));
-
-    String stateMutability = abiObject.getString("stateMutability");
-    if (stateMutability != null) {
-      entryBuilder.setStateMutability(getStateMutability(stateMutability));
-    }
-  }
-
-  /**
    * Converts a string type to the corresponding EntryType enum value.
    *
    * @param type The type string to convert
    * @return The corresponding EntryType enum value
-   * @return UnknownEntryType if the type string doesn't match any known type
+   * UnknownEntryType if the type string doesn't match any known type
    */
   private static ABI.Entry.EntryType getEntryType(String type) {
     switch (type.toLowerCase()) {
@@ -260,7 +254,7 @@ public class AbiUtils {
    *
    * @param stateMutability The state mutability string to convert
    * @return The corresponding StateMutabilityType enum value
-   * @return UnknownMutabilityType if the string doesn't match any known type
+   * UnknownMutabilityType if the string doesn't match any known type
    */
   private static ABI.Entry.StateMutabilityType getStateMutability(String stateMutability) {
     switch (stateMutability.toLowerCase()) {
