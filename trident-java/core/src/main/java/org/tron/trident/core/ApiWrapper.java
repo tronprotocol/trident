@@ -234,7 +234,7 @@ public class ApiWrapper implements Api {
    *
    * @param hexPrivateKey the binding private key. Operations require private key will all use this unless the private key is specified elsewhere.
    * @return a ApiWrapper object
-   * @deprecated Since 0.9.3, scheduled for removal in future versions.
+   * @deprecated Since 0.9.2, scheduled for removal in future versions.
    * This method will only be available before TronGrid prohibits the use without API key
    */
   @Deprecated
@@ -1892,7 +1892,7 @@ public class ApiWrapper implements Api {
    * @param contractAddress smart contract address.
    * @param function contract function.
    * @return TransactionExtention.
-   * @deprecated Since 0.9.3, scheduled for removal in future versions.
+   * @deprecated Since 0.9.2, scheduled for removal in future versions.
    * Use {@link #triggerConstantContract(String, String, Function)} instead.
    */
   @Deprecated
@@ -1909,7 +1909,7 @@ public class ApiWrapper implements Api {
    * @param contractAddress smart contract address.
    * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
    * @return TransactionExtention.
-   * @deprecated Since 0.9.3, scheduled for removal in future versions.
+   * @deprecated Since 0.9.2, scheduled for removal in future versions.
    * Use {@link #triggerConstantContract(String, String, String)} instead.
    */
   @Deprecated
@@ -1965,7 +1965,7 @@ public class ApiWrapper implements Api {
    * @param contractAddress smart contract address
    * @param function contract function
    * @return transaction builder. Users may set other fields, e.g. feeLimit
-   * @deprecated Since 0.9.3, scheduled for removal in future versions.
+   * @deprecated Since 0.9.2, scheduled for removal in future versions.
    * Use {@link #triggerConstantContract(String, String, Function)} instead.
    */
   @Deprecated
@@ -1983,7 +1983,7 @@ public class ApiWrapper implements Api {
    * @param contractAddress smart contract address
    * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
    * @return transaction builder. TransactionExtention detail.
-   * @deprecated Since 0.9.3, scheduled for removal in future versions.
+   * @deprecated Since 0.9.2, scheduled for removal in future versions.
    * Use {@link #triggerConstantContract(String, String, String)} instead.
    */
   @Deprecated
@@ -2264,11 +2264,11 @@ public class ApiWrapper implements Api {
   /**
    * Estimate the energy required for the successful execution of smart contract transactions
    * This API is closed by default in tron node.
-   * To open this interface, the two coniguration items vm.estimateEnergy and vm.supportConstant
+   * To open this interface, the two configuration items vm.estimateEnergy and vm.supportConstant
    * must be enabled in the node configuration file at the same time.
    *
-   * @param ownerAddress Owner address that triggers the contract. If visible=true, use base58check format, otherwise use hex format.
-   * For constant call you can use the all-zero address.
+   * @param ownerAddress Owner address that triggers the contract. If visible=true, use base58check
+   * format, otherwise use hex format. For constant call you can use the all-zero address.
    * @param contractAddress Smart contract address.
    * @param function contract function
    * @return EstimateEnergyMessage. Estimated energy to run the contract
@@ -2289,25 +2289,42 @@ public class ApiWrapper implements Api {
    * at the same time.
    *
    * @param ownerAddress Owner address that triggers the contract. If visible=true, use base58check
+   * format, otherwise use hex format. For constant call you can use the all-zero address.
+   * @param contractAddress Smart contract address.
+   * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
+   * @param callValue call Value. If TRX not used, use 0.
+   * @param tokenValue token Value, If token10 not used, use 0.
+   * @param tokenId token10 ID, If token10 not used, use null.
+   * @return EstimateEnergyMessage. Estimated energy to run the contract
+   */
+  @Override
+  public Response.EstimateEnergyMessage estimateEnergy(String ownerAddress,
+      String contractAddress, String callData, long callValue, long tokenValue, String tokenId) {
+    TriggerSmartContract trigger = buildTrigger(ownerAddress, contractAddress, callData, callValue,
+        tokenValue, tokenId);
+    return blockingStub.estimateEnergy(trigger);
+  }
+
+  /**
+   * Estimate the energy required for the successful execution of smart contract transactions
+   * This API is closed by default in tron node. To open this interface, the two configuration
+   * items vm.estimateEnergy and vm.supportConstant must be enabled in the node configuration file
+   * at the same time.
+   *
+   * @param ownerAddress Owner address that triggers the contract. If visible=true, use base58check
    * format, otherwise use hex format.
    * For constant call you can use the all-zero address.
    * @param contractAddress Smart contract address.
    * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
    * @return EstimateEnergyMessage. Estimated energy to run the contract
+   * @deprecated Since 0.9.2, scheduled for removal in future versions.
+   * Use {@link #estimateEnergy(String, String, String, long, long, String)} instead.
    */
   @Override
   public Response.EstimateEnergyMessage estimateEnergyV2(String ownerAddress,
       String contractAddress, String callData) {
     TriggerSmartContract trigger =
         buildTrigger(ownerAddress, contractAddress, callData, 0L, 0L, null);
-    return blockingStub.estimateEnergy(trigger);
-  }
-
-  @Override
-  public Response.EstimateEnergyMessage estimateEnergyV2(String ownerAddress,
-      String contractAddress, String callData, long callValue, long tokenValue, String tokenId) {
-    TriggerSmartContract trigger = buildTrigger(ownerAddress, contractAddress, callData, callValue,
-        tokenValue, tokenId);
     return blockingStub.estimateEnergy(trigger);
   }
 

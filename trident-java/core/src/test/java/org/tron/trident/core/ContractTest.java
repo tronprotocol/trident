@@ -237,7 +237,7 @@ class ContractTest extends BaseTest {
         Collections.singletonList(new TypeReference<Uint256>() {
         }));
     String encodedHex = FunctionEncoder.encode(depositFunction);
-    EstimateEnergyMessage estimateEnergyMessage = client.estimateEnergyV2(fromAddr, strx,
+    EstimateEnergyMessage estimateEnergyMessage = client.estimateEnergy(fromAddr, strx,
         encodedHex, 1_000_000L, 0, "");
     //System.out.println(estimateEnergyMessage.getEnergyRequired());
     assertTrue(estimateEnergyMessage.getEnergyRequired() > 0);
