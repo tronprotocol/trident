@@ -2264,11 +2264,11 @@ public class ApiWrapper implements Api {
   /**
    * Estimate the energy required for the successful execution of smart contract transactions
    * This API is closed by default in tron node.
-   * To open this interface, the two coniguration items vm.estimateEnergy and vm.supportConstant
+   * To open this interface, the two configuration items vm.estimateEnergy and vm.supportConstant
    * must be enabled in the node configuration file at the same time.
    *
-   * @param ownerAddress Owner address that triggers the contract. If visible=true, use base58check format, otherwise use hex format.
-   * For constant call you can use the all-zero address.
+   * @param ownerAddress Owner address that triggers the contract. If visible=true, use base58check
+   * format, otherwise use hex format. For constant call you can use the all-zero address.
    * @param contractAddress Smart contract address.
    * @param function contract function
    * @return EstimateEnergyMessage. Estimated energy to run the contract
@@ -2289,8 +2289,7 @@ public class ApiWrapper implements Api {
    * at the same time.
    *
    * @param ownerAddress Owner address that triggers the contract. If visible=true, use base58check
-   * format, otherwise use hex format.
-   * For constant call you can use the all-zero address.
+   * format, otherwise use hex format. For constant call you can use the all-zero address.
    * @param contractAddress Smart contract address.
    * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
    * @param callValue call Value. If TRX not used, use 0.
