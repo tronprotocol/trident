@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
+import lombok.Getter;
+import lombok.Setter;
 import org.bouncycastle.jcajce.provider.digest.SHA256;
 import org.tron.trident.abi.FunctionEncoder;
 import org.tron.trident.abi.datatypes.Function;
@@ -38,6 +40,7 @@ import org.tron.trident.core.contract.Contract;
 import org.tron.trident.core.contract.ContractFunction;
 import org.tron.trident.core.exceptions.IllegalException;
 import org.tron.trident.core.key.KeyPair;
+import org.tron.trident.core.transaction.BlockId;
 import org.tron.trident.core.transaction.TransactionBuilder;
 import org.tron.trident.core.transaction.TransactionCapsule;
 import org.tron.trident.core.utils.ByteArray;
@@ -139,6 +142,22 @@ public class ApiWrapper implements Api {
   public final KeyPair keyPair;
   public final ManagedChannel channel;
   public final ManagedChannel channelSolidity;
+
+  /**
+   * used to set refer block number and hash when createTransaction. If not set, use the highest
+   * solidity BlockId instead. Use {@link #clearRefer()} to reset.
+   */
+  @Getter
+  @Setter
+  private BlockId referHeadBlockId;
+  /**
+   * used this timestamp + TRANSACTION_DEFAULT_EXPIRATION_TIME to set expiration timestamp when
+   * createTransaction. If not set, use the timestamp of latest head BlockId instead. Use
+   * {@link #clearRefer()} to reset.
+   */
+  @Getter
+  @Setter
+  private long referBlockTimeStamp = -1;
 
   public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey) {
     channel = ManagedChannelBuilder.forTarget(grpcEndpoint).usePlaintext().build();
@@ -262,6 +281,14 @@ public class ApiWrapper implements Api {
    */
   public static ApiWrapper ofNile(String hexPrivateKey) {
     return new ApiWrapper(Constant.FULLNODE_NILE, Constant.FULLNODE_NILE_SOLIDITY, hexPrivateKey);
+  }
+
+  /**
+   * clear the refer value.
+   */
+  public void clearRefer() {
+    referHeadBlockId = null;
+    referBlockTimeStamp = -1;
   }
 
   /**
@@ -403,7 +430,7 @@ public class ApiWrapper implements Api {
 
   private TransactionCapsule createTransactionCapsuleWithoutValidate(
       Message message, Transaction.Contract.ContractType contractType,
-      BlockExtention solidHeadBlock, BlockExtention headBlock) throws Exception {
+      BlockId solidHeadBlockId, long headBlockTimeStamp) throws Exception {
     TransactionCapsule trx = new TransactionCapsule(message, contractType);
 
     if (contractType == Transaction.Contract.ContractType.CreateSmartContract) {
@@ -421,12 +448,10 @@ public class ApiWrapper implements Api {
     //build transaction
     trx.setTransactionCreate(false);
     //get solid head blockId
-    byte[] blockHash = Utils.getBlockId(solidHeadBlock).getBytes();
-    trx.setReference(solidHeadBlock.getBlockHeader().getRawData().getNumber(), blockHash);
+    trx.setReference(solidHeadBlockId.getNum(), solidHeadBlockId.getBytes());
 
     //get expiration time from head block timestamp
-    long expiration = headBlock.getBlockHeader().getRawData().getTimestamp()
-        + TRANSACTION_DEFAULT_EXPIRATION_TIME;
+    long expiration = headBlockTimeStamp + TRANSACTION_DEFAULT_EXPIRATION_TIME;
     trx.setExpiration(expiration);
     trx.setTimestamp();
 
@@ -436,11 +461,20 @@ public class ApiWrapper implements Api {
   private TransactionCapsule createTransaction(
       Message message, Transaction.Contract.ContractType contractType) throws Exception {
     BlockReq blockReq = BlockReq.newBuilder().setDetail(false).build();
-    BlockExtention solidHeadBlock = blockingStubSolidity.getBlock(blockReq);
-    BlockExtention headBlock = blockingStub.getBlock(blockReq);
+    BlockId solidHeadBlockId;
+    long headBlockTimeStamp;
 
-    return createTransactionCapsuleWithoutValidate(message, contractType, solidHeadBlock,
-        headBlock);
+    if (referHeadBlockId == null || referBlockTimeStamp <= 0) {
+      BlockExtention solidHeadBlock = blockingStubSolidity.getBlock(blockReq);
+      BlockExtention headBlock = blockingStub.getBlock(blockReq);
+      solidHeadBlockId = Utils.getBlockId(solidHeadBlock);
+      headBlockTimeStamp = headBlock.getBlockHeader().getRawData().getTimestamp();
+    } else {
+      solidHeadBlockId = referHeadBlockId;
+      headBlockTimeStamp = referBlockTimeStamp;
+    }
+    return createTransactionCapsuleWithoutValidate(message, contractType,
+        solidHeadBlockId, headBlockTimeStamp);
   }
 
   /**
