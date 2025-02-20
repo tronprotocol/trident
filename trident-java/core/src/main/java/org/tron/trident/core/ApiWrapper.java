@@ -463,10 +463,12 @@ public class ApiWrapper implements Api {
     BlockReq blockReq = BlockReq.newBuilder().setDetail(false).build();
     BlockId solidHeadBlockId = referHeadBlockId;
     long headBlockTimeStamp = referBlockTimeStamp;
-    if (referHeadBlockId == null || referBlockTimeStamp <= 0) {
+    if (solidHeadBlockId == null) {
       BlockExtention solidHeadBlock = blockingStubSolidity.getBlock(blockReq);
-      BlockExtention headBlock = blockingStub.getBlock(blockReq);
       solidHeadBlockId = Utils.getBlockId(solidHeadBlock);
+    }
+    if (headBlockTimeStamp <= 0) {
+      BlockExtention headBlock = blockingStub.getBlock(blockReq);
       headBlockTimeStamp = headBlock.getBlockHeader().getRawData().getTimestamp();
     }
 
