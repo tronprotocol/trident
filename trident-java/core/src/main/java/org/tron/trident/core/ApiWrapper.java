@@ -461,18 +461,15 @@ public class ApiWrapper implements Api {
   private TransactionCapsule createTransaction(
       Message message, Transaction.Contract.ContractType contractType) throws Exception {
     BlockReq blockReq = BlockReq.newBuilder().setDetail(false).build();
-    BlockId solidHeadBlockId;
-    long headBlockTimeStamp;
-
+    BlockId solidHeadBlockId = referHeadBlockId;
+    long headBlockTimeStamp = referBlockTimeStamp;
     if (referHeadBlockId == null || referBlockTimeStamp <= 0) {
       BlockExtention solidHeadBlock = blockingStubSolidity.getBlock(blockReq);
       BlockExtention headBlock = blockingStub.getBlock(blockReq);
       solidHeadBlockId = Utils.getBlockId(solidHeadBlock);
       headBlockTimeStamp = headBlock.getBlockHeader().getRawData().getTimestamp();
-    } else {
-      solidHeadBlockId = referHeadBlockId;
-      headBlockTimeStamp = referBlockTimeStamp;
     }
+
     return createTransactionCapsuleWithoutValidate(message, contractType,
         solidHeadBlockId, headBlockTimeStamp);
   }
