@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.tron.trident.abi.datatypes.Type;
 import org.tron.trident.core.ApiWrapper;
+import org.tron.trident.core.contract.abi.AbiUtils;
 import org.tron.trident.core.exceptions.ContractCreateException;
 import org.tron.trident.core.transaction.TransactionBuilder;
 import org.tron.trident.proto.Common.SmartContract;
@@ -382,10 +383,7 @@ public class Contract {
     if (abiString == null || abiString.isEmpty()) {
       return;
     }
-    if (!abiString.trim().startsWith("{")) {
-      abiString = "{\"entrys\":" + abiString + "}";
-    }
-    JsonFormat.parser().ignoringUnknownFields().merge(abiString, builder);
+    AbiUtils.loadAbiFromJson(abiString, builder);
   }
 
 }

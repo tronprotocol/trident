@@ -30,6 +30,8 @@ dependencies {
     implementation "com.google.protobuf:protobuf-java-util:$protobufVersion"
 
     implementation "org.bouncycastle:bcprov-jdk18on:$bouncycastleVersion"
+
+    implementation "com.alibaba.fastjson2:fastjson2:2.0.55"
 }
 
 protobuf {
