@@ -151,13 +151,13 @@ public class ApiWrapper implements Api {
   @Setter
   private BlockId referHeadBlockId;
   /**
-   * used this timestamp + TRANSACTION_DEFAULT_EXPIRATION_TIME to set expiration timestamp when
-   * createTransaction. If not set, use the timestamp of latest head BlockId instead. Use
-   * {@link #clearRefer()} to reset.
+   * used to set transaction's expiration timestamp when {@link #createTransaction} . If not set, use the
+   * timestamp of latest head BlockId + TRANSACTION_DEFAULT_EXPIRATION_TIME instead. Use {@link #clearRefer()}
+   * to reset. unit is milliseconds
    */
   @Getter
   @Setter
-  private long referBlockTimeStamp = -1;
+  private long expireTimeStamp = -1;
 
   public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey) {
     channel = ManagedChannelBuilder.forTarget(grpcEndpoint).usePlaintext().build();
@@ -288,7 +288,7 @@ public class ApiWrapper implements Api {
    */
   public void clearRefer() {
     referHeadBlockId = null;
-    referBlockTimeStamp = -1;
+    expireTimeStamp = -1;
   }
 
   /**
@@ -430,7 +430,7 @@ public class ApiWrapper implements Api {
 
   private TransactionCapsule createTransactionCapsuleWithoutValidate(
       Message message, Transaction.Contract.ContractType contractType,
-      BlockId solidHeadBlockId, long headBlockTimeStamp) throws Exception {
+      BlockId solidHeadBlockId, long expireTimeStamp) throws Exception {
     TransactionCapsule trx = new TransactionCapsule(message, contractType);
 
     if (contractType == Transaction.Contract.ContractType.CreateSmartContract) {
@@ -449,10 +449,7 @@ public class ApiWrapper implements Api {
     trx.setTransactionCreate(false);
     //get solid head blockId
     trx.setReference(solidHeadBlockId.getNum(), solidHeadBlockId.getBytes());
-
-    //get expiration time from head block timestamp
-    long expiration = headBlockTimeStamp + TRANSACTION_DEFAULT_EXPIRATION_TIME;
-    trx.setExpiration(expiration);
+    trx.setExpiration(expireTimeStamp);
     trx.setTimestamp();
 
     return trx;
@@ -462,18 +459,19 @@ public class ApiWrapper implements Api {
       Message message, Transaction.Contract.ContractType contractType) throws Exception {
     BlockReq blockReq = BlockReq.newBuilder().setDetail(false).build();
     BlockId solidHeadBlockId = referHeadBlockId;
-    long headBlockTimeStamp = referBlockTimeStamp;
+    long transactionExpireTimeStamp = expireTimeStamp;
     if (solidHeadBlockId == null) {
       BlockExtention solidHeadBlock = blockingStubSolidity.getBlock(blockReq);
       solidHeadBlockId = Utils.getBlockId(solidHeadBlock);
     }
-    if (headBlockTimeStamp <= 0) {
+    if (transactionExpireTimeStamp <= 0) {
       BlockExtention headBlock = blockingStub.getBlock(blockReq);
-      headBlockTimeStamp = headBlock.getBlockHeader().getRawData().getTimestamp();
+      transactionExpireTimeStamp = headBlock.getBlockHeader().getRawData().getTimestamp() +
+          TRANSACTION_DEFAULT_EXPIRATION_TIME;
     }
 
     return createTransactionCapsuleWithoutValidate(message, contractType,
-        solidHeadBlockId, headBlockTimeStamp);
+        solidHeadBlockId, transactionExpireTimeStamp);
   }
 
   /**
