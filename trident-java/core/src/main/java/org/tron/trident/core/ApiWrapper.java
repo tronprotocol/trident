@@ -2685,7 +2685,7 @@ public class ApiWrapper implements Api {
             .setExchangeId(exchangeId)
             .setTokenId(ByteString.copyFrom(tokenId.getBytes()))
             .setQuant(amount)
-            .setExpected(exchangeId)
+            .setExpected(expected)
             .build();
     return createTransactionExtention(exchangeTransactionContract,
         ContractType.ExchangeTransactionContract);
