@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.tron.trident.core.Constant.TRANSACTION_DEFAULT_EXPIRATION_TIME;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -348,19 +347,27 @@ class ContractTest extends BaseTest {
     long refBlockNum = new Random().nextInt(100);
     byte[] refBlockNumBytes = ByteArray.fromLong(refBlockNum);
     long timestamp = System.currentTimeMillis();
+    client.setCreateTransactionLocal(true);
+
+    try {
+      client.transferTrc10(testAddress,
+          "TAB1TVw5N8g1FLcKxPD17h2A3eEpSXvMQd", Integer.parseInt(tokenId), 100);
+      assert false;
+    } catch (Exception e) {
+      assert true;
+    }
+
     client.setReferHeadBlockId(new BlockId(Sha256Hash.wrap(rawHashBytes), refBlockNum));
-    client.setReferBlockTimeStamp(timestamp); //ms
+    client.setExpireTimeStamp(timestamp); //ms
     TransactionExtention transactionExtention = client.transferTrc10(testAddress,
         "TAB1TVw5N8g1FLcKxPD17h2A3eEpSXvMQd", Integer.parseInt(tokenId), 100);
-
     assertArrayEquals(ByteArray.subArray(rawHashBytes, 8, 16),
         transactionExtention.getTransaction().getRawData().getRefBlockHash().toByteArray());
     assertArrayEquals(ByteArray.subArray(refBlockNumBytes, 6, 8),
         transactionExtention.getTransaction().getRawData().getRefBlockBytes().toByteArray());
-    assertEquals(timestamp + TRANSACTION_DEFAULT_EXPIRATION_TIME,
-        transactionExtention.getTransaction().getRawData().getExpiration());
-    client.clearRefer();
+    assertEquals(timestamp, transactionExtention.getTransaction().getRawData().getExpiration());
 
+    client.setCreateTransactionLocal(false);
     transactionExtention = client.transferTrc10(testAddress,
         "TAB1TVw5N8g1FLcKxPD17h2A3eEpSXvMQd", Integer.parseInt(tokenId), 100);
 
@@ -373,8 +380,7 @@ class ContractTest extends BaseTest {
         ByteArray.toHexString(
             transactionExtention.getTransaction().getRawData().getRefBlockBytes().toByteArray()));
 
-    assertNotEquals(timestamp + TRANSACTION_DEFAULT_EXPIRATION_TIME,
-        transactionExtention.getTransaction().getRawData().getExpiration());
+    assertNotEquals(timestamp, transactionExtention.getTransaction().getRawData().getExpiration());
   }
 
   private byte[] getBlockId() {

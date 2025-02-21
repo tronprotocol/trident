@@ -144,16 +144,26 @@ public class ApiWrapper implements Api {
   public final ManagedChannel channelSolidity;
 
   /**
-   * used to set refer block number and hash when createTransaction. If not set, use the highest
-   * solidity BlockId instead. Use {@link #clearRefer()} to reset.
+   * Specify whether to createTransaction locally (default false) without grpc request. If true, we
+   * need to query referHeadBlockId and head block time through grpc api in method
+   * {@link #createTransaction}. {@link #referHeadBlockId} and {@link #expireTimeStamp} must be
+   * valid when it is true.
+   */
+  @Getter
+  @Setter
+  boolean createTransactionLocal = false;
+  /**
+   * Used to set refer block number and hash when {@link #createTransaction} only if
+   * {@link #createTransactionLocal} = true. If false, use the highest solidity BlockId instead.
+   * Use {@link #resetRefer()} to reset.
    */
   @Getter
   @Setter
   private BlockId referHeadBlockId;
   /**
-   * used to set transaction's expiration timestamp when {@link #createTransaction} . If not set, use the
-   * timestamp of latest head BlockId + TRANSACTION_DEFAULT_EXPIRATION_TIME instead. Use {@link #clearRefer()}
-   * to reset. unit is milliseconds
+   * Used to set transaction's expiration timestamp (milliseconds) when {@link #createTransaction} only if
+   * {@link #createTransactionLocal} = true. If false, use the timestamp of latest head BlockId +
+   * TRANSACTION_DEFAULT_EXPIRATION_TIME instead. Use {@link #resetExpireTimeStamp()} to reset.
    */
   @Getter
   @Setter
@@ -284,10 +294,13 @@ public class ApiWrapper implements Api {
   }
 
   /**
-   * clear the refer value.
+   * clear the referHeadBlockId.
    */
-  public void clearRefer() {
+  public void resetRefer() {
     referHeadBlockId = null;
+  }
+
+  public void resetExpireTimeStamp() {
     expireTimeStamp = -1;
   }
 
@@ -457,19 +470,26 @@ public class ApiWrapper implements Api {
 
   private TransactionCapsule createTransaction(
       Message message, Transaction.Contract.ContractType contractType) throws Exception {
-    BlockReq blockReq = BlockReq.newBuilder().setDetail(false).build();
-    BlockId solidHeadBlockId = referHeadBlockId;
-    long transactionExpireTimeStamp = expireTimeStamp;
-    if (solidHeadBlockId == null) {
+    BlockId solidHeadBlockId;
+    long transactionExpireTimeStamp;
+    if (createTransactionLocal) {
+      if (referHeadBlockId == null) {
+        throw new NullPointerException("referHeadBlockId must not be null");
+      }
+      if (expireTimeStamp <= 0) {
+        throw new Exception("expireTimeStamp must be > 0");
+      }
+      solidHeadBlockId = referHeadBlockId;
+      transactionExpireTimeStamp = expireTimeStamp;
+    } else {
+      BlockReq blockReq = BlockReq.newBuilder().setDetail(false).build();
       BlockExtention solidHeadBlock = blockingStubSolidity.getBlock(blockReq);
       solidHeadBlockId = Utils.getBlockId(solidHeadBlock);
-    }
-    if (transactionExpireTimeStamp <= 0) {
-      BlockExtention headBlock = blockingStub.getBlock(blockReq);
-      transactionExpireTimeStamp = headBlock.getBlockHeader().getRawData().getTimestamp() +
-          TRANSACTION_DEFAULT_EXPIRATION_TIME;
-    }
 
+      BlockExtention headBlock = blockingStub.getBlock(blockReq);
+      transactionExpireTimeStamp = headBlock.getBlockHeader().getRawData().getTimestamp()
+          + TRANSACTION_DEFAULT_EXPIRATION_TIME;
+    }
     return createTransactionCapsuleWithoutValidate(message, contractType,
         solidHeadBlockId, transactionExpireTimeStamp);
   }
