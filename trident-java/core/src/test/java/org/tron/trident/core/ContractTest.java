@@ -2,14 +2,17 @@ package org.tron.trident.core;
 
 
 import static java.lang.Thread.sleep;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.tron.trident.abi.FunctionEncoder;
@@ -22,8 +25,10 @@ import org.tron.trident.abi.datatypes.Type;
 import org.tron.trident.abi.datatypes.generated.Uint256;
 import org.tron.trident.core.contract.Contract;
 import org.tron.trident.core.exceptions.IllegalException;
+import org.tron.trident.core.transaction.BlockId;
 import org.tron.trident.core.transaction.TransactionBuilder;
 import org.tron.trident.core.utils.ByteArray;
+import org.tron.trident.core.utils.Sha256Hash;
 import org.tron.trident.proto.Chain.Transaction;
 import org.tron.trident.proto.Response.EstimateEnergyMessage;
 import org.tron.trident.proto.Response.TransactionExtention;
@@ -336,4 +341,51 @@ class ContractTest extends BaseTest {
     assertTrue(energy > 0);
   }
 
+  @Test
+  void testRefer() throws IllegalException {
+    byte[] rawHashBytes = getBlockId();
+    long refBlockNum = new Random().nextInt(100);
+    byte[] refBlockNumBytes = ByteArray.fromLong(refBlockNum);
+    long timestamp = System.currentTimeMillis();
+    client.setCreateTransactionLocal(true);
+
+    try {
+      client.transferTrc10(testAddress,
+          "TAB1TVw5N8g1FLcKxPD17h2A3eEpSXvMQd", Integer.parseInt(tokenId), 100);
+      assert false;
+    } catch (Exception e) {
+      assert true;
+    }
+
+    client.setReferHeadBlockId(new BlockId(Sha256Hash.wrap(rawHashBytes), refBlockNum));
+    client.setExpireTimeStamp(timestamp); //ms
+    TransactionExtention transactionExtention = client.transferTrc10(testAddress,
+        "TAB1TVw5N8g1FLcKxPD17h2A3eEpSXvMQd", Integer.parseInt(tokenId), 100);
+    assertArrayEquals(ByteArray.subArray(rawHashBytes, 8, 16),
+        transactionExtention.getTransaction().getRawData().getRefBlockHash().toByteArray());
+    assertArrayEquals(ByteArray.subArray(refBlockNumBytes, 6, 8),
+        transactionExtention.getTransaction().getRawData().getRefBlockBytes().toByteArray());
+    assertEquals(timestamp, transactionExtention.getTransaction().getRawData().getExpiration());
+
+    client.setCreateTransactionLocal(false);
+    transactionExtention = client.transferTrc10(testAddress,
+        "TAB1TVw5N8g1FLcKxPD17h2A3eEpSXvMQd", Integer.parseInt(tokenId), 100);
+
+    assertNotEquals(
+        ByteArray.toHexString(ByteArray.subArray(rawHashBytes, 8, 16)),
+        ByteArray.toHexString(
+            transactionExtention.getTransaction().getRawData().getRefBlockHash().toByteArray()));
+
+    assertNotEquals(ByteArray.toHexString(ByteArray.subArray(refBlockNumBytes, 6, 8)),
+        ByteArray.toHexString(
+            transactionExtention.getTransaction().getRawData().getRefBlockBytes().toByteArray()));
+
+    assertNotEquals(timestamp, transactionExtention.getTransaction().getRawData().getExpiration());
+  }
+
+  private byte[] getBlockId() {
+    byte[] id = new byte[32];
+    new Random().nextBytes(id);
+    return id;
+  }
 }
