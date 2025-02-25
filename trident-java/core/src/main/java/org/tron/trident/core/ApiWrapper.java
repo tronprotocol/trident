@@ -599,7 +599,6 @@ public class ApiWrapper implements Api {
   @Override
   public String broadcastTransaction(Transaction txn) throws RuntimeException {
     TransactionReturn ret = getBlockingStub().broadcastTransaction(txn);
-//    TransactionReturn ret = blockingStub.broadcastTransaction(txn);
     if (!ret.getResult()) {
       String errorMessage = new String(ret.getMessage().toByteArray());
       String message = resolveResultCode(ret.getCodeValue()) + ", " + errorMessage;

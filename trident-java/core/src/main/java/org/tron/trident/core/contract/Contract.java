@@ -274,7 +274,8 @@ public class Contract {
   public TransactionBuilder deploy(List<Type<?>> buildParams) throws Exception {
     CreateSmartContract createSmartContract = createSmartContract(buildParams);
     return new TransactionBuilder(
-        wrapper.blockingStub.withDeadlineAfter(GRPC_TIMEOUT, TimeUnit.MILLISECONDS).deployContract(createSmartContract).getTransaction());
+        wrapper.blockingStub.withDeadlineAfter(GRPC_TIMEOUT, TimeUnit.MILLISECONDS)
+            .deployContract(createSmartContract).getTransaction());
   }
 
   public static class Builder {
