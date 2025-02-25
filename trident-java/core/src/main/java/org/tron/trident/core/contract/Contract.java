@@ -1,10 +1,13 @@
 package org.tron.trident.core.contract;
 
+import static org.tron.trident.core.Constant.GRPC_TIMEOUT;
+
 import com.google.protobuf.ByteString;
 import com.google.protobuf.util.JsonFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import lombok.Getter;
 import lombok.Setter;
 import org.tron.trident.abi.datatypes.Type;
@@ -271,7 +274,7 @@ public class Contract {
   public TransactionBuilder deploy(List<Type<?>> buildParams) throws Exception {
     CreateSmartContract createSmartContract = createSmartContract(buildParams);
     return new TransactionBuilder(
-        wrapper.blockingStub.deployContract(createSmartContract).getTransaction());
+        wrapper.blockingStub.withDeadlineAfter(GRPC_TIMEOUT, TimeUnit.MILLISECONDS).deployContract(createSmartContract).getTransaction());
   }
 
   public static class Builder {
