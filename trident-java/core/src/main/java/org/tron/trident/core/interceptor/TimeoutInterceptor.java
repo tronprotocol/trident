@@ -11,6 +11,9 @@ public class TimeoutInterceptor implements ClientInterceptor {
   private final long timeout;
 
   public TimeoutInterceptor(long timeout) {
+    if (timeout < 0) {
+      throw new IllegalArgumentException("Timeout cannot be negative");
+    }
     this.timeout = timeout;
   }
 

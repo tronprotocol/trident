@@ -14,6 +14,7 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.Metadata;
 import io.grpc.stub.MetadataUtils;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -216,18 +217,28 @@ public class ApiWrapper implements Api {
 
   public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey,
       List<ClientInterceptor> clientInterceptors) {
+
+    List<ClientInterceptor> clientInterceptorList = new ArrayList<>();
+
+    if (clientInterceptors != null) {
+      for (ClientInterceptor interceptor : clientInterceptors) {
+        if (interceptor != null) {
+          clientInterceptorList.add(interceptor);
+        }
+      }
+    }
+    // if interceptor has set Timeout, GRPC_TIMEOUT will not take effect
+    clientInterceptorList.add(new TimeoutInterceptor(GRPC_TIMEOUT));
     channel =
         ManagedChannelBuilder.forTarget(grpcEndpoint)
-            .intercept(clientInterceptors)
+            .intercept(clientInterceptorList)
             .usePlaintext()
-            .intercept(new TimeoutInterceptor(GRPC_TIMEOUT))
             .build();
     channelSolidity =
         ManagedChannelBuilder
             .forTarget(grpcEndpointSolidity)
-            .intercept(clientInterceptors)
+            .intercept(clientInterceptorList)
             .usePlaintext()
-            .intercept(new TimeoutInterceptor(GRPC_TIMEOUT))
             .build();
     blockingStub = WalletGrpc.newBlockingStub(channel);
     blockingStubSolidity = WalletSolidityGrpc.newBlockingStub(channelSolidity);
@@ -259,17 +270,28 @@ public class ApiWrapper implements Api {
    */
   public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey,
       List<ClientInterceptor> clientInterceptors, int timeout) {
+
+    List<ClientInterceptor> clientInterceptorList = new ArrayList<>();
+    // first set timeout to ensure the configuration takes effect
+    clientInterceptorList.add(new TimeoutInterceptor(timeout));
+
+    if (clientInterceptors != null) {
+      for (ClientInterceptor interceptor : clientInterceptors) {
+        if (interceptor != null) {
+          clientInterceptorList.add(interceptor);
+        }
+      }
+    }
+
     channel =
         ManagedChannelBuilder.forTarget(grpcEndpoint)
             .usePlaintext()
-            .intercept(clientInterceptors)
-            .intercept(new TimeoutInterceptor(timeout))
+            .intercept(clientInterceptorList)
             .build();
     channelSolidity =
         ManagedChannelBuilder.forTarget(grpcEndpointSolidity)
             .usePlaintext()
             .intercept(clientInterceptors)
-            .intercept(new TimeoutInterceptor(timeout))
             .build();
     blockingStub = WalletGrpc.newBlockingStub(channel);
     blockingStubSolidity = WalletSolidityGrpc.newBlockingStub(channelSolidity);
