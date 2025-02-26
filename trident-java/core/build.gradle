@@ -32,6 +32,10 @@ dependencies {
     implementation "org.bouncycastle:bcprov-jdk18on:$bouncycastleVersion"
 
     implementation "com.alibaba.fastjson2:fastjson2:2.0.55"
+
+    testImplementation "io.grpc:grpc-testing:${grpcVersion}"
+    testImplementation "org.mockito:mockito-core:4.11.0"
+    testImplementation "org.mockito:mockito-junit-jupiter:4.11.0"
 }
 
 protobuf {

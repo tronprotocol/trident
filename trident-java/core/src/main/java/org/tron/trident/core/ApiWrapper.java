@@ -184,6 +184,24 @@ public class ApiWrapper implements Api {
     keyPair = new KeyPair(hexPrivateKey);
   }
 
+  public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey, boolean enableIdleTimeout, long timeout) {
+    channel =
+        ManagedChannelBuilder
+            .forTarget(grpcEndpoint)
+            .usePlaintext()
+            .idleTimeout(timeout, TimeUnit.MICROSECONDS)
+            .build();
+    channelSolidity =
+        ManagedChannelBuilder
+            .forTarget(grpcEndpointSolidity)
+            .usePlaintext()
+            .idleTimeout(timeout, TimeUnit.MICROSECONDS)
+            .build();
+    blockingStub = WalletGrpc.newBlockingStub(channel);
+    blockingStubSolidity = WalletSolidityGrpc.newBlockingStub(channelSolidity);
+    keyPair = new KeyPair(hexPrivateKey);
+  }
+
   public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey,
       String apiKey) {
     channel =
