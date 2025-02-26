@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.google.protobuf.ByteString;
 import io.grpc.ClientInterceptor;
+import io.grpc.Context;
+import io.grpc.Deadline;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
@@ -20,6 +22,11 @@ import org.tron.trident.core.interceptor.TimeoutInterceptor;
 import org.tron.trident.core.key.KeyPair;
 import org.tron.trident.proto.Chain.Block;
 import org.tron.trident.proto.Chain.BlockHeader;
+import io.grpc.CallOptions;
+import io.grpc.ClientCall;
+import io.grpc.Channel;
+import io.grpc.MethodDescriptor;
+import io.grpc.internal.NoopClientCall;
 
 class GrpcTimeoutTest {
   private Server server;
@@ -33,6 +40,9 @@ class GrpcTimeoutTest {
         new WalletGrpc.WalletImplBase() {
           @Override
           public void getNowBlock(EmptyMessage request, StreamObserver<Block> responseObserver) {
+            Context current = Context.current();
+            Deadline deadline = current.getDeadline();
+            System.out.println("Server received request with deadline: " + deadline);
             try {
               Thread.sleep(mockResponseDelay);
               BlockHeader.raw.Builder rawBuilder =
@@ -147,4 +157,70 @@ class GrpcTimeoutTest {
   }
 
 
+  @Test
+  void testWithoutTimeout() {
+
+
+    client =
+        new ApiWrapper(
+            serverAddress,
+            serverAddress,
+            KeyPair.generate().toPrivateKey()
+        );
+
+    try {
+      Block block = client.getNowBlock();
+      assertNotNull(block);
+      assertTrue(block.getBlockHeader().getRawData().getNumber() > 0);
+      System.out.println("Request completed successfully");
+    } catch (Exception e) {
+      fail("Unexpected exception: " + e.getMessage());
+    }
+  }
+
+  @Test
+  void testInterceptorMutiTimeOrder() {
+    List<ClientInterceptor> interceptors = new ArrayList<>();
+    
+    // first interceptor， timeout 1000ms
+    interceptors.add(new TimeoutInterceptor(1000) {
+        @Override
+        public <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(
+            MethodDescriptor<ReqT, RespT> method, CallOptions callOptions, Channel next) {
+            System.out.println("Interceptor A - Before: " + callOptions);
+            System.out.println("Interceptor A - Setting timeout: 1000ms");
+            ClientCall<ReqT, RespT> call = super.interceptCall(method, callOptions, next);
+            System.out.println("Interceptor A - After: " + callOptions);
+            return call;
+        }
+    });
+
+    // second interceptor， timeout 200ms
+    interceptors.add(new TimeoutInterceptor(200) {
+        @Override
+        public <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(
+            MethodDescriptor<ReqT, RespT> method, CallOptions callOptions, Channel next) {
+            System.out.println("Interceptor B - Before: " + callOptions);
+            System.out.println("Interceptor B - Setting timeout: 200ms");
+            ClientCall<ReqT, RespT> call = super.interceptCall(method, callOptions, next);
+            System.out.println("Interceptor B - After: " + callOptions);
+            return call;
+        }
+    });
+
+    client = new ApiWrapper(
+        serverAddress,
+        serverAddress,
+        KeyPair.generate().toPrivateKey(),
+        interceptors
+    );
+
+    try {
+      Block block = client.getNowBlock();
+      System.out.println(block.getBlockHeader().getRawData().getNumber());
+      fail("Expected timeout exception");
+    } catch (Exception e) {
+        System.out.println("Final exception: " + e.getMessage());
+    }
+  }
 }
