@@ -15,8 +15,6 @@ public final class Constant {
 
   public static final long TRANSACTION_DEFAULT_EXPIRATION_TIME = 60 * 1_000L; //60 seconds
 
-  public static final long GRPC_TIMEOUT = 30 * 1_000L; //30 seconds
-
   public static final String TRX_SYMBOL = "_";
 
 }
