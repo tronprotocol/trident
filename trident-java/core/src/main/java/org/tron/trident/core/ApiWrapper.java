@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import lombok.Getter;
 import org.bouncycastle.jcajce.provider.digest.SHA256;
 import org.tron.trident.abi.FunctionEncoder;
@@ -235,11 +237,11 @@ public class ApiWrapper implements Api {
     clientInterceptorList.add(new TimeoutInterceptor(timeout));
 
     if (clientInterceptors != null) {
-      for (ClientInterceptor interceptor : clientInterceptors) {
-        if (interceptor != null) {
-          clientInterceptorList.add(interceptor);
-        }
-      }
+      clientInterceptorList.addAll(
+          clientInterceptors.stream()
+              .filter(Objects::nonNull)
+              .collect(Collectors.toList())
+      );
     }
 
     channel =
