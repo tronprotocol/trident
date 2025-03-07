@@ -1,0 +1,31 @@
+/* Adjust navigation menu font size */
+.md-nav--primary .md-nav__item {
+    font-size: 16px;  /* Base navigation item font size */
+}
+
+/* Adjust first level navigation size */
+.md-nav--primary > .md-nav__list > .md-nav__item {
+    font-size: 18px;  /* Larger font for first level items */
+}
+
+/* Adjust second level navigation size */
+.md-nav--primary .md-nav__item .md-nav__item {
+    font-size: 16px;  /* Second level navigation font size */
+    padding-left: 0.5rem;
+}
+
+/* Adjust navigation title font */
+.md-nav__title {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+/* Adjust main content font */
+.md-content {
+    font-size: 16px;
+}
+
+/* Adjust code block font */
+.md-typeset code {
+    font-size: 15px;
+} 
