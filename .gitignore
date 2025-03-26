@@ -25,3 +25,8 @@ build/
 .gradle/
 .idea
 .vscode
+demo/
+
+# proto gen file
+/core/src/main/java/org/tron/trident/proto/
+/core/src/main/java/org/tron/trident/api/
