@@ -56,6 +56,7 @@ import org.tron.trident.core.utils.Utils;
 import org.tron.trident.proto.Chain.Block;
 import org.tron.trident.proto.Chain.Transaction;
 import org.tron.trident.proto.Chain.Transaction.Contract.ContractType;
+import org.tron.trident.proto.Common.Permission;
 import org.tron.trident.proto.Common.SmartContract;
 import org.tron.trident.proto.Contract.AccountCreateContract;
 import org.tron.trident.proto.Contract.AccountPermissionUpdateContract;
@@ -1982,7 +1983,7 @@ public class ApiWrapper implements Api {
   }
 
   /**
-   * Unfreeze a token that has passed the minimum freeze duration
+   * Update account permissions for multiSign
    *
    * @param accountPermissionUpdateContract AccountPermissionUpdateContract
    * @return TransactionExtention
@@ -1996,6 +1997,49 @@ public class ApiWrapper implements Api {
     return createTransactionExtention(accountPermissionUpdateContract,
         Transaction.Contract.ContractType.AccountPermissionUpdateContract);
   }
+
+  /**
+   * update account permissions with new owner/witness/active permissions
+   *
+   * @param ownerAddress Owner address
+   * @param newOwnerPermission New owner permission (cannot be null)
+   * @param newWitnessPermission New witness permission (can be null if not SR)
+   * @param newActivePermissions List of new active permissions (cannot be null)
+   * @return TransactionExtention
+   * @throws IllegalException if newOwnerPermission or newActivePermissions is null
+   */
+  @Override
+  public TransactionExtention accountPermissionUpdate(
+      String ownerAddress,
+      Permission newOwnerPermission,
+      Permission newWitnessPermission,
+      List<Permission> newActivePermissions)
+      throws IllegalException {
+
+    if (newOwnerPermission == null
+        || newActivePermissions == null
+        || newActivePermissions.isEmpty()) {
+      throw new IllegalException("newOwnerPermission and newActivePermissions must not be null");
+    }
+
+    // Set owner permission
+    AccountPermissionUpdateContract.Builder builder = AccountPermissionUpdateContract.newBuilder()
+        .setOwnerAddress(parseAddress(ownerAddress))
+        .setOwner(newOwnerPermission);
+
+    // Set witness permission
+    if (newWitnessPermission != null) {
+      builder.setWitness(newWitnessPermission);
+    }
+
+    // Set active permissions
+    for (Permission permission : newActivePermissions) {
+      builder.addActives(permission);
+    }
+
+    return accountPermissionUpdate(builder.build());
+  }
+
   //All other solidified APIs end
 
   /**

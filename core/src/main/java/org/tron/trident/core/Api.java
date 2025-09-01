@@ -14,6 +14,7 @@ import org.tron.trident.core.key.KeyPair;
 import org.tron.trident.core.transaction.TransactionBuilder;
 import org.tron.trident.proto.Chain.Block;
 import org.tron.trident.proto.Chain.Transaction;
+import org.tron.trident.proto.Common.Permission;
 import org.tron.trident.proto.Common.SmartContract;
 import org.tron.trident.proto.Contract.AccountPermissionUpdateContract;
 import org.tron.trident.proto.Contract.AssetIssueContract;
@@ -217,6 +218,13 @@ public interface Api {
   TransactionExtention unfreezeAsset(String ownerAddress) throws IllegalException;
 
   TransactionExtention accountPermissionUpdate(AccountPermissionUpdateContract contract)
+      throws IllegalException;
+
+  TransactionExtention accountPermissionUpdate(
+      String ownerAddress,
+      Permission newOwnerPermission,
+      Permission newWitnessPermission,
+      List<Permission> newActivePermissions)
       throws IllegalException;
 
   TransactionSignWeight getTransactionSignWeight(Transaction trx);
