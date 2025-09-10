@@ -1791,6 +1791,35 @@ public class ApiWrapper implements Api {
   }
 
   /**
+   * Get paginated list of real-time witnesses ordered by vote count
+   *
+   * @param offset the pagination offset, specifying the starting index of witnesses to return (0-based)
+   * @param limit the number of witnesses to return per page
+   * @param nodeType Optional parameter to specify which node to query.
+   *                 If not provided, uses full node default.
+   *                 If NodeType.SOLIDITY_NODE, uses solidity node.
+   * @return WitnessList
+   * @throws RuntimeException thrown when FullNode is in maintenance period and api is temporarily unavailable
+   */
+  @Override
+  public  WitnessList GetPaginatedNowWitnessList(long offset,
+      long limit, NodeType... nodeType) throws RuntimeException {
+    PaginatedMessage paginatedMessage = PaginatedMessage.newBuilder()
+            .setOffset(offset)
+            .setLimit(limit)
+            .build();
+    try {
+      return useSolidityNode(nodeType)
+              ? blockingStubSolidity.getPaginatedNowWitnessList(paginatedMessage)
+              : blockingStub.getPaginatedNowWitnessList(paginatedMessage);
+    } catch (Exception e) {
+      // thrown when system is in maintenance period
+      throw new RuntimeException(e.getMessage());
+    }
+
+  }
+
+  /**
    * List all exchange pairs
    * @param nodeType Optional parameter to specify which node to query.
    *                 If not provided, uses full node default.

@@ -32,6 +32,7 @@ import org.tron.trident.proto.Chain;
 import org.tron.trident.proto.Chain.Block;
 import org.tron.trident.proto.Chain.Transaction;
 import org.tron.trident.proto.Contract.TriggerSmartContract;
+import org.tron.trident.proto.Response;
 import org.tron.trident.proto.Response.BlockExtention;
 import org.tron.trident.proto.Response.ExchangeList;
 import org.tron.trident.proto.Response.MarketOrder;
@@ -314,6 +315,25 @@ class ApiWrapperTest extends BaseTest {
           "82e0b2120c7c8b4e3abe99723e9d9498e0b6c9a137ff761d43d0625914e11990");//nile
     } catch (IllegalException e) {
       assert false;
+    }
+  }
+
+  @Test
+  void testGetPaginatedNowWitnessList() throws InterruptedException {
+    int retryCount = 0;
+    int maxRetries = 2;
+    while (retryCount < maxRetries) {
+      try {
+        Response.WitnessList witnessList
+                = client.GetPaginatedNowWitnessList(0, 10);
+        assertNotNull(witnessList);
+        assertTrue(witnessList.getWitnessesCount() >= 0);
+        return;
+      } catch (Exception e) {
+        retryCount++;
+        //sleep
+        Thread.sleep(6000);
+      }
     }
   }
 }

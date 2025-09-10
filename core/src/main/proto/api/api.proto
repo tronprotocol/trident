@@ -142,6 +142,8 @@ service Wallet {
   rpc GetContractInfo(BytesMessage) returns (SmartContractDataWrapper) {}
 
   rpc ListWitnesses(EmptyMessage) returns (WitnessList) {}
+  rpc GetPaginatedNowWitnessList (PaginatedMessage) returns (WitnessList) {}
+
   rpc GetBrokerageInfo(BytesMessage) returns (NumberMessage) {}  // ???
   rpc GetRewardInfo(BytesMessage) returns (NumberMessage) {}     // ???
 
@@ -268,6 +270,7 @@ service WalletSolidity {
 
   rpc GetExchangeById (BytesMessage) returns (Exchange) {};
   rpc ListExchanges (EmptyMessage) returns (ExchangeList) {};
+  rpc GetPaginatedNowWitnessList (PaginatedMessage) returns (WitnessList) {};
   rpc GetMarketOrderById (BytesMessage) returns (MarketOrder) {}
   rpc GetMarketOrderByAccount (BytesMessage) returns (MarketOrderList) {}
   rpc GetMarketPriceByPair (MarketOrderPair) returns (MarketPriceList) {}
