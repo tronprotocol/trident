@@ -1791,15 +1791,14 @@ public class ApiWrapper implements Api {
   }
 
   /**
-   * Get paginated list of real-time witnesses ordered by vote count
-   *
+   * Get a paginated list of real-time witnesses ordered by vote count
+   * Note: This method may throw an exception when FullNode is in the maintenance period.
    * @param offset the pagination offset, specifying the starting index of witnesses to return (0-based)
-   * @param limit the number of witnesses to return per page
+   * @param limit the number of witnesses to return
    * @param nodeType Optional parameter to specify which node to query.
-   *                 If not provided, uses full node default.
-   *                 If NodeType.SOLIDITY_NODE, uses solidity node.
+   *                 If not provided, use full node default.
+   *                 If NodeType.SOLIDITY_NODE, use solidity node.
    * @return WitnessList
-   * @throws RuntimeException thrown when FullNode is in maintenance period and api is temporarily unavailable
    */
   @Override
   public  WitnessList GetPaginatedNowWitnessList(long offset, long limit, NodeType... nodeType) {
@@ -1807,15 +1806,9 @@ public class ApiWrapper implements Api {
             .setOffset(offset)
             .setLimit(limit)
             .build();
-    try {
-      return useSolidityNode(nodeType)
-              ? blockingStubSolidity.getPaginatedNowWitnessList(paginatedMessage)
-              : blockingStub.getPaginatedNowWitnessList(paginatedMessage);
-    } catch (Exception e) {
-      // thrown when system is in maintenance period
-      throw new RuntimeException(e.getMessage());
-    }
-
+    return useSolidityNode(nodeType)
+        ? blockingStubSolidity.getPaginatedNowWitnessList(paginatedMessage)
+        : blockingStub.getPaginatedNowWitnessList(paginatedMessage);
   }
 
   /**
