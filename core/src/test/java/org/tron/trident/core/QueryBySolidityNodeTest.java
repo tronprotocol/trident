@@ -209,15 +209,19 @@ class QueryBySolidityNodeTest {
     while (retryCount < maxRetries) {
       try {
         WitnessList witnessList
-                = client.GetPaginatedNowWitnessList(0, 10);
+                = client.GetPaginatedNowWitnessList(0, 10, NodeType.SOLIDITY_NODE);
         assertNotNull(witnessList);
         assertTrue(witnessList.getWitnessesCount() >= 0);
         return;
       } catch (Exception e) {
         retryCount++;
         //sleep
-        Thread.sleep(6000);
+        Thread.sleep(6500);
       }
+    }
+
+    if (retryCount == maxRetries) {
+      fail("getPaginatedNowWitnessList failed after " + maxRetries + " retries");
     }
   }
 

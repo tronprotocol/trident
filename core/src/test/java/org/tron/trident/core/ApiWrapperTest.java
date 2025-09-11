@@ -1,11 +1,5 @@
 package org.tron.trident.core;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import com.google.protobuf.ByteString;
 import io.grpc.ClientInterceptor;
 import java.lang.reflect.InvocationTargetException;
@@ -45,6 +39,8 @@ import org.tron.trident.proto.Response.SmartContractDataWrapper;
 import org.tron.trident.proto.Response.TransactionExtention;
 import org.tron.trident.proto.Response.TransactionInfoList;
 import org.tron.trident.proto.Response.TransactionReturn;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @Disabled("add private key to enable this case")
 class ApiWrapperTest extends BaseTest {
@@ -332,8 +328,12 @@ class ApiWrapperTest extends BaseTest {
       } catch (Exception e) {
         retryCount++;
         //sleep
-        Thread.sleep(6000);
+        Thread.sleep(6500);
       }
+    }
+
+    if (retryCount == maxRetries) {
+      fail("getPaginatedNowWitnessList failed after " + maxRetries + " retries");
     }
   }
 }
