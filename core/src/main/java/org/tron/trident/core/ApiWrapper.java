@@ -1802,8 +1802,7 @@ public class ApiWrapper implements Api {
    * @throws RuntimeException thrown when FullNode is in maintenance period and api is temporarily unavailable
    */
   @Override
-  public  WitnessList GetPaginatedNowWitnessList(long offset,
-      long limit, NodeType... nodeType) throws RuntimeException {
+  public  WitnessList GetPaginatedNowWitnessList(long offset, long limit, NodeType... nodeType) {
     PaginatedMessage paginatedMessage = PaginatedMessage.newBuilder()
             .setOffset(offset)
             .setLimit(limit)

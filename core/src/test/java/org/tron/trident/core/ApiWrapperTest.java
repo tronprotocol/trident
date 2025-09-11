@@ -317,22 +317,21 @@ class ApiWrapperTest extends BaseTest {
   @Test
   void testGetPaginatedNowWitnessList() throws InterruptedException {
     int retryCount = 0;
-    int maxRetries = 2;
-    while (retryCount < maxRetries) {
+    int maxRetries = 1;
+    do {
       try {
         Response.WitnessList witnessList
                 = client.GetPaginatedNowWitnessList(0, 10);
         assertNotNull(witnessList);
         assertTrue(witnessList.getWitnessesCount() >= 0);
-        return;
+        break;
       } catch (Exception e) {
         retryCount++;
-        //sleep
-        Thread.sleep(6500);
+        Thread.sleep(6500);  //maintenance period is 6s, sleep
       }
-    }
+    } while (retryCount <= maxRetries);
 
-    if (retryCount == maxRetries) {
+    if (retryCount > maxRetries) {
       fail("getPaginatedNowWitnessList failed after " + maxRetries + " retries");
     }
   }
