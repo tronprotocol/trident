@@ -1,9 +1,6 @@
 package org.tron.trident.core;
 
 import static org.tron.trident.core.Constant.TRANSACTION_DEFAULT_EXPIRATION_TIME;
-import static org.tron.trident.core.exceptions.IllegalException.BLOCK_FAIL_REASON;
-import static org.tron.trident.core.exceptions.IllegalException.EXCHANGE_FAIL_REASON;
-import static org.tron.trident.core.exceptions.IllegalException.TRANSACTION_FAIL_REASON;
 import static org.tron.trident.core.utils.TokenValidator.validateCallValue;
 import static org.tron.trident.core.utils.TokenValidator.validateTokenId;
 import static org.tron.trident.core.utils.TokenValidator.validateTokenValue;
@@ -1281,7 +1278,7 @@ public class ApiWrapper implements Api {
             : blockingStub.getBlockByNum2(builder.build());
 
     if (!block.hasBlockHeader()) {
-      throw new IllegalException(BLOCK_FAIL_REASON);
+      throw new IllegalException("Block " + blockNum + " not found.");
     }
     return block;
   }
@@ -1411,7 +1408,7 @@ public class ApiWrapper implements Api {
         ? blockingStubSolidity.getTransactionInfoById(request)
         : blockingStub.getTransactionInfoById(request);
     if (transactionInfo.getBlockTimeStamp() == 0) {
-      throw new IllegalException(TRANSACTION_FAIL_REASON);
+      throw new IllegalException("Transaction " + txID + " not found.");
     }
     return transactionInfo;
   }
@@ -1438,7 +1435,7 @@ public class ApiWrapper implements Api {
         ? blockingStubSolidity.getTransactionById(request)
         : blockingStub.getTransactionById(request);
     if (transaction.getRetCount() == 0) {
-      throw new IllegalException(TRANSACTION_FAIL_REASON);
+      throw new IllegalException("Transaction " + txID + " not found.");
     }
     return transaction;
   }
@@ -1833,7 +1830,7 @@ public class ApiWrapper implements Api {
         : blockingStub.getExchangeById(request);
 
     if (exchange.getSerializedSize() == 0) {
-      throw new IllegalException(EXCHANGE_FAIL_REASON);
+      throw new IllegalException("Exchange " + id + " not found");
     }
     return exchange;
   }
