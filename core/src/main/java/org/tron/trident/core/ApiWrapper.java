@@ -1278,7 +1278,7 @@ public class ApiWrapper implements Api {
             : blockingStub.getBlockByNum2(builder.build());
 
     if (!block.hasBlockHeader()) {
-      throw new IllegalException("Block " + blockNum + " not found.");
+      throw new IllegalException("Block not found: " + blockNum);
     }
     return block;
   }
@@ -1309,7 +1309,7 @@ public class ApiWrapper implements Api {
    * @param startNum Number of start block height, including this block
    * @param endNum Number of end block height, excluding this block
    * @return BlockListExtention
-   * @throws IllegalException if the parameters are not correct
+   * @throws IllegalException if the blockList Not Found.
    */
   @Override
   public BlockListExtention getBlockByLimitNext(long startNum, long endNum)
@@ -1326,7 +1326,7 @@ public class ApiWrapper implements Api {
           + "than 100, please check it.");
     }
     if (blockListExtention.getBlockCount() == 0) {
-      throw new IllegalException();
+      throw new IllegalException("Block List Not Found.");
     }
     return blockListExtention;
   }
@@ -1388,14 +1388,14 @@ public class ApiWrapper implements Api {
   }
 
   /**
-   * Query the transaction fee, block height by transaction id
+   * Query the transactionInfo by transaction id
    *
    * @param txID Transaction hash, i.e. transaction id
    * @param nodeType Optional parameter to specify which node to query.
    *                 If not provided, uses full node default.
    *                 If NodeType.SOLIDITY_NODE, uses solidity node.
    * @return TransactionInfo
-   * @throws IllegalException if the parameters are not correct
+   * @throws IllegalException if the transactionInfo not found
    */
   @Override
   public TransactionInfo getTransactionInfoById(String txID, NodeType... nodeType)
@@ -1408,7 +1408,7 @@ public class ApiWrapper implements Api {
         ? blockingStubSolidity.getTransactionInfoById(request)
         : blockingStub.getTransactionInfoById(request);
     if (transactionInfo.getBlockTimeStamp() == 0) {
-      throw new IllegalException("Transaction " + txID + " not found.");
+      throw new IllegalException("TransactionInfo not found: " + txID);
     }
     return transactionInfo;
   }
@@ -1422,7 +1422,7 @@ public class ApiWrapper implements Api {
    *                 If not provided, uses full node default.
    *                 If NodeType.SOLIDITY_NODE, uses solidity node.
    * @return Transaction
-   * @throws IllegalException if the parameters are not correct
+   * @throws IllegalException if the transaction not found
    */
   @Override
   public Transaction getTransactionById(String txID, NodeType... nodeType)
@@ -1435,7 +1435,7 @@ public class ApiWrapper implements Api {
         ? blockingStubSolidity.getTransactionById(request)
         : blockingStub.getTransactionById(request);
     if (transaction.getRetCount() == 0) {
-      throw new IllegalException("Transaction " + txID + " not found.");
+      throw new IllegalException("Transaction not found: " + txID);
     }
     return transaction;
   }
@@ -1830,7 +1830,7 @@ public class ApiWrapper implements Api {
         : blockingStub.getExchangeById(request);
 
     if (exchange.getSerializedSize() == 0) {
-      throw new IllegalException("Exchange " + id + " not found");
+      throw new IllegalException("Exchange not found:" + id);
     }
     return exchange;
   }
@@ -2082,13 +2082,13 @@ public class ApiWrapper implements Api {
   }
 
   /**
-   * Get transaction receipt info from a transaction id, must be in solid block
+   * Get transaction from a transaction id, must be in solid block
    *
    * @deprecated Since 0.10.0, scheduled for removal in future versions.
    * use {@link #getTransactionById(String, NodeType...)} instead
    * @param txID Transaction hash, i.e. transaction id
    * @return Transaction
-   * @throws IllegalException if the parameters are not correct
+   * @throws IllegalException if the transaction not found
    */
   @Deprecated
   @Override
@@ -2100,7 +2100,7 @@ public class ApiWrapper implements Api {
     Transaction transaction = blockingStubSolidity.getTransactionById(request);
 
     if (transaction.getRetCount() == 0) {
-      throw new IllegalException();
+      throw new IllegalException("Transaction not found: " + txID);
     }
     return transaction;
   }
