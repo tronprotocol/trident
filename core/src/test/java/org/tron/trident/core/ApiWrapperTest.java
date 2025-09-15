@@ -1,11 +1,5 @@
 package org.tron.trident.core;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import com.google.protobuf.ByteString;
 import io.grpc.ClientInterceptor;
 import java.lang.reflect.InvocationTargetException;
@@ -32,6 +26,7 @@ import org.tron.trident.proto.Chain;
 import org.tron.trident.proto.Chain.Block;
 import org.tron.trident.proto.Chain.Transaction;
 import org.tron.trident.proto.Contract.TriggerSmartContract;
+import org.tron.trident.proto.Response;
 import org.tron.trident.proto.Response.BlockExtention;
 import org.tron.trident.proto.Response.ExchangeList;
 import org.tron.trident.proto.Response.MarketOrder;
@@ -44,6 +39,8 @@ import org.tron.trident.proto.Response.SmartContractDataWrapper;
 import org.tron.trident.proto.Response.TransactionExtention;
 import org.tron.trident.proto.Response.TransactionInfoList;
 import org.tron.trident.proto.Response.TransactionReturn;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @Disabled("add private key to enable this case")
 class ApiWrapperTest extends BaseTest {
@@ -314,6 +311,28 @@ class ApiWrapperTest extends BaseTest {
           "82e0b2120c7c8b4e3abe99723e9d9498e0b6c9a137ff761d43d0625914e11990");//nile
     } catch (IllegalException e) {
       assert false;
+    }
+  }
+
+  @Test
+  void testGetPaginatedNowWitnessList() throws InterruptedException {
+    int retryCount = 0;
+    int maxRetries = 1;
+    do {
+      try {
+        Response.WitnessList witnessList
+                = client.GetPaginatedNowWitnessList(0, 10);
+        assertNotNull(witnessList);
+        assertTrue(witnessList.getWitnessesCount() >= 0);
+        break;
+      } catch (Exception e) {
+        retryCount++;
+        Thread.sleep(6500);  //maintenance period is 6s, sleep
+      }
+    } while (retryCount <= maxRetries);
+
+    if (retryCount > maxRetries) {
+      fail("getPaginatedNowWitnessList failed after " + maxRetries + " retries");
     }
   }
 }
