@@ -2395,7 +2395,7 @@ public class ApiWrapper implements Api {
   /**
    * GetBlockBalance
    * Get all balance change operations in a block(Note: At present, the interface data can only be queried through the following official nodes
-   * 47.241.20.47 & 161.117.85.97 &161.117.224.116 &161.117.83.38)
+   * 47.241.20.47; 161.117.85.97; 161.117.224.116; 161.117.83.38)
    *
    * @param blockId tx Id.eg:"000000000309c3c40be03c04615856fc6672b08af6d2cdbbf500a7cf9920fbdb"
    * @param blockNum block number
@@ -3230,7 +3230,7 @@ public class ApiWrapper implements Api {
    *
    * @param ownerAddress owner address
    * @param contractAddress contract address
-   * @param originEnergyLimit origin energy limit, must be > 0
+   * @param originEnergyLimit origin energy limit, must gt 0
    * @return UpdateEnergyLimitContract
    * @throws IllegalException if originEnergyLimit is invalid
    */

@@ -66,11 +66,7 @@ allprojects {
             force "com.google.guava:guava:$googleGuavaVersion"
         }
     }
-    java {
-        toolchain {
-            languageVersion = JavaLanguageVersion.of(8)
-        }
-    }
+
 }
 
 subprojects {
