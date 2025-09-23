@@ -64,6 +64,8 @@ allprojects {
     configurations.configureEach {
         resolutionStrategy {
             force "com.google.guava:guava:$googleGuavaVersion"
+            force "commons-beanutils:commons-beanutils:1.11.0"
+            force "commons-io:commons-io:2.14.0"
         }
     }
 
