@@ -14,9 +14,9 @@ Trident is a lightweight Java SDK for interacting with the TRON blockchain. It p
 
 ## Adding Trident to your build
 
-Trident-java is compiled with java version 1.8 and gradle 7.6.
+Since version 0.11.0, Trident can be built with JDK 8 or JDK17 on Gradle 8.5.
 
-Latest version can be found on [Maven Central](https://mvnrepository.com/artifact/io.github.tronprotocol/trident).
+The latest version (built with JDK 8) can be found on [Maven Central](https://mvnrepository.com/artifact/io.github.tronprotocol/trident).
 
 ### Gradle
 
@@ -39,10 +39,10 @@ Add repo setting:
 
 ### Using local build
 
-You can use locally built packages by follow steps(eg. 0.9.2):
+You can use locally built packages by the following steps(e.g., 0.9.2):
 
 1. Copy the compiled jar file to your project's `libs` directory
-2. Add the following to your project's `build.gradle`:
+2. Add the following to your project's `build.gradle` (dependency versions should match Trident version):
 ```groovy
 dependencies {
     implementation files('libs/trident-0.9.2.jar')
