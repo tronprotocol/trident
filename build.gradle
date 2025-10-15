@@ -19,7 +19,7 @@ buildscript {
     }
     configurations.classpath {
         resolutionStrategy {
-            force("commons-io:commons-io:2.14.0")
+            force("commons-io:commons-io:2.18.0")
         }
     }
 }
