@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.bouncycastle.util.encoders.Hex;
+import org.tron.trident.proto.Chain.Transaction.Contract.ContractType;
 
 /**
  * Utility class for encoding and decoding operations for Account Active permissions
  */
 public class ActivePermissionOperationsUtils {
+  public static final String NONE_OPERATIONS
+          = "0000000000000000000000000000000000000000000000000000000000000000";
 
   /**
    * Encode contract types to operations hex string
@@ -18,20 +21,16 @@ public class ActivePermissionOperationsUtils {
    */
   public static String encodeOperations(ContractType[] contractTypes) {
     if (contractTypes == null || contractTypes.length == 0) {
-      return "0000000000000000000000000000000000000000000000000000000000000000";
+      return NONE_OPERATIONS;
     }
 
     List<ContractType> list = new ArrayList<>(Arrays.asList(contractTypes));
-    byte[] operations = new byte[32];
+    int[] contractIds = new int[contractTypes.length];
 
     list.forEach(contractType -> {
-      int num = contractType.getNum();
-      if (num >= 0 && num < 256) {
-        operations[num / 8] |= (byte) (1 << (num % 8));
-      }
+      contractIds[list.indexOf(contractType)] = contractType.getNumber();
     });
-
-    return Hex.toHexString(operations);
+    return encodeOperations(contractIds);
   }
 
   /**
@@ -42,7 +41,7 @@ public class ActivePermissionOperationsUtils {
    */
   public static String encodeOperations(int[] contractIds) {
     if (contractIds == null || contractIds.length == 0) {
-      return "0000000000000000000000000000000000000000000000000000000000000000";
+      return NONE_OPERATIONS;
     }
 
     byte[] operations = new byte[32];
@@ -64,36 +63,34 @@ public class ActivePermissionOperationsUtils {
    */
   public static String encodeOperations(String[] contractNames) {
     if (contractNames == null || contractNames.length == 0) {
-      return "0000000000000000000000000000000000000000000000000000000000000000";
+      return NONE_OPERATIONS;
     }
 
-    List<ContractType> contractTypes = new ArrayList<>();
-    for (String contractName : contractNames) {
-      try {
-        ContractType contractType = ContractType.valueOf(contractName);
-        if (contractType != ContractType.UndefinedType) {
-          contractTypes.add(contractType);
-        }
-      } catch (IllegalArgumentException e) {
-        // Skip invalid contract names
-        throw new IllegalArgumentException("Invalid contract name: " + contractName);
+    int[] contractIds = new int[contractNames.length];
+
+    List<String> list = new ArrayList<>(Arrays.asList(contractNames));
+    list.forEach(contractName -> {
+      ContractType contractType = getContractTypeByName(contractName);
+      if (contractType == null) {
+        throw  new IllegalArgumentException("Invalid contract name: " + contractName);
       }
-    }
+      contractIds[list.indexOf(contractName)] = contractType.getNumber();
+    });
 
-    return encodeOperations(contractTypes.toArray(new ContractType[0]));
+    return encodeOperations(contractIds);
   }
 
   /**
    * Decode operations hex string to list of contract type names
    *
    * @param operations Hex string representation of operations
-   * @return List of contract type names
+   * @return List of contractType
    */
-  public static List<String> decodeOperations(String operations) {
-    List<String> contractNames = new ArrayList<>();
+  public static List<ContractType> decodeOperations(String operations) {
+    List<ContractType> ContractType = new ArrayList<>();
 
     if (operations == null || operations.isEmpty()) {
-      return contractNames;
+      return ContractType;
     }
 
     try {
@@ -101,10 +98,11 @@ public class ActivePermissionOperationsUtils {
       for (int i = 0; i < 32; i++) { // 32 bytes
         for (int j = 0; j < 8; j++) {
           if (((opArray[i] >> j) & 0x1) == 1) {
-            ContractType contractType = ContractType.getContractTypeByNum(i * 8 + j);
-            if (contractType != ContractType.UndefinedType) {
-              contractNames.add(contractType.name());
+            ContractType contractType = getContractTypeById(i * 8 + j);
+            if (contractType == null) {
+              throw  new IllegalArgumentException("not found contract type for id: " + (i * 8 + j));
             }
+            ContractType.add(contractType);
           }
         }
       }
@@ -112,42 +110,9 @@ public class ActivePermissionOperationsUtils {
       throw new IllegalArgumentException("operations decode failed: " + e.getMessage());
     }
 
-    return contractNames;
+    return ContractType;
   }
 
-  /**
-   * Decode operations hex string to list of contract IDs
-   *
-   * @param operations Hex string representation of operations
-   * @return List of contract IDs
-   */
-  public static List<Integer> decodeOperationsToIds(String operations) {
-    List<Integer> contractIds = new ArrayList<>();
-
-    if (operations == null || operations.isEmpty()) {
-      return contractIds;
-    }
-
-    try {
-      byte[] opArray = Hex.decode(operations);
-      for (int i = 0; i < 32; i++) { // 32 bytes
-        for (int j = 0; j < 8; j++) {
-          if (((opArray[i] >> j) & 0x1) == 1) {
-            int contractId = i * 8 + j;
-            ContractType contractType
-                = ContractType.getContractTypeByNum(contractId);
-            if (contractType != ContractType.UndefinedType) {
-              contractIds.add(contractId);
-            }
-          }
-        }
-      }
-    } catch (Exception e) {
-      throw new IllegalArgumentException("operations decode failed: " + e.getMessage());
-    }
-
-    return contractIds;
-  }
 
   /**
    * get operations for all Available Active ContractType (excluding UndefinedType
@@ -182,14 +147,14 @@ public class ActivePermissionOperationsUtils {
   /**
    * Get all available contract types for active permission
    *
-   * @return Array of all contract types (excluding UndefinedType
-   * and AccountPermissionUpdateContract)
+   * @return Array of all contract types (excluding UNRECOGNIZED, AccountPermissionUpdateContract)
    */
   public static ContractType[] getAllAvailableActiveContractTypes() {
     ContractType[] allTypes = ContractType.values();
-    // Filter out UndefinedType (-1) and AccountPermissionUpdateContract(46)
+    // Filter UNRECOGNIZED(-1), AccountPermissionUpdateContract(46)
     return Arrays.stream(allTypes)
-        .filter(type -> type != ContractType.UndefinedType
+        .filter(type ->
+            type != ContractType.UNRECOGNIZED
             && type != ContractType.AccountPermissionUpdateContract)
         .toArray(ContractType[]::new);
   }
@@ -203,7 +168,7 @@ public class ActivePermissionOperationsUtils {
   public static ContractType getContractTypeByName(String contractName) {
     try {
       return ContractType.valueOf(contractName);
-    } catch (IllegalArgumentException e) {
+    } catch (Exception e) {
       return null;
     }
   }
@@ -215,73 +180,13 @@ public class ActivePermissionOperationsUtils {
    * @return ContractType
    */
   public static ContractType getContractTypeById(int contractId) {
-    return ContractType.getContractTypeByNum(contractId);
-  }
-
-  /**
-   * Contract types supported by TRON network
-   */
-  public enum ContractType {
-    UndefinedType(-1),
-    AccountCreateContract(0),
-    TransferContract(1),
-    TransferAssetContract(2),
-    VoteAssetContract(3),
-    VoteWitnessContract(4),
-    WitnessCreateContract(5),
-    AssetIssueContract(6),
-    WitnessUpdateContract(8),
-    ParticipateAssetIssueContract(9),
-    AccountUpdateContract(10),
-    FreezeBalanceContract(11),
-    UnfreezeBalanceContract(12),
-    WithdrawBalanceContract(13),
-    UnfreezeAssetContract(14),
-    UpdateAssetContract(15),
-    ProposalCreateContract(16),
-    ProposalApproveContract(17),
-    ProposalDeleteContract(18),
-    SetAccountIdContract(19),
-    CustomContract(20),
-    CreateSmartContract(30),
-    TriggerSmartContract(31),
-    GetContract(32),
-    UpdateSettingContract(33),
-    ExchangeCreateContract(41),
-    ExchangeInjectContract(42),
-    ExchangeWithdrawContract(43),
-    ExchangeTransactionContract(44),
-    UpdateEnergyLimitContract(45),
-    AccountPermissionUpdateContract(46),
-    ClearABIContract(48),
-    UpdateBrokerageContract(49),
-    ShieldedTransferContract(51),
-    MarketSellAssetContract(52),
-    MarketCancelOrderContract(53),
-    FreezeBalanceV2Contract(54),
-    UnfreezeBalanceV2Contract(55),
-    WithdrawExpireUnfreezeContract(56),
-    DelegateResourceContract(57),
-    UnDelegateResourceContract(58),
-    CancelAllUnfreezeV2Contract(59);
-
-    private final int num;
-
-    ContractType(int num) {
-      this.num = num;
-    }
-
-    public static ContractType getContractTypeByNum(int num) {
-      for (ContractType type : ContractType.values()) {
-        if (type.getNum() == num) {
-          return type;
-        }
-      }
-      return ContractType.UndefinedType;
-    }
-
-    public int getNum() {
-      return num;
+    try {
+      return ContractType.forNumber(contractId);
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+      return null;
     }
   }
+
+
 }
