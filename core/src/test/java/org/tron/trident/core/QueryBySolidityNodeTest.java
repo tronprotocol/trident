@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.tron.trident.abi.FunctionEncoder;
 import org.tron.trident.abi.TypeReference;
@@ -202,6 +203,7 @@ class QueryBySolidityNodeTest {
     assertTrue(witnessList.getWitnessesCount() >= 0);
   }
 
+  @Disabled("only enable this after java-tron v4.8.1 has been released")
   @Test
   void testGetPaginatedNowWitnessList() throws InterruptedException {
     int retryCount = 0;

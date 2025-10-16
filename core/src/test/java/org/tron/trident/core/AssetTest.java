@@ -20,7 +20,7 @@ import org.tron.trident.utils.Base58Check;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Disabled("add private key to enable this case")
-public class AssetTest extends BaseTest {
+class AssetTest extends BaseTest {
   private String assetName;
   private KeyPair account;
 

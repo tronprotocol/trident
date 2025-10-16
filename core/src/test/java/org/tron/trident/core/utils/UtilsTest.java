@@ -18,10 +18,10 @@ import org.tron.trident.abi.datatypes.generated.Uint256;
 import org.tron.trident.core.exceptions.ContractCreateException;
 import org.tron.trident.crypto.Hash;
 
-public class UtilsTest {
+class UtilsTest {
 
   @Test
-  public void testAddressValid() {
+  void testAddressValid() {
     // test null address
     assertFalse(Utils.addressValid(null));
 
@@ -43,7 +43,7 @@ public class UtilsTest {
   }
 
   @Test
-  public void testEncode58CheckAndDecode() {
+  void testEncode58CheckAndDecode() {
     byte[] input = new byte[21];
     input[0] = Utils.ADD_PRE_FIX_BYTE_MAINNET;
     for (int i = 1; i < input.length; i++) {
@@ -63,7 +63,7 @@ public class UtilsTest {
   }
 
   @Test
-  public void testEncodeParameter() throws ContractCreateException {
+  void testEncodeParameter() throws ContractCreateException {
     List<org.tron.trident.abi.datatypes.Type<?>> params = new ArrayList<>();
     String testAddress = generateAddress().toBase58CheckAddress();
     params.add(new Address(testAddress));
@@ -75,7 +75,7 @@ public class UtilsTest {
   }
 
   @Test
-  public void testReplaceLibraryAddress() {
+  void testReplaceLibraryAddress() {
     // test with v5 compiler version
 
     String libraryName = "TestLibrary";

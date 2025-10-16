@@ -19,7 +19,7 @@ import org.tron.trident.proto.Response.TransactionInfo.code;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Disabled("add private key to enable this case")
-public class ExchangeTest extends BaseTest {
+class ExchangeTest extends BaseTest {
 
   private long exchangeID;
 

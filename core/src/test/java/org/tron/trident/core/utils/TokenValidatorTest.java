@@ -4,10 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-public class TokenValidatorTest {
+class TokenValidatorTest {
 
   @Test
-  public void testValidateTokenId() {
+  void testValidateTokenId() {
     TokenValidator.validateTokenId("1000058");
     TokenValidator.validateTokenId("");
     TokenValidator.validateTokenId("_");

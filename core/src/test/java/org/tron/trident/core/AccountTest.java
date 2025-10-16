@@ -20,7 +20,7 @@ import org.tron.trident.proto.Response.TransactionInfo.code;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Disabled("add private key to enable this case")
-public class AccountTest extends BaseTest {
+class AccountTest extends BaseTest {
 
   private KeyPair account;
   private String accountId;
