@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.bouncycastle.util.encoders.Hex;
 import org.tron.trident.proto.Chain.Transaction.Contract.ContractType;
+import org.tron.trident.utils.Strings;
 
 /**
  * Utility class for encoding and decoding operations for Account Active permissions
@@ -83,18 +84,18 @@ public class ActivePermissionOperationsUtils {
   /**
    * Decode operations hex string to list of contract type names
    *
-   * @param operations Hex string representation of operations
-   * @return List of contractType
+   * @param hexOperations Hex string representation of operations
+   * @return Array of contractType
    */
-  public static List<ContractType> decodeOperations(String operations) {
+  public static ContractType[] decodeOperations(String hexOperations) {
     List<ContractType> ContractType = new ArrayList<>();
 
-    if (operations == null || operations.isEmpty()) {
-      return ContractType;
+    if (Strings.isEmpty(hexOperations)) {
+      return ContractType.toArray(new ContractType[0]);
     }
 
     try {
-      byte[] opArray = Hex.decode(operations);
+      byte[] opArray = Hex.decode(hexOperations);
       for (int i = 0; i < 32; i++) { // 32 bytes
         for (int j = 0; j < 8; j++) {
           if (((opArray[i] >> j) & 0x1) == 1) {
@@ -110,7 +111,7 @@ public class ActivePermissionOperationsUtils {
       throw new IllegalArgumentException("operations decode failed: " + e.getMessage());
     }
 
-    return ContractType;
+    return ContractType.toArray(new ContractType[0]);
   }
 
 

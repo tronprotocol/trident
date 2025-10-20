@@ -8,13 +8,13 @@ import org.tron.trident.abi.datatypes.Function;
 import org.tron.trident.abi.datatypes.Type;
 import org.tron.trident.api.GrpcAPI.NumberMessage;
 import org.tron.trident.api.GrpcAPI.TransactionIdList;
+import org.tron.trident.core.account.AccountPermissions;
 import org.tron.trident.core.contract.Contract;
 import org.tron.trident.core.exceptions.IllegalException;
 import org.tron.trident.core.key.KeyPair;
 import org.tron.trident.core.transaction.TransactionBuilder;
 import org.tron.trident.proto.Chain.Block;
 import org.tron.trident.proto.Chain.Transaction;
-import org.tron.trident.proto.Common.Permission;
 import org.tron.trident.proto.Common.SmartContract;
 import org.tron.trident.proto.Contract.AccountPermissionUpdateContract;
 import org.tron.trident.proto.Contract.AssetIssueContract;
@@ -222,9 +222,10 @@ public interface Api {
 
   TransactionExtention accountPermissionUpdate(
       String ownerAddress,
-      Permission newOwnerPermission,
-      Permission newWitnessPermission,
-      List<Permission> newActivePermissions)
+      AccountPermissions accountPermissions)
+      throws IllegalException;
+
+  AccountPermissions getAccountPermissions(String address, NodeType... nodeType)
       throws IllegalException;
 
   TransactionSignWeight getTransactionSignWeight(Transaction trx);

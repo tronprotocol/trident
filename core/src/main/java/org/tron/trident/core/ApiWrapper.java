@@ -42,6 +42,7 @@ import org.tron.trident.api.GrpcAPI.PaginatedMessage;
 import org.tron.trident.api.GrpcAPI.TransactionIdList;
 import org.tron.trident.api.WalletGrpc;
 import org.tron.trident.api.WalletSolidityGrpc;
+import org.tron.trident.core.account.AccountPermissions;
 import org.tron.trident.core.contract.Contract;
 import org.tron.trident.core.contract.ContractFunction;
 import org.tron.trident.core.exceptions.IllegalException;
@@ -2002,42 +2003,51 @@ public class ApiWrapper implements Api {
    * update account permissions with new owner/witness/active permissions
    *
    * @param ownerAddress Owner address
-   * @param newOwnerPermission New owner permission (cannot be null)
-   * @param newWitnessPermission New witness permission (can be null if not SR)
-   * @param newActivePermissions List of new active permissions (cannot be null)
+   * @param accountPermissions New AccountPermission (containing owner/witness/active permissions)
    * @return TransactionExtention
    * @throws IllegalException if newOwnerPermission or newActivePermissions is null
    */
   @Override
   public TransactionExtention accountPermissionUpdate(
       String ownerAddress,
-      Permission newOwnerPermission,
-      Permission newWitnessPermission,
-      List<Permission> newActivePermissions)
+      AccountPermissions accountPermissions)
       throws IllegalException {
 
-    if (newOwnerPermission == null
-        || newActivePermissions == null
-        || newActivePermissions.isEmpty()) {
+    if (accountPermissions == null
+        || accountPermissions.getOwnerPermission() == null
+        || accountPermissions.getActivePermissions().isEmpty()) {
       throw new IllegalException("newOwnerPermission and newActivePermissions must not be null");
     }
 
     // Set owner permission
     AccountPermissionUpdateContract.Builder builder = AccountPermissionUpdateContract.newBuilder()
         .setOwnerAddress(parseAddress(ownerAddress))
-        .setOwner(newOwnerPermission);
+        .setOwner(accountPermissions.getOwnerPermission());
 
     // Set witness permission
-    if (newWitnessPermission != null) {
-      builder.setWitness(newWitnessPermission);
+    if (accountPermissions.getWitnessPermission() != null) {
+      builder.setWitness(accountPermissions.getWitnessPermission());
     }
 
     // Set active permissions
-    for (Permission permission : newActivePermissions) {
+    for (Permission permission : accountPermissions.getActivePermissions()) {
       builder.addActives(permission);
     }
 
     return accountPermissionUpdate(builder.build());
+  }
+
+  public AccountPermissions getAccountPermissions(String address, NodeType... nodeType) {
+    ByteString bsAddress = parseAddress(address);
+    AccountAddressMessage accountAddressMessage = AccountAddressMessage.newBuilder()
+        .setAddress(bsAddress)
+        .build();
+
+    Account account =  useSolidityNode(nodeType)
+        ? blockingStubSolidity.getAccount(accountAddressMessage)
+        : blockingStub.getAccount(accountAddressMessage);
+
+    return new AccountPermissions(account);
   }
 
   //All other solidified APIs end
