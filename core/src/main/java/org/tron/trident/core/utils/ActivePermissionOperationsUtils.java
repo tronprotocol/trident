@@ -27,7 +27,6 @@ public class ActivePermissionOperationsUtils {
 
     List<ContractType> list = new ArrayList<>(Arrays.asList(contractTypes));
     int[] contractIds = new int[contractTypes.length];
-
     list.forEach(contractType -> {
       contractIds[list.indexOf(contractType)] = contractType.getNumber();
     });
@@ -44,9 +43,7 @@ public class ActivePermissionOperationsUtils {
     if (contractIds == null || contractIds.length == 0) {
       return NONE_OPERATIONS;
     }
-
     byte[] operations = new byte[32];
-
     for (int contractId : contractIds) {
       if (contractId >= 0 && contractId < 256) {
         operations[contractId / 8] |= (byte) (1 << (contractId % 8));
@@ -66,9 +63,7 @@ public class ActivePermissionOperationsUtils {
     if (contractNames == null || contractNames.length == 0) {
       return NONE_OPERATIONS;
     }
-
     int[] contractIds = new int[contractNames.length];
-
     List<String> list = new ArrayList<>(Arrays.asList(contractNames));
     list.forEach(contractName -> {
       ContractType contractType = getContractTypeByName(contractName);
@@ -89,11 +84,9 @@ public class ActivePermissionOperationsUtils {
    */
   public static ContractType[] decodeOperations(String hexOperations) {
     List<ContractType> ContractType = new ArrayList<>();
-
     if (Strings.isEmpty(hexOperations)) {
       return ContractType.toArray(new ContractType[0]);
     }
-
     try {
       byte[] opArray = Hex.decode(hexOperations);
       for (int i = 0; i < 32; i++) { // 32 bytes
@@ -113,7 +106,6 @@ public class ActivePermissionOperationsUtils {
 
     return ContractType.toArray(new ContractType[0]);
   }
-
 
   /**
    * get operations for all Available Active ContractType (excluding UndefinedType
@@ -136,7 +128,6 @@ public class ActivePermissionOperationsUtils {
     if (operations == null || operations.isEmpty()) {
       return false;
     }
-
     try {
       byte[] opArray = Hex.decode(operations);
       return opArray.length == 32;
@@ -184,7 +175,6 @@ public class ActivePermissionOperationsUtils {
     try {
       return ContractType.forNumber(contractId);
     } catch (Exception e) {
-      System.out.println(e.getMessage());
       return null;
     }
   }

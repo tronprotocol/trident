@@ -16,8 +16,6 @@ import com.google.protobuf.ByteString;
 import lombok.Getter;
 import lombok.Setter;
 import org.tron.trident.proto.Chain.Transaction;
-import org.tron.trident.proto.Chain.Transaction.Contract;
-
 
 public class TransactionBuilder {
 
@@ -50,7 +48,6 @@ public class TransactionBuilder {
     return this;
   }
 
-
   /**
    * Set permission id for Transaction.Contract
    * This is a helper method for multi-sign transactions
@@ -61,7 +58,6 @@ public class TransactionBuilder {
     contract = contract.toBuilder()
         .setPermissionId(permissionId)
         .build();
-
     transaction = transaction.toBuilder()
         .setRawData(transaction.getRawData().toBuilder().setContract(0, contract))
         .build();

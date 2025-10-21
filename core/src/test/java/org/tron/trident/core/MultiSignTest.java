@@ -78,9 +78,6 @@ public class MultiSignTest extends BaseTest {
     * another way to get existing account permissions
     AccountPermissions accountPermissions1
         = new AccountPermissions(client.getAccount(accountKeyPair.toBase58CheckAddress()));
-
-    AccountPermissions accountPermissions2
-        = new AccountPermissions(accountKeyPair.toBase58CheckAddress(), client);
      */
 
 

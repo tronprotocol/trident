@@ -33,28 +33,14 @@ public class AccountPermissions {
   private Permission witnessPermission; // may be null if not present on-chain
 
   @Getter
-  private List<Permission> activePermissions = new ArrayList<>();
-
-  public AccountPermissions(String base58Address, ApiWrapper apiWrapper) {
-    this.base58Address = base58Address;
-    Account account = apiWrapper.getAccount(base58Address);
-
-    new AccountPermissions(account);
-  }
+  private List<Permission> activePermissions;
 
   public AccountPermissions(Account account) {
     this.base58Address = Base58Check.bytesToBase58(account.getAddress().toByteArray());
     this.ownerPermission = account.hasOwnerPermission() ? account.getOwnerPermission() : null;
     this.witnessPermission = account.hasWitnessPermission() ? account.getWitnessPermission() : null;
-    if (account.getActivePermissionList().isEmpty()) {
-      this.activePermissions = new ArrayList<>();
-    } else {
-      for (Permission p : account.getActivePermissionList()) {
-        if (p.getType() == PermissionType.Active && p.getId() >= 2) {
-          this.activePermissions.add(p);
-        }
-      }
-    }
+    this.activePermissions = new ArrayList<>();
+    this.activePermissions.addAll(account.getActivePermissionList());
   }
 
   public AccountPermissions setOwnerPermission(Permission owner) {
@@ -155,7 +141,6 @@ public class AccountPermissions {
       Map<String, Long> keys) {
     validatePermissionName(permissionName);
     validateKeysAndThreshold(keys, threshold);
-
     Permission.Builder builder =
         Permission.newBuilder()
             .setType(PermissionType.Owner)
@@ -163,11 +148,9 @@ public class AccountPermissions {
             .setPermissionName(permissionName)
             .setThreshold(threshold)
             .setParentId(0);
-
     for (Map.Entry<String, Long> entry : keys.entrySet()) {
       builder.addKeys(createKey(entry.getKey(), entry.getValue()));
     }
-
     return builder.build();
   }
 
@@ -195,18 +178,15 @@ public class AccountPermissions {
 
     validatePermissionName(permissionName);
     validateKeysAndThreshold(keys, threshold);
-
     Permission.Builder builder = Permission.newBuilder()
         .setType(Permission.PermissionType.Witness)
         .setId(1)
         .setPermissionName(permissionName)
         .setThreshold(threshold)
         .setParentId(0);
-
     for (Map.Entry<String, Long> entry : keys.entrySet()) {
       builder.addKeys(createKey(entry.getKey(), entry.getValue()));
     }
-
     return builder.build();
   }
 
@@ -226,7 +206,6 @@ public class AccountPermissions {
     validatePermissionName(permissionName);
     validateActivePermissionId(permissionId);
     validateKeysAndThreshold(keys, threshold);
-
     Permission.Builder builder =
         Permission.newBuilder()
             .setType(Permission.PermissionType.Active)
@@ -234,15 +213,12 @@ public class AccountPermissions {
             .setPermissionName(permissionName)
             .setThreshold(threshold)
             .setParentId(0);
-
     if (operations != null) {
       builder.setOperations(operations);
     }
-
     for (Map.Entry<String, Long> entry : keys.entrySet()) {
       builder.addKeys(createKey(entry.getKey(), entry.getValue()));
     }
-
     return builder.build();
   }
 
@@ -328,7 +304,6 @@ public class AccountPermissions {
     if (threshold <= 0) {
       throw new IllegalArgumentException("Threshold must be greater than 0");
     }
-
     long totalWeight = 0;
     for (Map.Entry<String, Long> entry : keys.entrySet()) {
       if (Strings.isEmpty(entry.getKey())) {
@@ -339,7 +314,6 @@ public class AccountPermissions {
       }
       totalWeight += entry.getValue();
     }
-
     if (totalWeight < threshold) {
       throw new IllegalArgumentException("sum of all key's weight should >= threshold");
     }

@@ -95,6 +95,9 @@ public class AccountPermissionsTest {
 
   @Test
   public void testSetActivePermission() {
+    List<Permission> permissions = accountPermissions.getActivePermissions();
+    Assertions.assertEquals(0, permissions.size());
+
     // test setActivePermission
     List<KeyPair> activeKeyPairs = new ArrayList<>();
     for (int i = 0; i < 3; i++) {
