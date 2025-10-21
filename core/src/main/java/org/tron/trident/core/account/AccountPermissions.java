@@ -1,5 +1,7 @@
 package org.tron.trident.core.account;
 
+import static org.tron.trident.core.ApiWrapper.parseAddress;
+
 import com.google.protobuf.ByteString;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +9,6 @@ import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 import org.bouncycastle.util.encoders.Hex;
-import org.tron.trident.core.ApiWrapper;
 import org.tron.trident.core.utils.ActivePermissionOperationsUtils;
 import org.tron.trident.proto.Chain.Transaction.Contract.ContractType;
 import org.tron.trident.proto.Common.Key;
@@ -19,6 +20,9 @@ import org.tron.trident.utils.Strings;
 
 /**
  * Aggregates owner, witness and active permissions for a TRON account.
+ *
+ *  <p><b>Note:</b> This class is NOT thread-safe. If you need to share an instance
+ *  across multiple threads, external synchronization is required.
  */
 public class AccountPermissions {
 
@@ -93,17 +97,7 @@ public class AccountPermissions {
     if (permissionId < 2) {
       throw new IllegalArgumentException("active permission id must be >= 2");
     }
-    Permission toRemove = null;
-    for (Permission p : this.activePermissions) {
-      if (p.getId() == permissionId) {
-        toRemove = p;
-        break;
-      }
-    }
-
-    if (toRemove != null) {
-      this.activePermissions.remove(toRemove);
-    }
+    this.activePermissions.removeIf(p -> p.getId() == permissionId);
     return this;
   }
 
@@ -115,15 +109,17 @@ public class AccountPermissions {
    * @return Key object
    */
   public Key createKey(String address, long weight) {
-    return Key.newBuilder().setAddress(ApiWrapper.parseAddress(address)).setWeight(weight).build();
+    try {
+      return Key.newBuilder().setAddress(parseAddress(address)).setWeight(weight).build();
+    } catch (Exception e) {
+      throw new IllegalArgumentException("Invalid key address: " + address);
+    }
   }
 
   /**
    * Create a Permission object for Owner type, default name "owner"
+   * @see #createOwnerPermission(String, long, Map)
    *
-   * @param threshold Threshold value
-   * @param keys Map of address -> weight
-   * @return Permission object
    */
   public Permission createOwnerPermission(long threshold, Map<String, Long> keys) {
     return createOwnerPermission("owner", threshold, keys);
@@ -156,10 +152,8 @@ public class AccountPermissions {
 
   /**
    * Create a Permission object for Witness type, default name "witness"
+   * @see #createWitnessPermission(String, long, Map)
    *
-   * @param threshold Threshold value
-   * @param keys Map of address -> weight
-   * @return Permission object
    */
   public Permission createWitnessPermission(long threshold, Map<String, Long> keys) {
     return createWitnessPermission("witness", threshold, keys);
@@ -175,11 +169,10 @@ public class AccountPermissions {
    */
   public Permission createWitnessPermission(String permissionName, long threshold,
       Map<String, Long> keys) {
-
     validatePermissionName(permissionName);
     validateKeysAndThreshold(keys, threshold);
     Permission.Builder builder = Permission.newBuilder()
-        .setType(Permission.PermissionType.Witness)
+        .setType(PermissionType.Witness)
         .setId(1)
         .setPermissionName(permissionName)
         .setThreshold(threshold)
@@ -196,26 +189,24 @@ public class AccountPermissions {
    * @param permissionName Permission name
    * @param permissionId Permission ID (must be >= 2)
    * @param threshold Threshold value
-   * @param operations Operation bytes (can be null for no restrictions)
+   * @param operations Operation bytes (can't be null, size must be 32)
    * @param keys Map of address -> weight
    * @return Permission object
    */
   public Permission createActivePermission(String permissionName, int permissionId,
       long threshold, ByteString operations, Map<String, Long> keys) {
-
     validatePermissionName(permissionName);
     validateActivePermissionId(permissionId);
     validateKeysAndThreshold(keys, threshold);
+    validateActivePermissionOperations(operations);
     Permission.Builder builder =
         Permission.newBuilder()
-            .setType(Permission.PermissionType.Active)
+            .setType(PermissionType.Active)
             .setId(permissionId)
             .setPermissionName(permissionName)
             .setThreshold(threshold)
-            .setParentId(0);
-    if (operations != null) {
-      builder.setOperations(operations);
-    }
+            .setParentId(0)
+            .setOperations(operations);
     for (Map.Entry<String, Long> entry : keys.entrySet()) {
       builder.addKeys(createKey(entry.getKey(), entry.getValue()));
     }
@@ -224,12 +215,7 @@ public class AccountPermissions {
 
   /**
    * Create a Permission object for Active type, default name "active"
-   *
-   * @param permissionId Permission ID (must be >= 2)
-   * @param threshold Threshold value
-   * @param operations Operation bytes (can be null for no restrictions)
-   * @param keys Map of address -> weight
-   * @return Permission object
+   * @see #createActivePermission(String, int, long, ByteString, Map)
    */
   public Permission createActivePermission(int permissionId, long threshold,
       ByteString operations, Map<String, Long> keys) {
@@ -237,66 +223,22 @@ public class AccountPermissions {
   }
 
   /**
-   * Create Active permission with operations from OperationsUtils
-   *
+   * Validate permission name
    * @param permissionName Permission name
-   * @param permissionId Permission ID (must be >= 2)
-   * @param threshold Threshold value
-   * @param operationsHex Operation hex string from OperationsUtils
-   * @param keys Map of address -> weight
-   * @return Permission object
+   * @throws IllegalArgumentException if invalid
    */
-  public Permission createActivePermission(String permissionName, int permissionId,
-      long threshold, String operationsHex, Map<String, Long> keys) {
-    ByteString operations = null;
-    if (operationsHex != null && !operationsHex.isEmpty()) {
-      if (!ActivePermissionOperationsUtils.isValidOperations(operationsHex)) {
-        throw new IllegalArgumentException("Invalid operations hex string: " + operationsHex);
-      }
-      operations = ByteString.copyFrom(Hex.decode(operationsHex));
-    }
-    return createActivePermission(permissionName, permissionId, threshold, operations, keys);
-  }
-
-  /**
-   * Create Active permission with predefined operations
-   *
-   * @param permissionName Permission name
-   * @param permissionId Permission ID (must be >= 2)
-   * @param threshold Threshold value
-   * @param contractTypes contractType array for operations
-   * @param keys Map of address -> weight
-   * @return Permission object
-   */
-  public Permission createActivePermission(String permissionName, int permissionId,
-      long threshold, ContractType[] contractTypes, Map<String, Long> keys) {
-    String operations = ActivePermissionOperationsUtils.encodeOperations(contractTypes);
-    return createActivePermission(permissionName, permissionId, threshold, operations, keys);
-  }
-
-  /**
-   * Create Active permission with predefined operations
-   *
-   * @param permissionId Permission ID (must be >= 2)
-   * @param threshold Threshold value
-   * @param contractTypes contractType array for operations
-   * @param keys Map of address -> weight
-   * @return Permission object
-   */
-  public Permission createActivePermission(int permissionId, long threshold,
-      ContractType[] contractTypes, Map<String, Long> keys) {
-    String operations = ActivePermissionOperationsUtils.encodeOperations(contractTypes);
-    return createActivePermission("active", permissionId, threshold, operations, keys);
-  }
-
-
-  // Validation methods
   private void validatePermissionName(String permissionName) {
     if (Strings.isEmpty(permissionName) || permissionName.length() > 32) {
       throw new IllegalArgumentException("Permission name cannot be null or empty or length > 32");
     }
   }
 
+  /**
+   * Validate keys and threshold
+   * @param keys Map of address -> weight
+   * @param threshold Threshold value
+   * @throws IllegalArgumentException if invalid
+   */
   private void validateKeysAndThreshold(Map<String, Long> keys, long threshold) {
     if (keys == null || keys.isEmpty()) {
       throw new IllegalArgumentException("Keys cannot be null or empty");
@@ -315,14 +257,48 @@ public class AccountPermissions {
       totalWeight += entry.getValue();
     }
     if (totalWeight < threshold) {
-      throw new IllegalArgumentException("sum of all key's weight should >= threshold");
+      throw new IllegalArgumentException("Sum of all key's weight should >= threshold");
     }
   }
 
+  /**
+   * Validate active permission ID
+   * @param permissionId Permission ID
+   * @throws IllegalArgumentException if permissionId < 2
+   */
   private void validateActivePermissionId(int permissionId) {
     if (permissionId < 2) {
       throw new IllegalArgumentException("Active permission ID must be greater than or equal to 2");
     }
+  }
+
+  /**
+   * Validate operations for active permission
+   * @param operations Operation bytes
+   * @throws IllegalArgumentException if operations are null or size != 32
+   */
+
+  private void validateActivePermissionOperations(ByteString operations) {
+    //check operations
+    if (operations.isEmpty() || operations.size() != 32) {
+      throw new IllegalArgumentException("Operations size must 32");
+    }
+  }
+
+  public static ByteString operationsFromHex(String operationsHex) {
+    ByteString operations = null;
+    if (operationsHex != null && !operationsHex.isEmpty()) {
+      if (!ActivePermissionOperationsUtils.isValidOperations(operationsHex)) {
+        throw new IllegalArgumentException("Invalid operations hex string: " + operationsHex);
+      }
+      operations = ByteString.copyFrom(Hex.decode(operationsHex));
+    }
+    return  operations;
+  }
+
+  public static ByteString operationsFromContractTypes(ContractType[] contractTypes) {
+    String operationsHex = ActivePermissionOperationsUtils.encodeOperations(contractTypes);
+    return operationsFromHex(operationsHex);
   }
 
 }

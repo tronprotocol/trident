@@ -3,6 +3,7 @@ package org.tron.trident.core;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import com.google.protobuf.ByteString;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -82,7 +83,7 @@ public class MultiSignTest extends BaseTest {
 
 
     // Build owner permission requiring 1/2 signatures
-    Map <String, Long> ownerKeyMap = new HashMap<String, Long>();
+    Map<String, Long> ownerKeyMap = new HashMap<String, Long>();
     for (KeyPair keyPair : ownerKeyPairs) {
       ownerKeyMap.put(keyPair.toBase58CheckAddress(), 1L);
     }
@@ -130,13 +131,14 @@ public class MultiSignTest extends BaseTest {
         = client.getAccountPermissions(accountKeyPair.toBase58CheckAddress());
 
     // Build active permission requiring 2/3 signatures
-    Map <String, Long> activeKeyMap = new HashMap<String, Long>();
+    Map<String, Long> activeKeyMap = new HashMap<String, Long>();
     for (KeyPair keyPair : activeKeyPairs) {
       activeKeyMap.put(keyPair.toBase58CheckAddress(), 1L);
     }
 
     // Build active permission with permissionId 2, threshold 2, all operations
-    String allAvailableActiveOperations = ActivePermissionOperationsUtils.getAllAvailableActiveOperations();
+    ByteString allAvailableActiveOperations = AccountPermissions.operationsFromHex(
+        ActivePermissionOperationsUtils.getAllAvailableActiveOperations());
     Permission activePermission
         = accountPermissions.createActivePermission("active", 2,
         2, allAvailableActiveOperations, activeKeyMap);

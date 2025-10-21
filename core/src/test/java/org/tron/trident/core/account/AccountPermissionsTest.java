@@ -2,6 +2,7 @@ package org.tron.trident.core.account;
 
 import static org.tron.trident.core.ApiWrapper.parseAddress;
 
+import com.google.protobuf.ByteString;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.tron.trident.core.ApiWrapper;
 import org.tron.trident.core.key.KeyPair;
 import org.tron.trident.core.utils.ActivePermissionOperationsUtils;
+import org.tron.trident.proto.Chain.Transaction.Contract.ContractType;
 import org.tron.trident.proto.Common.Permission;
 import org.tron.trident.proto.Common.Permission.PermissionType;
 import org.tron.trident.proto.Response.Account;
@@ -110,19 +112,19 @@ public class AccountPermissionsTest {
     }
 
     String options = ActivePermissionOperationsUtils.getAllAvailableActiveOperations();
-    Permission activePermission
-        = accountPermissions.createActivePermission("active", 2,
-        2, options, activeKeyMap);
+    Permission activePermission2
+        = accountPermissions.createActivePermission("active2", 2,
+        2, AccountPermissions.operationsFromHex(options), activeKeyMap);
 
     List<Permission> activePermissions = new ArrayList<>();
-    activePermissions.add(activePermission);
+    activePermissions.add(activePermission2);
 
     accountPermissions.setActivePermission(activePermissions);
 
     Assertions.assertEquals(1,
         accountPermissions.getActivePermissions().size());
 
-    Assertions.assertEquals(activePermission,
+    Assertions.assertEquals(activePermission2,
         accountPermissions.getActivePermissions().get(0));
     Assertions.assertEquals(PermissionType.Active,
         accountPermissions.getActivePermissions().get(0).getType());
@@ -131,24 +133,63 @@ public class AccountPermissionsTest {
     Assertions.assertEquals(activeKeyMap.size(),
         accountPermissions.getActivePermissions().get(0).getKeysCount());
 
-    Permission activePermission2
-        = activePermission.toBuilder().setPermissionName("active2").setId(3).build();
+    Permission activePermission3
+        = activePermission2.toBuilder().setPermissionName("active3").setId(3).build();
 
-    accountPermissions.addActivePermission(activePermission2);
+    accountPermissions.addActivePermission(activePermission3);
 
     Assertions.assertEquals(2,
         accountPermissions.getActivePermissions().size());
-    Assertions.assertEquals(activePermission2,
+    Assertions.assertEquals(activePermission3,
         accountPermissions.getActivePermissions().get(1));
 
     accountPermissions.removeActivePermission(2);
     Assertions.assertEquals(1,
         accountPermissions.getActivePermissions().size());
-    Assertions.assertEquals("active2",
+    Assertions.assertEquals("active3",
         accountPermissions.getActivePermissions().get(0).getPermissionName());
     Assertions.assertEquals(3,
         accountPermissions.getActivePermissions().get(0).getId());
 
+    accountPermissions.removeActivePermission(5); // non-exist id
+    Assertions.assertEquals(1,
+        accountPermissions.getActivePermissions().size());
+
+    accountPermissions.removeActivePermission(3); // only exist id
+    Assertions.assertEquals(0,
+        accountPermissions.getActivePermissions().size());
+
+    ContractType[] contracts = new ContractType[] {
+        ContractType.TransferContract,
+        ContractType.TransferAssetContract
+    };
+
+    Permission activePermission4
+        = accountPermissions.createActivePermission(4,
+        2, AccountPermissions.operationsFromContractTypes(contracts), activeKeyMap);
+
+    accountPermissions.addActivePermission(activePermission4);
+    Assertions.assertEquals(1,
+        accountPermissions.getActivePermissions().size());
+    Assertions.assertEquals(activePermission4,
+        accountPermissions.getActivePermissions().get(0));
+
+  }
+
+  @Test
+  public void testInvalidActivePermission() {
+    Map<String, Long> activeKeyMap = new HashMap<String, Long>();
+    for (int i = 0; i < 3; i++) {
+      activeKeyMap.put(KeyPair.generate().toBase58CheckAddress(), 1L);
+    }
+
+    Map<String, Long> invalidActiveKeyMap = new HashMap<>();
+    invalidActiveKeyMap.put("testInvalidAddress", 1L);
+
+    ByteString operations = AccountPermissions.operationsFromHex(
+            ActivePermissionOperationsUtils.getAllAvailableActiveOperations());
+
+    //set a null or empty active permission list
     try {
       accountPermissions.setActivePermission(null);
       Assertions.fail("Expected IllegalArgumentException");
@@ -157,10 +198,68 @@ public class AccountPermissionsTest {
     }
 
     try {
+      accountPermissions.setActivePermission(new ArrayList<>());
+      Assertions.fail("Expected IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      Assertions.assertEquals("active permission list is null or empty", e.getMessage());
+    }
+
+    // add null
+    try {
       accountPermissions.addActivePermission(null);
       Assertions.fail("Expected IllegalArgumentException");
     } catch (IllegalArgumentException e) {
       Assertions.assertEquals("active permission is null", e.getMessage());
+    }
+
+    // invalid permission id, threshold, options, keys
+    try {
+      accountPermissions.createActivePermission("invalidActive", 1,
+          2, operations, activeKeyMap);
+      Assertions.fail("Expected IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      Assertions.assertEquals("Active permission ID must be greater than or equal to 2",
+          e.getMessage());
+    }
+
+    try {
+      accountPermissions.createActivePermission("invalidActive", 10,
+          100, operations, activeKeyMap);
+      Assertions.fail("Expected IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      Assertions.assertEquals("Sum of all key's weight should >= threshold", e.getMessage());
+    }
+
+    try {
+      accountPermissions.createActivePermission("invalidActive", 10,
+          2, AccountPermissions.operationsFromHex("invalidOptions"), activeKeyMap);
+      Assertions.fail("Expected IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      Assertions.assertEquals("Invalid operations hex string: invalidOptions", e.getMessage());
+    }
+
+    try {
+      accountPermissions.createActivePermission("invalidActive", 10,
+          2, ByteString.EMPTY, activeKeyMap);
+      Assertions.fail("Expected IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      Assertions.assertEquals("Operations size must 32", e.getMessage());
+    }
+
+    try {
+      accountPermissions.createActivePermission("invalidActive", 10,
+          2, ByteString.copyFrom("test".getBytes()), activeKeyMap);
+      Assertions.fail("Expected IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      Assertions.assertEquals("Operations size must 32", e.getMessage());
+    }
+
+    try {
+      accountPermissions.createActivePermission("invalidActive", 10,
+          1, operations, invalidActiveKeyMap);
+      Assertions.fail("Expected IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      Assertions.assertTrue(e.getMessage().startsWith("Invalid key address"));
     }
 
   }
