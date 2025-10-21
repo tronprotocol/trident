@@ -266,7 +266,7 @@ public class ApiWrapper implements Api {
      * @param endpoint
      * @return
      */
-  private static ManagedChannelBuilder<?> channelFor(String endpoint){
+  protected ManagedChannelBuilder<?> channelFor(String endpoint){
       if (endpoint == null) {
           throw new IllegalArgumentException("Endpoint cannot be null");
       }
