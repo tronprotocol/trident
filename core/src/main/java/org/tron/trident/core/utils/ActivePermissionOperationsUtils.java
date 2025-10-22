@@ -1,5 +1,6 @@
 package org.tron.trident.core.utils;
 
+import com.google.protobuf.ByteString;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -108,14 +109,16 @@ public class ActivePermissionOperationsUtils {
   }
 
   /**
-   * get operations for all Available Active ContractType (excluding UndefinedType
-   * *  and AccountPermissionUpdateContract)
+   * Decode operations hex string to list of contract type names
    *
-   * @return Hex string of operations
+   * @param operations ByteString representation of operations
+   * @return Array of contractType
    */
-  public static String getAllAvailableActiveOperations() {
-    ContractType[] allContracts = getAllAvailableActiveContractTypes();
-    return encodeOperations(allContracts);
+  public static ContractType[] decodeOperations(ByteString operations) {
+    if (operations == null || operations.isEmpty()) {
+      return decodeOperations(NONE_OPERATIONS);
+    }
+    return decodeOperations(Hex.toHexString(operations.toByteArray()));
   }
 
   /**
@@ -134,21 +137,6 @@ public class ActivePermissionOperationsUtils {
     } catch (Exception e) {
       return false;
     }
-  }
-
-  /**
-   * Get all available contract types for active permission
-   *
-   * @return Array of all contract types (excluding UNRECOGNIZED, AccountPermissionUpdateContract)
-   */
-  public static ContractType[] getAllAvailableActiveContractTypes() {
-    ContractType[] allTypes = ContractType.values();
-    // Filter UNRECOGNIZED(-1), AccountPermissionUpdateContract(46)
-    return Arrays.stream(allTypes)
-        .filter(type ->
-            type != ContractType.UNRECOGNIZED
-            && type != ContractType.AccountPermissionUpdateContract)
-        .toArray(ContractType[]::new);
   }
 
   /**
@@ -179,5 +167,45 @@ public class ActivePermissionOperationsUtils {
     }
   }
 
+  /**
+   * Build operations ByteString by enabling or disabling specified contract types.
+   * @example enable TransferContract and disable VoteContract from account current operations
+   * <pre>
+   * ByteString currentOps = account.getActivePermission(0).getOperations();
+   * ByteString updatedOps = buildOperations(currentOps, true, ContractType.TransferContract);
+   * updatedOps = buildOperations(updatedOps, false, ContractType.VoteContract);
+   * </pre>
+   * @example buildOperations from scratch by enabling TransferContract
+   * <pre>
+   * ByteString operations = buildOperations(ByteString.EMPTY, true, ContractType.TransferContract);
+   * </pre>
+   * @param currentOperations current operations ByteString, use ByteString.EMPTY to start from scratch
+   * @param enable true to enable, false to disable
+   * @param contractTypes contract types to update, if null or empty, no changes will be made
+   * @return New operations ByteString with updated permissions
+   */
+  public static ByteString buildOperations(ByteString currentOperations,
+      boolean enable, ContractType... contractTypes) {
+    if (contractTypes == null || contractTypes.length == 0) {
+      return currentOperations;
+    }
+    byte[] operations;
+    if (currentOperations == null || currentOperations.isEmpty()) {
+      operations = new byte[32];
+    } else {
+      operations = currentOperations.toByteArray();
+    }
+    for (ContractType contractType : contractTypes) {
+      int contractId = contractType.getNumber();
+      if (contractId >= 0 && contractId < 256) {
+        if (enable) {
+          operations[contractId / 8] |= (byte) (1 << (contractId % 8));
+        } else {
+          operations[contractId / 8] &= (byte) ~(1 << (contractId % 8));
+        }
+      }
+    }
+    return ByteString.copyFrom(operations);
+  }
 
 }

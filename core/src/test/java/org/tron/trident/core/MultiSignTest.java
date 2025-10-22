@@ -20,6 +20,7 @@ import org.tron.trident.core.key.KeyPair;
 import org.tron.trident.core.transaction.TransactionBuilder;
 import org.tron.trident.core.utils.ActivePermissionOperationsUtils;
 import org.tron.trident.proto.Chain.Transaction;
+import org.tron.trident.proto.Chain.Transaction.Contract.ContractType;
 import org.tron.trident.proto.Common.Key;
 import org.tron.trident.proto.Common.Permission;
 import org.tron.trident.proto.Response.Account;
@@ -30,12 +31,11 @@ import org.tron.trident.proto.Response.TransactionInfo.code;
 // this case cost 450 trx at least to run
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Disabled("add private key to enable this case")
-public class MultiSignTest extends BaseTest {
+class MultiSignTest extends BaseTest {
 
   private KeyPair accountKeyPair; //  owner account keypair
   private final List<KeyPair> ownerKeyPairs = new ArrayList<>();
   private final List<KeyPair> activeKeyPairs = new ArrayList<>();
-
 
   void transferTrx(String fromAddress, String toAddress, long amount, KeyPair signKeyPair)
       throws IllegalException, InterruptedException {
@@ -70,7 +70,6 @@ public class MultiSignTest extends BaseTest {
   @Test
   @Order(1)
   void testCreateAccountPermissionUpdateContractForOwners() throws Exception {
-
     // Get existing account permissions
     AccountPermissions accountPermissions
         = client.getAccountPermissions(accountKeyPair.toBase58CheckAddress());
@@ -80,7 +79,6 @@ public class MultiSignTest extends BaseTest {
     AccountPermissions accountPermissions1
         = new AccountPermissions(client.getAccount(accountKeyPair.toBase58CheckAddress()));
      */
-
 
     // Build owner permission requiring 1/2 signatures
     Map<String, Long> ownerKeyMap = new HashMap<String, Long>();
@@ -125,7 +123,6 @@ public class MultiSignTest extends BaseTest {
   @Test
   @Order(2)
   void testCreateAccountPermissionUpdateContractWithActives() throws Exception {
-
     // Get existing account permissions
     AccountPermissions accountPermissions
         = client.getAccountPermissions(accountKeyPair.toBase58CheckAddress());
@@ -136,12 +133,12 @@ public class MultiSignTest extends BaseTest {
       activeKeyMap.put(keyPair.toBase58CheckAddress(), 1L);
     }
 
-    // Build active permission with permissionId 2, threshold 2, all operations
-    ByteString allAvailableActiveOperations = AccountPermissions.operationsFromHex(
-        ActivePermissionOperationsUtils.getAllAvailableActiveOperations());
+    // Build active permission with permissionId 2, threshold 2, transfer TRX operations only
+    ByteString trxTransferOperations = ActivePermissionOperationsUtils.buildOperations(ByteString.EMPTY,
+        true, ContractType.TransferContract);
     Permission activePermission
         = accountPermissions.createActivePermission("active", 2,
-        2, allAvailableActiveOperations, activeKeyMap);
+        2, trxTransferOperations, activeKeyMap);
 
     List<Permission> activePermissions = new ArrayList<>();
     activePermissions.add(activePermission);
@@ -175,13 +172,11 @@ public class MultiSignTest extends BaseTest {
     assertEquals(account.getActivePermissionCount(), activePermissions.size());
     assertEquals(account.getOwnerPermission(), accountPermissions.getOwnerPermission());
     assertEquals(account.getActivePermission(0), activePermission);
-
   }
 
   @Test
   @Order(3)
   void testMultiSignTransferWithActive() throws Exception {
-
     // 1. Create transfer transaction, need setPermissionId in contract
     // transfer 1 TRX
     TransactionExtention txnExt
@@ -198,10 +193,8 @@ public class MultiSignTest extends BaseTest {
     // 3. Second account signs
     Transaction signedTxn2 = client.signTransaction(signedTxn1, activeKeyPairs.get(1));
 
-
     // 4. Broadcast transaction
     String txId = client.broadcastTransaction(signedTxn2);
-
 
     // Wait for the transaction to be confirmed
     Thread.sleep(5000);
@@ -242,8 +235,6 @@ public class MultiSignTest extends BaseTest {
     TransactionExtention txnExt
         = client.accountPermissionUpdate(accountKeyPair.toBase58CheckAddress(), accountPermissions);
 
-
-
     // Sign with one owner
     Transaction signedTxn = client.signTransaction(txnExt, ownerKeyPairs.get(1));
 
@@ -264,7 +255,6 @@ public class MultiSignTest extends BaseTest {
     assertEquals("newOwner", accountPermissions.getOwnerPermission().getPermissionName());
     assertEquals(accountPermissions.getActivePermissions().size(),
         account.getActivePermissionCount());
-
   }
 
 }

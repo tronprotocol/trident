@@ -4,6 +4,7 @@ import static org.tron.trident.core.ApiWrapper.parseAddress;
 
 import com.google.protobuf.ByteString;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,10 +20,18 @@ import org.tron.trident.proto.Common.Permission;
 import org.tron.trident.proto.Common.Permission.PermissionType;
 import org.tron.trident.proto.Response.Account;
 
-public class AccountPermissionsTest {
+class AccountPermissionsTest {
 
   public static String address;
   public static AccountPermissions accountPermissions;
+  public static Map<String, Long> activeKeyMap = new HashMap<String, Long>();
+  public static final ContractType[] contracts = new ContractType[] {
+      ContractType.TransferContract,
+      ContractType.TransferAssetContract
+  };
+
+  public static final ByteString transferOperations =
+      ActivePermissionOperationsUtils.buildOperations(ByteString.EMPTY, true, contracts);
 
   @BeforeAll
   public static void init() {
@@ -33,16 +42,20 @@ public class AccountPermissionsTest {
         .build();
     accountPermissions
         = new AccountPermissions(account);
+    for (int i = 0; i < 3; i++) {
+      activeKeyMap.put(KeyPair.generate().toBase58CheckAddress(), 1L);
+    }
   }
 
   @AfterAll
   public static void tearDown() {
     address = null;
     accountPermissions = null;
+    activeKeyMap.clear();
   }
 
   @Test
-  public void testSetOwnerPermission() {
+  void testSetOwnerPermission() {
     Permission permission = accountPermissions.getOwnerPermission();
     Assertions.assertNull(permission);
 
@@ -71,7 +84,7 @@ public class AccountPermissionsTest {
   }
 
   @Test
-  public void testSetWitnessPermission() {
+  void testSetWitnessPermission() {
     Permission permission = accountPermissions.getWitnessPermission();
     Assertions.assertNull(permission);
 
@@ -80,9 +93,7 @@ public class AccountPermissionsTest {
 
     permission
         = accountPermissions.createWitnessPermission(1, witnessKeyMap);
-
     accountPermissions.setWitnessPermission(permission);
-
     Assertions.assertEquals("witness",
         accountPermissions.getWitnessPermission().getPermissionName());
     Assertions.assertEquals(PermissionType.Witness,
@@ -96,53 +107,34 @@ public class AccountPermissionsTest {
   }
 
   @Test
-  public void testSetActivePermission() {
+  void testSetActivePermission() {
     List<Permission> permissions = accountPermissions.getActivePermissions();
     Assertions.assertEquals(0, permissions.size());
 
-    // test setActivePermission
-    List<KeyPair> activeKeyPairs = new ArrayList<>();
-    for (int i = 0; i < 3; i++) {
-      activeKeyPairs.add(KeyPair.generate());
-    }
-
-    Map<String, Long> activeKeyMap = new HashMap<String, Long>();
-    for (KeyPair keyPair : activeKeyPairs) {
-      activeKeyMap.put(keyPair.toBase58CheckAddress(), 1L);
-    }
-
-    String options = ActivePermissionOperationsUtils.getAllAvailableActiveOperations();
     Permission activePermission2
         = accountPermissions.createActivePermission("active2", 2,
-        2, AccountPermissions.operationsFromHex(options), activeKeyMap);
+        2, transferOperations, activeKeyMap);
 
     List<Permission> activePermissions = new ArrayList<>();
     activePermissions.add(activePermission2);
-
     accountPermissions.setActivePermission(activePermissions);
-
     Assertions.assertEquals(1,
         accountPermissions.getActivePermissions().size());
-
     Assertions.assertEquals(activePermission2,
         accountPermissions.getActivePermissions().get(0));
     Assertions.assertEquals(PermissionType.Active,
         accountPermissions.getActivePermissions().get(0).getType());
     Assertions.assertEquals(2, accountPermissions.getActivePermissions().get(0).getId());
-
     Assertions.assertEquals(activeKeyMap.size(),
         accountPermissions.getActivePermissions().get(0).getKeysCount());
 
     Permission activePermission3
         = activePermission2.toBuilder().setPermissionName("active3").setId(3).build();
-
     accountPermissions.addActivePermission(activePermission3);
-
     Assertions.assertEquals(2,
         accountPermissions.getActivePermissions().size());
     Assertions.assertEquals(activePermission3,
         accountPermissions.getActivePermissions().get(1));
-
     accountPermissions.removeActivePermission(2);
     Assertions.assertEquals(1,
         accountPermissions.getActivePermissions().size());
@@ -159,15 +151,9 @@ public class AccountPermissionsTest {
     Assertions.assertEquals(0,
         accountPermissions.getActivePermissions().size());
 
-    ContractType[] contracts = new ContractType[] {
-        ContractType.TransferContract,
-        ContractType.TransferAssetContract
-    };
-
     Permission activePermission4
         = accountPermissions.createActivePermission(4,
-        2, AccountPermissions.operationsFromContractTypes(contracts), activeKeyMap);
-
+        2, transferOperations, activeKeyMap);
     accountPermissions.addActivePermission(activePermission4);
     Assertions.assertEquals(1,
         accountPermissions.getActivePermissions().size());
@@ -177,17 +163,56 @@ public class AccountPermissionsTest {
   }
 
   @Test
-  public void testInvalidActivePermission() {
-    Map<String, Long> activeKeyMap = new HashMap<String, Long>();
-    for (int i = 0; i < 3; i++) {
-      activeKeyMap.put(KeyPair.generate().toBase58CheckAddress(), 1L);
-    }
+  void testEnableDisableActivePermissionOperation() {
 
+    Permission activePermission
+        = accountPermissions.createActivePermission(4,
+        2, transferOperations, activeKeyMap);
+
+    List<Permission> activePermissions = new ArrayList<>();
+    activePermissions.add(activePermission);
+    accountPermissions.setActivePermission(activePermissions);
+    Assertions.assertEquals(1,
+        accountPermissions.getActivePermissions().size());
+
+    accountPermissions.enableActivePermissionOperation(4, ContractType.AccountCreateContract);
+    Permission updatedPermission = accountPermissions.getActivePermissionByPermissionId(4);
+    Assertions.assertNotNull(updatedPermission);
+
+    ContractType[] contractTypes = ActivePermissionOperationsUtils.decodeOperations(
+        updatedPermission.getOperations());
+    Assertions.assertEquals(3, contractTypes.length);
+    Assertions.assertTrue(Arrays.stream(contractTypes).allMatch(
+        c -> c == ContractType.TransferAssetContract
+            || c == ContractType.TransferContract
+            || c == ContractType.AccountCreateContract
+    ));
+
+    accountPermissions.disableActivePermissionOperation(4, ContractType.TransferContract);
+    updatedPermission = accountPermissions.getActivePermissionByPermissionId(4);
+    Assertions.assertNotNull(updatedPermission);
+    contractTypes = ActivePermissionOperationsUtils.decodeOperations(
+        updatedPermission.getOperations());
+    Assertions.assertEquals(2, contractTypes.length);
+    Assertions.assertTrue(Arrays.stream(contractTypes).allMatch(
+        c -> c == ContractType.TransferAssetContract
+            || c == ContractType.AccountCreateContract
+    ));
+
+    //recover to original
+    accountPermissions
+        .enableActivePermissionOperation(4, ContractType.TransferContract)
+        .disableActivePermissionOperation(4, ContractType.AccountCreateContract);
+    updatedPermission = accountPermissions.getActivePermissionByPermissionId(4);
+    Assertions.assertNotNull(updatedPermission);
+    Assertions.assertEquals(transferOperations, updatedPermission.getOperations());
+
+  }
+
+  @Test
+  void testInvalidActivePermission() {
     Map<String, Long> invalidActiveKeyMap = new HashMap<>();
     invalidActiveKeyMap.put("testInvalidAddress", 1L);
-
-    ByteString operations = AccountPermissions.operationsFromHex(
-            ActivePermissionOperationsUtils.getAllAvailableActiveOperations());
 
     //set a null or empty active permission list
     try {
@@ -215,7 +240,7 @@ public class AccountPermissionsTest {
     // invalid permission id, threshold, options, keys
     try {
       accountPermissions.createActivePermission("invalidActive", 1,
-          2, operations, activeKeyMap);
+          2, transferOperations, activeKeyMap);
       Assertions.fail("Expected IllegalArgumentException");
     } catch (IllegalArgumentException e) {
       Assertions.assertEquals("Active permission ID must be greater than or equal to 2",
@@ -224,7 +249,7 @@ public class AccountPermissionsTest {
 
     try {
       accountPermissions.createActivePermission("invalidActive", 10,
-          100, operations, activeKeyMap);
+          100, transferOperations, activeKeyMap);
       Assertions.fail("Expected IllegalArgumentException");
     } catch (IllegalArgumentException e) {
       Assertions.assertEquals("Sum of all key's weight should >= threshold", e.getMessage());
@@ -232,10 +257,10 @@ public class AccountPermissionsTest {
 
     try {
       accountPermissions.createActivePermission("invalidActive", 10,
-          2, AccountPermissions.operationsFromHex("invalidOptions"), activeKeyMap);
+          2, ByteString.copyFrom("invalidOptions".getBytes()), activeKeyMap);
       Assertions.fail("Expected IllegalArgumentException");
     } catch (IllegalArgumentException e) {
-      Assertions.assertEquals("Invalid operations hex string: invalidOptions", e.getMessage());
+      Assertions.assertEquals("Operations size must 32", e.getMessage());
     }
 
     try {
@@ -256,12 +281,11 @@ public class AccountPermissionsTest {
 
     try {
       accountPermissions.createActivePermission("invalidActive", 10,
-          1, operations, invalidActiveKeyMap);
+          1, transferOperations, invalidActiveKeyMap);
       Assertions.fail("Expected IllegalArgumentException");
     } catch (IllegalArgumentException e) {
       Assertions.assertTrue(e.getMessage().startsWith("Invalid key address"));
     }
-
   }
 
 }

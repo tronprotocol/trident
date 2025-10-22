@@ -1,15 +1,16 @@
 package org.tron.trident.core.utils;
 
+import com.google.protobuf.ByteString;
+import java.util.Arrays;
+import org.bouncycastle.util.encoders.Hex;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.tron.trident.proto.Chain.Transaction.Contract.ContractType;
 
-public class ActivePermissionOperationsUtilsTest {
+class ActivePermissionOperationsUtilsTest {
 
   public static final String transferOptions =
       "0600000000000000000000000000000000000000000000000000000000000000";
-  public static final String allOptions =
-      "7fff1fc0033efb0f000000000000000000000000000000000000000000000000";
 
   @Test
   public void testEncodeOperations() {
@@ -40,13 +41,7 @@ public class ActivePermissionOperationsUtilsTest {
   }
 
   @Test
-  public void testGetAllAvailableActiveOperations() {
-    String options = ActivePermissionOperationsUtils.getAllAvailableActiveOperations();
-    Assertions.assertEquals(allOptions, options);
-  }
-
-  @Test
-  public void testDecodeOperations() {
+  void testDecodeOperations() {
     ContractType[] contracts = ActivePermissionOperationsUtils.decodeOperations(transferOptions);
     Assertions.assertEquals(2, contracts.length);
     Assertions.assertEquals("TransferContract", contracts[0].name());
@@ -56,15 +51,11 @@ public class ActivePermissionOperationsUtilsTest {
         ActivePermissionOperationsUtils.NONE_OPERATIONS);
     Assertions.assertEquals(0, contracts.length);
 
-    contracts = ActivePermissionOperationsUtils.decodeOperations(allOptions);
-    Assertions.assertEquals(40, contracts.length);
-
     contracts = ActivePermissionOperationsUtils.decodeOperations("");
     Assertions.assertEquals(0, contracts.length);
 
-    contracts = ActivePermissionOperationsUtils.decodeOperations(null);
+    contracts = ActivePermissionOperationsUtils.decodeOperations(ByteString.EMPTY);
     Assertions.assertEquals(0, contracts.length);
-
 
     try {
       contracts = ActivePermissionOperationsUtils.decodeOperations("xxx");
@@ -76,8 +67,7 @@ public class ActivePermissionOperationsUtilsTest {
   }
 
   @Test
-  public void testGetContractTypeById() {
-
+  void testGetContractTypeById() {
     ContractType contract = ActivePermissionOperationsUtils.getContractTypeById(0);
     Assertions.assertNotNull(contract);
     Assertions.assertEquals("AccountCreateContract", contract.name());
@@ -99,6 +89,71 @@ public class ActivePermissionOperationsUtilsTest {
 
     contract = ActivePermissionOperationsUtils.getContractTypeById(10000);
     Assertions.assertNull(contract);
-
   }
+
+  @Test
+  void testSetOperations() {
+    ByteString options = ActivePermissionOperationsUtils.buildOperations(
+        ByteString.EMPTY,
+        true,
+        ContractType.TransferAssetContract,
+        ContractType.CreateSmartContract);
+
+    ContractType[] contracts =
+        ActivePermissionOperationsUtils.decodeOperations(Hex.toHexString(options.toByteArray()));
+    Assertions.assertEquals(2, contracts.length);
+    Assertions.assertTrue(Arrays.asList(contracts).contains(ContractType.TransferAssetContract));
+    Assertions.assertTrue(Arrays.asList(contracts).contains(ContractType.CreateSmartContract));
+
+    options = ActivePermissionOperationsUtils.buildOperations(
+        options,
+        true,
+        ContractType.TransferContract);
+    contracts = ActivePermissionOperationsUtils.decodeOperations(
+        Hex.toHexString(options.toByteArray()));
+    Assertions.assertEquals(3, contracts.length);
+    Assertions.assertTrue(Arrays.stream(contracts).allMatch(
+        c -> c == ContractType.TransferAssetContract
+            || c == ContractType.CreateSmartContract
+            || c == ContractType.TransferContract
+    ));
+
+    options = ActivePermissionOperationsUtils.buildOperations(
+        options,
+        false,
+        ContractType.CreateSmartContract);
+    contracts = ActivePermissionOperationsUtils.decodeOperations(
+        Hex.toHexString(options.toByteArray()));
+    Assertions.assertEquals(2, contracts.length);
+    Assertions.assertFalse(Arrays.asList(contracts).contains(ContractType.CreateSmartContract));
+
+    // add a contract type already in options, should be no-op
+    ByteString options1 = ActivePermissionOperationsUtils.buildOperations(
+        options,
+        true,
+        ContractType.TransferContract);
+    Assertions.assertEquals(options, options1);
+
+    // add a contract type null, should be no-op
+    ByteString optionsNull = ActivePermissionOperationsUtils.buildOperations(
+        options,
+        true,
+        (ContractType[]) null);
+    Assertions.assertEquals(options, optionsNull);
+
+    // disable a contract type not in options, should be no-op
+    ByteString options2 = ActivePermissionOperationsUtils.buildOperations(
+        options,
+        false,
+        ContractType.VoteAssetContract);
+    Assertions.assertEquals(options, options2);
+
+    // disable a contract type null, should be no-op
+    ByteString optionsNull2 = ActivePermissionOperationsUtils.buildOperations(
+        options,
+        false,
+        (ContractType[]) null);
+    Assertions.assertEquals(options, optionsNull2);
+  }
+
 }

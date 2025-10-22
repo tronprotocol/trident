@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
-import org.bouncycastle.util.encoders.Hex;
 import org.tron.trident.core.utils.ActivePermissionOperationsUtils;
 import org.tron.trident.proto.Chain.Transaction.Contract.ContractType;
 import org.tron.trident.proto.Common.Key;
@@ -47,6 +46,11 @@ public class AccountPermissions {
     this.activePermissions.addAll(account.getActivePermissionList());
   }
 
+  /**
+   * Set the owner permission
+   * @param owner Owner permission
+   * @return Updated AccountPermissions object
+   */
   public AccountPermissions setOwnerPermission(Permission owner) {
     if (owner == null) {
       throw new IllegalArgumentException("owner permission cannot be null");
@@ -58,6 +62,11 @@ public class AccountPermissions {
     return this;
   }
 
+  /**
+   * Set the witness permission
+   * @param witness Witness permission
+   * @return Updated AccountPermissions object
+   */
   public AccountPermissions setWitnessPermission(Permission witness) {
     if (witness != null && witness.getType() != PermissionType.Witness) {
       throw new IllegalArgumentException("witness permission type must be Witness");
@@ -66,6 +75,11 @@ public class AccountPermissions {
     return this;
   }
 
+  /**
+   * Set the list of active permissions
+   * @param actives List of active permissions
+   * @return Updated AccountPermissions object
+   */
   public AccountPermissions setActivePermission(List<Permission> actives) {
     if (actives == null || actives.isEmpty()) {
       throw new IllegalArgumentException("active permission list is null or empty");
@@ -81,6 +95,11 @@ public class AccountPermissions {
     return this;
   }
 
+  /**
+   * Add an active permission
+   * @param active Permission to add
+   * @return Updated AccountPermissions object
+   */
   public AccountPermissions addActivePermission(Permission active) {
     if (active == null) {
       throw new IllegalArgumentException("active permission is null");
@@ -93,11 +112,84 @@ public class AccountPermissions {
     return this;
   }
 
+  /**
+   * Remove an active permission by its ID
+   * @param permissionId Permission ID to remove
+   * @return Updated AccountPermissions object
+   */
   public AccountPermissions removeActivePermission(int permissionId) {
-    if (permissionId < 2) {
-      throw new IllegalArgumentException("active permission id must be >= 2");
-    }
+    validateActivePermissionId(permissionId);
     this.activePermissions.removeIf(p -> p.getId() == permissionId);
+    return this;
+  }
+
+  /**
+   * get an active permission by its Permission ID
+   * @param permissionId Permission ID
+   * @return Permission object if found, null otherwise
+   */
+  public Permission getActivePermissionByPermissionId(int permissionId) {
+    return this.activePermissions.stream()
+        .filter(p -> p.getId() == permissionId)
+        .findFirst().orElse(null);
+  }
+
+  /**
+   * Enable active permission operation for a specific contract type,
+   * e.g., to enable TransferContract and TransferAssetContract for permission ID 2:
+   *   accountPermissions.enableActivePermissionOperation(2,
+   *       ContractType.TransferContract, ContractType.TransferAssetContract);
+   *
+   * @param permissionId Permission ID
+   * @param contractTypes Contract type to add, cannot be null
+   * @return Updated AccountPermissions object
+   */
+
+  public AccountPermissions enableActivePermissionOperation(int permissionId,
+      ContractType... contractTypes) {
+    return switchActivePermissionOperation(permissionId, true, contractTypes);
+  }
+
+  /**
+   * Disable active permission operation for a specific contract type,
+   * e.g., to disable TransferContract and TransferAssetContract for permission ID 2:
+   *   accountPermissions.disableActivePermissionOperation(2,
+   *    ContractType.TransferContract, ContractType.TransferAssetContract);
+   *
+   * @param permissionId Permission ID
+   * @param contractTypes  Contract type to remove, cannot be null
+   * @return Updated AccountPermissions object
+   */
+  public AccountPermissions disableActivePermissionOperation(int permissionId,
+      ContractType... contractTypes) {
+    return switchActivePermissionOperation(permissionId, false, contractTypes);
+  }
+
+  /**
+   * Switch active permission operations by enabling or disabling a specific contract type
+   * @param permissionId Permission ID
+   * @param enable true to enable, false to disable
+   * @param contractTypes Contract type to enable/disable
+   * @return Updated AccountPermissions object
+   */
+  private AccountPermissions switchActivePermissionOperation(int permissionId,
+      boolean enable,
+      ContractType... contractTypes) {
+    validateActivePermissionId(permissionId);
+    if (contractTypes == null || contractTypes.length == 0) {
+      throw new IllegalArgumentException("contractType cannot be null");
+    }
+    Permission permission = getActivePermissionByPermissionId(permissionId);
+    if (permission == null) {
+      throw new IllegalArgumentException(
+          "active permissionId " + permissionId + " not found");
+    }
+    ByteString newOperations
+        = ActivePermissionOperationsUtils.buildOperations(
+            permission.getOperations(), enable, contractTypes);
+    Permission newPermission = permission.toBuilder().setOperations(newOperations).build();
+    this.activePermissions.remove(permission);
+    this.activePermissions.add(newPermission);
     return this;
   }
 
@@ -189,7 +281,8 @@ public class AccountPermissions {
    * @param permissionName Permission name
    * @param permissionId Permission ID (must be >= 2)
    * @param threshold Threshold value
-   * @param operations Operation bytes (can't be null, size must be 32)
+   * @param operations Operation bytes which can be built using
+   * buildOperations(ByteString, boolean, ContractType...) in ActivePermissionOperationsUtils.java
    * @param keys Map of address -> weight
    * @return Permission object
    */
@@ -283,22 +376,6 @@ public class AccountPermissions {
     if (operations.isEmpty() || operations.size() != 32) {
       throw new IllegalArgumentException("Operations size must 32");
     }
-  }
-
-  public static ByteString operationsFromHex(String operationsHex) {
-    ByteString operations = null;
-    if (operationsHex != null && !operationsHex.isEmpty()) {
-      if (!ActivePermissionOperationsUtils.isValidOperations(operationsHex)) {
-        throw new IllegalArgumentException("Invalid operations hex string: " + operationsHex);
-      }
-      operations = ByteString.copyFrom(Hex.decode(operationsHex));
-    }
-    return  operations;
-  }
-
-  public static ByteString operationsFromContractTypes(ContractType[] contractTypes) {
-    String operationsHex = ActivePermissionOperationsUtils.encodeOperations(contractTypes);
-    return operationsFromHex(operationsHex);
   }
 
 }
