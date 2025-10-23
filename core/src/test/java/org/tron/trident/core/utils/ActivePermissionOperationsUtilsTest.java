@@ -13,7 +13,7 @@ class ActivePermissionOperationsUtilsTest {
       "0600000000000000000000000000000000000000000000000000000000000000";
 
   @Test
-  public void testEncodeOperations() {
+  void testEncodeOperations() {
     String[] contracts = new String[] {
         "TransferContract",
         "TransferAssetContract"
@@ -51,11 +51,19 @@ class ActivePermissionOperationsUtilsTest {
         ActivePermissionOperationsUtils.NONE_OPERATIONS);
     Assertions.assertEquals(0, contracts.length);
 
-    contracts = ActivePermissionOperationsUtils.decodeOperations("");
-    Assertions.assertEquals(0, contracts.length);
+    try {
+      contracts = ActivePermissionOperationsUtils.decodeOperations(ByteString.EMPTY);
+      Assertions.fail("Expected IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      // Expected exception
+    }
 
-    contracts = ActivePermissionOperationsUtils.decodeOperations(ByteString.EMPTY);
-    Assertions.assertEquals(0, contracts.length);
+    try {
+      contracts = ActivePermissionOperationsUtils.decodeOperations("");
+      Assertions.fail("Expected IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      // Expected exception
+    }
 
     try {
       contracts = ActivePermissionOperationsUtils.decodeOperations("xxx");
@@ -154,6 +162,28 @@ class ActivePermissionOperationsUtilsTest {
         false,
         (ContractType[]) null);
     Assertions.assertEquals(options, optionsNull2);
+  }
+
+  @Test
+  void testGetContractTypeByName() {
+    ContractType contract = ActivePermissionOperationsUtils.getContractTypeByName("TransferContract");
+    Assertions.assertNotNull(contract);
+    Assertions.assertEquals(ContractType.TransferContract, contract);
+
+    contract = ActivePermissionOperationsUtils.getContractTypeByName("NonExistingContract");
+    Assertions.assertNull(contract);
+  }
+
+  @Test
+  void testIsValidOperations() {
+    ByteString validOptions = ByteString.copyFrom(Hex.decode(transferOptions));
+    Assertions.assertTrue(ActivePermissionOperationsUtils.isValidOperations(validOptions));
+
+    ByteString invalidOptions = ByteString.copyFrom(Hex.decode("0000"));
+    Assertions.assertFalse(ActivePermissionOperationsUtils.isValidOperations(invalidOptions));
+
+    Assertions.assertFalse(ActivePermissionOperationsUtils.isValidOperations(ByteString.EMPTY));
+    Assertions.assertFalse(ActivePermissionOperationsUtils.isValidOperations(null));
   }
 
 }

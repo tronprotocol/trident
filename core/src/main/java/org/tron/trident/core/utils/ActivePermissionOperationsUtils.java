@@ -2,11 +2,9 @@ package org.tron.trident.core.utils;
 
 import com.google.protobuf.ByteString;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.bouncycastle.util.encoders.Hex;
 import org.tron.trident.proto.Chain.Transaction.Contract.ContractType;
-import org.tron.trident.utils.Strings;
 
 /**
  * Utility class for encoding and decoding operations for Account Active permissions
@@ -25,12 +23,10 @@ public class ActivePermissionOperationsUtils {
     if (contractTypes == null || contractTypes.length == 0) {
       return NONE_OPERATIONS;
     }
-
-    List<ContractType> list = new ArrayList<>(Arrays.asList(contractTypes));
     int[] contractIds = new int[contractTypes.length];
-    list.forEach(contractType -> {
-      contractIds[list.indexOf(contractType)] = contractType.getNumber();
-    });
+    for (int i = 0; i < contractTypes.length; i++) {
+      contractIds[i] = contractTypes[i].getNumber();
+    }
     return encodeOperations(contractIds);
   }
 
@@ -46,9 +42,10 @@ public class ActivePermissionOperationsUtils {
     }
     byte[] operations = new byte[32];
     for (int contractId : contractIds) {
-      if (contractId >= 0 && contractId < 256) {
-        operations[contractId / 8] |= (byte) (1 << (contractId % 8));
+      if (contractId < 0 || contractId >= 256) {
+        throw new IllegalArgumentException("Invalid contractId: " + contractId);
       }
+      operations[contractId / 8] |= (byte) (1 << (contractId % 8));
     }
 
     return Hex.toHexString(operations);
@@ -65,16 +62,47 @@ public class ActivePermissionOperationsUtils {
       return NONE_OPERATIONS;
     }
     int[] contractIds = new int[contractNames.length];
-    List<String> list = new ArrayList<>(Arrays.asList(contractNames));
-    list.forEach(contractName -> {
-      ContractType contractType = getContractTypeByName(contractName);
+    for (int i = 0; i < contractNames.length; i++) {
+      ContractType contractType = getContractTypeByName(contractNames[i]);
       if (contractType == null) {
-        throw  new IllegalArgumentException("Invalid contract name: " + contractName);
+        throw  new IllegalArgumentException("Invalid contract name: " + contractNames[i]);
       }
-      contractIds[list.indexOf(contractName)] = contractType.getNumber();
-    });
-
+      contractIds[i] = contractType.getNumber();
+    }
     return encodeOperations(contractIds);
+  }
+
+  /**
+   * Decode operations to list of contract types
+   *
+   * @param operations ByteString representation of operations
+   * @return Array of contractType
+   */
+  public static ContractType[] decodeOperations(ByteString operations) {
+
+    if (!isValidOperations(operations)) {
+      throw new IllegalArgumentException("operations string is invalid");
+    }
+
+    List<ContractType> contractTypeList = new ArrayList<>();
+    try {
+      byte[] opArray = operations.toByteArray();
+      for (int i = 0; i < 32; i++) { // 32 bytes
+        for (int j = 0; j < 8; j++) {
+          if (((opArray[i] >> j) & 0x1) == 1) {
+            ContractType contractType = getContractTypeById(i * 8 + j);
+            if (contractType == null) {
+              throw  new IllegalArgumentException("not found contract type for id: " + (i * 8 + j));
+            }
+            contractTypeList.add(contractType);
+          }
+        }
+      }
+    } catch (Exception e) {
+      throw new IllegalArgumentException("operations decode failed: " + e.getMessage());
+    }
+
+    return contractTypeList.toArray(new ContractType[0]);
   }
 
   /**
@@ -84,55 +112,24 @@ public class ActivePermissionOperationsUtils {
    * @return Array of contractType
    */
   public static ContractType[] decodeOperations(String hexOperations) {
-    List<ContractType> ContractType = new ArrayList<>();
-    if (Strings.isEmpty(hexOperations)) {
-      return ContractType.toArray(new ContractType[0]);
+    if (hexOperations == null || hexOperations.length() != 64) { // 32 bytes * 2 hex chars
+      throw new IllegalArgumentException("hexOperations string must be 64 chars");
     }
-    try {
-      byte[] opArray = Hex.decode(hexOperations);
-      for (int i = 0; i < 32; i++) { // 32 bytes
-        for (int j = 0; j < 8; j++) {
-          if (((opArray[i] >> j) & 0x1) == 1) {
-            ContractType contractType = getContractTypeById(i * 8 + j);
-            if (contractType == null) {
-              throw  new IllegalArgumentException("not found contract type for id: " + (i * 8 + j));
-            }
-            ContractType.add(contractType);
-          }
-        }
-      }
-    } catch (Exception e) {
-      throw new IllegalArgumentException("operations decode failed: " + e.getMessage());
-    }
-
-    return ContractType.toArray(new ContractType[0]);
-  }
-
-  /**
-   * Decode operations hex string to list of contract type names
-   *
-   * @param operations ByteString representation of operations
-   * @return Array of contractType
-   */
-  public static ContractType[] decodeOperations(ByteString operations) {
-    if (operations == null || operations.isEmpty()) {
-      return decodeOperations(NONE_OPERATIONS);
-    }
-    return decodeOperations(Hex.toHexString(operations.toByteArray()));
+    return decodeOperations(ByteString.copyFrom(Hex.decode(hexOperations)));
   }
 
   /**
    * Validate if operations string is valid
    *
-   * @param operations Hex string representation of operations
+   * @param operations ByteString representation of operations
    * @return true if valid, false otherwise
    */
-  public static boolean isValidOperations(String operations) {
+  public static boolean isValidOperations(ByteString operations) {
     if (operations == null || operations.isEmpty()) {
       return false;
     }
     try {
-      byte[] opArray = Hex.decode(operations);
+      byte[] opArray = operations.toByteArray();
       return opArray.length == 32;
     } catch (Exception e) {
       return false;
@@ -168,41 +165,53 @@ public class ActivePermissionOperationsUtils {
   }
 
   /**
-   * Build operations ByteString by enabling or disabling specified contract types.
-   * @example enable TransferContract and disable VoteContract from account current operations
+   * Build a new operations ByteString by enabling or disabling specified contract types.
+   * <p><b>Note:</b> This method does not modify the input {@code currentOperations}, it returns a new ByteString.
+   * If currentOperations not contain any of the specified contract types to disable, or already contains those to enable,
+   * no changes will be made, but a new ByteString which is equal to currentOperations will be returned.
+   * </p>
+   * Example usage:
    * <pre>
+   * // enable TransferContract and disable VoteContract from account current operations
    * ByteString currentOps = account.getActivePermission(0).getOperations();
    * ByteString updatedOps = buildOperations(currentOps, true, ContractType.TransferContract);
    * updatedOps = buildOperations(updatedOps, false, ContractType.VoteContract);
+   *
+   * // buildOperations from scratch by enabling TransferAssetContract and TransferContract
+   * ByteString options = ActivePermissionOperationsUtils.buildOperations(
+   *     ByteString.EMPTY,
+   *     true,
+   *     ContractType.TransferAssetContract,
+   *     ContractType.TransferContract);
    * </pre>
-   * @example buildOperations from scratch by enabling TransferContract
-   * <pre>
-   * ByteString operations = buildOperations(ByteString.EMPTY, true, ContractType.TransferContract);
-   * </pre>
+   *
    * @param currentOperations current operations ByteString, use ByteString.EMPTY to start from scratch
-   * @param enable true to enable, false to disable
+   * @param enable {@code true} to enable the specified contract types, {@code false} to disable
    * @param contractTypes contract types to update, if null or empty, no changes will be made
-   * @return New operations ByteString with updated permissions
+   * @return New operations ByteString with updated permissions, never null
    */
   public static ByteString buildOperations(ByteString currentOperations,
       boolean enable, ContractType... contractTypes) {
-    if (contractTypes == null || contractTypes.length == 0) {
-      return currentOperations;
-    }
     byte[] operations;
     if (currentOperations == null || currentOperations.isEmpty()) {
       operations = new byte[32];
     } else {
       operations = currentOperations.toByteArray();
     }
+
+    if (contractTypes == null || contractTypes.length == 0) {
+      return ByteString.copyFrom(operations);
+    }
+
     for (ContractType contractType : contractTypes) {
       int contractId = contractType.getNumber();
-      if (contractId >= 0 && contractId < 256) {
-        if (enable) {
-          operations[contractId / 8] |= (byte) (1 << (contractId % 8));
-        } else {
-          operations[contractId / 8] &= (byte) ~(1 << (contractId % 8));
-        }
+      if (contractId < 0 || contractId >= 256) {
+        throw new IllegalArgumentException("Invalid contractId: " + contractId);
+      }
+      if (enable) {
+        operations[contractId / 8] |= (byte) (1 << (contractId % 8));
+      } else {
+        operations[contractId / 8] &= (byte) ~(1 << (contractId % 8));
       }
     }
     return ByteString.copyFrom(operations);

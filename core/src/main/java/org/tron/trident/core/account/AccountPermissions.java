@@ -6,6 +6,7 @@ import com.google.protobuf.ByteString;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.Setter;
 import org.tron.trident.core.utils.ActivePermissionOperationsUtils;
@@ -135,10 +136,13 @@ public class AccountPermissions {
   }
 
   /**
-   * Enable active permission operation for a specific contract type,
-   * e.g., to enable TransferContract and TransferAssetContract for permission ID 2:
+   * Enable active permission operation for a specific contract type.
+   * <p>
+   * Example: to enable TransferContract and TransferAssetContract for permission ID 2:
+   * <pre>
    *   accountPermissions.enableActivePermissionOperation(2,
    *       ContractType.TransferContract, ContractType.TransferAssetContract);
+   * </pre>
    *
    * @param permissionId Permission ID
    * @param contractTypes Contract type to add, cannot be null
@@ -151,10 +155,13 @@ public class AccountPermissions {
   }
 
   /**
-   * Disable active permission operation for a specific contract type,
-   * e.g., to disable TransferContract and TransferAssetContract for permission ID 2:
+   * Disable active permission operation for specific contract types.
+   * <p>
+   * Example: to disable TransferContract and TransferAssetContract for permission ID 2
+   * <pre>
    *   accountPermissions.disableActivePermissionOperation(2,
-   *    ContractType.TransferContract, ContractType.TransferAssetContract);
+   *   ContractType.TransferContract, ContractType.TransferAssetContract);
+   * </pre>
    *
    * @param permissionId Permission ID
    * @param contractTypes  Contract type to remove, cannot be null
@@ -166,7 +173,7 @@ public class AccountPermissions {
   }
 
   /**
-   * Switch active permission operations by enabling or disabling a specific contract type
+   * Switch active permission operations by enabling or disabling specific contract types
    * @param permissionId Permission ID
    * @param enable true to enable, false to disable
    * @param contractTypes Contract type to enable/disable
@@ -188,8 +195,11 @@ public class AccountPermissions {
         = ActivePermissionOperationsUtils.buildOperations(
             permission.getOperations(), enable, contractTypes);
     Permission newPermission = permission.toBuilder().setOperations(newOperations).build();
-    this.activePermissions.remove(permission);
-    this.activePermissions.add(newPermission);
+
+    this.activePermissions =
+        this.activePermissions.stream()
+            .map(p -> p.getId() == permissionId ? newPermission : p)
+            .collect(Collectors.toList());
     return this;
   }
 
@@ -281,8 +291,8 @@ public class AccountPermissions {
    * @param permissionName Permission name
    * @param permissionId Permission ID (must be >= 2)
    * @param threshold Threshold value
-   * @param operations Operation bytes which can be built using
-   * buildOperations(ByteString, boolean, ContractType...) in ActivePermissionOperationsUtils.java
+   * @param operations Operation ByteString, which can be built using
+   * {@link org.tron.trident.core.utils.ActivePermissionOperationsUtils#buildOperations(ByteString, boolean, ContractType...)}
    * @param keys Map of address -> weight
    * @return Permission object
    */
