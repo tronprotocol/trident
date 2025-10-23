@@ -196,13 +196,19 @@ public class ActivePermissionOperationsUtils {
     if (currentOperations == null || currentOperations.isEmpty()) {
       operations = new byte[32];
     } else {
+      // validate currentOperations
+      if (!isValidOperations(currentOperations)) {
+        throw new IllegalArgumentException("currentOperations must be 32 bytes");
+      }
       operations = currentOperations.toByteArray();
     }
 
+    // contractTypes is null or empty, no changes
     if (contractTypes == null || contractTypes.length == 0) {
       return ByteString.copyFrom(operations);
     }
 
+    // update operations
     for (ContractType contractType : contractTypes) {
       int contractId = contractType.getNumber();
       if (contractId < 0 || contractId >= 256) {
