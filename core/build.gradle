@@ -1,21 +1,13 @@
 plugins {
-    id 'com.google.protobuf' version '0.8.12'
+    id 'com.google.protobuf' version '0.9.1'
     id 'java-library'
 }
 
 description 'Trident-Java gRPC core classes'
 
-def protobufVersion = '3.25.5'
-def grpcVersion = '1.60.0'
-
-configurations.all {
-    resolutionStrategy {
-        force("com.squareup.okio:okio:3.9.0")
-        force("io.netty:netty-codec-http:4.1.111.Final")
-        force("io.netty:netty-common:4.1.118.Final")
-        force("io.netty:netty-handler:4.1.118.Final")
-    }
-}
+def protobufVersion = '3.25.8'
+def grpcVersion = '1.75.0'
+def protocGenVersion = '1.60.0' // https://github.com/grpc/grpc-java/pull/11371 , 1.64.x is not supported CentOS 7.
 
 dependencies {
     implementation "com.google.guava:guava:$googleGuavaVersion"
@@ -45,7 +37,7 @@ protobuf {
     }
     plugins {
         grpc {
-            artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion"
+            artifact = "io.grpc:protoc-gen-grpc-java:$protocGenVersion"
         }
     }
     generateProtoTasks {

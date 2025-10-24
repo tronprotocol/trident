@@ -192,7 +192,7 @@ public interface Api {
 
   WitnessList listWitnesses(NodeType... nodeType);
 
-  WitnessList GetPaginatedNowWitnessList(long offset, long limit, NodeType... nodeType);
+  WitnessList getPaginatedNowWitnessList(long offset, long limit, NodeType... nodeType);
 
   ExchangeList listExchanges(NodeType... nodeType);
 

@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import lombok.Getter;
 import org.bouncycastle.jcajce.provider.digest.SHA256;
 import org.tron.trident.abi.FunctionEncoder;
@@ -174,8 +173,12 @@ public class ApiWrapper implements Api {
   private long expireTimeStamp = -1;
 
   public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey) {
-    channel = ManagedChannelBuilder.forTarget(grpcEndpoint).usePlaintext().build();
-    channelSolidity = ManagedChannelBuilder.forTarget(grpcEndpointSolidity).usePlaintext().build();
+    channel = ManagedChannelBuilder.forTarget(grpcEndpoint)
+        .usePlaintext()
+        .build();
+    channelSolidity = ManagedChannelBuilder.forTarget(grpcEndpointSolidity)
+        .usePlaintext()
+        .build();
     blockingStub = WalletGrpc.newBlockingStub(channel);
     blockingStubSolidity = WalletSolidityGrpc.newBlockingStub(channelSolidity);
     keyPair = new KeyPair(hexPrivateKey);
@@ -183,8 +186,12 @@ public class ApiWrapper implements Api {
 
   public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey,
       String apiKey) {
-    channel = ManagedChannelBuilder.forTarget(grpcEndpoint).usePlaintext().build();
-    channelSolidity = ManagedChannelBuilder.forTarget(grpcEndpointSolidity).usePlaintext().build();
+    channel = ManagedChannelBuilder.forTarget(grpcEndpoint)
+        .usePlaintext()
+        .build();
+    channelSolidity = ManagedChannelBuilder.forTarget(grpcEndpointSolidity)
+        .usePlaintext()
+        .build();
 
     //attach api key
     Metadata header = new Metadata();
@@ -207,7 +214,10 @@ public class ApiWrapper implements Api {
         .intercept(clientInterceptors)
         .usePlaintext()
         .build();
-    channelSolidity = ManagedChannelBuilder.forTarget(grpcEndpointSolidity).usePlaintext().build();
+    channelSolidity = ManagedChannelBuilder.forTarget(grpcEndpointSolidity)
+        .intercept(clientInterceptors)
+        .usePlaintext()
+        .build();
     blockingStub = WalletGrpc.newBlockingStub(channel);
     blockingStubSolidity = WalletSolidityGrpc.newBlockingStub(channelSolidity);
     keyPair = new KeyPair(hexPrivateKey);
@@ -218,13 +228,11 @@ public class ApiWrapper implements Api {
    */
   public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey,
       int timeout) {
-    channel = ManagedChannelBuilder
-        .forTarget(grpcEndpoint)
+    channel = ManagedChannelBuilder.forTarget(grpcEndpoint)
         .usePlaintext()
         .intercept(new TimeoutInterceptor(timeout))
         .build();
-    channelSolidity = ManagedChannelBuilder
-        .forTarget(grpcEndpointSolidity)
+    channelSolidity = ManagedChannelBuilder.forTarget(grpcEndpointSolidity)
         .usePlaintext()
         .intercept(new TimeoutInterceptor(timeout))
         .build();
@@ -244,23 +252,19 @@ public class ApiWrapper implements Api {
     clientInterceptorList.add(new TimeoutInterceptor(timeout));
 
     if (clientInterceptors != null) {
-      clientInterceptorList.addAll(
-          clientInterceptors.stream()
-              .filter(Objects::nonNull)
-              .collect(Collectors.toList())
-      );
+      clientInterceptors.stream()
+          .filter(Objects::nonNull)
+          .forEach(clientInterceptorList::add);
     }
 
-    channel =
-        ManagedChannelBuilder.forTarget(grpcEndpoint)
-            .usePlaintext()
-            .intercept(clientInterceptorList)
-            .build();
-    channelSolidity =
-        ManagedChannelBuilder.forTarget(grpcEndpointSolidity)
-            .usePlaintext()
-            .intercept(clientInterceptorList)
-            .build();
+    channel = ManagedChannelBuilder.forTarget(grpcEndpoint)
+        .usePlaintext()
+        .intercept(clientInterceptorList)
+        .build();
+    channelSolidity = ManagedChannelBuilder.forTarget(grpcEndpointSolidity)
+        .usePlaintext()
+        .intercept(clientInterceptorList)
+        .build();
     blockingStub = WalletGrpc.newBlockingStub(channel);
     blockingStubSolidity = WalletSolidityGrpc.newBlockingStub(channelSolidity);
     keyPair = new KeyPair(hexPrivateKey);
@@ -315,6 +319,7 @@ public class ApiWrapper implements Api {
 
   /**
    * enable local create transaction.
+   *
    * @param blockId refer blockId used in createTransaction. It will be invalid after 65535 blocks
    * so remember to update it timely.
    * @param expireTime transaction's absolute expire timestamp in createTransaction, milliseconds.
@@ -1417,7 +1422,6 @@ public class ApiWrapper implements Api {
    * Query transaction information by transaction id
    *
    * @param txID Transaction hash, i.e. transaction id
-   *
    * @param nodeType Optional parameter to specify which node to query.
    *                 If not provided, uses full node default.
    *                 If NodeType.SOLIDITY_NODE, uses solidity node.
@@ -1603,10 +1607,10 @@ public class ApiWrapper implements Api {
 
   /**
    * Query the list of all the TRC10 tokens
+   *
    * @param nodeType Optional parameter to specify which node to query.
    *                 If not provided, uses full node default.
    *                 If NodeType.SOLIDITY_NODE, uses solidity node.
-   *
    * @return AssetIssueList
    */
   @Override
@@ -1777,6 +1781,7 @@ public class ApiWrapper implements Api {
 
   /**
    * List all witnesses that current API node is connected to
+   *
    * @param nodeType Optional parameter to specify which node to query.
    *                 If not provided, uses full node default.
    *                 If NodeType.SOLIDITY_NODE, uses solidity node.
@@ -1793,6 +1798,7 @@ public class ApiWrapper implements Api {
   /**
    * Get a paginated list of real-time witnesses ordered by vote count
    * Note: This method may throw an exception when FullNode is in the maintenance period.
+   *
    * @param offset the pagination offset, specifying the starting index of witnesses to return (0-based)
    * @param limit the number of witnesses to return
    * @param nodeType Optional parameter to specify which node to query.
@@ -1801,11 +1807,11 @@ public class ApiWrapper implements Api {
    * @return WitnessList
    */
   @Override
-  public  WitnessList GetPaginatedNowWitnessList(long offset, long limit, NodeType... nodeType) {
+  public WitnessList getPaginatedNowWitnessList(long offset, long limit, NodeType... nodeType) {
     PaginatedMessage paginatedMessage = PaginatedMessage.newBuilder()
-            .setOffset(offset)
-            .setLimit(limit)
-            .build();
+        .setOffset(offset)
+        .setLimit(limit)
+        .build();
     return useSolidityNode(nodeType)
         ? blockingStubSolidity.getPaginatedNowWitnessList(paginatedMessage)
         : blockingStub.getPaginatedNowWitnessList(paginatedMessage);
@@ -1813,10 +1819,10 @@ public class ApiWrapper implements Api {
 
   /**
    * List all exchange pairs
+   *
    * @param nodeType Optional parameter to specify which node to query.
    *                 If not provided, uses full node default.
    *                 If NodeType.SOLIDITY_NODE, uses solidity node.
-   *
    * @return ExchangeList
    */
   @Override
@@ -2046,10 +2052,10 @@ public class ApiWrapper implements Api {
   /**
    * Get solid account info by address
    *
-   * @deprecated Since 0.10.0, scheduled for removal in future versions.
-   * use {@link #getAccount(String, NodeType...)} instead
    * @param address address, default hexString
    * @return Account
+   * @deprecated Since 0.10.0, scheduled for removal in future versions.
+   * use {@link #getAccount(String, NodeType...)} instead
    */
   @Deprecated
   @Override
@@ -2064,11 +2070,11 @@ public class ApiWrapper implements Api {
   /**
    * Get transactionInfo from block number
    *
-   * @deprecated Since 0.10.0, scheduled for removal in future versions.
-   * use {@link #getTransactionInfoByBlockNum(long, NodeType...)} instead
    * @param blockNum The block height
    * @return TransactionInfoList
    * @throws IllegalException no transactions or the blockNum is incorrect
+   * @deprecated Since 0.10.0, scheduled for removal in future versions.
+   * use {@link #getTransactionInfoByBlockNum(long, NodeType...)} instead
    */
   @Deprecated
   @Override
@@ -2084,11 +2090,10 @@ public class ApiWrapper implements Api {
   /**
    * Query the latest solid block information
    *
-   * @deprecated Since 0.10.0, scheduled for removal in future versions.
-   * use {@link #getNowBlock2(NodeType...)} instead
-   *
    * @return BlockExtention
    * @throws IllegalException if fail to get now block
+   * @deprecated Since 0.10.0, scheduled for removal in future versions.
+   * use {@link #getNowBlock2(NodeType...)} instead
    */
   @Deprecated
   @Override
@@ -2105,11 +2110,11 @@ public class ApiWrapper implements Api {
   /**
    * Get transaction from a transaction id, must be in solid block
    *
-   * @deprecated Since 0.10.0, scheduled for removal in future versions.
-   * use {@link #getTransactionById(String, NodeType...)} instead
    * @param txID Transaction hash, i.e. transaction id
    * @return Transaction
    * @throws IllegalException if the transaction not found
+   * @deprecated Since 0.10.0, scheduled for removal in future versions.
+   * use {@link #getTransactionById(String, NodeType...)} instead
    */
   @Deprecated
   @Override
@@ -2149,10 +2154,10 @@ public class ApiWrapper implements Api {
   /**
    * Get the rewards that the voter has not received
    *
-   * @deprecated Since 0.10.0, scheduled for removal in future versions.
-   * use {@link #getRewardInfo(String, NodeType...)} instead
    * @param address address, default hexString
    * @return NumberMessage
+   * @deprecated Since 0.10.0, scheduled for removal in future versions.
+   * use {@link #getRewardInfo(String, NodeType...)} instead
    */
   @Deprecated
   @Override
@@ -2415,6 +2420,7 @@ public class ApiWrapper implements Api {
   /**
    * GetBurnTRX
    * Query the amount of TRX burned due to on-chain transaction fees since No. 54 Committee Proposal took effect
+   *
    * @param nodeType Optional parameter to specify which node to query.
    *                 If not provided, uses full node default.
    *                 If NodeType.SOLIDITY_NODE, uses solidity node.
@@ -2708,7 +2714,7 @@ public class ApiWrapper implements Api {
    * @param callData The data passed along with a transaction that allows us to interact with smart contracts.
    * @return EstimateEnergyMessage. Estimated energy to run the contract
    * @deprecated Since 0.9.2, scheduled for removal in future versions.
-   * Use {@link #estimateEnergy(String, String, String, long, long, String, NodeType... )} instead.
+   * Use {@link #estimateEnergy(String, String, String, long, long, String, NodeType...)} instead.
    */
   @Override
   public Response.EstimateEnergyMessage estimateEnergyV2(String ownerAddress,
@@ -2742,6 +2748,7 @@ public class ApiWrapper implements Api {
   /**
    * GetBandwidthPrices
    * Query historical bandwidth unit price.
+   *
    * @param nodeType Optional parameter to specify which node to query.
    *                 If not provided, uses full node default.
    *                 If NodeType.SOLIDITY_NODE, uses solidity node.
@@ -2762,6 +2769,7 @@ public class ApiWrapper implements Api {
   /**
    * GetEnergyPrices
    * Query historical energy unit price.
+   *
    * @param nodeType Optional parameter to specify which node to query.
    *                 If not provided, uses full node default.
    *                 If NodeType.SOLIDITY_NODE, uses solidity node.
@@ -2797,12 +2805,13 @@ public class ApiWrapper implements Api {
   /**
    * GetBandwidthPricesOnSolidity
    * Query historical bandwidth unit price.
-   * @deprecated Since 0.10.0, scheduled for removal in future versions.
-   * use {@link  #getBandwidthPrices(NodeType...)} instead
+   *
    * @return prices string: All historical bandwidth unit price information.
    * Each unit price change is separated by a comma.
    * Before the colon is the millisecond timestamp,
    * and after the colon is the bandwidth unit price in sun.
+   * @deprecated Since 0.10.0, scheduled for removal in future versions.
+   * use {@link  #getBandwidthPrices(NodeType...)} instead
    */
   @Deprecated
   @Override
@@ -2814,12 +2823,13 @@ public class ApiWrapper implements Api {
   /**
    * GetEnergyPricesOnSolidity
    * Query historical energy unit price.
-   * @deprecated Since 0.10.0, scheduled for removal in future versions.
-   * use {@link #getEnergyPrices(NodeType...)} instead
+   *
    * @return prices string: All historical bandwidth unit price information.
    * Each unit price change is separated by a comma.
    * Before the colon is the millisecond timestamp,
    * and after the colon is the bandwidth unit price in sun.
+   * @deprecated Since 0.10.0, scheduled for removal in future versions.
+   * use {@link #getEnergyPrices(NodeType...)} instead
    */
   @Deprecated
   @Override
@@ -3026,6 +3036,7 @@ public class ApiWrapper implements Api {
 
   /**
    * getMarketPairList
+   *
    * @param nodeType Optional parameter to specify which node to query.
    *                 If not provided, uses full node default.
    *                 If NodeType.SOLIDITY_NODE, uses solidity node.

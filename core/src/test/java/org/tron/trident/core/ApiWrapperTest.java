@@ -302,7 +302,7 @@ class ApiWrapperTest {
     do {
       try {
         Response.WitnessList witnessList
-            = client.GetPaginatedNowWitnessList(0, 10);
+            = client.getPaginatedNowWitnessList(0, 10);
         assertNotNull(witnessList);
         assertTrue(witnessList.getWitnessesCount() >= 0);
         break;
