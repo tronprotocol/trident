@@ -209,7 +209,7 @@ class QueryBySolidityNodeTest {
     do {
       try {
         WitnessList witnessList
-                = client.GetPaginatedNowWitnessList(0, 10, NodeType.SOLIDITY_NODE);
+                = client.getPaginatedNowWitnessList(0, 10, NodeType.SOLIDITY_NODE);
         assertNotNull(witnessList);
         assertTrue(witnessList.getWitnessesCount() >= 0);
         break;

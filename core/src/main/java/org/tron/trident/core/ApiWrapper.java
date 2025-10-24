@@ -1807,7 +1807,7 @@ public class ApiWrapper implements Api {
    * @return WitnessList
    */
   @Override
-  public WitnessList GetPaginatedNowWitnessList(long offset, long limit, NodeType... nodeType) {
+  public WitnessList getPaginatedNowWitnessList(long offset, long limit, NodeType... nodeType) {
     PaginatedMessage paginatedMessage = PaginatedMessage.newBuilder()
         .setOffset(offset)
         .setLimit(limit)
