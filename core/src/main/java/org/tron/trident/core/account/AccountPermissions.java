@@ -85,13 +85,14 @@ public class AccountPermissions {
       throw new IllegalArgumentException("active permission list is null or empty");
     }
 
-    this.activePermissions.clear();
     for (Permission active : actives) {
       if (active.getType() != PermissionType.Active || active.getId() < 2) {
         throw new IllegalArgumentException("active permission must be Active and id >= 2");
       }
-      this.activePermissions.add(active);
     }
+
+    this.activePermissions.clear();
+    this.activePermissions.addAll(actives);
     return this;
   }
 
@@ -177,8 +178,7 @@ public class AccountPermissions {
    * @param contractTypes Contract type to enable/disable
    * @return Updated AccountPermissions object
    */
-  private AccountPermissions switchActivePermissionOperation(int permissionId,
-      boolean enable,
+  private AccountPermissions switchActivePermissionOperation(int permissionId, boolean enable,
       ContractType... contractTypes) {
     validateActivePermissionId(permissionId);
     if (contractTypes == null || contractTypes.length == 0) {

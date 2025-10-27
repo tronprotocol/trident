@@ -1,5 +1,6 @@
 package org.tron.trident.core;
 
+import static java.lang.Thread.sleep;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -15,10 +16,10 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.tron.trident.core.account.AccountPermissions;
+import org.tron.trident.core.account.ActivePermissionOperationsUtils;
 import org.tron.trident.core.exceptions.IllegalException;
 import org.tron.trident.core.key.KeyPair;
 import org.tron.trident.core.transaction.TransactionBuilder;
-import org.tron.trident.core.account.ActivePermissionOperationsUtils;
 import org.tron.trident.proto.Chain.Transaction;
 import org.tron.trident.proto.Chain.Transaction.Contract.ContractType;
 import org.tron.trident.proto.Common.Key;
@@ -44,7 +45,7 @@ class MultiSignTest extends BaseTest {
     String txId = client.broadcastTransaction(signedTxn);
 
     // Wait for the transaction to be confirmed
-    Thread.sleep(3000);
+    sleep(10_000L);
 
     // Verify if the transaction is successful
     TransactionInfo info = client.getTransactionInfoById(txId);
@@ -104,7 +105,7 @@ class MultiSignTest extends BaseTest {
     String transaction = client.broadcastTransaction(signedTxn);
 
     // Wait for the transaction to be confirmed
-    Thread.sleep(5000);
+    sleep(10_000L);
 
     // Verify if the transaction is successful
     TransactionInfo info = client.getTransactionInfoById(transaction);
@@ -134,8 +135,8 @@ class MultiSignTest extends BaseTest {
     }
 
     // Build active permission with permissionId 2, threshold 2, transfer TRX operations only
-    ByteString trxTransferOperations = ActivePermissionOperationsUtils.buildOperations(ByteString.EMPTY,
-        true, ContractType.TransferContract);
+    ByteString trxTransferOperations = ActivePermissionOperationsUtils.buildOperations(
+        ByteString.EMPTY, true, ContractType.TransferContract);
     Permission activePermission
         = accountPermissions.createActivePermission("active", 2,
         2, trxTransferOperations, activeKeyMap);
@@ -158,7 +159,7 @@ class MultiSignTest extends BaseTest {
     String transaction = client.broadcastTransaction(signedTxn);
 
     // Wait for the transaction to be confirmed
-    Thread.sleep(5000);
+    sleep(10_000L);
 
     // Verify if the transaction is successful
     TransactionInfo info = client.getTransactionInfoById(transaction);
@@ -197,7 +198,7 @@ class MultiSignTest extends BaseTest {
     String txId = client.broadcastTransaction(signedTxn2);
 
     // Wait for the transaction to be confirmed
-    Thread.sleep(5000);
+    sleep(10_000L);
 
     // Verify if the transaction is successful
     TransactionInfo info = client.getTransactionInfoById(txId);
@@ -241,7 +242,7 @@ class MultiSignTest extends BaseTest {
     String txId = client.broadcastTransaction(signedTxn);
 
     // Wait for the transaction to be confirmed
-    Thread.sleep(5000);
+    sleep(10_000L);
 
     // Verify if the transaction is successful
     TransactionInfo info = client.getTransactionInfoById(txId);

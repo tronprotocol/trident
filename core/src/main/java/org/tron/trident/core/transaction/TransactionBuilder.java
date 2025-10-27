@@ -54,8 +54,7 @@ public class TransactionBuilder {
    */
   public TransactionBuilder setContractPermissionId(int permissionId) {
     // Get the first contract and set permission id
-    Transaction.Contract contract = transaction.getRawData().getContract(0);
-    contract = contract.toBuilder()
+    Transaction.Contract contract = transaction.getRawData().getContract(0).toBuilder()
         .setPermissionId(permissionId)
         .build();
     transaction = transaction.toBuilder()

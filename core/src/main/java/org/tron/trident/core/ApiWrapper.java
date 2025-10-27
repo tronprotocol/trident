@@ -2018,9 +2018,9 @@ public class ApiWrapper implements Api {
    * @throws IllegalException if fail to update account permission
    */
   @Override
-  public TransactionExtention accountPermissionUpdate(AccountPermissionUpdateContract
-      accountPermissionUpdateContract)
-      throws IllegalException {
+  public TransactionExtention accountPermissionUpdate(
+      AccountPermissionUpdateContract accountPermissionUpdateContract
+  ) throws IllegalException {
 
     return createTransactionExtention(accountPermissionUpdateContract,
         Transaction.Contract.ContractType.AccountPermissionUpdateContract);
@@ -2036,10 +2036,8 @@ public class ApiWrapper implements Api {
    */
   @Override
   public TransactionExtention accountPermissionUpdate(
-      String ownerAddress,
-      AccountPermissions accountPermissions)
-      throws IllegalException {
-
+      String ownerAddress, AccountPermissions accountPermissions
+  ) throws IllegalException {
     if (accountPermissions == null
         || accountPermissions.getOwnerPermission() == null
         || accountPermissions.getActivePermissions().isEmpty()) {
@@ -2512,7 +2510,6 @@ public class ApiWrapper implements Api {
         Transaction.Contract.ContractType.WitnessCreateContract);
   }
 
-
   /**
    * UpdateWitness
    * Edit the URL of the witness's official website.
@@ -2556,7 +2553,6 @@ public class ApiWrapper implements Api {
         Transaction.Contract.ContractType.WithdrawBalanceContract);
   }
 
-
   /**
    * GetNextMaintenanceTime
    * Returns the timestamp of the next voting time in milliseconds.
@@ -2569,7 +2565,6 @@ public class ApiWrapper implements Api {
         EmptyMessage.getDefaultInstance());
     return numberMessage.getNum();
   }
-
 
   /**
    * ProposalCreate
@@ -2664,7 +2659,6 @@ public class ApiWrapper implements Api {
     return pendingSize.getNum();
   }
 
-
   /**
    * GetTransactionFromPending
    * Get transaction details from the pending pool
@@ -2683,7 +2677,6 @@ public class ApiWrapper implements Api {
     return blockingStub.getTransactionFromPending(request);
   }
 
-
   /**
    * GetBlockById
    * Query block by ID(block hash).
@@ -2699,7 +2692,6 @@ public class ApiWrapper implements Api {
         .build();
     return blockingStub.getBlockById(request);
   }
-
 
   /**
    * Estimate the energy required for the successful execution of smart contract transactions
@@ -2770,6 +2762,7 @@ public class ApiWrapper implements Api {
    * @deprecated Since 0.9.2, scheduled for removal in future versions.
    * Use {@link #estimateEnergy(String, String, String, long, long, String, NodeType...)} instead.
    */
+  @Deprecated
   @Override
   public Response.EstimateEnergyMessage estimateEnergyV2(String ownerAddress,
       String contractAddress, String callData) {
@@ -2819,7 +2812,6 @@ public class ApiWrapper implements Api {
         : blockingStub.getBandwidthPrices(emptyMessage);
   }
 
-
   /**
    * GetEnergyPrices
    * Query historical energy unit price.
@@ -2840,7 +2832,6 @@ public class ApiWrapper implements Api {
         : blockingStub.getEnergyPrices(emptyMessage);
   }
 
-
   /**
    * GetMemoFee
    * Query historical memo fee.
@@ -2854,7 +2845,6 @@ public class ApiWrapper implements Api {
   public PricesResponseMessage getMemoFee() {
     return blockingStub.getMemoFee(EmptyMessage.getDefaultInstance());
   }
-
 
   /**
    * GetBandwidthPricesOnSolidity
@@ -2872,7 +2862,6 @@ public class ApiWrapper implements Api {
   public PricesResponseMessage getBandwidthPricesOnSolidity() {
     return blockingStubSolidity.getBandwidthPrices(EmptyMessage.getDefaultInstance());
   }
-
 
   /**
    * GetEnergyPricesOnSolidity
