@@ -1,4 +1,4 @@
-package org.tron.trident.core.utils;
+package org.tron.trident.core.account;
 
 import com.google.protobuf.ByteString;
 import java.util.ArrayList;
@@ -8,6 +8,9 @@ import org.tron.trident.proto.Chain.Transaction.Contract.ContractType;
 
 /**
  * Utility class for encoding and decoding operations for Account Active permissions
+ *
+ * <p>Each bit in the 32-byte operations field corresponds to a {@link ContractType},
+ * allowing up to 256 different contract types to be represented.
  */
 public class ActivePermissionOperationsUtils {
   public static final String NONE_OPERATIONS
@@ -31,7 +34,10 @@ public class ActivePermissionOperationsUtils {
   }
 
   /**
-   * Encode contract types to operations hex string using contract IDs
+   * Encode contract types to operations hex string using contract IDs.
+   * <p>
+   * Each bit in the 32-byte operations array represents a {@link ContractType}.
+   * Up to 256 different contract types are supported (8 bits × 32 bytes).
    *
    * @param contractIds Array of contract IDs to encode
    * @return Hex string representation of operations
@@ -79,7 +85,6 @@ public class ActivePermissionOperationsUtils {
    * @return Array of contractType
    */
   public static ContractType[] decodeOperations(ByteString operations) {
-
     if (!isValidOperations(operations)) {
       throw new IllegalArgumentException("operations string is invalid");
     }

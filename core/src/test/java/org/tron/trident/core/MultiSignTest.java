@@ -18,7 +18,7 @@ import org.tron.trident.core.account.AccountPermissions;
 import org.tron.trident.core.exceptions.IllegalException;
 import org.tron.trident.core.key.KeyPair;
 import org.tron.trident.core.transaction.TransactionBuilder;
-import org.tron.trident.core.utils.ActivePermissionOperationsUtils;
+import org.tron.trident.core.account.ActivePermissionOperationsUtils;
 import org.tron.trident.proto.Chain.Transaction;
 import org.tron.trident.proto.Chain.Transaction.Contract.ContractType;
 import org.tron.trident.proto.Common.Key;

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.bouncycastle.util.encoders.Hex;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.tron.trident.core.account.ActivePermissionOperationsUtils;
 import org.tron.trident.proto.Chain.Transaction.Contract.ContractType;
 
 class ActivePermissionOperationsUtilsTest {

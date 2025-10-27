@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.Setter;
-import org.tron.trident.core.utils.ActivePermissionOperationsUtils;
 import org.tron.trident.proto.Chain.Transaction.Contract.ContractType;
 import org.tron.trident.proto.Common.Key;
 import org.tron.trident.proto.Common.Permission;
@@ -148,7 +147,6 @@ public class AccountPermissions {
    * @param contractTypes Contract type to add, cannot be null
    * @return Updated AccountPermissions object
    */
-
   public AccountPermissions enableActivePermissionOperation(int permissionId,
       ContractType... contractTypes) {
     return switchActivePermissionOperation(permissionId, true, contractTypes);
@@ -221,7 +219,6 @@ public class AccountPermissions {
   /**
    * Create a Permission object for Owner type, default name "owner"
    * @see #createOwnerPermission(String, long, Map)
-   *
    */
   public Permission createOwnerPermission(long threshold, Map<String, Long> keys) {
     return createOwnerPermission("owner", threshold, keys);
@@ -255,7 +252,6 @@ public class AccountPermissions {
   /**
    * Create a Permission object for Witness type, default name "witness"
    * @see #createWitnessPermission(String, long, Map)
-   *
    */
   public Permission createWitnessPermission(long threshold, Map<String, Long> keys) {
     return createWitnessPermission("witness", threshold, keys);
@@ -292,7 +288,7 @@ public class AccountPermissions {
    * @param permissionId Permission ID (must be >= 2)
    * @param threshold Threshold value
    * @param operations Operation ByteString, which can be built using
-   * {@link org.tron.trident.core.utils.ActivePermissionOperationsUtils#buildOperations(ByteString, boolean, ContractType...)}
+   * {@link org.tron.trident.core.account.ActivePermissionOperationsUtils#buildOperations(ByteString, boolean, ContractType...)}
    * @param keys Map of address -> weight
    * @return Permission object
    */
@@ -380,7 +376,6 @@ public class AccountPermissions {
    * @param operations Operation bytes
    * @throws IllegalArgumentException if operations are null or size != 32
    */
-
   private void validateActivePermissionOperations(ByteString operations) {
     //check operations
     if (operations.isEmpty() || operations.size() != 32) {

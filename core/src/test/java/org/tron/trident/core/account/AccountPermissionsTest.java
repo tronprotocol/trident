@@ -14,7 +14,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.tron.trident.core.ApiWrapper;
 import org.tron.trident.core.key.KeyPair;
-import org.tron.trident.core.utils.ActivePermissionOperationsUtils;
 import org.tron.trident.proto.Chain.Transaction.Contract.ContractType;
 import org.tron.trident.proto.Common.Permission;
 import org.tron.trident.proto.Common.Permission.PermissionType;
