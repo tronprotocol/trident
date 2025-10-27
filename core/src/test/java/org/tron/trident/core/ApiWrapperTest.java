@@ -5,33 +5,29 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import com.google.protobuf.ByteString;
 import io.grpc.ClientInterceptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.tron.trident.abi.FunctionEncoder;
-import org.tron.trident.abi.TypeReference;
 import org.tron.trident.abi.datatypes.Address;
-import org.tron.trident.abi.datatypes.Bool;
-import org.tron.trident.abi.datatypes.Function;
-import org.tron.trident.abi.datatypes.generated.Uint256;
 import org.tron.trident.api.GrpcAPI.EmptyMessage;
 import org.tron.trident.core.exceptions.IllegalException;
 import org.tron.trident.core.key.KeyPair;
 import org.tron.trident.core.utils.ByteArray;
 import org.tron.trident.proto.Chain;
 import org.tron.trident.proto.Chain.Block;
-import org.tron.trident.proto.Chain.Transaction;
-import org.tron.trident.proto.Contract.TriggerSmartContract;
+import org.tron.trident.proto.Response;
 import org.tron.trident.proto.Response.BlockExtention;
 import org.tron.trident.proto.Response.ExchangeList;
 import org.tron.trident.proto.Response.MarketOrder;
@@ -41,12 +37,25 @@ import org.tron.trident.proto.Response.MarketPriceList;
 import org.tron.trident.proto.Response.Proposal;
 import org.tron.trident.proto.Response.ProposalList;
 import org.tron.trident.proto.Response.SmartContractDataWrapper;
-import org.tron.trident.proto.Response.TransactionExtention;
 import org.tron.trident.proto.Response.TransactionInfoList;
-import org.tron.trident.proto.Response.TransactionReturn;
 
-@Disabled("add private key to enable this case")
-class ApiWrapperTest extends BaseTest {
+class ApiWrapperTest {
+
+  static ApiWrapper client;
+  static String testAddress;
+
+  @BeforeAll
+  static void setUp() {
+    client = ApiWrapper.ofNile(ApiWrapper.generateAddress().toPrivateKey());
+    testAddress = client.keyPair.toBase58CheckAddress();
+  }
+
+  @AfterAll
+  static void tearDown() {
+    if (client != null) {
+      client.close();
+    }
+  }
 
   @Test
   void testGetNowBlockQuery() {
@@ -66,39 +75,6 @@ class ApiWrapperTest extends BaseTest {
 
     //System.out.println(block.getBlockHeader());
     assertTrue(block.getBlockHeader().getRawDataOrBuilder().getNumber() > 0);
-  }
-
-  @Test
-  void testSendTrc20Transaction() {
-    // transfer(address,uint256) returns (bool)
-    String usdtAddr = "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf"; //nile
-    String fromAddr = client.keyPair.toBase58CheckAddress();
-    String toAddress = "TVjsyZ7fYF3qLF6BQgPmTEZy1xrNNyVAAA";
-    Function trc20Transfer = new Function("transfer",
-        Arrays.asList(new Address(toAddress),
-            new Uint256(BigInteger.valueOf(10).multiply(BigInteger.valueOf(10).pow(6)))),
-        Arrays.asList(new TypeReference<Bool>() {
-        }));
-
-    String encodedHex = FunctionEncoder.encode(trc20Transfer);
-
-    TriggerSmartContract trigger =
-        TriggerSmartContract.newBuilder()
-            .setOwnerAddress(ApiWrapper.parseAddress(fromAddr))
-            .setContractAddress(ApiWrapper.parseAddress(usdtAddr))
-            .setData(ByteString.copyFrom(ByteArray.fromHexString(encodedHex)))
-            .build();
-
-    //System.out.println("trigger:\n" + trigger);
-
-    TransactionExtention txnExt = client.blockingStub.triggerContract(trigger);
-    //System.out.println("txn id => " + Hex.toHexString(txnExt.getTxid().toByteArray()));
-
-    Transaction signedTxn = client.signTransaction(txnExt);
-
-    //System.out.println(signedTxn.toString());
-    TransactionReturn ret = client.blockingStub.broadcastTransaction(signedTxn);
-    //System.out.println("======== Result ========\n" + ret.toString());
   }
 
   @Test
@@ -187,7 +163,7 @@ class ApiWrapperTest extends BaseTest {
   }
 
   @Test
-  void testGetMarketOrderById() throws IllegalException {
+  void testGetMarketOrderById() {
     String orderId = "4503c83790b5f739b58b94c28f1e98357c3dc98f6b6877c8ee792d3ea3a4465a";
     String ownerAddress = "TEqZpKG8cLquDHNVGcHXJhEQMoWE653nBH";
     MarketOrder marketOrder = client.getMarketOrderById(orderId);
@@ -228,7 +204,7 @@ class ApiWrapperTest extends BaseTest {
   }
 
   @Test
-  void testGetProposalById() throws IllegalException {
+  void testGetProposalById() {
     Proposal proposal = client.getProposalById("1");
     String proposalAddress = "TD23EqH3ixYMYh8CMXKdHyQWjePi3KQvxV";
     assertEquals(proposal.getProposerAddress(), ApiWrapper.parseAddress(proposalAddress));
@@ -312,8 +288,32 @@ class ApiWrapperTest extends BaseTest {
     try {
       client.getTransactionById(
           "82e0b2120c7c8b4e3abe99723e9d9498e0b6c9a137ff761d43d0625914e11990");//nile
+      Assertions.assertTrue(true);
     } catch (IllegalException e) {
       assert false;
+    }
+  }
+
+  @Disabled("only enable this after java-tron v4.8.1 has been released")
+  @Test
+  void testGetPaginatedNowWitnessList() throws InterruptedException {
+    int retryCount = 0;
+    int maxRetries = 1;
+    do {
+      try {
+        Response.WitnessList witnessList
+            = client.getPaginatedNowWitnessList(0, 10);
+        assertNotNull(witnessList);
+        assertTrue(witnessList.getWitnessesCount() >= 0);
+        break;
+      } catch (Exception e) {
+        retryCount++;
+        Thread.sleep(6500);  //maintenance period is 6s, sleep
+      }
+    } while (retryCount <= maxRetries);
+
+    if (retryCount > maxRetries) {
+      fail("getPaginatedNowWitnessList failed after " + maxRetries + " retries");
     }
   }
 }

@@ -20,7 +20,7 @@ import org.tron.trident.proto.Response.TransactionInfo.code;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Disabled("add private key to enable this case")
-public class MarketTest extends BaseTest {
+class MarketTest extends BaseTest {
 
   private String orderId;
 

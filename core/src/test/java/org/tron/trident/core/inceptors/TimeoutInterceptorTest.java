@@ -15,7 +15,7 @@ import org.tron.trident.core.interceptor.TimeoutInterceptor;
 import org.tron.trident.core.key.KeyPair;
 import org.tron.trident.proto.Response.BlockExtention;
 
-public class TimeoutInterceptorTest {
+class TimeoutInterceptorTest {
 
   @Test
   void testTimeoutInterceptor() {

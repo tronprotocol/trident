@@ -2,7 +2,10 @@ package org.tron.trident.core.contract.abi;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.tron.trident.core.contract.Contract;
+import org.tron.trident.proto.Common.SmartContract;
 import org.tron.trident.proto.Common.SmartContract.ABI;
 import org.tron.trident.proto.Common.SmartContract.ABI.Entry.EntryType;
 
@@ -105,7 +108,7 @@ class AbiUtilsTest {
       + "]";
 
   @Test
-  void testLoadContract() throws Exception {
+  void testLoadContract() {
     ABI abi = AbiUtils.jsonStr2ABI(abiJson);
     assertEquals(4, abi.getEntrysCount());
 
@@ -140,8 +143,8 @@ class AbiUtilsTest {
   }
 
   @Test
-  void testLoadComplexContract() throws Exception {
-    String abiJson = "["
+  void testLoadComplexContract() {
+    String abiJson2 = "["
         + "{"
         + "    \"anonymous\": false,"
         + "    \"inputs\": ["
@@ -198,7 +201,7 @@ class AbiUtilsTest {
         + "]";
 
     ABI.Builder builder = ABI.newBuilder();
-    AbiUtils.loadAbiFromJson(abiJson, builder);
+    AbiUtils.loadAbiFromJson(abiJson2, builder);
     
     ABI abi = builder.build();
     assertEquals(3, abi.getEntrysCount());
@@ -226,7 +229,7 @@ class AbiUtilsTest {
   }
 
   @Test
-  void testLoadEmptyOrInvalidAbi() throws Exception {
+  void testLoadEmptyOrInvalidAbi() {
     ABI.Builder builder = ABI.newBuilder();
 
     AbiUtils.loadAbiFromJson("", builder);
@@ -248,8 +251,8 @@ class AbiUtilsTest {
   }
 
   @Test
-  void testAllEntryTypes() throws Exception {
-    String abiJson = "["
+  void testAllEntryTypes() {
+    String abiJson2 = "["
         + "{"
         + "    \"type\": \"function\","
         + "    \"name\": \"myFunction\","
@@ -300,7 +303,7 @@ class AbiUtilsTest {
         + "]";
 
     ABI.Builder builder = ABI.newBuilder();
-    AbiUtils.loadAbiFromJson(abiJson, builder);
+    AbiUtils.loadAbiFromJson(abiJson2, builder);
 
     ABI abi = builder.build();
     assertEquals(5, abi.getEntrysCount());
@@ -321,8 +324,8 @@ class AbiUtilsTest {
   }
 
   @Test
-  public void testLoadAbiWithEnums() throws Exception {
-    String abiJson = "{"
+  void testLoadAbiWithEnums() {
+    String abiJson2 = "{"
         + "\"entrys\": [{"
         + "    \"type\": \"function\","
         + "    \"name\": \"transfer\","
@@ -333,7 +336,7 @@ class AbiUtilsTest {
         + "}]}";
 
     ABI.Builder builder = ABI.newBuilder();
-    AbiUtils.loadAbiFromJson(abiJson, builder);
+    AbiUtils.loadAbiFromJson(abiJson2, builder);
 
     ABI abi = builder.build();
     assertEquals(1, abi.getEntrysCount());
@@ -346,7 +349,7 @@ class AbiUtilsTest {
   }
 
   @Test
-  public void testLoadEntrys() throws Exception {
+  void testLoadEntry() {
 
     ABI.Builder builder = ABI.newBuilder();
     AbiUtils.loadAbiFromJson(abiJson, builder);
@@ -359,8 +362,8 @@ class AbiUtilsTest {
   }
 
   @Test
-  void testAnonymousEvent() throws Exception {
-    String abiJson = "["
+  void testAnonymousEvent() {
+    String abiJson2 = "["
         + "{"
         + "    \"anonymous\": true,"
         + "    \"inputs\": ["
@@ -376,7 +379,7 @@ class AbiUtilsTest {
         + "]";
 
     ABI.Builder builder = ABI.newBuilder();
-    AbiUtils.loadAbiFromJson(abiJson, builder);
+    AbiUtils.loadAbiFromJson(abiJson2, builder);
     
     ABI abi = builder.build();
     assertEquals(1, abi.getEntrysCount());
@@ -386,4 +389,48 @@ class AbiUtilsTest {
     assertTrue(eventEntry.getAnonymous());
   }
 
+  @Test
+  void testLoadAbiFromJson() {
+    String abi = "{\"entrys\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\""
+        + ":\"address\",\"name\":\"employee\",\"type\":\"address\"},{\"indexed\":false,"
+        + "\"internalType\":\"string\",\"name\":\"place\",\"type\":\"string\"},{\"indexed\":false,"
+        + "\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\"},{\"indexed\":"
+        + "false,\"internalType\":\"bool\",\"name\":\"late\",\"type\":\"bool\"},{\"indexed\":false,"
+        + "\"internalType\":\"uint256\",\"name\":\"fine\",\"type\":\"uint256\"}],\"name\":"
+        + "\"EmployeeClockIn\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\","
+        + "\"name\":\"employee\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":"
+        + "\"employeePlace\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":"
+        + "\"currentTime\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"isLate\","
+        + "\"type\":\"bool\"}],\"name\":\"clockIn\",\"outputs\":[{\"internalType\":\"bool\",\"name"
+        + "\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},"
+        + "{\"inputs\":[{\"internalType\":\"address\",\"name\":\"employee\",\"type\":\"address\"},"
+        + "{\"internalType\":\"string\",\"name\":\"employeePlace\",\"type\":\"string\"},"
+        + "{\"internalType\":\"uint256\",\"name\":\"currentTime\",\"type\":\"uint256\"},"
+        + "{\"internalType\":\"bool\",\"name\":\"isLate\",\"type\":\"bool\"},{\"internalType\":"
+        + "\"uint256\",\"name\":\"fine\",\"type\":\"uint256\"}],\"name\":\"clockOut\",\"outputs\":"
+        + "[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":"
+        + "\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getBlockChainId\","
+        + "\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],"
+        + "\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":"
+        + "\"uint256\",\"name\":\"x\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\""
+        + ":\"y\",\"type\":\"uint256\"}],\"name\":\"getMax\",\"outputs\":[{\"internalType\":"
+        + "\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":"
+        + "\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"seed\",\"type\":"
+        + "\"uint256\"}],\"name\":\"getRandom\",\"outputs\":[{\"internalType\":\"uint256\","
+        + "\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}"
+        + ",{\"inputs\":[],\"name\":\"payMeTRX\",\"outputs\":[{\"internalType\":\"uint256\","
+        + "\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":"
+        + "\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"n\",\"type\":"
+        + "\"uint256\"}],\"name\":\"writeNumber\",\"outputs\":[{\"internalType\":\"uint256\","
+        + "\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":"
+        + "\"function\"}]}";
+    SmartContract.ABI.Builder abiBuilder = SmartContract.ABI.newBuilder();
+    try {
+      Contract.loadAbiFromJson(abi, abiBuilder);
+      Assertions.assertTrue(true);
+      assert true;
+    } catch (Exception e) {
+      Assertions.fail();
+    }
+  }
 }

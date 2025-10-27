@@ -1,15 +1,12 @@
 package org.tron.trident.core;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import com.google.protobuf.ByteString;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.tron.trident.abi.FunctionEncoder;
 import org.tron.trident.abi.TypeReference;
@@ -41,6 +38,8 @@ import org.tron.trident.proto.Response.TransactionInfoList;
 import org.tron.trident.proto.Response.Witness;
 import org.tron.trident.proto.Response.WitnessList;
 import org.tron.trident.utils.Base58Check;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class QueryBySolidityNodeTest {
   private static ApiWrapper client;
@@ -202,6 +201,29 @@ class QueryBySolidityNodeTest {
   void testListWitnesses() {
     WitnessList witnessList = client.listWitnesses(NodeType.SOLIDITY_NODE);
     assertTrue(witnessList.getWitnessesCount() >= 0);
+  }
+
+  @Disabled("only enable this after java-tron v4.8.1 has been released")
+  @Test
+  void testGetPaginatedNowWitnessList() throws InterruptedException {
+    int retryCount = 0;
+    int maxRetries = 1;
+    do {
+      try {
+        WitnessList witnessList
+                = client.getPaginatedNowWitnessList(0, 10, NodeType.SOLIDITY_NODE);
+        assertNotNull(witnessList);
+        assertTrue(witnessList.getWitnessesCount() >= 0);
+        break;
+      } catch (Exception e) {
+        retryCount++;
+        Thread.sleep(6500);  //maintenance period is 6s, sleep
+      }
+    } while (retryCount <= maxRetries);
+
+    if (retryCount > maxRetries) {
+      fail("getPaginatedNowWitnessList failed after " + maxRetries + " retries");
+    }
   }
 
   @Test

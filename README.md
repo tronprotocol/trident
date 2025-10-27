@@ -14,14 +14,14 @@ Trident is a lightweight Java SDK for interacting with the TRON blockchain. It p
 
 ## Adding Trident to your build
 
-Trident-java is compiled with java version 1.8 and gradle 7.6.
+Since version 0.11.0, Trident can be built with JDK 1.8 or JDK17 on Gradle 8.5.
 
-Latest version can be found on [Maven Central](https://mvnrepository.com/artifact/io.github.tronprotocol/trident).
+The latest version (built with JDK 1.8) can be found on [Maven Central](https://mvnrepository.com/artifact/io.github.tronprotocol/trident).
 
 ### Gradle
 
 ```groovy
-implementation("io.github.tronprotocol:trident:<version>") // Check latest version from Maven Central
+implementation("io.github.tronprotocol:trident:0.11.0")
 ```
 
 ### Maven
@@ -32,30 +32,30 @@ Add repo setting:
 <dependency>
   <groupId>io.github.tronprotocol</groupId>
   <artifactId>trident</artifactId>
-  <version>[version]</version>
+  <version>0.11.0</version>
 </dependency>
 ```
 
 
 ### Using local build
 
-You can use locally built packages by follow steps(eg. 0.9.2):
+You can use locally built packages by the following steps:
 
 1. Copy the compiled jar file to your project's `libs` directory
 2. Add the following to your project's `build.gradle`:
 ```groovy
 dependencies {
-    implementation files('libs/trident-0.9.2.jar')
+    implementation files('libs/trident-0.11.0.jar')
     implementation "com.google.guava:guava:33.0.0-jre"
-    implementation "io.grpc:grpc-netty-shaded:1.60.0"
-    implementation "io.grpc:grpc-netty:1.60.0"
-    implementation "io.grpc:grpc-okhttp:1.60.0"
-    implementation "io.grpc:grpc-protobuf:1.60.0"
-    implementation "io.grpc:grpc-stub:1.60.0"
-    implementation "com.google.protobuf:protobuf-java-util:3.25.5"
+    implementation "io.grpc:grpc-netty-shaded:1.75.0"
+    implementation "io.grpc:grpc-netty:1.75.0"
+    implementation "io.grpc:grpc-okhttp:1.75.0"
+    implementation "io.grpc:grpc-protobuf:1.75.0"
+    implementation "io.grpc:grpc-stub:1.75.0"
+    implementation "com.google.protobuf:protobuf-java-util:3.25.8"
     implementation "org.bouncycastle:bcprov-jdk18on:1.78.1"
-    implementation "io.vertx:vertx-core:4.5.10"
-    implementation "io.netty:netty-all:4.1.118.Final"
+    implementation "io.vertx:vertx-core:4.5.21"
+    implementation "io.netty:netty-all:4.1.125.Final"
     implementation "com.alibaba.fastjson2:fastjson2:2.0.55"
 }
 ```

@@ -1,4 +1,4 @@
-def VERSION = '0.10.0'
+def VERSION = '0.11.0'
 group 'io.github.tronprotocol'
 
 buildscript {
@@ -11,10 +11,16 @@ buildscript {
             url "https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public"
         }
         mavenCentral()
+        gradlePluginPortal()
     }
     dependencies {
-        classpath "io.github.gradle-nexus:publish-plugin:1.1.0"
-        classpath 'com.github.jengelman.gradle.plugins:shadow:5.2.0'
+        classpath 'io.github.gradle-nexus:publish-plugin:1.1.0'
+        classpath 'com.github.johnrengelman.shadow:com.github.johnrengelman.shadow.gradle.plugin:8.1.1'
+    }
+    configurations.classpath {
+        resolutionStrategy {
+            force("commons-io:commons-io:2.18.0")
+        }
     }
 }
 
@@ -36,6 +42,9 @@ allprojects {
         mavenCentral()
     }
 
+    tasks.withType(Jar) {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
 
     tasks.withType(Javadoc).tap {
         configureEach {
@@ -62,9 +71,15 @@ allprojects {
 
     configurations.configureEach {
         resolutionStrategy {
-            force "com.google.guava:guava:$googleGuavaVersion"
+            force("com.google.guava:guava:$googleGuavaVersion")
+            force("com.squareup.okio:okio:3.9.0")
+            force("io.netty:netty-codec:4.1.125.Final")
+            force("io.netty:netty-codec-http:4.1.125.Final")
+            force("io.netty:netty-codec-http2:4.1.125.Final")
+            force("commons-beanutils:commons-beanutils:1.11.0")
         }
     }
+
 }
 
 subprojects {
@@ -77,16 +92,16 @@ subprojects {
 
     java {
         sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.current()
     }
 
     dependencies {
         testImplementation "org.junit.jupiter:junit-jupiter:$junitJupiterVersion"
 
-        compileOnly 'org.projectlombok:lombok:1.18.12'
-        annotationProcessor 'org.projectlombok:lombok:1.18.12'
-        testCompileOnly 'org.projectlombok:lombok:1.18.12'
-        testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+        compileOnly 'org.projectlombok:lombok:1.18.34'
+        annotationProcessor 'org.projectlombok:lombok:1.18.34'
+        testCompileOnly 'org.projectlombok:lombok:1.18.34'
+        testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
     }
 
     test {
@@ -98,13 +113,13 @@ subprojects {
 
     tasks.register('sourcesJar', Jar) {
         dependsOn classes
-        classifier = 'sources'
+        archiveClassifier = 'sources'
         from sourceSets.main.allSource
     }
 
     tasks.register('javadocJar', Jar) {
         dependsOn javadoc
-        classifier = 'javadoc'
+        archiveClassifier = 'javadoc'
         from javadoc.destinationDir
     }
 

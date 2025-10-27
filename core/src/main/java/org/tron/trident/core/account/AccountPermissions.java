@@ -288,7 +288,8 @@ public class AccountPermissions {
    * @param permissionId Permission ID (must be >= 2)
    * @param threshold Threshold value
    * @param operations Operation ByteString, which can be built using
-   * {@link org.tron.trident.core.account.ActivePermissionOperationsUtils#buildOperations(ByteString, boolean, ContractType...)}
+   * {@link org.tron.trident.core.account.ActivePermissionOperationsUtils#buildOperations(
+   * com.google.protobuf.ByteString, boolean, org.tron.trident.proto.Chain.Transaction.Contract.ContractType...)}
    * @param keys Map of address -> weight
    * @return Permission object
    */

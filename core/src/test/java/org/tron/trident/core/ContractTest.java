@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.google.protobuf.ByteString;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
@@ -30,10 +31,12 @@ import org.tron.trident.core.transaction.TransactionBuilder;
 import org.tron.trident.core.utils.ByteArray;
 import org.tron.trident.core.utils.Sha256Hash;
 import org.tron.trident.proto.Chain.Transaction;
+import org.tron.trident.proto.Contract.TriggerSmartContract;
 import org.tron.trident.proto.Response.EstimateEnergyMessage;
 import org.tron.trident.proto.Response.TransactionExtention;
 import org.tron.trident.proto.Response.TransactionInfo;
 import org.tron.trident.proto.Response.TransactionInfo.code;
+import org.tron.trident.proto.Response.TransactionReturn;
 import org.tron.trident.utils.Base58Check;
 
 @Disabled("add private key to enable this case")
@@ -63,6 +66,39 @@ class ContractTest extends BaseTest {
 
     TransactionInfo transactionInfo = client.getTransactionInfoById(txId);
     assertEquals(code.SUCESS, transactionInfo.getResult());
+  }
+
+  @Test
+  void testSendTrc20Transaction() {
+    // transfer(address,uint256) returns (bool)
+    String usdtAddr = "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf"; //nile
+    String fromAddr = client.keyPair.toBase58CheckAddress();
+    String toAddress = "TVjsyZ7fYF3qLF6BQgPmTEZy1xrNNyVAAA";
+    Function trc20Transfer = new Function("transfer",
+        Arrays.asList(new Address(toAddress),
+            new Uint256(BigInteger.valueOf(10).multiply(BigInteger.valueOf(10).pow(6)))),
+        Arrays.asList(new TypeReference<Bool>() {
+        }));
+
+    String encodedHex = FunctionEncoder.encode(trc20Transfer);
+
+    TriggerSmartContract trigger =
+        TriggerSmartContract.newBuilder()
+            .setOwnerAddress(ApiWrapper.parseAddress(fromAddr))
+            .setContractAddress(ApiWrapper.parseAddress(usdtAddr))
+            .setData(ByteString.copyFrom(ByteArray.fromHexString(encodedHex)))
+            .build();
+
+    //System.out.println("trigger:\n" + trigger);
+
+    TransactionExtention txnExt = client.blockingStub.triggerContract(trigger);
+    //System.out.println("txn id => " + Hex.toHexString(txnExt.getTxid().toByteArray()));
+
+    Transaction signedTxn = client.signTransaction(txnExt);
+
+    //System.out.println(signedTxn.toString());
+    TransactionReturn ret = client.blockingStub.broadcastTransaction(signedTxn);
+    //System.out.println("======== Result ========\n" + ret.toString());
   }
 
   @Test
@@ -310,7 +346,7 @@ class ContractTest extends BaseTest {
   }
 
   @Test
-  void testTriggerConstantContract() throws InterruptedException, IllegalException {
+  void testTriggerConstantContract() {
     // transfer(address,uint256) returns (bool)
     String usdtAddr = "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf"; //nile
     String fromAddr = client.keyPair.toBase58CheckAddress();

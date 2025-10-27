@@ -28,7 +28,7 @@ import org.tron.trident.utils.Base58Check;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Disabled("add private key to enable this case")
-public class Contract2Test extends BaseTest {
+class Contract2Test extends BaseTest {
 
   String contractWithT;
 
