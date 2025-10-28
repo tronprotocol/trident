@@ -175,11 +175,9 @@ public class ApiWrapper implements Api {
   private long expireTimeStamp = -1;
 
   public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey) {
-    channel = ManagedChannelBuilder.forTarget(grpcEndpoint)
-        .usePlaintext()
+    channel = channelFor(grpcEndpoint)
         .build();
-    channelSolidity = ManagedChannelBuilder.forTarget(grpcEndpointSolidity)
-        .usePlaintext()
+    channelSolidity = channelFor(grpcEndpointSolidity)
         .build();
     blockingStub = WalletGrpc.newBlockingStub(channel);
     blockingStubSolidity = WalletSolidityGrpc.newBlockingStub(channelSolidity);
@@ -188,11 +186,9 @@ public class ApiWrapper implements Api {
 
   public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey,
       String apiKey) {
-    channel = ManagedChannelBuilder.forTarget(grpcEndpoint)
-        .usePlaintext()
+    channel = channelFor(grpcEndpoint)
         .build();
-    channelSolidity = ManagedChannelBuilder.forTarget(grpcEndpointSolidity)
-        .usePlaintext()
+    channelSolidity = channelFor(grpcEndpointSolidity)
         .build();
 
     //attach api key
@@ -212,13 +208,11 @@ public class ApiWrapper implements Api {
 
   public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey,
       List<ClientInterceptor> clientInterceptors) {
-    channel = ManagedChannelBuilder.forTarget(grpcEndpoint)
+    channel = channelFor(grpcEndpoint)
         .intercept(clientInterceptors)
-        .usePlaintext()
         .build();
-    channelSolidity = ManagedChannelBuilder.forTarget(grpcEndpointSolidity)
+    channelSolidity = channelFor(grpcEndpointSolidity)
         .intercept(clientInterceptors)
-        .usePlaintext()
         .build();
     blockingStub = WalletGrpc.newBlockingStub(channel);
     blockingStubSolidity = WalletSolidityGrpc.newBlockingStub(channelSolidity);
@@ -230,12 +224,10 @@ public class ApiWrapper implements Api {
    */
   public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey,
       int timeout) {
-    channel = ManagedChannelBuilder.forTarget(grpcEndpoint)
-        .usePlaintext()
+    channel = channelFor(grpcEndpoint)
         .intercept(new TimeoutInterceptor(timeout))
         .build();
-    channelSolidity = ManagedChannelBuilder.forTarget(grpcEndpointSolidity)
-        .usePlaintext()
+    channelSolidity = channelFor(grpcEndpointSolidity)
         .intercept(new TimeoutInterceptor(timeout))
         .build();
     blockingStub = WalletGrpc.newBlockingStub(channel);
@@ -259,12 +251,10 @@ public class ApiWrapper implements Api {
           .forEach(clientInterceptorList::add);
     }
 
-    channel = ManagedChannelBuilder.forTarget(grpcEndpoint)
-        .usePlaintext()
+    channel = channelFor(grpcEndpoint)
         .intercept(clientInterceptorList)
         .build();
-    channelSolidity = ManagedChannelBuilder.forTarget(grpcEndpointSolidity)
-        .usePlaintext()
+    channelSolidity = channelFor(grpcEndpointSolidity)
         .intercept(clientInterceptorList)
         .build();
     blockingStub = WalletGrpc.newBlockingStub(channel);
@@ -273,6 +263,23 @@ public class ApiWrapper implements Api {
   }
 
   /**
+   * construct channel builder from endpoint
+   * @param endpoint
+   * @return
+   */
+  protected ManagedChannelBuilder<?> channelFor(String endpoint){
+    if (endpoint == null) {
+        throw new IllegalArgumentException("Endpoint cannot be null");
+    }
+    if(endpoint.startsWith("https://")){
+        return ManagedChannelBuilder.forTarget(endpoint.substring(8)).useTransportSecurity();
+    } else {
+        return ManagedChannelBuilder.forTarget(endpoint).usePlaintext();
+    }
+  }
+
+
+    /**
    * The constructor for main net. Use TronGrid as default
    *
    * @param hexPrivateKey the binding private key. Operations require private key will all use this unless the private key is specified elsewhere.
