@@ -159,6 +159,14 @@ class AccountPermissionsTest {
     Assertions.assertEquals(activePermission4,
         accountPermissions.getActivePermissions().get(0));
 
+    accountPermissions.setActivePermission(accountPermissions.getActivePermissions());
+    Assertions.assertEquals(1,
+        accountPermissions.getActivePermissions().size());
+
+    accountPermissions.getActivePermissions().clear();
+    Assertions.assertEquals(1,
+        accountPermissions.getActivePermissions().size());
+
   }
 
   @Test
