@@ -45,6 +45,12 @@ public class AccountPermissions {
     this.activePermissions.addAll(account.getActivePermissionList());
   }
 
+  /**
+   * get a copy of active permission list
+   *
+   * <p>This method returns a copy of the internal list, to update the active permissions, use
+   * {@link #setActivePermission(List)} instead.
+   */
   public List<Permission> getActivePermissions() {
     return new ArrayList<>(activePermissions);
   }
