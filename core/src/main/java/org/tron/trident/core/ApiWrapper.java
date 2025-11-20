@@ -2062,6 +2062,19 @@ public class ApiWrapper implements Api {
     return accountPermissionUpdate(builder.build());
   }
 
+  /**
+   * Retrieves the permissions of a TRON account.
+   *
+   * <p>This is a utility method provided by Trident for multi-signature
+   * operations. It queries the account using {@link #getAccount(String, NodeType...)} and
+   * wraps the result into an {@link AccountPermissions} object.
+   *
+   * @param address account, in any allowed formats.
+   * @param nodeType Optional parameter to specify which node to query.
+   *                If not provided, use full node default.
+   *                If NodeType.SOLIDITY_NODE, use solidity node.
+   * @return AccountPermissions, null if the account does not exist or inactive
+   */
   public AccountPermissions getAccountPermissions(String address, NodeType... nodeType) {
     ByteString bsAddress = parseAddress(address);
     AccountAddressMessage accountAddressMessage = AccountAddressMessage.newBuilder()
@@ -2071,6 +2084,11 @@ public class ApiWrapper implements Api {
     Account account =  useSolidityNode(nodeType)
         ? blockingStubSolidity.getAccount(accountAddressMessage)
         : blockingStub.getAccount(accountAddressMessage);
+
+    // if account not exists or inactive, return null
+    if (account.getAddress().isEmpty()) {
+      return null;
+    }
 
     return new AccountPermissions(account);
   }
