@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -22,6 +23,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.tron.trident.abi.datatypes.Address;
 import org.tron.trident.api.GrpcAPI.EmptyMessage;
+import org.tron.trident.core.account.AccountPermissions;
 import org.tron.trident.core.exceptions.IllegalException;
 import org.tron.trident.core.key.KeyPair;
 import org.tron.trident.core.utils.ByteArray;
@@ -315,5 +317,12 @@ class ApiWrapperTest {
     if (retryCount > maxRetries) {
       fail("getPaginatedNowWitnessList failed after " + maxRetries + " retries");
     }
+  }
+
+  @Test
+  void testGetAccountPermissions() {
+    AccountPermissions accountPermissions
+        = client.getAccountPermissions(ApiWrapper.generateAddress().toBase58CheckAddress());
+    assertNull(accountPermissions);
   }
 }

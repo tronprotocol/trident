@@ -2065,8 +2065,7 @@ public class ApiWrapper implements Api {
   /**
    * Retrieves the permissions of a TRON account.
    *
-   * <p>This is a utility method provided by Trident for multi-signature
-   * operations. It queries the account using {@link #getAccount(String, NodeType...)} and
+   * <p>It queries the account using {@link #getAccount(String, NodeType...)} and
    * wraps the result into an {@link AccountPermissions} object.
    *
    * @param address account, in any allowed formats.
