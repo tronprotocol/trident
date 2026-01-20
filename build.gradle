@@ -1,5 +1,5 @@
-def VERSION = '0.11.0'
-group 'io.github.tronprotocol'
+def DEFAULT_VERSION = '0.11.0'
+def DEFAULT_GROUP = 'io.github.tronprotocol'
 
 buildscript {
     repositories {
@@ -36,7 +36,9 @@ ext {
 }
 
 allprojects {
-    version = VERSION
+    version = project.hasProperty("VERSION") ? project.property("VERSION") : DEFAULT_VERSION
+    group = project.hasProperty("GROUP") ? project.property("GROUP") : DEFAULT_GROUP
+
 
     repositories {
         mavenCentral()
@@ -168,20 +170,17 @@ javadoc {
 
 tasks.register('javadocJar', Jar) {
     archiveClassifier = 'javadoc'
-    archiveVersion = VERSION
     from javadoc
 }
 
 tasks.register('sourcesJar', Jar) {
     archiveClassifier = 'sources'
-    archiveVersion = VERSION
     from subprojects.collect { project ->
         project.sourceSets.main.allSource
     }
 }
 
 tasks.register('buildLib', Jar) {
-    archiveVersion = VERSION
     from subprojects.collect { project ->
         project.sourceSets.main.output
     }

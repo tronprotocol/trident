@@ -1,0 +1,198 @@
+name: Build - Artifacts
+
+on:
+  workflow_dispatch:
+    inputs:
+      project_version:
+        description: "Project version (e.g. 1.0.0)"
+        required: true
+        default: ""
+      project_group:
+        description: "Project group (e.g. io.github.tronprotocol)"
+        required: true
+        default: "io.github.tronprotocol"
+
+permissions:
+  id-token: write # Only allow OIDC token access
+  contents: read # Limit repository access
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 8
+        run: |
+          export JDK_TAR="jdk-8u202-linux-x64.tar.gz"
+          export JDK_DIR="jdk1.8.0_202"
+          export JDK_MD5="0029351f7a946f6c05b582100c7d45b7"
+          set -o errexit -o nounset
+          sudo apt-get update && sudo apt-get install -y wget
+          sudo wget -P /usr/local https://github.com/frekele/oracle-java/releases/download/8u202-b08/$JDK_TAR
+          echo "$JDK_MD5 /usr/local/$JDK_TAR" | md5sum -c
+          sudo tar -zxf /usr/local/$JDK_TAR -C /usr/local
+          sudo rm /usr/local/$JDK_TAR
+          echo "JAVA_HOME=/usr/local/$JDK_DIR" >> $GITHUB_ENV
+          echo "CLASSPATH=/usr/local/$JDK_DIR/lib/dt.jar:/usr/local/$JDK_DIR/lib/tools.jar" >> $GITHUB_ENV
+          echo "/usr/local/$JDK_DIR/bin" >> $GITHUB_PATH
+
+      # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
+      # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: ${{ github.event_name == 'pull_request' }}
+          # This prevents pull requests from polluting the cache with potentially unstable changes.
+
+      # --- Regular Gradle build (with dependency verification) ---
+      - name: Build project
+        run: ./gradlew clean build -x test -PVERSION=${{ inputs.project_version }} -PGROUP=${{ inputs.project_group }}
+
+      # --- Create init.gradle for publishing ---
+      - name: Create Gradle init script for publishing
+        run: |
+          cat > init-publish.gradle <<'EOF'
+          allprojects {
+              // Apply Java and Maven Publish plugins
+              apply plugin: 'java'
+              apply plugin: 'maven-publish'
+
+              publishing {
+                publications {
+                    mavenJava(MavenPublication) {
+                        from components.java
+
+                        groupId = "${{ inputs.project_group }}"
+                        artifactId = 'trident'
+                        version = "${{ inputs.project_version }}"
+
+                        pom {
+                            name = 'trident'
+                            description = 'Java implementation of trident'
+                            url = 'https://github.com/tronprotocol/trident'
+
+                            licenses {
+                                license {
+                                    name = 'The Apache License, Version 2.0'
+                                    url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                                }
+                            }
+
+                            developers {
+                                developer {
+                                    name = 'jiangyuanshu'
+                                    email = '317787106@qq.com'
+                                }
+                                developer {
+                                    name = 'apple'
+                                    email = 'apple0xlee@gmail.com'
+                                }
+                            }
+
+                            scm {
+                                connection = 'scm:git:git://github.com/tronprotocol/trident.git'
+                                developerConnection = 'scm:git:ssh://github.com/tronprotocol/trident.git'
+                                url = 'https://github.com/tronprotocol/trident'
+                            }
+
+                            // collect all dependencies of subprojects
+                            withXml {
+                                def dependenciesNode = asNode().appendNode('dependencies')
+                                def seenDependencies = [] as Set
+                                subprojects.each { subproject ->
+                                    {
+                                        subproject.properties.configurations.implementation.allDependencies.each { dep ->
+                                            {//println dep
+                                                if (!(dep instanceof ProjectDependency) && dep.group != null && dep.name != null && dep.version != null && dep.group != artifactId) {
+                                                    def dependencyIdentifier = "${dep.group}:${dep.name}:${dep.version}"
+                                                    //drop duplicate
+                                                    if (!seenDependencies.contains(dependencyIdentifier)) {
+                                                        seenDependencies << dependencyIdentifier
+                                                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                                                        dependencyNode.appendNode('groupId', dep.group)
+                                                        dependencyNode.appendNode('artifactId', dep.name)
+                                                        dependencyNode.appendNode('version', dep.version)
+                                                        //dependencyNode.appendNode('scope', 'runtime')
+
+                                                        // for exclusions
+                                                        if (dep.excludeRules.size() > 0) {
+                                                            def exclusions = dependencyNode.appendNode('exclusions')
+                                                            dep.excludeRules.each { ExcludeRule ex ->
+                                                                def exclusion = exclusions.appendNode('exclusion')
+                                                                exclusion.appendNode('groupId', ex.group)
+                                                                exclusion.appendNode('artifactId', ex.module)
+                                                            }
+                                                        }
+                                                    }
+                                                }// end if
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            //end withXml
+                        }
+                    }
+                }
+
+                repositories {
+                    mavenLocal()
+                }
+              }
+          }
+          EOF
+
+      # --- Generate POM using init script ---
+      - name: Generate POM file
+        run: ./gradlew generatePomFileForMavenJavaPublication -I init-publish.gradle
+
+      # --- Upload generated POM as artifact ---
+      - name: Upload POM file
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-pom
+          path: build/publications/mavenJava/pom-default.xml
+
+      - name: Upload JAR files
+        uses: actions/upload-artifact@v4
+        with:
+          name: trident-${{ inputs.project_version }}
+          path: build/libs/*.jar
+
+      # --- AWS S3 Upload Section ---
+      - name: Configure AWS Credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN_DEV_UPLOAD }} # 👈 replace with your IAM role
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Upload artifacts to S3
+        run: |
+          DEST="s3://${{ secrets.S3_BUCKET_DEV }}"
+          if [ -n "${{ secrets.S3_PREFIX }}" ]; then
+              DEST="$DEST/${{ secrets.S3_PREFIX }}"
+          fi
+          DEST="$DEST/${{ inputs.project_version }}"
+          aws s3 cp build/publications/mavenJava/pom-default.xml "$DEST/trident-${{ inputs.project_version }}.pom"
+          aws s3 cp build/libs/ "$DEST/" --recursive --exclude "*" --include "*.jar"
+
+          echo "## MD5 Summary of Uploaded Files" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Filename | MD5 Hash |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|----------|" >> $GITHUB_STEP_SUMMARY
+          for file in build/libs/*.jar; do
+            if [ -f "$file" ]; then
+              FILENAME=$(basename "$file")
+              LOCAL_MD5=$(md5sum $file | awk '{print $1}')
+              echo "| $FILENAME | $LOCAL_MD5 |" >> $GITHUB_STEP_SUMMARY
+              echo "$FILENAME: $LOCAL_MD5"
+            fi
+          done
+
+          LOCAL_MD5=$(md5sum build/publications/mavenJava/pom-default.xml | awk '{print $1}')
+          echo "| trident-${{ inputs.project_version }}.pom | $LOCAL_MD5 |" >> $GITHUB_STEP_SUMMARY
+          echo "trident-${{ inputs.project_version }}.pom: $LOCAL_MD5"
+

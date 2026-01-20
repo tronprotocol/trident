@@ -1,0 +1,193 @@
+name: Sign - Artifacts
+
+on:
+  workflow_dispatch:
+    inputs:
+      project_version:
+        description: "Project version (e.g. 1.0.0)"
+        required: true
+        default: ""
+      project_group:
+        description: "Project group (e.g. io.github.tronprotocol)"
+        required: true
+        default: "io.github.tronprotocol"
+
+jobs:
+
+
+  download-from-s3-and-sign:
+    name: Download from S3
+    runs-on: self-hosted
+
+    permissions:
+      contents: read
+      id-token: write # Needed for AWS credential provider
+
+    steps:
+      - name: Set S3 path
+        run: |
+          echo "S3_PATH=${{ secrets.S3_BUCKET_DEV }}/${{ secrets.S3_PREFIX }}/${{ inputs.project_version }}" >> $GITHUB_ENV
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN_DEV_DOWNLOAD }} # 👈 replace with your IAM role
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Compute DOWNLOAD_DIR
+        run: |
+          GROUP_PATH=$(echo "${{ inputs.project_group }}" | tr '.' '/')
+          echo "DOWNLOAD_DIR=$GROUP_PATH/trident/${{ inputs.project_version }}" >> $GITHUB_ENV
+
+      - name: Create download directory
+        run: |
+          if [ -d "${{ env.DOWNLOAD_DIR }}" ]; then
+            rm -rf "${{ env.DOWNLOAD_DIR }}"
+          fi
+          mkdir -p ${{ env.DOWNLOAD_DIR }}
+
+      - name: Download files from S3
+        run: |
+          echo "Downloading files from ${{ env.S3_PATH }}"
+          aws s3 cp s3://${{ env.S3_PATH }}/ ${{ env.DOWNLOAD_DIR }}/ --recursive --exclude "*" --include "trident-${{ inputs.project_version }}*"
+
+          # Verify download was successful
+          if [ -z "$(ls -A ${{ env.DOWNLOAD_DIR }})" ]; then
+            echo "Error: Failed to download files from S3"
+            exit 1
+          else
+            echo "Download from S3 completed successfully"
+            ls -l "${{ env.DOWNLOAD_DIR }}" | awk '{ $3=""; $4=""; print }'
+          fi
+
+      - name: Create download summary
+        run: |
+          echo "## S3 Download Summary" >> $GITHUB_STEP_SUMMARY
+          echo "Downloaded files from \`${{ env.S3_PATH }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Downloaded Files:" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          ls -l "${{ env.DOWNLOAD_DIR }}" | awk '{ $3=""; $4=""; print }' >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+
+          echo "### MD5 Summary of Downloaded Files" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Filename | MD5 Hash |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|----------|" >> $GITHUB_STEP_SUMMARY
+          for file in ${{ env.DOWNLOAD_DIR }}/*; do
+            if [ -f "$file" ]; then
+              FILENAME=$(basename "$file")
+              LOCAL_MD5=$(md5sum $file | awk '{print $1}')
+              echo "| $FILENAME | $LOCAL_MD5 |" >> $GITHUB_STEP_SUMMARY
+              echo "$FILENAME: $LOCAL_MD5"
+            fi
+          done
+
+      - name: List files to sign
+        run: |
+          echo "Files to sign:"
+          ls -l ${{ env.DOWNLOAD_DIR }} | awk '{ $3=""; $4=""; print }'
+
+      - name: Sign artifacts
+        run: |
+          # Sign each JAR file
+          PREFIX="${{ env.DOWNLOAD_DIR }}/trident-${{ inputs.project_version }}"
+
+          files=(
+              "${PREFIX}.jar"
+              "${PREFIX}-sources.jar"
+              "${PREFIX}-javadoc.jar"
+              "${PREFIX}.pom"
+          )
+          for file in "${files[@]}"; do
+            if [ -f "$file" ]; then
+              echo "Signing $file"
+              # Generate GPG signature
+              gpg --local-user ${{ secrets.GPG_FINGERPRINT }} --armor --detach-sign ${file}
+              # Generate checksums (macOS-specific commands)
+              md5 ${file} | awk '{print $NF}' > ${file}.md5
+              shasum -a 1 ${file} | awk '{print $1}' > ${file}.sha1
+              shasum -a 256 ${file} | awk '{print $1}' > ${file}.sha256
+              shasum -a 512 ${file} | awk '{print $1}' > ${file}.sha512
+              # Generate checksums for the signature file
+              md5 ${file}.asc | awk '{print $NF}' > ${file}.asc.md5
+              shasum -a 1 ${file}.asc | awk '{print $1}' > ${file}.asc.sha1
+              shasum -a 256 ${file}.asc | awk '{print $1}' > ${file}.asc.sha256
+              shasum -a 512 ${file}.asc | awk '{print $1}' > ${file}.asc.sha512
+            fi
+          done
+
+          # Verify signature files were created
+          echo "Signature files created:"
+          ls -l ${{ env.DOWNLOAD_DIR }}/*.sig | awk '{ $3=""; $4=""; print }' || echo "No signature files found"
+
+      - name: Create signing summary
+        run: |
+          echo "## Signing Summary" >> $GITHUB_STEP_SUMMARY
+          echo "Signed artifacts for \`${{ env.S3_PATH }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Signed Files:" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          ls -l ${{ env.DOWNLOAD_DIR }} | awk '{ $3=""; $4=""; print }' >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+
+      - name: Gzip files
+        run: |
+          rm -f trident-${{ inputs.project_version }}-bundle.zip
+          zip -r trident-${{ inputs.project_version }}-bundle.zip ${DOWNLOAD_DIR}
+          LOCAL_MD5=$(md5sum trident-${{ inputs.project_version }}-bundle.zip | awk '{print $1}')
+          echo "trident-${{ inputs.project_version }}-bundle.zip: $LOCAL_MD5"
+
+      - name: Upload signed artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: trident-${{ inputs.project_version }}-bundle.zip
+          path: "./trident-${{ inputs.project_version }}-bundle.zip"
+          if-no-files-found: error
+
+  upload-signed-to-s3:
+    name: Upload Signed Artifacts to S3
+    runs-on: ubuntu-22.04
+    needs: download-from-s3-and-sign
+
+    permissions:
+      actions: read
+      contents: read
+      id-token: write # Needed for AWS credential provider
+
+    steps:
+      - name: Download signed artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: trident-${{ inputs.project_version }}-bundle.zip
+          path: ./signed-artifacts/
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN_TEST_UPLOAD }} # 👈 replace with your IAM role
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Upload signed artifacts to S3
+        run: |
+          S3_SIGNED_PATH="s3://${{ secrets.S3_BUCKET_TEST }}"
+          if [ -n "${{ secrets.S3_PREFIX }}" ]; then
+              S3_SIGNED_PATH="$S3_SIGNED_PATH/${{ secrets.S3_PREFIX }}"
+          fi
+          S3_SIGNED_PATH="$S3_SIGNED_PATH/${{ inputs.project_version }}"
+          echo "Uploading signed artifacts to $S3_SIGNED_PATH"
+          aws s3 cp "./signed-artifacts/" "$S3_SIGNED_PATH" --recursive
+          echo "Upload of signed artifacts to S3 completed successfully"
+
+          echo "## MD5 Summary of Uploaded Files" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Filename | MD5 Hash |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|----------|" >> $GITHUB_STEP_SUMMARY
+          for file in ./signed-artifacts/*; do
+            if [ -f "$file" ]; then
+              FILENAME=$(basename "$file")
+              LOCAL_MD5=$(md5sum $file | awk '{print $1}')
+              echo "| $FILENAME | $LOCAL_MD5 |" >> $GITHUB_STEP_SUMMARY
+              echo "$FILENAME: $LOCAL_MD5"
+            fi
+          done
