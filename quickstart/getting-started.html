@@ -556,9 +556,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#build-a-multisig-transaction" class="md-nav__link">
+  <a href="#build-a-multi-sign-transaction" class="md-nav__link">
     <span class="md-ellipsis">
-      Build a Multisig Transaction
+      Build a Multi-sign Transaction
     </span>
   </a>
   
@@ -1200,12 +1200,12 @@
 </span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Transaction status: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">txInfo</span><span class="p">.</span><span class="na">getResult</span><span class="p">());</span>
 </span></code></pre></div>
 <h2 id="scenario-examples">Scenario Examples</h2>
-<h3 id="build-a-multisig-transaction">Build a Multisig Transaction</h3>
-<p>Developers can send multi-transactions easily by Trident. Here is as an example of how to create a transfer transaction using account active permissions.</p>
-<p>The steps below illustrate a complete multisignature transaction process:</p>
+<h3 id="build-a-multi-sign-transaction">Build a Multi-sign Transaction</h3>
+<p>Developers can send multi-sign transactions easily by Trident. Here is as an example of how to create a transfer transaction using account active permissions.</p>
+<p>The steps below illustrate a complete multi-sign transaction process:</p>
 <ol>
 <li>
-<p>Modify account permission (make a multiSign account, need 100 TRX)</p>
+<p>Modify account permission (make a multi-sign account, need 100 TRX)</p>
 </li>
 <li>
 <p>Select permission and create transfer transaction</p>
@@ -1237,7 +1237,7 @@
 </span><span id="__span-6-18"><a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a>import org.tron.trident.proto.Response.TransactionExtention;
 </span><span id="__span-6-19"><a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a>
 </span><span id="__span-6-20"><a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a>/**
-</span><span id="__span-6-21"><a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a> * A demo for TRON multi-signature transactions.
+</span><span id="__span-6-21"><a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a> * A demo for TRON multi-sign transactions.
 </span><span id="__span-6-22"><a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a> *
 </span><span id="__span-6-23"><a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a> * This demo illustrates the following steps:
 </span><span id="__span-6-24"><a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a> * 1. Modify an account&#39;s permissions to require multiple signatures for certain operations.
@@ -1250,7 +1250,7 @@
 </span><span id="__span-6-31"><a id="__codelineno-6-31" name="__codelineno-6-31" href="#__codelineno-6-31"></a>  // NOTE: Replace with your private key. In a real application,
 </span><span id="__span-6-32"><a id="__codelineno-6-32" name="__codelineno-6-32" href="#__codelineno-6-32"></a>  // use a secure way to manage private keys, such as environment variables or a secret manager.
 </span><span id="__span-6-33"><a id="__codelineno-6-33" name="__codelineno-6-33" href="#__codelineno-6-33"></a>  private static final String OWNER_PRIVATE_KEY = &quot;...&quot;;
-</span><span id="__span-6-34"><a id="__codelineno-6-34" name="__codelineno-6-34" href="#__codelineno-6-34"></a>  // The account that will have its permissions updated for multi-sig.
+</span><span id="__span-6-34"><a id="__codelineno-6-34" name="__codelineno-6-34" href="#__codelineno-6-34"></a>  // The account that will have its permissions updated for multi-sign.
 </span><span id="__span-6-35"><a id="__codelineno-6-35" name="__codelineno-6-35" href="#__codelineno-6-35"></a>  private static final String OWNER_ADDRESS = new KeyPair(OWNER_PRIVATE_KEY).toBase58CheckAddress();
 </span><span id="__span-6-36"><a id="__codelineno-6-36" name="__codelineno-6-36" href="#__codelineno-6-36"></a>
 </span><span id="__span-6-37"><a id="__codelineno-6-37" name="__codelineno-6-37" href="#__codelineno-6-37"></a>  // The recipient address for the transfer.
@@ -1291,7 +1291,7 @@
 </span><span id="__span-6-72"><a id="__codelineno-6-72" name="__codelineno-6-72" href="#__codelineno-6-72"></a>
 </span><span id="__span-6-73"><a id="__codelineno-6-73" name="__codelineno-6-73" href="#__codelineno-6-73"></a>    // Create a new active permission.
 </span><span id="__span-6-74"><a id="__codelineno-6-74" name="__codelineno-6-74" href="#__codelineno-6-74"></a>    // - &quot;active&quot;: A custom name for the permission.
-</span><span id="__span-6-75"><a id="__codelineno-6-75" name="__codelineno-6-75" href="#__codelineno-6-75"></a>    // - permissionId=2: The ID for this new permission. ID 0 is for owner, 1 is for witness.
+</span><span id="__span-6-75"><a id="__codelineno-6-75" name="__codelineno-6-75" href="#__codelineno-6-75"></a>    // - permissionId=2: The ID for this new permission. ID 0 is for owner, 1 is for witness, 2 is for active.
 </span><span id="__span-6-76"><a id="__codelineno-6-76" name="__codelineno-6-76" href="#__codelineno-6-76"></a>    // - threshold=2: The sum of weights of signatures required to approve a transaction (2 out of 3 in this case).
 </span><span id="__span-6-77"><a id="__codelineno-6-77" name="__codelineno-6-77" href="#__codelineno-6-77"></a>    Permission activePermission = accountPermissions.createActivePermission(&quot;active&quot;, 2,
 </span><span id="__span-6-78"><a id="__codelineno-6-78" name="__codelineno-6-78" href="#__codelineno-6-78"></a>        2, trxTransferOperations, activeKeyMap);
@@ -1342,24 +1342,47 @@
 </span><span id="__span-6-123"><a id="__codelineno-6-123" name="__codelineno-6-123" href="#__codelineno-6-123"></a>    System.out.println(&quot;Signing with key 1...&quot;);
 </span><span id="__span-6-124"><a id="__codelineno-6-124" name="__codelineno-6-124" href="#__codelineno-6-124"></a>    Transaction signedTxn1 = client.signTransaction(transferTransaction, activeKeyPairs.get(0));
 </span><span id="__span-6-125"><a id="__codelineno-6-125" name="__codelineno-6-125" href="#__codelineno-6-125"></a>
-</span><span id="__span-6-126"><a id="__codelineno-6-126" name="__codelineno-6-126" href="#__codelineno-6-126"></a>    // Second active account signs the already partially signed transaction.
-</span><span id="__span-6-127"><a id="__codelineno-6-127" name="__codelineno-6-127" href="#__codelineno-6-127"></a>    System.out.println(&quot;Signing with key 2...&quot;);
-</span><span id="__span-6-128"><a id="__codelineno-6-128" name="__codelineno-6-128" href="#__codelineno-6-128"></a>    Transaction signedTxn2 = client.signTransaction(signedTxn1, activeKeyPairs.get(1));
-</span><span id="__span-6-129"><a id="__codelineno-6-129" name="__codelineno-6-129" href="#__codelineno-6-129"></a>
-</span><span id="__span-6-130"><a id="__codelineno-6-130" name="__codelineno-6-130" href="#__codelineno-6-130"></a>
-</span><span id="__span-6-131"><a id="__codelineno-6-131" name="__codelineno-6-131" href="#__codelineno-6-131"></a>    // ======== STEP 4: Broadcast the multi-signed transaction ========
-</span><span id="__span-6-132"><a id="__codelineno-6-132" name="__codelineno-6-132" href="#__codelineno-6-132"></a>
-</span><span id="__span-6-133"><a id="__codelineno-6-133" name="__codelineno-6-133" href="#__codelineno-6-133"></a>    System.out.println(&quot;\n======= STEP 4: Broadcasting the transaction... =======&quot;);
-</span><span id="__span-6-134"><a id="__codelineno-6-134" name="__codelineno-6-134" href="#__codelineno-6-134"></a>    String transferTxId = client.broadcastTransaction(signedTxn2);
-</span><span id="__span-6-135"><a id="__codelineno-6-135" name="__codelineno-6-135" href="#__codelineno-6-135"></a>
-</span><span id="__span-6-136"><a id="__codelineno-6-136" name="__codelineno-6-136" href="#__codelineno-6-136"></a>    System.out.println(&quot;Multi-signed transfer transaction sent. TXID: &quot; + transferTxId);
-</span><span id="__span-6-137"><a id="__codelineno-6-137" name="__codelineno-6-137" href="#__codelineno-6-137"></a>    // Wait for the transaction to be confirmed.
-</span><span id="__span-6-138"><a id="__codelineno-6-138" name="__codelineno-6-138" href="#__codelineno-6-138"></a>    System.out.println(&quot;Waiting for confirmation...&quot;);
-</span><span id="__span-6-139"><a id="__codelineno-6-139" name="__codelineno-6-139" href="#__codelineno-6-139"></a>    sleep(10_000L);
-</span><span id="__span-6-140"><a id="__codelineno-6-140" name="__codelineno-6-140" href="#__codelineno-6-140"></a>
-</span><span id="__span-6-141"><a id="__codelineno-6-141" name="__codelineno-6-141" href="#__codelineno-6-141"></a>    System.out.println(&quot;\nDemo finished successfully!&quot;);
-</span><span id="__span-6-142"><a id="__codelineno-6-142" name="__codelineno-6-142" href="#__codelineno-6-142"></a>  }
-</span><span id="__span-6-143"><a id="__codelineno-6-143" name="__codelineno-6-143" href="#__codelineno-6-143"></a>}
+</span><span id="__span-6-126"><a id="__codelineno-6-126" name="__codelineno-6-126" href="#__codelineno-6-126"></a>    /******************************************************************************************
+</span><span id="__span-6-127"><a id="__codelineno-6-127" name="__codelineno-6-127" href="#__codelineno-6-127"></a>     * NOTE: Handling multi-signature signing across different parties.
+</span><span id="__span-6-128"><a id="__codelineno-6-128" name="__codelineno-6-128" href="#__codelineno-6-128"></a>     *
+</span><span id="__span-6-129"><a id="__codelineno-6-129" name="__codelineno-6-129" href="#__codelineno-6-129"></a>     * In a real-world scenario, signatures come from different users at different locations.
+</span><span id="__span-6-130"><a id="__codelineno-6-130" name="__codelineno-6-130" href="#__codelineno-6-130"></a>     * The partially signed `Transaction` object (`signedTxn1`) could be serialized and
+</span><span id="__span-6-131"><a id="__codelineno-6-131" name="__codelineno-6-131" href="#__codelineno-6-131"></a>     * sent to the next signer.
+</span><span id="__span-6-132"><a id="__codelineno-6-132" name="__codelineno-6-132" href="#__codelineno-6-132"></a>     *
+</span><span id="__span-6-133"><a id="__codelineno-6-133" name="__codelineno-6-133" href="#__codelineno-6-133"></a>     * 1. First signer serializes the transaction:
+</span><span id="__span-6-134"><a id="__codelineno-6-134" name="__codelineno-6-134" href="#__codelineno-6-134"></a>     *    byte[] transactionBytes = signedTxn1.toByteArray();
+</span><span id="__span-6-135"><a id="__codelineno-6-135" name="__codelineno-6-135" href="#__codelineno-6-135"></a>     *    // To transport these bytes via a text-based medium (like a JSON API or email),
+</span><span id="__span-6-136"><a id="__codelineno-6-136" name="__codelineno-6-136" href="#__codelineno-6-136"></a>     *    // you can encode them. Base64 is a common choice for this.
+</span><span id="__span-6-137"><a id="__codelineno-6-137" name="__codelineno-6-137" href="#__codelineno-6-137"></a>     *    String base64EncodedTx = java.util.Base64.getEncoder().encodeToString(transactionBytes);
+</span><span id="__span-6-138"><a id="__codelineno-6-138" name="__codelineno-6-138" href="#__codelineno-6-138"></a>     *
+</span><span id="__span-6-139"><a id="__codelineno-6-139" name="__codelineno-6-139" href="#__codelineno-6-139"></a>     * 2. The encoded string is sent to the next signer.
+</span><span id="__span-6-140"><a id="__codelineno-6-140" name="__codelineno-6-140" href="#__codelineno-6-140"></a>     *
+</span><span id="__span-6-141"><a id="__codelineno-6-141" name="__codelineno-6-141" href="#__codelineno-6-141"></a>     * 3. Next signer decodes and signs:
+</span><span id="__span-6-142"><a id="__codelineno-6-142" name="__codelineno-6-142" href="#__codelineno-6-142"></a>     *    byte[] decodedBytes = java.util.Base64.getDecoder().decode(base64EncodedTx);
+</span><span id="__span-6-143"><a id="__codelineno-6-143" name="__codelineno-6-143" href="#__codelineno-6-143"></a>     *    Transaction partiallySignedTx = Transaction.parseFrom(decodedBytes);
+</span><span id="__span-6-144"><a id="__codelineno-6-144" name="__codelineno-6-144" href="#__codelineno-6-144"></a>     *    Transaction signedTxn2 = client.signTransaction(partiallySignedTx, nextKeyPair);
+</span><span id="__span-6-145"><a id="__codelineno-6-145" name="__codelineno-6-145" href="#__codelineno-6-145"></a>     *
+</span><span id="__span-6-146"><a id="__codelineno-6-146" name="__codelineno-6-146" href="#__codelineno-6-146"></a>     * For this demo, we simulate this by directly passing the `signedTxn1` object.
+</span><span id="__span-6-147"><a id="__codelineno-6-147" name="__codelineno-6-147" href="#__codelineno-6-147"></a>     ******************************************************************************************/
+</span><span id="__span-6-148"><a id="__codelineno-6-148" name="__codelineno-6-148" href="#__codelineno-6-148"></a>
+</span><span id="__span-6-149"><a id="__codelineno-6-149" name="__codelineno-6-149" href="#__codelineno-6-149"></a>    // Second active account signs the already partially signed transaction.
+</span><span id="__span-6-150"><a id="__codelineno-6-150" name="__codelineno-6-150" href="#__codelineno-6-150"></a>    System.out.println(&quot;Signing with key 2...&quot;);
+</span><span id="__span-6-151"><a id="__codelineno-6-151" name="__codelineno-6-151" href="#__codelineno-6-151"></a>    Transaction signedTxn2 = client.signTransaction(signedTxn1, activeKeyPairs.get(1));
+</span><span id="__span-6-152"><a id="__codelineno-6-152" name="__codelineno-6-152" href="#__codelineno-6-152"></a>
+</span><span id="__span-6-153"><a id="__codelineno-6-153" name="__codelineno-6-153" href="#__codelineno-6-153"></a>
+</span><span id="__span-6-154"><a id="__codelineno-6-154" name="__codelineno-6-154" href="#__codelineno-6-154"></a>    // ======== STEP 4: Broadcast the multi-signed transaction ========
+</span><span id="__span-6-155"><a id="__codelineno-6-155" name="__codelineno-6-155" href="#__codelineno-6-155"></a>
+</span><span id="__span-6-156"><a id="__codelineno-6-156" name="__codelineno-6-156" href="#__codelineno-6-156"></a>    System.out.println(&quot;\n======= STEP 4: Broadcasting the transaction... =======&quot;);
+</span><span id="__span-6-157"><a id="__codelineno-6-157" name="__codelineno-6-157" href="#__codelineno-6-157"></a>    String transferTxId = client.broadcastTransaction(signedTxn2);
+</span><span id="__span-6-158"><a id="__codelineno-6-158" name="__codelineno-6-158" href="#__codelineno-6-158"></a>
+</span><span id="__span-6-159"><a id="__codelineno-6-159" name="__codelineno-6-159" href="#__codelineno-6-159"></a>    System.out.println(&quot;Multi-signed transfer transaction sent. TXID: &quot; + transferTxId);
+</span><span id="__span-6-160"><a id="__codelineno-6-160" name="__codelineno-6-160" href="#__codelineno-6-160"></a>    // Wait for the transaction to be confirmed.
+</span><span id="__span-6-161"><a id="__codelineno-6-161" name="__codelineno-6-161" href="#__codelineno-6-161"></a>    System.out.println(&quot;Waiting for confirmation...&quot;);
+</span><span id="__span-6-162"><a id="__codelineno-6-162" name="__codelineno-6-162" href="#__codelineno-6-162"></a>    sleep(10_000L);
+</span><span id="__span-6-163"><a id="__codelineno-6-163" name="__codelineno-6-163" href="#__codelineno-6-163"></a>
+</span><span id="__span-6-164"><a id="__codelineno-6-164" name="__codelineno-6-164" href="#__codelineno-6-164"></a>    System.out.println(&quot;\nDemo finished successfully!&quot;);
+</span><span id="__span-6-165"><a id="__codelineno-6-165" name="__codelineno-6-165" href="#__codelineno-6-165"></a>  }
+</span><span id="__span-6-166"><a id="__codelineno-6-166" name="__codelineno-6-166" href="#__codelineno-6-166"></a>}
 </span></code></pre></div>
 <h2 id="learn-more">Learn More</h2>
 <ul>
