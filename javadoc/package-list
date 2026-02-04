@@ -6,6 +6,7 @@ org.tron.trident.abi.spi
 org.tron.trident.api
 org.tron.trident.commons
 org.tron.trident.core
+org.tron.trident.core.account
 org.tron.trident.core.contract
 org.tron.trident.core.contract.abi
 org.tron.trident.core.exceptions
