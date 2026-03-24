@@ -16,13 +16,13 @@ public class ApiWrapperBuilder {
   @Getter
   private final String grpcEndpoint;
   @Getter
-  private String grpcEndpointSolidity = null;
+  private String grpcEndpointSolidity;
   @Getter
-  private String hexPrivateKey = null;
+  private String hexPrivateKey;
   @Getter
-  private boolean useTLS = false;
+  private boolean useTLS;
   @Getter
-  private File trustCert = null; // Certificate for custom full node
+  private File trustCert; // Certificate for custom full node
   @Getter
   private List<ClientInterceptor> interceptors = new ArrayList<>();// Default: no timeout
 
@@ -45,10 +45,17 @@ public class ApiWrapperBuilder {
 
   /**
    * Enable TLS with custom certificate
+   * <p>
+   * Recommend using TLS 1.2 or TLS 1.3 for better security.
+   * For generating self-signed certificates, tools like OpenSSL can be used
+   * (e.g., <a href="https://docs.openssl.org/master/man1/openssl-req/">OpenSSL Req</a>).
+   * </p>
+   *
    * @param certFile The certificate file
    */
   public ApiWrapperBuilder withTLS(File certFile) {
-    Preconditions.checkArgument(certFile.exists(), "cert file does not exist");
+    Preconditions.checkNotNull(certFile, "certFile is null");
+    Preconditions.checkArgument(certFile.exists(), "cert file does not exist: " + certFile.getAbsolutePath());
     this.useTLS = true;
     this.trustCert = certFile;
     return this;
@@ -122,7 +129,7 @@ public class ApiWrapperBuilder {
         .add("grpcEndpointSolidity", grpcEndpointSolidity)
         .add("hexPrivateKey", hexPrivateKey != null ? "****" : null)
         .add("useTLS", useTLS)
-        .add("trustCert", trustCert)
+        .add("trustCert", trustCert != null ? trustCert.getAbsolutePath() : null)
         .add("interceptors", interceptors)
         .toString();
   }

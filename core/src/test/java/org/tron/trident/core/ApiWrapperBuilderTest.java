@@ -110,4 +110,24 @@ class ApiWrapperBuilderTest {
     });
   }
 
+  @Test
+  void testToString() {
+    ApiWrapperBuilder builder = new ApiWrapperBuilder(
+        Constant.FULLNODE_NILE,
+        Constant.FULLNODE_NILE_SOLIDITY,
+        TEST_PRIVATE_KEY
+    );
+    String toStringResult = builder.toString();
+    assertTrue(toStringResult.contains("grpcEndpoint=" + Constant.FULLNODE_NILE));
+    assertTrue(toStringResult.contains("grpcEndpointSolidity=" + Constant.FULLNODE_NILE_SOLIDITY));
+    assertTrue(toStringResult.contains("hexPrivateKey=****"));
+    assertTrue(toStringResult.contains("useTLS=false"));
+    assertTrue(toStringResult.contains("trustCert=null"));
+
+    builder.withTLS(testCertFile);
+    toStringResult = builder.toString();
+    assertTrue(toStringResult.contains("useTLS=true"));
+    assertTrue(toStringResult.contains("trustCert=" + testCertFile.getAbsolutePath()));
+    }
+
 }

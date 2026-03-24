@@ -448,15 +448,19 @@ public class ApiWrapper implements Api {
     }
 
     if (nodeType[0] == NodeType.SOLIDITY_NODE) {
-      if (this.channelSolidity == null
-          || this.channelSolidity.isShutdown()
-          || this.channelSolidity.isTerminated()) {
-        throw new IllegalArgumentException("the channelSolidity is null or close");
-      }
+      checkSolidityChannel();
       return true;
     }
 
     return false;
+  }
+
+  private void checkSolidityChannel() {
+    if (this.channelSolidity == null
+        || this.channelSolidity.isShutdown()
+        || this.channelSolidity.isTerminated()) {
+      throw new IllegalArgumentException("the channelSolidity is null or close");
+    }
   }
 
   public static VoteWitnessContract createVoteWitnessContract(ByteString ownerAddress,
@@ -2156,11 +2160,7 @@ public class ApiWrapper implements Api {
   @Deprecated
   @Override
   public Account getAccountSolidity(String address) {
-    if (channelSolidity == null
-        || channelSolidity.isShutdown()
-        || channelSolidity.isTerminated()) {
-      throw new IllegalArgumentException("the channelSolidity is null or close");
-    }
+    checkSolidityChannel();
     ByteString bsAddress = parseAddress(address);
     AccountAddressMessage accountAddressMessage = AccountAddressMessage.newBuilder()
         .setAddress(bsAddress)
@@ -2181,11 +2181,7 @@ public class ApiWrapper implements Api {
   @Override
   public TransactionInfoList getTransactionInfoByBlockNumSolidity(long blockNum)
       throws IllegalException {
-    if (channelSolidity == null
-        || channelSolidity.isShutdown()
-        || channelSolidity.isTerminated()) {
-      throw new IllegalArgumentException("the channelSolidity is null or close");
-    }
+    checkSolidityChannel();
     if (blockNum < 0) {
       throw new IllegalException("blockNum must be >= 0");
     }
@@ -2205,11 +2201,7 @@ public class ApiWrapper implements Api {
   @Override
   public BlockExtention getNowBlockSolidity() throws IllegalException {
 
-    if (channelSolidity == null
-        || channelSolidity.isShutdown()
-        || channelSolidity.isTerminated()) {
-      throw new IllegalArgumentException("the channelSolidity is null or close");
-    }
+    checkSolidityChannel();
     BlockExtention blockExtention = blockingStubSolidity.getNowBlock2(
         EmptyMessage.newBuilder().build());
 
@@ -2232,11 +2224,7 @@ public class ApiWrapper implements Api {
   @Override
   public Transaction getTransactionByIdSolidity(String txID) throws IllegalException {
 
-    if (channelSolidity == null
-        || channelSolidity.isShutdown()
-        || channelSolidity.isTerminated()) {
-      throw new IllegalArgumentException("the channelSolidity is null or close");
-    }
+    checkSolidityChannel();
 
     ByteString bsTxId = ByteString.copyFrom(ByteArray.fromHexString(txID));
     BytesMessage request = BytesMessage.newBuilder()

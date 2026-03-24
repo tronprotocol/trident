@@ -203,18 +203,6 @@ class ApiWrapperBuilderFunctionalTest {
     client.close();
   }
 
-  @Test
-  void testPrivateKeyToString() {
-    String result = new ApiWrapperBuilder(Constant.FULLNODE_NILE)
-        .withGrpcEndpointSolidity(Constant.FULLNODE_NILE_SOLIDITY)
-        .withTLS()
-        .withTimeout(2000)
-        .withPrivateKey(keyPair.toPrivateKey()).toString();
-
-    assertFalse(result.contains(keyPair.toPrivateKey()));
-
-  }
-
 }
 
 
