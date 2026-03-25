@@ -13,6 +13,11 @@
 
 package org.tron.trident.abi;
 
+import static org.tron.trident.abi.TypeDecoder.MAX_BYTE_LENGTH_FOR_HEX_STRING;
+import static org.tron.trident.abi.TypeDecoder.isDynamic;
+import static org.tron.trident.abi.Utils.getParameterizedTypeFromArray;
+import static org.tron.trident.abi.Utils.staticStructNestedPublicFieldsFlatList;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -78,55 +83,68 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
     int offset = 0;
     for (TypeReference<?> typeReference : outputParameters) {
       try {
+        int hexStringDataOffset = getDataOffset(input, offset, typeReference);
+
         @SuppressWarnings("unchecked")
         Class<Type> classType = (Class<Type>) typeReference.getClassType();
 
-        int hexStringDataOffset = getDataOffset(input, offset, classType);
-
         Type result;
         if (DynamicStruct.class.isAssignableFrom(classType)) {
-          if (outputParameters.size() != 1) {
-            throw new UnsupportedOperationException(
-                "Multiple return objects containing a struct is not supported");
-          }
           result =
-              TypeDecoder.decodeDynamicStruct(
-                  input, hexStringDataOffset, typeReference);
-          offset += TypeDecoder.MAX_BYTE_LENGTH_FOR_HEX_STRING;
+                  TypeDecoder.decodeDynamicStruct(
+                          input, hexStringDataOffset, typeReference);
+          offset += MAX_BYTE_LENGTH_FOR_HEX_STRING;
 
         } else if (DynamicArray.class.isAssignableFrom(classType)) {
           result =
-              TypeDecoder.decodeDynamicArray(
-                  input, hexStringDataOffset, typeReference);
-          offset += TypeDecoder.MAX_BYTE_LENGTH_FOR_HEX_STRING;
+                  TypeDecoder.decodeDynamicArray(
+                          input, hexStringDataOffset, typeReference);
+          offset += MAX_BYTE_LENGTH_FOR_HEX_STRING;
 
         } else if (typeReference instanceof TypeReference.StaticArrayTypeReference) {
           int length = ((TypeReference.StaticArrayTypeReference) typeReference).getSize();
           result =
-              TypeDecoder.decodeStaticArray(
-                  input, hexStringDataOffset, typeReference, length);
-          offset += length * TypeDecoder.MAX_BYTE_LENGTH_FOR_HEX_STRING;
+                  TypeDecoder.decodeStaticArray(
+                          input, hexStringDataOffset, typeReference, length);
+          offset += length * MAX_BYTE_LENGTH_FOR_HEX_STRING;
 
         } else if (StaticStruct.class.isAssignableFrom(classType)) {
           result =
-              TypeDecoder.decodeStaticStruct(
-                  input, hexStringDataOffset, typeReference);
+                  TypeDecoder.decodeStaticStruct(
+                          input, hexStringDataOffset, typeReference);
           offset +=
-              classType.getDeclaredFields().length * TypeDecoder.MAX_BYTE_LENGTH_FOR_HEX_STRING;
+                  staticStructNestedPublicFieldsFlatList(classType).size()
+                          * MAX_BYTE_LENGTH_FOR_HEX_STRING;
         } else if (StaticArray.class.isAssignableFrom(classType)) {
           int length =
-              Integer.parseInt(
-                  classType
-                      .getSimpleName()
-                      .substring(StaticArray.class.getSimpleName().length()));
+                  Integer.parseInt(
+                          classType
+                                  .getSimpleName()
+                                  .substring(StaticArray.class.getSimpleName().length()));
           result =
-              TypeDecoder.decodeStaticArray(
-                  input, hexStringDataOffset, typeReference, length);
-          offset += length * TypeDecoder.MAX_BYTE_LENGTH_FOR_HEX_STRING;
-
+                  TypeDecoder.decodeStaticArray(
+                          input, hexStringDataOffset, typeReference, length);
+          if (DynamicStruct.class.isAssignableFrom(
+                  getParameterizedTypeFromArray(typeReference))) {
+            offset += MAX_BYTE_LENGTH_FOR_HEX_STRING;
+          } else if (StaticStruct.class.isAssignableFrom(
+                  getParameterizedTypeFromArray(typeReference))) {
+            offset +=
+                    staticStructNestedPublicFieldsFlatList(
+                            getParameterizedTypeFromArray(
+                                    typeReference))
+                            .size()
+                            * length
+                            * MAX_BYTE_LENGTH_FOR_HEX_STRING;
+          } else if (Utf8String.class.isAssignableFrom(
+                  getParameterizedTypeFromArray(typeReference))) {
+            offset += MAX_BYTE_LENGTH_FOR_HEX_STRING;
+          } else {
+            offset += length * MAX_BYTE_LENGTH_FOR_HEX_STRING;
+          }
         } else {
           result = TypeDecoder.decode(input, hexStringDataOffset, classType);
-          offset += TypeDecoder.MAX_BYTE_LENGTH_FOR_HEX_STRING;
+          offset += MAX_BYTE_LENGTH_FOR_HEX_STRING;
         }
         results.add(result);
 
@@ -137,13 +155,39 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
     return results;
   }
 
-  private static <T extends Type> int getDataOffset(String input, int offset, Class<T> type) {
+  public static <T extends Type> int getDataOffset(
+          String input, int offset, TypeReference<?> typeReference)
+          throws ClassNotFoundException {
+    @SuppressWarnings("unchecked")
+    Class<Type> type = (Class<Type>) typeReference.getClassType();
     if (DynamicBytes.class.isAssignableFrom(type)
-        || Utf8String.class.isAssignableFrom(type)
-        || DynamicArray.class.isAssignableFrom(type)) {
+            || Utf8String.class.isAssignableFrom(type)
+            || DynamicArray.class.isAssignableFrom(type)
+            || hasDynamicOffsetInStaticArray(typeReference, offset)) {
       return TypeDecoder.decodeUintAsInt(input, offset) << 1;
     } else {
       return offset;
+    }
+  }
+
+  /**
+   * Checks if the parametrized type is offsetted in case of static array containing structs.
+   *
+   * @param typeReference of static array
+   * @return true, if static array elements have dynamic offsets
+   * @throws ClassNotFoundException if class type cannot be determined
+   */
+  private static boolean hasDynamicOffsetInStaticArray(TypeReference<?> typeReference, int offset)
+          throws ClassNotFoundException {
+    @SuppressWarnings("unchecked")
+    Class<Type> type = (Class<Type>) typeReference.getClassType();
+    try {
+      return StaticArray.class.isAssignableFrom(type)
+              && (DynamicStruct.class.isAssignableFrom(
+              getParameterizedTypeFromArray(typeReference))
+              || isDynamic(getParameterizedTypeFromArray(typeReference)));
+    } catch (ClassCastException e) {
+      return false;
     }
   }
 }

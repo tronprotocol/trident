@@ -52,6 +52,6 @@ public class EventEncoder {
   public static String buildEventSignature(String methodSignature) {
     byte[] input = methodSignature.getBytes();
     byte[] hash = Hash.sha3(input);
-    return Numeric.toHexString(hash);
+    return Numeric.toHexString(hash).substring(2);
   }
 }

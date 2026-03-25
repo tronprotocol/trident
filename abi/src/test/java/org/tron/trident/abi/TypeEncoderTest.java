@@ -15,10 +15,15 @@ package org.tron.trident.abi;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.tron.trident.abi.TypeEncoder.encode;
 
 import java.math.BigInteger;
+import java.util.Arrays;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.tron.trident.abi.AbiV2TestFixture.Bar;
+import org.tron.trident.abi.AbiV2TestFixture.Foo;
 import org.tron.trident.abi.datatypes.Address;
 import org.tron.trident.abi.datatypes.Bool;
 import org.tron.trident.abi.datatypes.Bytes;
@@ -63,6 +68,7 @@ import org.tron.trident.abi.datatypes.generated.Int80;
 import org.tron.trident.abi.datatypes.generated.Int88;
 import org.tron.trident.abi.datatypes.generated.Int96;
 import org.tron.trident.abi.datatypes.generated.StaticArray2;
+import org.tron.trident.abi.datatypes.generated.StaticArray3;
 import org.tron.trident.abi.datatypes.generated.Uint104;
 import org.tron.trident.abi.datatypes.generated.Uint112;
 import org.tron.trident.abi.datatypes.generated.Uint120;
@@ -84,6 +90,7 @@ import org.tron.trident.abi.datatypes.generated.Uint232;
 import org.tron.trident.abi.datatypes.generated.Uint24;
 import org.tron.trident.abi.datatypes.generated.Uint240;
 import org.tron.trident.abi.datatypes.generated.Uint248;
+import org.tron.trident.abi.datatypes.generated.Uint256;
 import org.tron.trident.abi.datatypes.generated.Uint32;
 import org.tron.trident.abi.datatypes.generated.Uint40;
 import org.tron.trident.abi.datatypes.generated.Uint48;
@@ -1215,6 +1222,137 @@ public class TypeEncoderTest {
             + "0000000000000000000000000000000000000000000000000000000000000003"));
   }
 
+  @Test
+  public void testDynamicStringsArray() {
+    DynamicArray<Utf8String> array =
+        new DynamicArray<>(
+            Utf8String.class,
+            new Utf8String("web3j"),
+            new Utf8String("arrays"),
+            new Utf8String("encoding"));
+
+    assertEquals(
+        ("0000000000000000000000000000000000000000000000000000000000000003"
+            + "0000000000000000000000000000000000000000000000000000000000000060"
+            + "00000000000000000000000000000000000000000000000000000000000000a0"
+            + "00000000000000000000000000000000000000000000000000000000000000e0"
+            + "0000000000000000000000000000000000000000000000000000000000000005"
+            + "776562336a000000000000000000000000000000000000000000000000000000"
+            + "0000000000000000000000000000000000000000000000000000000000000006"
+            + "6172726179730000000000000000000000000000000000000000000000000000"
+            + "0000000000000000000000000000000000000000000000000000000000000008"
+            + "656e636f64696e67000000000000000000000000000000000000000000000000"),
+        TypeEncoder.encodeDynamicArray(array));
+  }
+
+  @Test
+  public void testDynamicArrayOfDynamicArraysOfStaticStructs() {
+    DynamicArray<DynamicArray<Bar>> array =
+        new DynamicArray(
+            DynamicArray.class,
+            Arrays.asList(
+                new DynamicArray(
+                    Bar.class,
+                    new Bar(
+                        new Uint256(BigInteger.ZERO),
+                        new Uint256(BigInteger.ZERO))),
+                new DynamicArray(
+                    Bar.class,
+                    new Bar(
+                        new Uint256(BigInteger.ONE),
+                        new Uint256(BigInteger.ZERO)))));
+    assertEquals(
+        ("0000000000000000000000000000000000000000000000000000000000000002"
+            + "0000000000000000000000000000000000000000000000000000000000000040"
+            + "00000000000000000000000000000000000000000000000000000000000000a0"
+            + "0000000000000000000000000000000000000000000000000000000000000001"
+            + "0000000000000000000000000000000000000000000000000000000000000000"
+            + "0000000000000000000000000000000000000000000000000000000000000000"
+            + "0000000000000000000000000000000000000000000000000000000000000001"
+            + "0000000000000000000000000000000000000000000000000000000000000001"
+            + "0000000000000000000000000000000000000000000000000000000000000000"),
+        TypeEncoder.encodeDynamicArray(array));
+  }
+
+  @Test
+  public void testStructsDynamicArray() {
+    DynamicArray<Foo> array =
+        new DynamicArray<>(
+            Foo.class,
+            new Foo("id", "name"),
+            new Foo("id", "name"),
+            new Foo("id", "name"));
+
+    assertEquals(
+        TypeEncoder.encodeDynamicArray(array),
+        ("0000000000000000000000000000000000000000000000000000000000000003"
+            + "0000000000000000000000000000000000000000000000000000000000000060"
+            + "0000000000000000000000000000000000000000000000000000000000000120"
+            + "00000000000000000000000000000000000000000000000000000000000001e0"
+            + "0000000000000000000000000000000000000000000000000000000000000040"
+            + "0000000000000000000000000000000000000000000000000000000000000080"
+            + "0000000000000000000000000000000000000000000000000000000000000002"
+            + "6964000000000000000000000000000000000000000000000000000000000000"
+            + "0000000000000000000000000000000000000000000000000000000000000004"
+            + "6e616d6500000000000000000000000000000000000000000000000000000000"
+            + "0000000000000000000000000000000000000000000000000000000000000040"
+            + "0000000000000000000000000000000000000000000000000000000000000080"
+            + "0000000000000000000000000000000000000000000000000000000000000002"
+            + "6964000000000000000000000000000000000000000000000000000000000000"
+            + "0000000000000000000000000000000000000000000000000000000000000004"
+            + "6e616d6500000000000000000000000000000000000000000000000000000000"
+            + "0000000000000000000000000000000000000000000000000000000000000040"
+            + "0000000000000000000000000000000000000000000000000000000000000080"
+            + "0000000000000000000000000000000000000000000000000000000000000002"
+            + "6964000000000000000000000000000000000000000000000000000000000000"
+            + "0000000000000000000000000000000000000000000000000000000000000004"
+            + "6e616d6500000000000000000000000000000000000000000000000000000000"));
+  }
+
+  @Test
+  public void testDynamicStructStaticArray() {
+    StaticArray3<Foo> array =
+        new StaticArray3<>(
+            Foo.class, new Foo("", ""), new Foo("id", "name"), new Foo("", ""));
+
+    assertEquals(
+        ("0000000000000000000000000000000000000000000000000000000000000040"
+            + "0000000000000000000000000000000000000000000000000000000000000060"
+            + "0000000000000000000000000000000000000000000000000000000000000000"
+            + "0000000000000000000000000000000000000000000000000000000000000000"
+            + "0000000000000000000000000000000000000000000000000000000000000040"
+            + "0000000000000000000000000000000000000000000000000000000000000080"
+            + "0000000000000000000000000000000000000000000000000000000000000002"
+            + "6964000000000000000000000000000000000000000000000000000000000000"
+            + "0000000000000000000000000000000000000000000000000000000000000004"
+            + "6e616d6500000000000000000000000000000000000000000000000000000000"
+            + "0000000000000000000000000000000000000000000000000000000000000040"
+            + "0000000000000000000000000000000000000000000000000000000000000060"
+            + "0000000000000000000000000000000000000000000000000000000000000000"
+            + "0000000000000000000000000000000000000000000000000000000000000000"),
+        TypeEncoder.encodeArrayValues(array));
+  }
+
+  @Test
+  public void testStaticStructStaticArray() {
+    StaticArray3<Bar> array =
+        new StaticArray3<>(
+            Bar.class,
+            new Bar(BigInteger.ONE, BigInteger.ZERO),
+            new Bar(BigInteger.ONE, BigInteger.ZERO),
+            new Bar(BigInteger.ONE, BigInteger.ZERO));
+
+    assertEquals(
+        TypeEncoder.encodeArrayValues(array),
+        ("0000000000000000000000000000000000000000000000000000000000000001"
+            + "0000000000000000000000000000000000000000000000000000000000000000"
+            + "0000000000000000000000000000000000000000000000000000000000000001"
+            + "0000000000000000000000000000000000000000000000000000000000000000"
+            + "0000000000000000000000000000000000000000000000000000000000000001"
+            + "0000000000000000000000000000000000000000000000000000000000000000"));
+  }
+
+
   @SuppressWarnings("unchecked")
   @Test
   public void testEmptyArray() {
@@ -1354,21 +1492,21 @@ public class TypeEncoderTest {
   @Test
   public void testPrimitiveByte() {
     Assertions.assertEquals(
-        TypeEncoder.encode(new Byte((byte) 0)),
+        encode(new Byte((byte) 0)),
         ("0000000000000000000000000000000000000000000000000000000000000000"));
     Assertions.assertEquals(
-        TypeEncoder.encode(new Byte((byte) 127)),
+        encode(new Byte((byte) 127)),
         ("7f00000000000000000000000000000000000000000000000000000000000000"));
   }
 
   @Test
   public void testPrimitiveChar() {
     Assertions.assertEquals(
-        TypeEncoder.encode(new Char('a')),
+        encode(new Char('a')),
         ("0000000000000000000000000000000000000000000000000000000000000001"
             + "6100000000000000000000000000000000000000000000000000000000000000"));
     Assertions.assertEquals(
-        TypeEncoder.encode(new Char(' ')),
+        encode(new Char(' ')),
         ("0000000000000000000000000000000000000000000000000000000000000001"
             + "2000000000000000000000000000000000000000000000000000000000000000"));
   }
@@ -1376,45 +1514,45 @@ public class TypeEncoderTest {
   @Test
   public void testPrimitiveInt() {
     Assertions.assertEquals(
-        TypeEncoder.encode(new Int(0)),
+        encode(new Int(0)),
         ("0000000000000000000000000000000000000000000000000000000000000000"));
 
     Assertions.assertEquals(
-        TypeEncoder.encode(new Int(Integer.MIN_VALUE)),
+        encode(new Int(Integer.MIN_VALUE)),
         ("ffffffffffffffffffffffffffffffffffffffffffffffffffffffff80000000"));
 
     Assertions.assertEquals(
-        TypeEncoder.encode(new Int(Integer.MAX_VALUE)),
+        encode(new Int(Integer.MAX_VALUE)),
         ("000000000000000000000000000000000000000000000000000000007fffffff"));
   }
 
   @Test
   public void testPrimitiveShort() {
     Assertions.assertEquals(
-        TypeEncoder.encode(new Short((short) 0)),
+        encode(new Short((short) 0)),
         ("0000000000000000000000000000000000000000000000000000000000000000"));
 
     Assertions.assertEquals(
-        TypeEncoder.encode(new Short(java.lang.Short.MIN_VALUE)),
+        encode(new Short(java.lang.Short.MIN_VALUE)),
         ("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff8000"));
 
     Assertions.assertEquals(
-        TypeEncoder.encode(new Short(java.lang.Short.MAX_VALUE)),
+        encode(new Short(java.lang.Short.MAX_VALUE)),
         ("0000000000000000000000000000000000000000000000000000000000007fff"));
   }
 
   @Test
   public void testPrimitiveLong() {
     Assertions.assertEquals(
-        TypeEncoder.encode(new Long(0)),
+        encode(new Long(0)),
         ("0000000000000000000000000000000000000000000000000000000000000000"));
 
     Assertions.assertEquals(
-        TypeEncoder.encode(new Long(java.lang.Long.MIN_VALUE)),
+        encode(new Long(java.lang.Long.MIN_VALUE)),
         ("ffffffffffffffffffffffffffffffffffffffffffffffff8000000000000000"));
 
     Assertions.assertEquals(
-        TypeEncoder.encode(new Long(java.lang.Long.MAX_VALUE)),
+        encode(new Long(java.lang.Long.MAX_VALUE)),
         ("0000000000000000000000000000000000000000000000007fffffffffffffff"));
   }
 
@@ -1422,13 +1560,44 @@ public class TypeEncoderTest {
   public void testPrimitiveFloat() {
     assertThrows(
         UnsupportedOperationException.class,
-        () -> TypeEncoder.encode(new org.tron.trident.abi.datatypes.primitive.Float(0)));
+        () -> encode(new org.tron.trident.abi.datatypes.primitive.Float(0)));
   }
 
   @Test
   public void testPrimitiveDouble() {
     assertThrows(
         UnsupportedOperationException.class,
-        () -> TypeEncoder.encode(new Double(0)));
+        () -> encode(new Double(0)));
+  }
+
+  @Test
+  public void testStructContainingDynamicBytes() {
+    String expectedEncoding =
+        "0000000000000000000000000000000000000000000000000000000000000060"
+            + "0000000000000000000000000000000000000000000000000000000000000000"
+            + "00000000000000000000000000000000000000000000000000000000000000a0"
+            + "0000000000000000000000000000000000000000000000000000000000000007"
+            + "64796e616d696300000000000000000000000000000000000000000000000000"
+            + "0000000000000000000000000000000000000000000000000000000000000005"
+            + "4279746573000000000000000000000000000000000000000000000000000000";
+    assertEquals(
+        expectedEncoding,
+        encode(AbiV2TestFixture.addDynamicBytesArrayFunction.getInputParameters().get(0)));
+  }
+
+  @Test
+  public void testStaticArrayOfDynamicElements() {
+    StaticArray2<Utf8String> string2 = new StaticArray2<>(
+        Utf8String.class,
+        new Utf8String("hello"),
+        new Utf8String("world"));
+    
+    String encoded = TypeEncoder.encode(string2);
+    
+    // In ABI, string[2] is dynamic. Its head should contain offsets.
+    // Head size = 2 * 32 = 64 bytes (0x40 in hex)
+    // The first word should be the offset to the first string: 0x00...0040
+    assertTrue(encoded.startsWith("0000000000000000000000000000000000000000000000000000000000000040"),
+        "StaticArray of Utf8String should be encoded with offsets. Found: " + encoded);
   }
 }

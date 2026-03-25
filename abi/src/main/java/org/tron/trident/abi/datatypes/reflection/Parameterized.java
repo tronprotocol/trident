@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Web3 Labs Ltd.
+ * Copyright 2022 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -11,19 +11,15 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package org.tron.trident.abi.datatypes.primitive;
+package org.tron.trident.abi.datatypes.reflection;
 
-import org.tron.trident.abi.datatypes.NumericType;
-import org.tron.trident.abi.datatypes.generated.Int32;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public final class Int extends Number<java.lang.Integer> {
-
-  public Int(int value) {
-    super(value);
-  }
-
-  @Override
-  public NumericType toSolidityType() {
-    return new Int32(getValue());
-  }
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.PARAMETER)
+public @interface Parameterized {
+  Class<?> type();
 }

@@ -11,19 +11,28 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package org.tron.trident.abi.datatypes.primitive;
+package org.tron.trident.abi.datatypes;
 
-import org.tron.trident.abi.datatypes.NumericType;
-import org.tron.trident.abi.datatypes.generated.Int32;
+import static org.tron.trident.abi.Utils.convert;
 
-public final class Int extends Number<java.lang.Integer> {
+import java.util.List;
+import org.tron.trident.abi.TypeReference;
 
-  public Int(int value) {
-    super(value);
+/** CustomError wrapper type. */
+public class CustomError {
+  private String name;
+  private List<TypeReference<Type>> parameters;
+
+  public CustomError(String name, List<TypeReference<?>> parameters) {
+    this.name = name;
+    this.parameters = convert(parameters);
   }
 
-  @Override
-  public NumericType toSolidityType() {
-    return new Int32(getValue());
+  public String getName() {
+    return name;
+  }
+
+  public List<TypeReference<Type>> getParameters() {
+    return parameters;
   }
 }

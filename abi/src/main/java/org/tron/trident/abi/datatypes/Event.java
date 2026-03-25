@@ -13,10 +13,11 @@
 
 package org.tron.trident.abi.datatypes;
 
+import static org.tron.trident.abi.Utils.convert;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import org.tron.trident.abi.TypeReference;
-import org.tron.trident.abi.Utils;
 
 /**
  * Event wrapper type.
@@ -28,7 +29,7 @@ public class Event {
 
   public Event(String name, List<TypeReference<?>> parameters) {
     this.name = name;
-    this.parameters = Utils.convert(parameters);
+    this.parameters = convert(parameters);
   }
 
   public String getName() {

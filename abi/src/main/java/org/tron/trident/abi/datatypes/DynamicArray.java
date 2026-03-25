@@ -14,6 +14,7 @@
 package org.tron.trident.abi.datatypes;
 
 import java.util.List;
+import org.tron.trident.abi.Utils;
 
 /**
  * Dynamic array type.
@@ -24,13 +25,23 @@ public class DynamicArray<T extends Type> extends Array<T> {
   @SafeVarargs
   @SuppressWarnings({"unchecked"})
   public DynamicArray(T... values) {
-    super((Class<T>) AbiTypes.getType(values[0].getTypeAsString()), values);
+    super(
+            StructType.class.isAssignableFrom(values[0].getClass())
+                || Array.class.isAssignableFrom(values[0].getClass())
+                    ? (Class<T>) values[0].getClass()
+                    : (Class<T>) AbiTypes.getType(values[0].getTypeAsString()),
+            values);
   }
 
   @Deprecated
   @SuppressWarnings("unchecked")
   public DynamicArray(List<T> values) {
-    super((Class<T>) AbiTypes.getType(values.get(0).getTypeAsString()), values);
+    super(
+            StructType.class.isAssignableFrom(values.get(0).getClass())
+                || Array.class.isAssignableFrom(values.get(0).getClass())
+                    ? (Class<T>) values.get(0).getClass()
+                    : (Class<T>) AbiTypes.getType(values.get(0).getTypeAsString()),
+            values);
   }
 
   @Deprecated
@@ -60,6 +71,24 @@ public class DynamicArray<T extends Type> extends Array<T> {
 
   @Override
   public String getTypeAsString() {
-    return AbiTypes.getTypeAString(getComponentType()) + "[]";
+    String type;
+    // Handle dynamic array of zero length. This will fail if the dynamic array
+    // is an array of structs.
+    if (value.isEmpty()) {
+      if (StructType.class.isAssignableFrom(getComponentType())) {
+        type = Utils.getStructType(getComponentType());
+      } else {
+        type = AbiTypes.getTypeAString(getComponentType());
+      }
+    } else {
+      if (StructType.class.isAssignableFrom(value.get(0).getClass())) {
+        type = value.get(0).getTypeAsString();
+      } else if (Array.class.isAssignableFrom(value.get(0).getClass())) {
+        type = value.get(0).getTypeAsString();
+      } else {
+        type = AbiTypes.getTypeAString(getComponentType());
+      }
+    }
+    return type + "[]";
   }
 }
