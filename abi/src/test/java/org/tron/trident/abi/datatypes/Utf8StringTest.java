@@ -24,4 +24,14 @@ public class Utf8StringTest {
     assertEquals(new Utf8String("").toString(), (""));
     assertEquals(new Utf8String("string").toString(), ("string"));
   }
+  @Test
+  public void testBytes32PaddedLength() {
+    String string32Bytes = "12345678901234567890123456789012";
+    String string33Bytes = "123456789012345678901234567890123";
+    String string66Bytes = string33Bytes + string33Bytes;
+    assertEquals(32, new Utf8String("").bytes32PaddedLength());
+    assertEquals(32, new Utf8String("string").bytes32PaddedLength());
+    assertEquals(32, new Utf8String(string32Bytes).bytes32PaddedLength());
+    assertEquals(64, new Utf8String(string33Bytes).bytes32PaddedLength());
+  }
 }

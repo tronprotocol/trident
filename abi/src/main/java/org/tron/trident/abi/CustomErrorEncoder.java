@@ -1,5 +1,6 @@
 package org.tron.trident.abi;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.tron.trident.abi.datatypes.CustomError;
@@ -35,7 +36,7 @@ public class CustomErrorEncoder {
   }
 
   public static String calculateSignatureHash(String errorSignature) {
-    byte[] input = errorSignature.getBytes();
+    byte[] input = errorSignature.getBytes(StandardCharsets.UTF_8);
     byte[] hash = Hash.sha3(input);
     return Numeric.toHexString(hash).substring(2);
   }

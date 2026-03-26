@@ -125,6 +125,9 @@ public class AbiV2TestFixture {
   
   public static final String FUNC_SETGETMULTIDIMDYNAMICARRAY = "setGetMultiDimDynamicArray";
 
+  public static final String FUNC_setMultiDimStaticArrayWithUtf8StringSubType
+      = "setMultiDimStaticArrayWithUtf8StringSubType";
+
   public static class Foo extends DynamicStruct {
     public String id;
 
@@ -959,4 +962,34 @@ public class AbiV2TestFixture {
                       new Uint256(6), new Uint256(7), new Uint256(8))))),
           Collections.singletonList(new TypeReference<DynamicArray<DynamicArray<DynamicArray<Uint256>>>>() {})
       );
+
+  public static Function setMultiDimStaticArrayWithUtf8StringSubTypeFunction() {
+    //string[2][2]
+    StaticArray2<Utf8String> inner1 = new StaticArray2<>(
+        Utf8String.class,
+        new Utf8String("1234567890123456789012345678901234567890"
+            + "1234567890123456789012345678901234567890"),
+        new Utf8String("short1")
+    );
+
+    StaticArray2<Utf8String> inner2 = new StaticArray2<>(
+        Utf8String.class,
+        new Utf8String("short2"),
+        new Utf8String("short3")
+    );
+
+    @SuppressWarnings("unchecked")
+    StaticArray2<StaticArray2<Utf8String>> outer = new StaticArray2<>(
+        (Class<StaticArray2<Utf8String>>) (Class<?>) StaticArray2.class,
+        inner1,
+        inner2
+    );
+
+    return new Function(
+        FUNC_setMultiDimStaticArrayWithUtf8StringSubType,
+        Collections.singletonList(outer),
+        Collections.emptyList()
+    );
+  }
+
 }
