@@ -364,6 +364,10 @@ public class TypeEncoder {
             !value.getValue().isEmpty() && value.getValue().get(0) instanceof DynamicStruct;
     boolean arrayOfDynamicArrays =
             !value.getValue().isEmpty() && value.getValue().get(0) instanceof DynamicArray;
+    boolean arrayOfDynamicStaticArrays =
+            !value.getValue().isEmpty()
+            && value.getValue().get(0) instanceof StaticArray
+            && isDynamic(value.getValue().get(0));
     if (arrayOfBytes || arrayOfString) {
       long offset = 0;
       for (int i = 0; i < value.getValue().size(); i++) {
@@ -385,7 +389,7 @@ public class TypeEncoder {
                 Numeric.toBytesPadded(
                     new BigInteger(Long.toString(offset)), MAX_BYTE_LENGTH)));
       }
-    } else if (arrayOfDynamicArrays || arrayOfDynamicStructs) {
+    } else if (arrayOfDynamicArrays || arrayOfDynamicStructs || arrayOfDynamicStaticArrays) {
       result.append(encodeDynamicsTypesArraysOffsets(value));
     }
     return result.toString();
