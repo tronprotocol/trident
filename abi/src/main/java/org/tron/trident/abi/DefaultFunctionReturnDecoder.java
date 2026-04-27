@@ -16,7 +16,6 @@ package org.tron.trident.abi;
 import static org.tron.trident.abi.TypeDecoder.MAX_BYTE_LENGTH_FOR_HEX_STRING;
 import static org.tron.trident.abi.TypeDecoder.isDynamic;
 import static org.tron.trident.abi.Utils.getParameterizedTypeFromArray;
-import static org.tron.trident.abi.Utils.staticStructNestedPublicFieldsFlatList;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,7 +35,7 @@ import org.tron.trident.utils.Numeric;
 import org.tron.trident.utils.Strings;
 
 /**
- * Ethereum Contract Application Binary Interface (ABI) encoding for functions. Further details are
+ * Ethereum Contract Application Binary Interface (ABI) decoding for functions. Further details are
  * available <a href="https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI">here</a>.
  */
 public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
@@ -113,7 +112,7 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
                   TypeDecoder.decodeStaticStruct(
                           input, hexStringDataOffset, typeReference);
           offset +=
-                  staticStructNestedPublicFieldsFlatList(classType).size()
+                  (result.bytes32PaddedLength() / Type.MAX_BYTE_LENGTH)
                           * MAX_BYTE_LENGTH_FOR_HEX_STRING;
         } else if (StaticArray.class.isAssignableFrom(classType)) {
           int length =
@@ -130,11 +129,7 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
           } else if (StaticStruct.class.isAssignableFrom(
                   getParameterizedTypeFromArray(typeReference))) {
             offset +=
-                    staticStructNestedPublicFieldsFlatList(
-                            getParameterizedTypeFromArray(
-                                    typeReference))
-                            .size()
-                            * length
+                    (result.bytes32PaddedLength() / Type.MAX_BYTE_LENGTH)
                             * MAX_BYTE_LENGTH_FOR_HEX_STRING;
           } else if (Utf8String.class.isAssignableFrom(
                   getParameterizedTypeFromArray(typeReference))) {

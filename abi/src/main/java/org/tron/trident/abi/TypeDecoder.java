@@ -388,23 +388,6 @@ public class TypeDecoder {
     return decodeStaticStructElement(input, offset, typeReference, function);
   }
 
-  // Counts the number of nested fields in a StaticStruct with inner types.
-  private static <T extends Type> int countNestedFields(final TypeReference<T> typeReference) {
-    try {
-      if (StaticStruct.class.isAssignableFrom(typeReference.getClassType())) {
-        return typeReference.getInnerTypes().stream()
-            .map((tr) -> countNestedFields(tr))
-            .reduce(0, (a, b) -> a + b);
-      }
-
-      return 1;
-    } catch (ClassNotFoundException e) {
-      throw new UnsupportedOperationException(
-          "countNestedFields failed for " + Utils.getTypeName(typeReference.getType()),
-          e);
-    }
-  }
-
   @SuppressWarnings("unchecked")
   private static <T extends Type> T decodeStaticStructElementFromInnerTypes(
       final String input,
@@ -421,13 +404,9 @@ public class TypeDecoder {
         final Class<T> declaredField = innerType.getClassType();
 
         if (StaticStruct.class.isAssignableFrom(declaredField)) {
-          final int nestedStructLength = countNestedFields(innerType) * 64;
-          value =
-              decodeStaticStruct(
-                  input.substring(currOffset, currOffset + nestedStructLength),
-                  0,
-                  innerType);
-          currOffset += nestedStructLength;
+          value = decodeStaticStruct(input, currOffset, innerType);
+          currOffset += (value.bytes32PaddedLength() / Type.MAX_BYTE_LENGTH)
+              * MAX_BYTE_LENGTH_FOR_HEX_STRING;
         } else {
           value = decode(input.substring(currOffset, currOffset + 64), 0, declaredField);
           currOffset += 64;
@@ -591,7 +570,8 @@ public class TypeDecoder {
       } else {
         if (StaticStruct.class.isAssignableFrom(declaredField)) {
           value = decodeStaticStruct(input.substring(beginIndex), 0, innerType);
-          tracker.staticOffset += countNestedFields(innerType) * 64;
+          tracker.staticOffset += (value.bytes32PaddedLength() / Type.MAX_BYTE_LENGTH)
+              * MAX_BYTE_LENGTH_FOR_HEX_STRING;
         } else {
           value = decode(input.substring(beginIndex), 0, declaredField);
           tracker.staticOffset += value.bytes32PaddedLength() * 2;
@@ -905,14 +885,14 @@ public class TypeDecoder {
                   currOffset,
                   (TypeReference<T>) typeReference.getSubTypeReference());
               currOffset +=
-                  countNestedFields(typeReference.getSubTypeReference())
+                  (value.bytes32PaddedLength() / Type.MAX_BYTE_LENGTH)
                       * MAX_BYTE_LENGTH_FOR_HEX_STRING;
             } else {
               value =
                   TypeDecoder.decodeStaticStruct(
                       input, currOffset, TypeReference.create(cls));
               currOffset +=
-                  getSingleElementLength(input, currOffset, cls)
+                  (value.bytes32PaddedLength() / Type.MAX_BYTE_LENGTH)
                       * MAX_BYTE_LENGTH_FOR_HEX_STRING;
             }
           }

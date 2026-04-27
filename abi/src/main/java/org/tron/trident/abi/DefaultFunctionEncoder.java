@@ -13,11 +13,8 @@
 
 package org.tron.trident.abi;
 
-import static org.tron.trident.abi.Utils.staticStructNestedPublicFieldsFlatList;
-
 import java.math.BigInteger;
 import java.util.List;
-import org.tron.trident.abi.datatypes.DynamicStruct;
 import org.tron.trident.abi.datatypes.Function;
 import org.tron.trident.abi.datatypes.StaticArray;
 import org.tron.trident.abi.datatypes.StaticStruct;
@@ -113,19 +110,8 @@ public class DefaultFunctionEncoder extends FunctionEncoder {
     for (final Type type : parameters) {
       if (TypeEncoder.isDynamic(type)) {
         count++;
-      } else if (type instanceof StaticArray) {
-        if (StaticStruct.class.isAssignableFrom(
-                ((StaticArray) type).getComponentType())) {
-          count +=
-                  staticStructNestedPublicFieldsFlatList(
-                          ((StaticArray) type).getComponentType())
-                          .size()
-                          * ((StaticArray) type).getValue().size();
-        } else {
-          count += getLength(((StaticArray) type).getValue());
-        }
-      } else if (type instanceof StaticStruct) {
-        count += staticStructNestedPublicFieldsFlatList((Class<Type>) type.getClass()).size();
+      } else if (type instanceof StaticArray || type instanceof StaticStruct) {
+        count += type.bytes32PaddedLength() / Type.MAX_BYTE_LENGTH;
       } else {
         count++;
       }
