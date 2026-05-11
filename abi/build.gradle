@@ -6,4 +6,5 @@ description 'TRON Application Binary Interface (ABI) for working with smart cont
 
 dependencies {
     implementation project(':utils')
+    testImplementation "com.fasterxml.jackson.core:jackson-databind:2.18.6"
 }
