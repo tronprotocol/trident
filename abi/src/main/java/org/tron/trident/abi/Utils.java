@@ -190,6 +190,57 @@ public class Utils {
   }
 
 
+  /**
+   * Resolves the element TypeReference for a DynamicArray during decoding.
+   * Prefers the explicit {@code subTypeReference} (set by ABI-JSON path); falls back to
+   * reflecting on {@code getType()}; last resort synthesizes via
+   * {@link #getFullParameterizedTypeFromArray}.
+   */
+  @SuppressWarnings("unchecked")
+  static TypeReference<?> resolveDynamicArrayElementTypeReference(TypeReference<?> outerRef)
+      throws ClassNotFoundException {
+    TypeReference<?> sub = outerRef.getSubTypeReference();
+    if (sub != null) {
+      return sub;
+    }
+    final java.lang.reflect.Type elementType =
+        ((ParameterizedType) outerRef.getType()).getActualTypeArguments()[0];
+    if (elementType instanceof ParameterizedType) {
+      return new TypeReference<Type>() {
+        @Override
+        public java.lang.reflect.Type getType() {
+          return elementType;
+        }
+      };
+    }
+    return getDynamicArrayTypeReference(getFullParameterizedTypeFromArray(outerRef));
+  }
+
+  /**
+   * Resolves the inner element TypeReference for a StaticArray during decoding,
+   * drilling two levels (outer-of-static-array, then element-of-static-array).
+   */
+  @SuppressWarnings("unchecked")
+  static TypeReference<?> resolveStaticArrayInnerTypeReference(TypeReference<?> outerRef) {
+    TypeReference<?> sub = outerRef.getSubTypeReference();
+    if (sub != null && sub.getSubTypeReference() != null) {
+      return sub.getSubTypeReference();
+    }
+    final java.lang.reflect.Type elementType =
+        ((ParameterizedType) outerRef.getType()).getActualTypeArguments()[0];
+    final java.lang.reflect.Type innerReflectType =
+        ((ParameterizedType) elementType).getActualTypeArguments()[0];
+    if (innerReflectType instanceof ParameterizedType) {
+      return new TypeReference<Type>() {
+        @Override
+        public java.lang.reflect.Type getType() {
+          return innerReflectType;
+        }
+      };
+    }
+    return TypeReference.create((Class) innerReflectType);
+  }
+
   @SuppressWarnings("unchecked")
   static <T extends Type> Class<T> getParameterizedTypeFromArray(TypeReference typeReference)
       throws ClassNotFoundException {
@@ -215,15 +266,27 @@ public class Utils {
   static <T extends Type> Class<T> getFullParameterizedTypeFromArray(TypeReference typeReference)
           throws ClassNotFoundException {
 
+    TypeReference<?> subRef = typeReference.getSubTypeReference();
+    if (subRef != null && subRef.getSubTypeReference() != null) {
+      return subRef.getSubTypeReference().getClassType();
+    }
+
     java.lang.reflect.Type type = typeReference.getType();
 
     java.lang.reflect.Type typeArgument =
             ((ParameterizedType) type).getActualTypeArguments()[0];
 
-    return (Class<T>)
-            Class.forName(
-                    ((ParameterizedType) typeArgument)
-                            .getActualTypeArguments()[0].getTypeName());
+    java.lang.reflect.Type innerType =
+            ((ParameterizedType) typeArgument).getActualTypeArguments()[0];
+
+    // For 3D+ arrays, innerType may be a ParameterizedType (e.g. DynamicArray<Uint256>).
+    // Use getRawType() to extract only the class name without generic parameters,
+    // since Class.forName() cannot parse parameterized type strings.
+    if (innerType instanceof ParameterizedType) {
+      return (Class<T>)
+              Class.forName(getTypeName(((ParameterizedType) innerType).getRawType()));
+    }
+    return (Class<T>) Class.forName(innerType.getTypeName());
   }
 
   @SuppressWarnings("unchecked")

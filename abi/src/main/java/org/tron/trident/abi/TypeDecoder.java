@@ -388,6 +388,19 @@ public class TypeDecoder {
     return decodeStaticStructElement(input, offset, typeReference, function);
   }
 
+  private static int extractStaticArrayLength(TypeReference<?> typeReference) {
+    if (typeReference instanceof TypeReference.StaticArrayTypeReference) {
+      return ((TypeReference.StaticArrayTypeReference<?>) typeReference).getSize();
+    }
+    try {
+      Class<?> cls = typeReference.getClassType();
+      return Integer.parseInt(cls.getSimpleName().replaceAll("\\D+", ""));
+    } catch (Exception e) {
+      throw new UnsupportedOperationException(
+          "Cannot determine StaticArray length from " + typeReference.getType(), e);
+    }
+  }
+
   @SuppressWarnings("unchecked")
   private static <T extends Type> T decodeStaticStructElementFromInnerTypes(
       final String input,
@@ -407,9 +420,14 @@ public class TypeDecoder {
           value = decodeStaticStruct(input, currOffset, innerType);
           currOffset += (value.bytes32PaddedLength() / Type.MAX_BYTE_LENGTH)
               * MAX_BYTE_LENGTH_FOR_HEX_STRING;
+        } else if (StaticArray.class.isAssignableFrom(declaredField)) {
+          int staticLength = extractStaticArrayLength(innerType);
+          value = (T) decodeStaticArray(input, currOffset, innerType, staticLength);
+          currOffset += (value.bytes32PaddedLength() / Type.MAX_BYTE_LENGTH)
+              * MAX_BYTE_LENGTH_FOR_HEX_STRING;
         } else {
           value = decode(input.substring(currOffset, currOffset + 64), 0, declaredField);
-          currOffset += 64;
+          currOffset += MAX_BYTE_LENGTH_FOR_HEX_STRING;
         }
         elements.add(value);
       }
@@ -559,7 +577,7 @@ public class TypeDecoder {
       final Class<T> declaredField = innerType.getClassType();
       final T value;
       final int beginIndex = offset + tracker.staticOffset;
-      if (isDynamic(declaredField)) {
+      if (isDynamic(innerType)) {
         final int parameterOffset =
             decodeDynamicStructDynamicParameterOffset(
                 input.substring(beginIndex, beginIndex + 64))
@@ -570,6 +588,11 @@ public class TypeDecoder {
       } else {
         if (StaticStruct.class.isAssignableFrom(declaredField)) {
           value = decodeStaticStruct(input.substring(beginIndex), 0, innerType);
+          tracker.staticOffset += (value.bytes32PaddedLength() / Type.MAX_BYTE_LENGTH)
+              * MAX_BYTE_LENGTH_FOR_HEX_STRING;
+        } else if (StaticArray.class.isAssignableFrom(declaredField)) {
+          int staticLength = extractStaticArrayLength(innerType);
+          value = (T) decodeStaticArray(input, beginIndex, innerType, staticLength);
           tracker.staticOffset += (value.bytes32PaddedLength() / Type.MAX_BYTE_LENGTH)
               * MAX_BYTE_LENGTH_FOR_HEX_STRING;
         } else {
@@ -593,8 +616,7 @@ public class TypeDecoder {
     int dynamicParametersProcessed = 0;
     for (int i = 0; i < innerTypes.size(); ++i) {
       final TypeReference<T> parameterTypeReference = (TypeReference<T>) innerTypes.get(i);
-      final Class<T> declaredField = parameterTypeReference.getClassType();
-      if (isDynamic(declaredField)) {
+      if (isDynamic(parameterTypeReference)) {
         final boolean isLastParameterInStruct =
             dynamicParametersProcessed == (tracker.dynamicParametersToProcess - 1);
         final int parameterLength =
@@ -776,6 +798,9 @@ public class TypeDecoder {
       value = decodeDynamicStruct(dynamicElementData, 0, parameterTypeReference);
     } else if (DynamicArray.class.isAssignableFrom(declaredField)) {
       value = (T) decodeDynamicArray(dynamicElementData, 0, parameterTypeReference);
+    } else if (StaticArray.class.isAssignableFrom(declaredField)) {
+      int staticLength = extractStaticArrayLength(parameterTypeReference);
+      value = (T) decodeStaticArray(dynamicElementData, 0, parameterTypeReference, staticLength);
     } else {
       value = decode(dynamicElementData, declaredField);
     }
@@ -791,6 +816,48 @@ public class TypeDecoder {
         || Utf8String.class.isAssignableFrom(parameter)
         || DynamicArray.class.isAssignableFrom(parameter)
         || DynamicStruct.class.isAssignableFrom(parameter);
+  }
+
+  /**
+   * Recursive ABI-dynamic check: a type is ABI-dynamic if it is itself a dynamic class
+   * (per {@link #isDynamic(Class)}) OR it is a StaticArray whose element type is ABI-dynamic.
+   * E.g. {@code string[3]} is ABI-dynamic because {@code string} is dynamic, even though
+   * its outer Java class is StaticArray.
+   */
+  @SuppressWarnings("unchecked")
+  static boolean isDynamic(TypeReference<?> typeReference) {
+    try {
+      Class<Type> cls = (Class<Type>) typeReference.getClassType();
+      if (isDynamic(cls)) {
+        return true;
+      }
+      if (StaticArray.class.isAssignableFrom(cls)) {
+        TypeReference<?> subRef = typeReference.getSubTypeReference();
+        if (subRef != null) {
+          return isDynamic(subRef);
+        }
+        java.lang.reflect.Type type = typeReference.getType();
+        if (type instanceof ParameterizedType) {
+          final java.lang.reflect.Type elementType =
+              ((ParameterizedType) type).getActualTypeArguments()[0];
+          return isDynamic(new TypeReference<Type>() {
+            @Override
+            public java.lang.reflect.Type getType() {
+              return elementType;
+            }
+          });
+        }
+        try {
+          Class<Type> paramType = Utils.getParameterizedTypeFromArray(typeReference);
+          return isDynamic(paramType);
+        } catch (Exception e) {
+          return false;
+        }
+      }
+      return false;
+    } catch (ClassNotFoundException e) {
+      return false;
+    }
   }
 
   static BigInteger asBigInteger(Object arg) {
@@ -906,6 +973,8 @@ public class TypeDecoder {
         for (int i = 0, currOffset = offset; i < length; i++) {
           T value;
           if (DynamicArray.class.isAssignableFrom(cls)) {
+            TypeReference<?> dynamicTypeRef =
+                Utils.resolveDynamicArrayElementTypeReference(typeReference);
             value =
                 (T)
                     TypeDecoder.decodeDynamicArray(
@@ -913,9 +982,7 @@ public class TypeDecoder {
                         offset
                             + getDataOffset(
                             input, currOffset, typeReference),
-                        Utils.getDynamicArrayTypeReference(
-                            Utils.getFullParameterizedTypeFromArray(
-                                typeReference)));
+                        dynamicTypeRef);
             currOffset +=
                 getSingleElementLength(input, currOffset, cls)
                     * MAX_BYTE_LENGTH_FOR_HEX_STRING;
@@ -925,9 +992,8 @@ public class TypeDecoder {
                 typeName.substring(typeName.replaceAll("[0-9]+$", "").length());
             int staticLength =
                 extractedLength.isEmpty() ? 0 : Integer.parseInt(extractedLength);
-            TypeReference innerType =
-                TypeReference.create(
-                    Utils.getFullParameterizedTypeFromArray(typeReference));
+            final TypeReference innerType =
+                Utils.resolveStaticArrayInnerTypeReference(typeReference);
 
             TypeReference.StaticArrayTypeReference staticReference =
                 new TypeReference.StaticArrayTypeReference<StaticArray>(
@@ -965,16 +1031,30 @@ public class TypeDecoder {
                     };
                   }
                 };
-            value =
-                (T)
-                    TypeDecoder.decodeStaticArray(
-                        input, currOffset, staticReference, staticLength);
-            // In ABI, StaticArrays are encoded inline without any length prefix.
-            // Therefore, the exact offset advance required is derived from
-            // the true padded byte length.
-            currOffset +=
-                (value.bytes32PaddedLength() / Type.MAX_BYTE_LENGTH)
-                    * MAX_BYTE_LENGTH_FOR_HEX_STRING;
+            if (isDynamic(staticReference)) {
+              // StaticArray with dynamic elements (e.g. string[3]) is ABI-dynamic:
+              // outer container stores an offset pointer (1 slot); actual data
+              // is at offset + pointerValue, in head/tail form.
+              int hexStringDataOffset =
+                  getDataOffset(input, currOffset, staticReference);
+              value =
+                  (T)
+                      TypeDecoder.decodeStaticArray(
+                          input,
+                          offset + hexStringDataOffset,
+                          staticReference,
+                          staticLength);
+              currOffset += MAX_BYTE_LENGTH_FOR_HEX_STRING;
+            } else {
+              // All-static StaticArray: inline, no length prefix.
+              value =
+                  (T)
+                      TypeDecoder.decodeStaticArray(
+                          input, currOffset, staticReference, staticLength);
+              currOffset +=
+                  (value.bytes32PaddedLength() / Type.MAX_BYTE_LENGTH)
+                      * MAX_BYTE_LENGTH_FOR_HEX_STRING;
+            }
           }
           elements.add(value);
         }
