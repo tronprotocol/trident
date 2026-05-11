@@ -76,6 +76,13 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
   }
 
   private static List<Type> build(String input, List<TypeReference<Type>> outputParameters) {
+    // Reject cyclic or excessively nested TypeReference graphs up front; any
+    // downstream recursion through subTypeReference / innerTypes is then bounded
+    // by what passed validation here.
+    for (TypeReference<?> typeReference : outputParameters) {
+      Utils.validateTypeReferenceDepth(typeReference);
+    }
+
     List<Type> results = new ArrayList<>(outputParameters.size());
 
     int offset = 0;

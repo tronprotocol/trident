@@ -19,10 +19,15 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.tron.trident.abi.datatypes.DynamicArray;
@@ -401,5 +406,68 @@ public class Utils {
     }
 
     return type.getName();
+  }
+
+  /**
+   * Upper bound on TypeReference graph depth accepted by the decoder.
+   * Real ABIs rarely exceed 6-8 levels of nesting (e.g. DeFi aggregator structs);
+   * 10 covers realistic use with a small margin while rejecting obviously
+   * malicious or malformed inputs quickly. Bump if a legitimate case trips this.
+   */
+  private static final int MAX_TYPEREF_DEPTH = 10;
+
+  /**
+   * Validates a TypeReference graph before decoding: rejects cycles on the
+   * current traversal path via identity comparison and caps the maximum depth at
+   * {@link #MAX_TYPEREF_DEPTH}. Walked
+   * iteratively (explicit stack) so this method itself cannot blow the JVM stack
+   * on malicious input.
+   *
+   * <p>Called once at the decoder entry; bounds every downstream recursive
+   * traversal of subTypeReference / innerTypes (in {@code TypeDecoder.isDynamic},
+   * {@code buildTypeStringFromTypeReference}, {@code decodeStaticStruct},
+   * {@code decodeDynamicStruct}, etc.). All local state, no shared mutable
+   * fields — safe for concurrent invocation on the same TypeReference.
+   */
+  public static void validateTypeReferenceDepth(TypeReference<?> root) {
+    if (root == null) {
+      return;
+    }
+    Deque<Object[]> stack = new ArrayDeque<>();
+    Set<TypeReference<?>> inPath =
+            Collections.newSetFromMap(new IdentityHashMap<>());
+    stack.push(new Object[]{root, 0, true});
+    while (!stack.isEmpty()) {
+      Object[] curr = stack.pop();
+      TypeReference<?> node = (TypeReference<?>) curr[0];
+      int depth = (Integer) curr[1];
+      boolean entering = (Boolean) curr[2];
+      if (!entering) {
+        inPath.remove(node);
+        continue;
+      }
+      if (depth >= MAX_TYPEREF_DEPTH) {
+        throw new UnsupportedOperationException(
+            "TypeReference depth exceeds " + MAX_TYPEREF_DEPTH
+                + " — possible cycle or excessively nested type");
+      }
+      if (!inPath.add(node)) {
+        throw new UnsupportedOperationException(
+            "Cycle detected in TypeReference graph");
+      }
+      stack.push(new Object[]{node, depth, false});
+      TypeReference<?> sub = node.getSubTypeReference();
+      if (sub != null) {
+        stack.push(new Object[]{sub, depth + 1, true});
+      }
+      List<TypeReference<?>> inners = node.getInnerTypes();
+      if (inners != null) {
+        for (TypeReference<?> inner : inners) {
+          if (inner != null) {
+            stack.push(new Object[]{inner, depth + 1, true});
+          }
+        }
+      }
+    }
   }
 }

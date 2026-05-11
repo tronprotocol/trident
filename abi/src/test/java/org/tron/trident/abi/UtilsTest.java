@@ -27,6 +27,7 @@ import org.tron.trident.abi.datatypes.DynamicBytes;
 import org.tron.trident.abi.datatypes.Fixed;
 import org.tron.trident.abi.datatypes.Int;
 import org.tron.trident.abi.datatypes.StaticArray;
+import org.tron.trident.abi.datatypes.Type;
 import org.tron.trident.abi.datatypes.Ufixed;
 import org.tron.trident.abi.datatypes.Uint;
 import org.tron.trident.abi.datatypes.Utf8String;
@@ -105,5 +106,58 @@ public class UtilsTest {
   public void testTypeMapEmpty() {
     Assertions.assertEquals(Utils.typeMap(new ArrayList<>(), Uint256.class),
         (new ArrayList<Uint256>()));
+  }
+
+  @Test
+  public void testValidateTypeReferenceDepthAcceptsNull() {
+    // Null root is a no-op (defensive); should not throw.
+    Assertions.assertDoesNotThrow(() -> Utils.validateTypeReferenceDepth(null));
+  }
+
+  @Test
+  public void testValidateTypeReferenceDepthAcceptsRealisticNesting() {
+    // DynamicArray<DynamicArray<Uint256>> — depth 3, well below the limit.
+    TypeReference<?> ref = new TypeReference<DynamicArray<DynamicArray<Uint256>>>() {};
+    Assertions.assertDoesNotThrow(() -> Utils.validateTypeReferenceDepth(ref));
+  }
+
+  @Test
+  public void testValidateTypeReferenceDepthRejectsExcessiveNesting() {
+    // Build a chain of innerTypes 15 levels deep — beyond MAX_TYPEREF_DEPTH (10).
+    TypeReference<?> chain = TypeReference.create(Uint256.class);
+    for (int i = 0; i < 15; i++) {
+      final TypeReference<?> child = chain;
+      chain = new TypeReference<Type>(false, Arrays.asList(child)) { };
+    }
+    final TypeReference<?> tooDeep = chain;
+    UnsupportedOperationException ex = Assertions.assertThrows(
+        UnsupportedOperationException.class,
+        () -> Utils.validateTypeReferenceDepth(tooDeep));
+    Assertions.assertTrue(ex.getMessage().contains("depth"),
+        "expected depth-related message, got: " + ex.getMessage());
+  }
+
+  @Test
+  public void testValidateTypeReferenceDepthAcceptsSharedNodes() {
+    TypeReference<?> shared = TypeReference.create(Uint256.class);
+    TypeReference<?> left = new TypeReference<Type>(false, Arrays.asList(shared)) { };
+    TypeReference<?> right = new TypeReference<Type>(false, Arrays.asList(shared)) { };
+    TypeReference<?> root = new TypeReference<Type>(false, Arrays.asList(left, right)) { };
+
+    Assertions.assertDoesNotThrow(() -> Utils.validateTypeReferenceDepth(root));
+  }
+
+  @Test
+  public void testValidateTypeReferenceDepthRejectsCycle() {
+    List<TypeReference<?>> rootChildren = new ArrayList<>();
+    TypeReference<?> root = new TypeReference<Type>(false, rootChildren) { };
+    TypeReference<?> child = new TypeReference<Type>(false, Arrays.asList(root)) { };
+    rootChildren.add(child);
+
+    UnsupportedOperationException ex = Assertions.assertThrows(
+        UnsupportedOperationException.class,
+        () -> Utils.validateTypeReferenceDepth(root));
+    Assertions.assertTrue(ex.getMessage().contains("Cycle"),
+        "expected cycle-related message, got: " + ex.getMessage());
   }
 }
