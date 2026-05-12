@@ -106,7 +106,7 @@ public abstract class TypeReference<T extends org.tron.trident.abi.datatypes.Typ
     if (getType() instanceof ParameterizedType) {
       return (Class<T>) ((ParameterizedType) clsType).getRawType();
     } else {
-      return (Class<T>) Class.forName(Utils.getTypeName(clsType));
+      return Utils.safeLoadTypeClass(Utils.getTypeName(clsType));
     }
   }
 

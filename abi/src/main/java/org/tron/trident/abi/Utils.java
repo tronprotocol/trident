@@ -51,6 +51,27 @@ public class Utils {
   private Utils() {
   }
 
+  /**
+   * Reflectively loads a class by FQN and verifies it is an ABI {@link Type}
+   * subtype. Uses {@code initialize=false} so loading never triggers the
+   * target class's static initializer — defense-in-depth against side
+   * effects from unexpected class names sneaking into a TypeReference graph.
+   *
+   * @throws ClassNotFoundException if the named class cannot be located
+   * @throws UnsupportedOperationException if the named class is not a Type subtype
+   */
+  @SuppressWarnings("unchecked")
+  static <T extends Type> Class<T> safeLoadTypeClass(String fqcn)
+      throws ClassNotFoundException {
+    Class<?> loaded = Class.forName(fqcn, false, Utils.class.getClassLoader());
+    if (!Type.class.isAssignableFrom(loaded)) {
+      throw new UnsupportedOperationException(
+          "Resolved class is not a subtype of " + Type.class.getName()
+              + ": " + fqcn);
+    }
+    return (Class<T>) loaded;
+  }
+
   static <T extends Type> String getTypeName(TypeReference<T> typeReference) {
     try {
       java.lang.reflect.Type reflectedType = typeReference.getType();
@@ -62,7 +83,7 @@ public class Utils {
       } else if (typeReference.getSubTypeReference() != null) {
         return getParameterizedTypeName(typeReference, typeReference.getClassType());
       } else {
-        type = Class.forName(getTypeName(reflectedType));
+        type = safeLoadTypeClass(getTypeName(reflectedType));
         if (StructType.class.isAssignableFrom(type)) {
           return getStructType(type);
         }
@@ -260,12 +281,11 @@ public class Utils {
         ((ParameterizedType) type).getActualTypeArguments();
 
     if (typeArguments[0] instanceof ParameterizedType) {
-      return (Class<T>)
-              Class.forName(getTypeName(((ParameterizedType) typeArguments[0]).getRawType()));
+      return safeLoadTypeClass(
+          getTypeName(((ParameterizedType) typeArguments[0]).getRawType()));
     }
 
-    String parameterizedTypeName = typeArguments[0].getTypeName();
-    return (Class<T>) Class.forName(parameterizedTypeName);
+    return safeLoadTypeClass(typeArguments[0].getTypeName());
   }
 
   static <T extends Type> Class<T> getFullParameterizedTypeFromArray(TypeReference typeReference)
@@ -288,10 +308,10 @@ public class Utils {
     // Use getRawType() to extract only the class name without generic parameters,
     // since Class.forName() cannot parse parameterized type strings.
     if (innerType instanceof ParameterizedType) {
-      return (Class<T>)
-              Class.forName(getTypeName(((ParameterizedType) innerType).getRawType()));
+      return safeLoadTypeClass(
+          getTypeName(((ParameterizedType) innerType).getRawType()));
     }
-    return (Class<T>) Class.forName(innerType.getTypeName());
+    return safeLoadTypeClass(innerType.getTypeName());
   }
 
   @SuppressWarnings("unchecked")
