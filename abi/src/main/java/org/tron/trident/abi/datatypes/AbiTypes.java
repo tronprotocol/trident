@@ -369,7 +369,19 @@ public final class AbiTypes {
         return TrcToken.class;
       default: {
         try {
-          return (Class<? extends Type>) Class.forName(type);
+          // initialize=false: do not trigger static initializers of arbitrary
+          // classes during reflective lookup. Explicit ClassLoader keeps
+          // resolution independent of the calling stack.
+          Class<?> loaded =
+              Class.forName(type, false, AbiTypes.class.getClassLoader());
+          if (!Type.class.isAssignableFrom(loaded)) {
+            throw new UnsupportedOperationException(
+                "Unsupported type encountered: " + type
+                    + " (not a subtype of " + Type.class.getName() + ")");
+          }
+          @SuppressWarnings("unchecked")
+          Class<? extends Type> typed = (Class<? extends Type>) loaded;
+          return typed;
         } catch (ClassNotFoundException e) {
           throw new UnsupportedOperationException(
                   "Unsupported type encountered: " + type);
