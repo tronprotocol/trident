@@ -34,4 +34,12 @@ public class Utf8StringTest {
     assertEquals(32, new Utf8String(string32Bytes).bytes32PaddedLength());
     assertEquals(64, new Utf8String(string33Bytes).bytes32PaddedLength());
   }
+
+  @Test
+  public void testBytes32PaddedLengthWithNullValue() {
+    // equals()/hashCode() already tolerate null value; bytes32PaddedLength
+    // must too, otherwise reflective construction paths can NPE before
+    // the value ever gets validated.
+    assertEquals(32, new Utf8String(null).bytes32PaddedLength());
+  }
 }

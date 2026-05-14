@@ -18,7 +18,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import org.tron.trident.abi.datatypes.DynamicArray;
 import org.tron.trident.abi.datatypes.Event;
+import org.tron.trident.abi.datatypes.generated.StaticArray2;
 import org.tron.trident.abi.datatypes.generated.Uint256;
 
 public class EventEncoderTest {
@@ -78,5 +80,16 @@ public class EventEncoderTest {
         EventEncoder.buildMethodSignature(
             AbiV2TestFixture.nazzEvent2.getName(),
             AbiV2TestFixture.nazzEvent2.getParameters()));
+  }
+
+  @Test
+  void testBuildMethodSignatureWithNestedStaticArray() {
+    List<TypeReference<?>> parameters =
+        Arrays.asList(new TypeReference<DynamicArray<StaticArray2<Uint256>>>() {
+        });
+
+    assertEquals(
+        "Nested(uint256[2][])",
+        EventEncoder.buildMethodSignature("Nested", Utils.convert(parameters)));
   }
 }

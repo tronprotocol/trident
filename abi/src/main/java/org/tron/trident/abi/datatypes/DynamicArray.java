@@ -74,16 +74,18 @@ public class DynamicArray<T extends Type> extends Array<T> {
     String type;
     if (value.isEmpty()) {
       Class<T> componentType = getComponentType();
-      // Empty struct array decoded from ABI: componentType is the generic
-      // DynamicStruct/StaticStruct base class (or null), which carries no
-      // field metadata. Reflection cannot recover the struct layout.
-      if (componentType == null
-              || componentType == DynamicStruct.class
-              || componentType == StaticStruct.class) {
+      boolean genericStruct =
+          componentType == DynamicStruct.class || componentType == StaticStruct.class;
+      boolean rawArrayType =
+          componentType != null
+              && Array.class.isAssignableFrom(componentType)
+              && !StructType.class.isAssignableFrom(componentType);
+      if (componentType == null || genericStruct || rawArrayType) {
         throw new UnsupportedOperationException(
-            "Cannot determine type string for empty array of generic struct type. "
-                + "Either construct DynamicArray with a typed StructType subclass, "
-                + "or compute the type string externally from a TypeReference.");
+            "Cannot determine type string for empty array of generic struct "
+                + "or nested array type. Either construct DynamicArray with a "
+                + "concrete element type, or compute the type string externally "
+                + "from a TypeReference.");
       }
       if (StructType.class.isAssignableFrom(componentType)) {
         type = Utils.getStructType(componentType);

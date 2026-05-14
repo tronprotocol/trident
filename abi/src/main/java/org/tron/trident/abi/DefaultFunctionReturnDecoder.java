@@ -153,6 +153,7 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
     if (DynamicBytes.class.isAssignableFrom(type)
             || Utf8String.class.isAssignableFrom(type)
             || DynamicArray.class.isAssignableFrom(type)
+            || DynamicStruct.class.isAssignableFrom(type)
             || hasDynamicOffsetInStaticArray(typeReference)) {
       return TypeDecoder.decodeUintAsInt(input, offset) << 1;
     } else {

@@ -3,7 +3,6 @@ package org.tron.trident.abi.datatypes;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.tron.trident.abi.TypeReference;
@@ -20,9 +19,11 @@ public class CustomErrorTest {
 
     assertEquals(event.getName(), "MyError");
 
-    Iterator<TypeReference<?>> expectedParameter = parameters.iterator();
-    for (TypeReference<?> actualParameter : event.getParameters()) {
-      assertEquals(expectedParameter.next(), actualParameter);
+    List<TypeReference<Type>> actualParameters = event.getParameters();
+    assertEquals(parameters.size(), actualParameters.size(),
+        "parameter count mismatch");
+    for (int i = 0; i < parameters.size(); i++) {
+      assertEquals(parameters.get(i), actualParameters.get(i));
     }
   }
 

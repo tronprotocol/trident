@@ -40,7 +40,7 @@ public class EventEncoder {
    * Encodes the given {@code Event} and removes '0x' of the encoded string.
    *
    * @param event the {@code Event} instance to be encoded
-   * @return a hexadecimal string representing the encoded event, excluding the prefix 0x
+   * @return a hexadecimal string representing the encoded event, excluding the prefix '0x'
    */
   public static String encodeWithOutPrefix(Event event) {
     return encode(event).substring(2);

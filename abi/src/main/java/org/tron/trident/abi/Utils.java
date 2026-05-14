@@ -115,7 +115,15 @@ public class Utils {
         Class parameterAnnotation =
                 extractParameterFromAnnotation(constructor.getParameterAnnotations()[i]);
         if (parameterAnnotation != null) {
-          sb.append(getTypeName(getDynamicArrayTypeReference(parameterAnnotation)));
+          try {
+            TypeReference typeRef = getTypeReferenceForParameterizedField(cls, parameterAnnotation);
+            sb.append(getTypeName(typeRef));
+          } catch (ClassNotFoundException e) {
+            throw new RuntimeException(
+                "Failed to build TypeReference for @Parameterized field of type "
+                    + cls.getName() + " with element type "
+                    + parameterAnnotation.getName(), e);
+          }
         } else {
           sb.append(getTypeName(TypeReference.create(cls)));
         }
@@ -135,6 +143,39 @@ public class Utils {
         return TypeReference.create(parameter);
       }
     };
+  }
+
+  public static TypeReference getTypeReferenceForParameterizedField(
+      Class fieldType, Class elementType) throws ClassNotFoundException {
+    if (StaticArray.class.isAssignableFrom(fieldType)) {
+      int size = extractStaticArraySize(fieldType);
+      String elementTypeName = getSimpleTypeName(elementType);
+      String solidityType = elementTypeName + "[" + size + "]";
+      return TypeReference.makeTypeReference(solidityType);
+    } else {
+      return getDynamicArrayTypeReference(elementType);
+    }
+  }
+
+  /**
+   * Extracts the array size from a generated {@code StaticArrayN} subclass.
+   * The bare {@link StaticArray} base class carries no size information and is rejected.
+   */
+  private static int extractStaticArraySize(Class<?> staticArrayClass) {
+    String className = staticArrayClass.getSimpleName();
+    String prefix = "StaticArray";
+    if (!className.startsWith(prefix) || className.length() == prefix.length()) {
+      throw new IllegalArgumentException(
+          "Cannot determine static array size from class " + staticArrayClass.getName()
+              + "; @Parameterized fields must use a generated StaticArrayN subclass.");
+    }
+    String sizeStr = className.substring(prefix.length());
+    try {
+      return Integer.parseInt(sizeStr);
+    } catch (NumberFormatException e) {
+      throw new IllegalArgumentException(
+          "Invalid static array size suffix in class " + staticArrayClass.getName(), e);
+    }
   }
 
   public static <T extends Type> Class<T> extractParameterFromAnnotation(
@@ -186,12 +227,10 @@ public class Utils {
 
     try {
       if (type.equals(DynamicArray.class)) {
-        Class<U> parameterizedType = getParameterizedTypeFromArray(typeReference);
-        String parameterizedTypeName = simpleNameOrStruct(parameterizedType);
+        String parameterizedTypeName = getArrayElementTypeName(typeReference);
         return parameterizedTypeName + "[]";
       } else if (StaticArray.class.isAssignableFrom(type)) {
-        Class<U> parameterizedType = getParameterizedTypeFromArray(typeReference);
-        String parameterizedTypeName = simpleNameOrStruct(parameterizedType);
+        String parameterizedTypeName = getArrayElementTypeName(typeReference);
         final int length;
         if (TypeReference.StaticArrayTypeReference.class.isAssignableFrom(
                 typeReference.getClass())) {
@@ -206,6 +245,46 @@ public class Utils {
     } catch (ClassNotFoundException e) {
       throw new UnsupportedOperationException("Invalid class reference provided", e);
     }
+  }
+
+  @SuppressWarnings("unchecked")
+  private static String getArrayElementTypeName(TypeReference<?> typeReference)
+      throws ClassNotFoundException {
+    TypeReference<?> subTypeReference = typeReference.getSubTypeReference();
+    if (subTypeReference != null) {
+      return getTypeName((TypeReference<Type>) subTypeReference);
+    }
+
+    java.lang.reflect.Type reflectedType = typeReference.getType();
+    if (!(reflectedType instanceof ParameterizedType)) {
+      throw new UnsupportedOperationException("Invalid array type provided " + reflectedType);
+    }
+
+    java.lang.reflect.Type elementType =
+        ((ParameterizedType) reflectedType).getActualTypeArguments()[0];
+    if (elementType instanceof ParameterizedType) {
+      final java.lang.reflect.Type parameterizedElementType = elementType;
+      return getTypeName(
+          new TypeReference<Type>() {
+            @Override
+            public java.lang.reflect.Type getType() {
+              return parameterizedElementType;
+            }
+          });
+    }
+
+    Class<?> elementClass;
+    if (elementType instanceof Class) {
+      elementClass = (Class<?>) elementType;
+    } else {
+      elementClass = safeLoadTypeClass(elementType.getTypeName());
+    }
+    if (!Type.class.isAssignableFrom(elementClass)) {
+      throw new UnsupportedOperationException(
+          "Resolved array element is not a subtype of " + Type.class.getName()
+              + ": " + elementType);
+    }
+    return simpleNameOrStruct((Class<? extends Type>) elementClass);
   }
 
   private static <U extends Type> String simpleNameOrStruct(Class<U> parameterizedType) {

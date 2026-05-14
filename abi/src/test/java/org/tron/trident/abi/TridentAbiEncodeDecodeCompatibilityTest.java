@@ -532,15 +532,17 @@ public class TridentAbiEncodeDecodeCompatibilityTest {
     /**
      * Whether the given fixture value falls outside the signed range of the declared
      * {@code intN} type. Only matches scalar signed ints (not arrays/tuples, not uint).
+     * Treats bare {@code int} as its ABI alias {@code int256}.
      */
     private static boolean isSignedIntOutOfRange(String typeStr, JsonNode valueNode) {
-        if (!typeStr.matches("int\\d+")) {
+        if (!typeStr.matches("int\\d*")) {
             return false;
         }
         if (!valueNode.isObject() || !"number".equals(valueNode.path("type").asText())) {
             return false;
         }
-        int bitSize = Integer.parseInt(typeStr.substring(3));
+        String suffix = typeStr.substring(3);
+        int bitSize = suffix.isEmpty() ? 256 : Integer.parseInt(suffix);
         BigInteger v = new BigInteger(valueNode.get("value").asText());
         BigInteger max = BigInteger.ONE.shiftLeft(bitSize - 1).subtract(BigInteger.ONE);
         BigInteger min = BigInteger.ONE.shiftLeft(bitSize - 1).negate();

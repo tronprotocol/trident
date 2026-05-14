@@ -15,7 +15,6 @@ package org.tron.trident.abi.datatypes;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -69,14 +68,6 @@ public abstract class Array<T extends Type> implements Type<List<T>> {
   @Override
   public List<T> getValue() {
     return value;
-  }
-
-  public List<Object> getNativeValueCopy() {
-    List<Object> copy = new ArrayList<>(value.size());
-    for (T t : value) {
-      copy.add(t.getValue());
-    }
-    return Collections.unmodifiableList(copy);
   }
 
   public Class<T> getComponentType() {

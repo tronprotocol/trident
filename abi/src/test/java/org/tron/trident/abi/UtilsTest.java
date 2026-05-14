@@ -21,20 +21,24 @@ import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.tron.trident.abi.datatypes.Address;
 import org.tron.trident.abi.datatypes.Bool;
 import org.tron.trident.abi.datatypes.DynamicArray;
 import org.tron.trident.abi.datatypes.DynamicBytes;
 import org.tron.trident.abi.datatypes.Fixed;
 import org.tron.trident.abi.datatypes.Int;
 import org.tron.trident.abi.datatypes.StaticArray;
+import org.tron.trident.abi.datatypes.StaticStruct;
 import org.tron.trident.abi.datatypes.Type;
 import org.tron.trident.abi.datatypes.Ufixed;
 import org.tron.trident.abi.datatypes.Uint;
 import org.tron.trident.abi.datatypes.Utf8String;
 import org.tron.trident.abi.datatypes.generated.Int64;
 import org.tron.trident.abi.datatypes.generated.StaticArray2;
+import org.tron.trident.abi.datatypes.generated.StaticArray3;
 import org.tron.trident.abi.datatypes.generated.Uint256;
 import org.tron.trident.abi.datatypes.generated.Uint64;
+import org.tron.trident.abi.datatypes.reflection.Parameterized;
 
 public class UtilsTest {
 
@@ -67,6 +71,21 @@ public class UtilsTest {
         ("uint256[5]"));
     assertEquals(Utils.getTypeName(new TypeReference<DynamicArray<Uint>>() {
     }), ("uint256[]"));
+  }
+
+  @Test
+  public void testGetTypeNameNestedArrayUsesCanonicalAbiName() throws Exception {
+    assertEquals(
+        "uint256[2][]",
+        Utils.getTypeName(new TypeReference<DynamicArray<StaticArray2<Uint256>>>() {
+        }));
+    assertEquals(
+        "uint256[2][]",
+        Utils.getTypeName(TypeReference.makeTypeReference("uint256[2][]")));
+    assertEquals(
+        "uint256[2][2]",
+        Utils.getTypeName(new TypeReference<StaticArray2<StaticArray2<Uint256>>>() {
+        }));
   }
 
   @Test
@@ -159,5 +178,48 @@ public class UtilsTest {
         () -> Utils.validateTypeReferenceDepth(root));
     Assertions.assertTrue(ex.getMessage().contains("Cycle"),
         "expected cycle-related message, got: " + ex.getMessage());
+  }
+
+  @Test
+  public void testGetStructTypeWithParameterizedStaticArray() {
+    // @Parameterized on a generated StaticArrayN field should emit the static
+    // array suffix (e.g. "uint256[3]"), not collapse to "uint256[]".
+    String result = Utils.getStructType(TestStructWithParameterizedStaticArray.class);
+    assertEquals("(address,uint256[3])", result);
+  }
+
+  @Test
+  public void testGetStructTypeWithParameterizedDynamicArrayUnchanged() {
+    // Regression guard: @Parameterized on a DynamicArray field must still
+    // produce the dynamic-array suffix "[]" — the StaticArray fix must not
+    // accidentally rewrite this case.
+    String result = Utils.getStructType(TestStructWithParameterizedDynamicArray.class);
+    assertEquals("(address,uint256[])", result);
+  }
+
+  @Test
+  public void testExtractStaticArraySizeRejectsBareStaticArrayClass() {
+    // The bare StaticArray base class has no size suffix; using it as a
+    // field type for @Parameterized must fail loudly rather than silently
+    // producing a nonsense type string.
+    IllegalArgumentException ex = Assertions.assertThrows(
+        IllegalArgumentException.class,
+        () -> Utils.getTypeReferenceForParameterizedField(StaticArray.class, Uint256.class));
+    Assertions.assertTrue(ex.getMessage().contains("StaticArrayN"),
+        "expected guidance toward StaticArrayN, got: " + ex.getMessage());
+  }
+}
+
+class TestStructWithParameterizedStaticArray extends StaticStruct {
+  public TestStructWithParameterizedStaticArray(
+      Address address, @Parameterized(type = Uint256.class) StaticArray3<Uint256> uint256Array) {
+    super(address, uint256Array);
+  }
+}
+
+class TestStructWithParameterizedDynamicArray extends StaticStruct {
+  public TestStructWithParameterizedDynamicArray(
+      Address address, @Parameterized(type = Uint256.class) DynamicArray<Uint256> uint256Array) {
+    super(address, uint256Array);
   }
 }
