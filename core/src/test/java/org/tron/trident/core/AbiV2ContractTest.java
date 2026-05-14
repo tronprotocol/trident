@@ -723,6 +723,7 @@ class AbiV2ContractTest {
   @Test
   @Order(5)
   @DisplayName("Test multi-dimensional static array")
+  @SuppressWarnings("unchecked")
   void testMultiDimArray() {
     // Represents uint256[2][3]
     StaticArray3<StaticArray2<Uint256>> inputArray = new StaticArray3<>(

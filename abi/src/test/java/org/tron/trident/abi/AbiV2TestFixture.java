@@ -14,6 +14,7 @@
 package org.tron.trident.abi;
 
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -880,7 +881,9 @@ public class AbiV2TestFixture {
           FUNC_addDynamicBytesArray,
           Arrays.<Type>asList(
               new BytesStruct(
-                  "dynamic".getBytes(), BigInteger.ZERO, "Bytes".getBytes())),
+                  "dynamic".getBytes(StandardCharsets.UTF_8),
+                  BigInteger.ZERO,
+                  "Bytes".getBytes(StandardCharsets.UTF_8))),
           Collections.<TypeReference<?>>emptyList());
 
   public static class ArrayStruct extends DynamicStruct {
