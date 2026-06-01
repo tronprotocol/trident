@@ -47,6 +47,7 @@ import org.tron.trident.core.contract.ContractFunction;
 import org.tron.trident.core.exceptions.IllegalException;
 import org.tron.trident.core.interceptor.TimeoutInterceptor;
 import org.tron.trident.core.key.KeyPair;
+import org.tron.trident.core.key.PQKeyPair;
 import org.tron.trident.core.transaction.BlockId;
 import org.tron.trident.core.transaction.TransactionBuilder;
 import org.tron.trident.core.transaction.TransactionCapsule;
@@ -54,6 +55,7 @@ import org.tron.trident.core.utils.ByteArray;
 import org.tron.trident.core.utils.Sha256Hash;
 import org.tron.trident.core.utils.Utils;
 import org.tron.trident.proto.Chain.Block;
+import org.tron.trident.proto.Chain.PQAuthSig;
 import org.tron.trident.proto.Chain.Transaction;
 import org.tron.trident.proto.Chain.Transaction.Contract.ContractType;
 import org.tron.trident.proto.Common.Permission;
@@ -151,6 +153,14 @@ public class ApiWrapper implements Api {
   public final KeyPair keyPair;
   public final ManagedChannel channel;
   public final ManagedChannel channelSolidity;
+  /**
+   * Optional post-quantum keypair bound to this client. Unlike {@link #keyPair} it
+   * is not set by the constructors (a PQ key cannot be expressed as a hex secp256k1
+   * private key); supply it via {@link #setPQKeyPair(PQKeyPair)} to enable the no-arg
+   * {@link #signTransactionPQ(Transaction)} / {@link #signTransactionPQ(TransactionExtention)}
+   * convenience overloads.
+   */
+  private PQKeyPair pqKeyPair;
 
   /**
    * Specify whether to createTransaction locally (default false) without grpc request. If false, we
@@ -529,6 +539,75 @@ public class ApiWrapper implements Api {
   @Override
   public Transaction signTransaction(Transaction txn) {
     return signTransaction(txn, keyPair);
+  }
+
+  /**
+   * Sign a transaction with a post-quantum keypair. The resulting authentication
+   * is appended as a {@link PQAuthSig} entry in {@code Transaction.pq_auth_sig}
+   * (carrying the scheme, public key, and signature) rather than the legacy
+   * {@code Transaction.signature} field. PQ and ECDSA signatures may co-exist on
+   * a multi-sig transaction.
+   */
+  @Override
+  public Transaction signTransactionPQ(TransactionExtention txnExt, PQKeyPair pqKeyPair) {
+    byte[] txId = txnExt.getTxid().toByteArray();
+    return buildPQSigned(txnExt.getTransaction(), txId, pqKeyPair);
+  }
+
+  @Override
+  public Transaction signTransactionPQ(Transaction txn, PQKeyPair pqKeyPair) {
+    byte[] txId = calculateTransactionHash(txn);
+    return buildPQSigned(txn, txId, pqKeyPair);
+  }
+
+  /**
+   * Sign with the post-quantum keypair bound to this client via
+   * {@link #setPQKeyPair(PQKeyPair)}. Mirrors the no-arg
+   * {@link #signTransaction(TransactionExtention)} ECDSA convenience overload.
+   *
+   * @throws IllegalStateException if no PQ keypair has been bound
+   */
+  @Override
+  public Transaction signTransactionPQ(TransactionExtention txnExt) {
+    return signTransactionPQ(txnExt, requireBoundPQKeyPair());
+  }
+
+  @Override
+  public Transaction signTransactionPQ(Transaction txn) {
+    return signTransactionPQ(txn, requireBoundPQKeyPair());
+  }
+
+  /**
+   * Bind a post-quantum keypair to this client, enabling the no-arg
+   * {@code signTransactionPQ} overloads. Returns {@code this} for chaining.
+   */
+  public synchronized ApiWrapper setPQKeyPair(PQKeyPair pqKeyPair) {
+    this.pqKeyPair = pqKeyPair;
+    return this;
+  }
+
+  /** Returns the post-quantum keypair bound to this client, or {@code null} if none. */
+  public PQKeyPair getPQKeyPair() {
+    return pqKeyPair;
+  }
+
+  private PQKeyPair requireBoundPQKeyPair() {
+    if (pqKeyPair == null) {
+      throw new IllegalStateException(
+          "no PQ keypair bound to this client; call setPQKeyPair(...) first "
+              + "or use signTransactionPQ(txn, pqKeyPair)");
+    }
+    return pqKeyPair;
+  }
+
+  private Transaction buildPQSigned(Transaction txn, byte[] txId, PQKeyPair pqKeyPair) {
+    byte[] sig = PQKeyPair.signTransaction(txId, pqKeyPair);
+    PQAuthSig pqAuthSig = PQAuthSig.newBuilder()
+        .setScheme(pqKeyPair.getScheme())
+        .setPublicKey(ByteString.copyFrom(pqKeyPair.getPublicKey()))
+        .setSignature(ByteString.copyFrom(sig))
+        .build();
+    return txn.toBuilder().addPqAuthSig(pqAuthSig).build();
   }
 
   private TransactionCapsule createTransactionCapsuleWithoutValidate(
@@ -3442,6 +3521,27 @@ public class ApiWrapper implements Api {
       long feeLimit, long consumeUserResourcePercent, long originEnergyLimit, long callValue,
       String tokenId, long tokenValue)
       throws Exception {
+    return deployContract(keyPair.toBase58CheckAddress(), contractName, abiStr, bytecode,
+        constructorParams, feeLimit, consumeUserResourcePercent, originEnergyLimit, callValue,
+        tokenId, tokenValue);
+  }
+
+  /**
+   * Build a contract-deployment {@link TransactionExtention} for an explicit owner
+   * address, independent of the instance ECDSA {@link #keyPair}. This is the
+   * entry point for post-quantum wallets: a PQ-only holder passes their PQ-derived
+   * address here (e.g. {@link PQKeyPair#toBase58CheckAddress()}) to build the
+   * unsigned transaction, then signs it with {@link #signTransactionPQ(Transaction)}
+   * or {@link #signTransactionPQ(Transaction, PQKeyPair)} — no secp256k1 key is
+   * involved at any step.
+   *
+   * @param ownerAddress base58check owner/deployer address that will own the contract
+   */
+  public TransactionExtention deployContract(String ownerAddress, String contractName,
+      String abiStr, String bytecode, List<Type<?>> constructorParams,
+      long feeLimit, long consumeUserResourcePercent, long originEnergyLimit, long callValue,
+      String tokenId, long tokenValue)
+      throws Exception {
     validateCallValue(callValue);
     validateTokenId(tokenId);
     validateTokenValue(tokenValue);
@@ -3452,7 +3552,7 @@ public class ApiWrapper implements Api {
       bytecode = ByteArray.toHexString(newByteCode.toByteArray());
     }
     CreateSmartContract createSmartContract = createSmartContract(
-        contractName, keyPair.toBase58CheckAddress(), abiStr, bytecode, callValue,
+        contractName, ownerAddress, abiStr, bytecode, callValue,
         consumeUserResourcePercent, originEnergyLimit, tokenValue, tokenId);
 
     return createTransactionExtention(createSmartContract,

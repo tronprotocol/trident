@@ -12,6 +12,7 @@ import org.tron.trident.core.account.AccountPermissions;
 import org.tron.trident.core.contract.Contract;
 import org.tron.trident.core.exceptions.IllegalException;
 import org.tron.trident.core.key.KeyPair;
+import org.tron.trident.core.key.PQKeyPair;
 import org.tron.trident.core.transaction.TransactionBuilder;
 import org.tron.trident.proto.Chain.Block;
 import org.tron.trident.proto.Chain.Transaction;
@@ -58,6 +59,14 @@ public interface Api {
   Transaction signTransaction(TransactionExtention txnExt);
 
   Transaction signTransaction(Transaction txn);
+
+  Transaction signTransactionPQ(TransactionExtention txnExt, PQKeyPair pqKeyPair);
+
+  Transaction signTransactionPQ(Transaction txn, PQKeyPair pqKeyPair);
+
+  Transaction signTransactionPQ(TransactionExtention txnExt);
+
+  Transaction signTransactionPQ(Transaction txn);
 
   TransactionExtention createTransactionExtention(Message request,
       Transaction.Contract.ContractType contractType) throws IllegalException;

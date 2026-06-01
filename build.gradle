@@ -30,7 +30,7 @@ apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'maven-publish'
 
 ext {
-    bouncycastleVersion = '1.78.1'
+    bouncycastleVersion = '1.84'
     junitJupiterVersion = '5.4.2'
     googleGuavaVersion = '33.0.0-jre'
 }
