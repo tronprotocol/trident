@@ -160,7 +160,7 @@ public class ApiWrapper implements Api {
    * {@link #signTransactionPQ(Transaction)} / {@link #signTransactionPQ(TransactionExtention)}
    * convenience overloads.
    */
-  private PQKeyPair pqKeyPair;
+  private volatile PQKeyPair pqKeyPair;
 
   /**
    * Specify whether to createTransaction locally (default false) without grpc request. If false, we
