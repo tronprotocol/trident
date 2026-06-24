@@ -1177,11 +1177,33 @@ public class ApiWrapper implements Api {
    */
   @Override
   public long getCanDelegatedMaxSize(String ownerAddress, int type, NodeType... nodeType) {
+    return getCanDelegatedMaxSize(ownerAddress, type, 0, nodeType);
+  }
+
+  /**
+   * Stake2.0 API
+   * query the amount of delegatable resources share of the specified resource type for an address,
+   * accounting for post-quantum signature size. Supply {@code pqScheme} as the numeric PQScheme
+   * value (e.g., {@code 1} for FN_DSA_512, {@code 2} for ML_DSA_44).
+   * Pass 0 ({@code UNKNOWN_PQ_SCHEME}) to use the default ECDSA-sized estimate.
+   *
+   * @param ownerAddress owner address
+   * @param type resource type, 0 is bandwidth, 1 is energy
+   * @param pqScheme PQ scheme enum value (0 = UNKNOWN_PQ_SCHEME default ECDSA sizing)
+   * @param nodeType Optional parameter to specify which node to query.
+   *                 If not provided, uses full node default.
+   *                 If NodeType.SOLIDITY_NODE, uses solidity node.
+   * @return the max amount of delegatable resources, adjusted for PQ signature overhead
+   */
+  @Override
+  public long getCanDelegatedMaxSize(String ownerAddress, int type, int pqScheme,
+      NodeType... nodeType) {
     ByteString rawFrom = parseAddress(ownerAddress);
     CanDelegatedMaxSizeRequestMessage request =
         CanDelegatedMaxSizeRequestMessage.newBuilder()
             .setOwnerAddress(rawFrom)
             .setType(type)
+            .setPqScheme(pqScheme)
             .build();
     CanDelegatedMaxSizeResponseMessage responseMessage =
         useSolidityNode(nodeType)

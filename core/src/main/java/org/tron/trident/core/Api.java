@@ -120,6 +120,8 @@ public interface Api {
 
   long getCanDelegatedMaxSize(String ownerAddress, int type, NodeType... nodeType);
 
+  long getCanDelegatedMaxSize(String ownerAddress, int type, int pqScheme, NodeType... nodeType);
+
   DelegatedResourceList getDelegatedResourceV2(String fromAddress, String toAddress,
       NodeType... nodeType);
 
