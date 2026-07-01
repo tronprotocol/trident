@@ -36,8 +36,12 @@ ext {
 }
 
 allprojects {
-    version = project.hasProperty("VERSION") ? project.property("VERSION") : DEFAULT_VERSION
-    group = project.hasProperty("GROUP") ? project.property("GROUP") : DEFAULT_GROUP
+    version = project.hasProperty("VERSION") ? project.property("VERSION")
+        : project.hasProperty("version") ? project.property("version")
+        : DEFAULT_VERSION
+    group = project.hasProperty("GROUP") ? project.property("GROUP")
+        : project.hasProperty("group") ? project.property("group")
+        : DEFAULT_GROUP
 
 
     repositories {
@@ -87,6 +91,19 @@ allprojects {
 subprojects {
     apply plugin: 'java'
     apply plugin: 'checkstyle'
+    apply plugin: 'maven-publish'
+
+    afterEvaluate {
+        publishing {
+            publications {
+                maven(MavenPublication) {
+                    from components.java
+                    artifact sourcesJar
+                    artifact javadocJar
+                }
+            }
+        }
+    }
 
     tasks.withType(Jar).configureEach {
         destinationDirectory = rootProject.file("build/libs")
