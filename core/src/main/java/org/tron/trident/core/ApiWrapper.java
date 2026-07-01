@@ -56,6 +56,7 @@ import org.tron.trident.core.utils.Sha256Hash;
 import org.tron.trident.core.utils.Utils;
 import org.tron.trident.proto.Chain.Block;
 import org.tron.trident.proto.Chain.PQAuthSig;
+import org.tron.trident.proto.Chain.PQScheme;
 import org.tron.trident.proto.Chain.Transaction;
 import org.tron.trident.proto.Chain.Transaction.Contract.ContractType;
 import org.tron.trident.proto.Common.Permission;
@@ -157,7 +158,7 @@ public class ApiWrapper implements Api {
    * Optional post-quantum keypair bound to this client. Unlike {@link #keyPair} it
    * is not set by the constructors (a PQ key cannot be expressed as a hex secp256k1
    * private key); supply it via {@link #setPQKeyPair(PQKeyPair)} to enable the no-arg
-   * {@link #signTransactionPQ(Transaction)} / {@link #signTransactionPQ(TransactionExtention)}
+   * {@link #signTransactionPQ} / {@link #signTransactionPQ}
    * convenience overloads.
    */
   private volatile PQKeyPair pqKeyPair;
@@ -563,7 +564,7 @@ public class ApiWrapper implements Api {
   /**
    * Sign with the post-quantum keypair bound to this client via
    * {@link #setPQKeyPair(PQKeyPair)}. Mirrors the no-arg
-   * {@link #signTransaction(TransactionExtention)} ECDSA convenience overload.
+   * {@link #signTransaction} ECDSA convenience overload.
    *
    * @throws IllegalStateException if no PQ keypair has been bound
    */
@@ -1177,26 +1178,28 @@ public class ApiWrapper implements Api {
    */
   @Override
   public long getCanDelegatedMaxSize(String ownerAddress, int type, NodeType... nodeType) {
-    return getCanDelegatedMaxSize(ownerAddress, type, 0, nodeType);
+    return getCanDelegatedMaxSize(ownerAddress, type, PQScheme.UNKNOWN_PQ_SCHEME, nodeType);
   }
 
   /**
    * Stake2.0 API
    * query the amount of delegatable resources share of the specified resource type for an address,
-   * accounting for post-quantum signature size. Supply {@code pqScheme} as the numeric PQScheme
-   * value (e.g., {@code 1} for FN_DSA_512, {@code 2} for ML_DSA_44).
-   * Pass 0 ({@code UNKNOWN_PQ_SCHEME}) to use the default ECDSA-sized estimate.
+   * accounting for post-quantum signature size. Supply {@code pqScheme} as the
+   * {@link PQScheme} enum value
+   * (e.g., {@link PQScheme#FN_DSA_512}, {@link PQScheme#ML_DSA_44}).
+   * Pass {@link PQScheme#UNKNOWN_PQ_SCHEME} to use the default ECDSA-sized estimate.
    *
    * @param ownerAddress owner address
    * @param type resource type, 0 is bandwidth, 1 is energy
-   * @param pqScheme PQ scheme enum value (0 = UNKNOWN_PQ_SCHEME default ECDSA sizing)
+   * @param pqScheme PQ scheme enum value
+   *                 ({@link PQScheme#UNKNOWN_PQ_SCHEME} for default ECDSA sizing)
    * @param nodeType Optional parameter to specify which node to query.
    *                 If not provided, uses full node default.
    *                 If NodeType.SOLIDITY_NODE, uses solidity node.
    * @return the max amount of delegatable resources, adjusted for PQ signature overhead
    */
   @Override
-  public long getCanDelegatedMaxSize(String ownerAddress, int type, int pqScheme,
+  public long getCanDelegatedMaxSize(String ownerAddress, int type, PQScheme pqScheme,
       NodeType... nodeType) {
     ByteString rawFrom = parseAddress(ownerAddress);
     CanDelegatedMaxSizeRequestMessage request =
@@ -3553,8 +3556,8 @@ public class ApiWrapper implements Api {
    * address, independent of the instance ECDSA {@link #keyPair}. This is the
    * entry point for post-quantum wallets: a PQ-only holder passes their PQ-derived
    * address here (e.g. {@link PQKeyPair#toBase58CheckAddress()}) to build the
-   * unsigned transaction, then signs it with {@link #signTransactionPQ(Transaction)}
-   * or {@link #signTransactionPQ(Transaction, PQKeyPair)} — no secp256k1 key is
+   * unsigned transaction, then signs it with {@link #signTransactionPQ}
+   * or {@link #signTransactionPQ} (with an explicit {@link PQKeyPair}) — no secp256k1 key is
    * involved at any step.
    *
    * @param ownerAddress base58check owner/deployer address that will own the contract

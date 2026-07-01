@@ -506,7 +506,7 @@ message CanWithdrawUnfreezeAmountResponseMessage {
 message CanDelegatedMaxSizeRequestMessage {
   int32 type = 1;
   bytes owner_address = 2;
-  int32 pq_scheme = 3;
+  PQScheme pq_scheme = 3;
 }
 message CanDelegatedMaxSizeResponseMessage {
   int64 max_size = 1;

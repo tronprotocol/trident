@@ -15,6 +15,7 @@ import org.tron.trident.core.key.KeyPair;
 import org.tron.trident.core.key.PQKeyPair;
 import org.tron.trident.core.transaction.TransactionBuilder;
 import org.tron.trident.proto.Chain.Block;
+import org.tron.trident.proto.Chain.PQScheme;
 import org.tron.trident.proto.Chain.Transaction;
 import org.tron.trident.proto.Common.SmartContract;
 import org.tron.trident.proto.Contract.AccountPermissionUpdateContract;
@@ -120,7 +121,8 @@ public interface Api {
 
   long getCanDelegatedMaxSize(String ownerAddress, int type, NodeType... nodeType);
 
-  long getCanDelegatedMaxSize(String ownerAddress, int type, int pqScheme, NodeType... nodeType);
+  long getCanDelegatedMaxSize(String ownerAddress, int type, PQScheme pqScheme,
+                              NodeType... nodeType);
 
   DelegatedResourceList getDelegatedResourceV2(String fromAddress, String toAddress,
       NodeType... nodeType);

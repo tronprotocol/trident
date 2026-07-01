@@ -21,7 +21,7 @@ import org.tron.trident.proto.Chain.PQScheme;
  *
  * <p><b>Wire-format default.</b> {@code UNKNOWN_PQ_SCHEME = 0} is the proto3
  * default (reserved for the {@code UNKNOWN_} API-evolution slot) and is
- * rejected by {@link #contains(PQScheme)} / {@link #require(PQScheme)} —
+ * rejected by {@link #contains} / {@code require(PQScheme)} —
  * callers must specify a concrete scheme.
  */
 public final class PQSchemeRegistry {
