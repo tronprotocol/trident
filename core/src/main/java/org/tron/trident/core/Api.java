@@ -12,8 +12,10 @@ import org.tron.trident.core.account.AccountPermissions;
 import org.tron.trident.core.contract.Contract;
 import org.tron.trident.core.exceptions.IllegalException;
 import org.tron.trident.core.key.KeyPair;
+import org.tron.trident.core.key.PQKeyPair;
 import org.tron.trident.core.transaction.TransactionBuilder;
 import org.tron.trident.proto.Chain.Block;
+import org.tron.trident.proto.Chain.PQScheme;
 import org.tron.trident.proto.Chain.Transaction;
 import org.tron.trident.proto.Common.SmartContract;
 import org.tron.trident.proto.Contract.AccountPermissionUpdateContract;
@@ -58,6 +60,14 @@ public interface Api {
   Transaction signTransaction(TransactionExtention txnExt);
 
   Transaction signTransaction(Transaction txn);
+
+  Transaction signTransactionPQ(TransactionExtention txnExt, PQKeyPair pqKeyPair);
+
+  Transaction signTransactionPQ(Transaction txn, PQKeyPair pqKeyPair);
+
+  Transaction signTransactionPQ(TransactionExtention txnExt);
+
+  Transaction signTransactionPQ(Transaction txn);
 
   TransactionExtention createTransactionExtention(Message request,
       Transaction.Contract.ContractType contractType) throws IllegalException;
@@ -110,6 +120,9 @@ public interface Api {
   long getCanWithdrawUnfreezeAmount(String ownerAddress, long timestamp, NodeType... nodeType);
 
   long getCanDelegatedMaxSize(String ownerAddress, int type, NodeType... nodeType);
+
+  long getCanDelegatedMaxSize(String ownerAddress, int type, PQScheme pqScheme,
+                              NodeType... nodeType);
 
   DelegatedResourceList getDelegatedResourceV2(String fromAddress, String toAddress,
       NodeType... nodeType);
