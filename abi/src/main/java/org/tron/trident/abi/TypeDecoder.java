@@ -464,20 +464,12 @@ public class TypeDecoder {
         final Class<T> declaredField = (Class<T>) constructor.getParameterTypes()[i];
 
         if (StaticStruct.class.isAssignableFrom(declaredField)) {
-          final int nestedStructLength =
-              classType
-                  .getDeclaredFields()[i]
-                  .getType()
-                  .getConstructors()[0]
-                  .getParameters()
-                  .length
-                  * 64;
-          value =
-              decodeStaticStruct(
-                  input.substring(currOffset, currOffset + nestedStructLength),
-                  0,
-                  TypeReference.create(declaredField));
-          currOffset += nestedStructLength;
+          value = decodeStaticStruct(input, currOffset, TypeReference.create(declaredField));
+          currOffset += value.bytes32PaddedLength() * 2;
+        } else if (StaticArray.class.isAssignableFrom(declaredField)) {
+          value = decodeStaticArrayStructField(
+              input, currOffset, classType, constructor, i, declaredField);
+          currOffset += value.bytes32PaddedLength() * 2;
         } else {
           value = decode(input.substring(currOffset, currOffset + 64), 0, declaredField);
           currOffset += 64;
@@ -494,6 +486,44 @@ public class TypeDecoder {
               + Utils.getTypeName(typeReference.getType()),
           e);
     }
+  }
+
+  /**
+   * Decodes a {@code StaticArrayN}-typed struct field on the constructor-reflection
+   * path. The element type comes from the {@code @Parameterized} annotation on the
+   * constructor parameter — the same contract signature generation
+   * ({@code Utils.getStructType}) relies on.
+   */
+  @SuppressWarnings("unchecked")
+  private static <T extends Type> T decodeStaticArrayStructField(
+      final String input,
+      final int offset,
+      final Class<?> structClass,
+      final Constructor<?> constructor,
+      final int parameterIndex,
+      final Class<T> declaredField) throws ClassNotFoundException {
+    final Class<T> elementType =
+        Utils.extractParameterFromAnnotation(
+            constructor.getParameterAnnotations()[parameterIndex]);
+    if (elementType == null) {
+      throw new UnsupportedOperationException(
+          "Array-typed struct field " + declaredField.getSimpleName()
+              + " of " + structClass.getName()
+              + " requires the @Parameterized annotation on the constructor parameter"
+              + " to declare its element type");
+    }
+    if (isDynamic(elementType)) {
+      throw new UnsupportedOperationException(
+          "Static arrays of dynamic elements are not supported on the"
+              + " constructor-reflection path (field " + declaredField.getSimpleName()
+              + " of " + structClass.getName()
+              + "); construct a TypeReference with innerTypes instead");
+    }
+    TypeReference<T> arrayRef =
+        (TypeReference<T>)
+            Utils.getTypeReferenceForParameterizedField(declaredField, elementType);
+    int size = ((TypeReference.StaticArrayTypeReference) arrayRef).getSize();
+    return decodeStaticArray(input, offset, arrayRef, size);
   }
 
   @SuppressWarnings("unchecked")
@@ -696,10 +726,11 @@ public class TypeDecoder {
                     input.substring(beginIndex),
                     0,
                     TypeReference.create(declaredField));
-            staticOffset +=
-                staticStructNestedPublicFieldsFlatList((Class<Type>) declaredField)
-                    .size()
-                    * MAX_BYTE_LENGTH_FOR_HEX_STRING;
+            staticOffset += value.bytes32PaddedLength() * 2;
+          } else if (StaticArray.class.isAssignableFrom(declaredField)) {
+            value = decodeStaticArrayStructField(
+                input, beginIndex, classType, constructor, i, declaredField);
+            staticOffset += value.bytes32PaddedLength() * 2;
           } else {
             value = decode(input.substring(beginIndex), 0, declaredField);
             staticOffset += value.bytes32PaddedLength() * 2;

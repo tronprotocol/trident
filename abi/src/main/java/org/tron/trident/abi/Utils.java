@@ -37,6 +37,7 @@ import org.tron.trident.abi.datatypes.Int;
 import org.tron.trident.abi.datatypes.StaticArray;
 import org.tron.trident.abi.datatypes.StaticStruct;
 import org.tron.trident.abi.datatypes.StructType;
+import org.tron.trident.abi.datatypes.TrcToken;
 import org.tron.trident.abi.datatypes.Type;
 import org.tron.trident.abi.datatypes.Ufixed;
 import org.tron.trident.abi.datatypes.Uint;
@@ -149,9 +150,37 @@ public class Utils {
       Class fieldType, Class elementType) throws ClassNotFoundException {
     if (StaticArray.class.isAssignableFrom(fieldType)) {
       int size = extractStaticArraySize(fieldType);
-      String elementTypeName = getSimpleTypeName(elementType);
-      String solidityType = elementTypeName + "[" + size + "]";
-      return TypeReference.makeTypeReference(solidityType);
+      TypeReference elementRef = TypeReference.create(elementType);
+      // Built directly from the classes at hand, mirroring the reference shape
+      // makeTypeReference produces. Round-tripping through a Solidity name string
+      // is lossy for element types whose simple name is not a valid ABI token
+      // (TrcToken, Fixed/Ufixed, struct classes).
+      return new TypeReference.StaticArrayTypeReference<StaticArray>(size) {
+        @Override
+        public TypeReference getSubTypeReference() {
+          return elementRef;
+        }
+
+        @Override
+        public java.lang.reflect.Type getType() {
+          return new ParameterizedType() {
+            @Override
+            public java.lang.reflect.Type[] getActualTypeArguments() {
+              return new java.lang.reflect.Type[] {elementType};
+            }
+
+            @Override
+            public java.lang.reflect.Type getRawType() {
+              return fieldType;
+            }
+
+            @Override
+            public java.lang.reflect.Type getOwnerType() {
+              return Class.class;
+            }
+          };
+        }
+      };
     } else {
       return getDynamicArrayTypeReference(elementType);
     }
@@ -215,6 +244,10 @@ public class Utils {
       return "string";
     } else if (type.equals(DynamicBytes.class)) {
       return "bytes";
+    } else if (type.equals(TrcToken.class)) {
+      // TVM extension type; the ABI token is camelCase and AbiTypes' lookup is
+      // case-sensitive, so the generic toLowerCase() would corrupt it.
+      return "trcToken";
     } else if (StructType.class.isAssignableFrom(type)) {
       return type.getName();
     } else {
