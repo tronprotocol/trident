@@ -1100,6 +1100,63 @@ public class TypeDecoderTest {
   }
 
   @Test
+  public void testIsDynamicUnresolvableElementTypeThrows() {
+    // A raw StaticArray reference with no element type information: answering
+    // "static" here used to silently corrupt downstream offset math; it must throw.
+    assertThrows(
+        UnsupportedOperationException.class,
+        () -> TypeDecoder.isDynamic(
+            TypeReference.create(org.tron.trident.abi.datatypes.generated.StaticArray2.class)));
+  }
+
+  @Test
+  public void testEmptyStaticArrayInstantiateType() throws Exception {
+    Type arr = TypeDecoder.instantiateType("uint256[0]", new long[] {});
+
+    assertTrue(arr instanceof org.tron.trident.abi.datatypes.generated.StaticArray0);
+    assertTrue(((org.tron.trident.abi.datatypes.generated.StaticArray0<?>) arr)
+        .getValue().isEmpty());
+    assertEquals("uint256[0]", arr.getTypeAsString());
+  }
+
+  @Test
+  public void testNonEmptyValuesForZeroLengthStaticArrayRejected() {
+    Exception e = assertThrows(
+        java.lang.reflect.InvocationTargetException.class,
+        () -> TypeDecoder.instantiateType("uint256[0]", new long[] {1, 2}));
+    assertTrue(e.getCause() instanceof UnsupportedOperationException);
+  }
+
+  @Test
+  public void testDecodeNumericTruncatedInput() {
+    // 17 bytes instead of the 32 a Uint256 word requires: must fail fast, not
+    // zero-pad the tail (which would return value << 120).
+    assertThrows(
+        IndexOutOfBoundsException.class,
+        () -> TypeDecoder.decodeNumeric(
+            "00000000000000000000000000000000000f4e0c", Uint256.class));
+    // Empty input must not silently decode to zero.
+    assertThrows(
+        IndexOutOfBoundsException.class,
+        () -> TypeDecoder.decodeNumeric("", Uint256.class));
+  }
+
+  @Test
+  public void testTrcTokenStaticArray() throws Exception {
+    assertEquals(
+        TypeDecoder.decodeStaticArray(
+            "00000000000000000000000000000000000000000000000000000000000f4e0c"
+                + "00000000000000000000000000000000000000000000000000000000000f4e0d",
+            0,
+            TypeReference.makeTypeReference("trcToken[2]"),
+            2),
+        (new StaticArray2<>(
+            TrcToken.class,
+            new TrcToken(1003020),
+            new TrcToken(1003021))));
+  }
+
+  @Test
   public void testEmptyStaticArray() {
     assertThrows(
         UnsupportedOperationException.class,

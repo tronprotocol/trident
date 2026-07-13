@@ -148,6 +148,12 @@ public class TypeDecoder {
       byte[] inputByteArray = Numeric.hexStringToByteArray(input);
       int typeLengthAsBytes = getTypeLengthInBytes(type);
       int valueOffset = Type.MAX_BYTE_LENGTH - typeLengthAsBytes;
+      if (inputByteArray.length < valueOffset + typeLengthAsBytes) {
+        throw new IndexOutOfBoundsException(
+            "Input is too short to decode " + type.getSimpleName() + ": needs "
+                + (valueOffset + typeLengthAsBytes) + " bytes, found "
+                + inputByteArray.length);
+      }
       byte[] slice =
           Arrays.copyOfRange(inputByteArray, valueOffset, valueOffset + typeLengthAsBytes);
 
@@ -215,7 +221,7 @@ public class TypeDecoder {
         ref instanceof TypeReference.StaticArrayTypeReference
             ? ((TypeReference.StaticArrayTypeReference) ref).getSize()
             : -1;
-    if (arraySize <= 0) {
+    if (arraySize < 0) {
       listcons = DynamicArray.class.getConstructor(Class.class, List.class);
     } else {
       Class<?> arrayClass =
@@ -831,7 +837,11 @@ public class TypeDecoder {
       if (isDynamic(cls)) {
         return true;
       }
-      if (StaticArray.class.isAssignableFrom(cls)) {
+      // Struct classes extend StaticArray/DynamicArray for encoding purposes but are
+      // not arrays: a StaticStruct is static by definition (dynamic structs are already
+      // caught by isDynamic(cls) above), so keep them out of the element-type probe.
+      if (StaticArray.class.isAssignableFrom(cls)
+          && !StructType.class.isAssignableFrom(cls)) {
         TypeReference<?> subRef = typeReference.getSubTypeReference();
         if (subRef != null) {
           return isDynamic(subRef);
@@ -851,12 +861,18 @@ public class TypeDecoder {
           Class<Type> paramType = Utils.getParameterizedTypeFromArray(typeReference);
           return isDynamic(paramType);
         } catch (Exception e) {
-          return false;
+          throw new UnsupportedOperationException(
+              "Unable to determine element type of static array "
+                  + Utils.getTypeName(typeReference.getType()),
+              e);
         }
       }
       return false;
     } catch (ClassNotFoundException e) {
-      return false;
+      throw new UnsupportedOperationException(
+          "Unable to access parameterized type "
+              + Utils.getTypeName(typeReference.getType()),
+          e);
     }
   }
 
@@ -896,7 +912,13 @@ public class TypeDecoder {
           (Class<? extends StaticArray>)
               Class.forName("org.tron.trident.abi.datatypes.generated.StaticArray" + length);
 
-      return (T) arrayClass.getConstructor(List.class).newInstance(elements);
+      // The Class-carrying constructor, not the deprecated List-only one: the latter
+      // re-derives the element type via AbiTypes.getType(value.getTypeAsString()),
+      // which breaks for types whose ABI token differs from their type string
+      // (e.g. TrcToken's is "trcToken256").
+      return (T) arrayClass
+          .getConstructor(Class.class, List.class)
+          .newInstance(elements.get(0).getClass(), elements);
     } catch (ReflectiveOperationException e) {
       throw new UnsupportedOperationException(e);
     }
