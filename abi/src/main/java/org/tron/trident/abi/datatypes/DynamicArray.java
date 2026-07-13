@@ -21,6 +21,10 @@ import org.tron.trident.abi.Utils;
  */
 public class DynamicArray<T extends Type> extends Array<T> {
 
+  /**
+   * @deprecated Infers the element type from {@code values[0]}, so passing an empty array
+   *     throws {@link ArrayIndexOutOfBoundsException}. Use {@code DynamicArray(Class<T>, T...)}.
+   */
   @Deprecated
   @SafeVarargs
   @SuppressWarnings({"unchecked"})
@@ -33,6 +37,10 @@ public class DynamicArray<T extends Type> extends Array<T> {
             values);
   }
 
+  /**
+   * @deprecated Infers the element type from {@code values.get(0)}, so passing an empty list
+   *     throws {@link IndexOutOfBoundsException}. Use {@code DynamicArray(Class<T>, List<T>)}.
+   */
   @Deprecated
   @SuppressWarnings("unchecked")
   public DynamicArray(List<T> values) {
