@@ -10,6 +10,8 @@ import org.tron.trident.abi.AbiV2TestFixture.Nazz;
 import org.tron.trident.abi.datatypes.Address;
 import org.tron.trident.abi.datatypes.CustomError;
 import org.tron.trident.abi.datatypes.DynamicArray;
+import org.tron.trident.abi.datatypes.DynamicStruct;
+import org.tron.trident.abi.datatypes.StaticStruct;
 import org.tron.trident.abi.datatypes.Utf8String;
 import org.tron.trident.abi.datatypes.generated.Uint256;
 
@@ -73,6 +75,36 @@ public class CustomErrorEncoderTest {
     assertEquals(
         "DynamicArrayError((((string,string)[])[],uint256)[])",
         CustomErrorEncoder.buildErrorSignature("DynamicArrayError", convert(parameters)));
+  }
+
+  @Test
+  void testBuildErrorSignatureWithInnerTypesTuple() throws ClassNotFoundException {
+    List<TypeReference<?>> tupleFields =
+        Arrays.asList(
+            TypeReference.makeTypeReference("uint256"),
+            TypeReference.makeTypeReference("string"));
+    List<TypeReference<?>> parameters =
+        Arrays.asList(new TypeReference<DynamicStruct>(false, tupleFields) {
+        });
+
+    assertEquals(
+        "TupleError((uint256,string))",
+        CustomErrorEncoder.buildErrorSignature("TupleError", convert(parameters)));
+  }
+
+  @Test
+  void testBuildErrorSignatureWithInnerTypesStaticTuple() throws ClassNotFoundException {
+    List<TypeReference<?>> tupleFields =
+        Arrays.asList(
+            TypeReference.makeTypeReference("uint256"),
+            TypeReference.makeTypeReference("address"));
+    List<TypeReference<?>> parameters =
+        Arrays.asList(new TypeReference<StaticStruct>(false, tupleFields) {
+        });
+
+    assertEquals(
+        "StaticTupleError((uint256,address))",
+        CustomErrorEncoder.buildErrorSignature("StaticTupleError", convert(parameters)));
   }
 
 }

@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.tron.trident.abi.datatypes.DynamicArray;
+import org.tron.trident.abi.datatypes.DynamicStruct;
 import org.tron.trident.abi.datatypes.Event;
 import org.tron.trident.abi.datatypes.generated.StaticArray2;
 import org.tron.trident.abi.datatypes.generated.Uint256;
@@ -91,5 +92,83 @@ public class EventEncoderTest {
     assertEquals(
         "Nested(uint256[2][])",
         EventEncoder.buildMethodSignature("Nested", Utils.convert(parameters)));
+  }
+
+  @Test
+  void testBuildMethodSignatureWithInnerTypesTuple() throws ClassNotFoundException {
+    List<TypeReference<?>> tupleFields =
+        Arrays.asList(
+            TypeReference.makeTypeReference("uint256"),
+            TypeReference.makeTypeReference("string"));
+    List<TypeReference<?>> parameters =
+        Arrays.asList(new TypeReference<DynamicStruct>(false, tupleFields) {
+        });
+
+    assertEquals(
+        "E((uint256,string))",
+        EventEncoder.buildMethodSignature("E", Utils.convert(parameters)));
+  }
+
+  @Test
+  void testBuildMethodSignatureWithNestedInnerTypesTuple() throws ClassNotFoundException {
+    List<TypeReference<?>> innerFields =
+        Arrays.asList(
+            TypeReference.makeTypeReference("uint256"),
+            TypeReference.makeTypeReference("string"));
+    List<TypeReference<?>> outerFields =
+        Arrays.asList(
+            new TypeReference<DynamicStruct>(false, innerFields) {
+            },
+            TypeReference.makeTypeReference("bool"));
+    List<TypeReference<?>> parameters =
+        Arrays.asList(new TypeReference<DynamicStruct>(false, outerFields) {
+        });
+
+    assertEquals(
+        "E(((uint256,string),bool))",
+        EventEncoder.buildMethodSignature("E", Utils.convert(parameters)));
+  }
+
+  @Test
+  void testBuildMethodSignatureWithArrayOfInnerTypesTuple() throws ClassNotFoundException {
+    List<TypeReference<?>> tupleFields =
+        Arrays.asList(
+            TypeReference.makeTypeReference("uint256"),
+            TypeReference.makeTypeReference("string"));
+    final TypeReference<DynamicStruct> tupleRef =
+        new TypeReference<DynamicStruct>(false, tupleFields) {
+        };
+    List<TypeReference<?>> parameters =
+        Arrays.asList(
+            new TypeReference<DynamicArray>() {
+              @Override
+              public TypeReference getSubTypeReference() {
+                return tupleRef;
+              }
+            });
+
+    assertEquals(
+        "E((uint256,string)[])",
+        EventEncoder.buildMethodSignature("E", Utils.convert(parameters)));
+  }
+
+  @Test
+  void testInnerTypesTupleSignatureMatchesGeneratedClass() throws ClassNotFoundException {
+    // AbiV2TestFixture.Foo is a generated-class style struct of (string,string);
+    // the runtime innerTypes style must produce the identical signature.
+    List<TypeReference<?>> fooFields =
+        Arrays.asList(
+            TypeReference.makeTypeReference("string"),
+            TypeReference.makeTypeReference("string"));
+    List<TypeReference<?>> runtimeStyle =
+        Arrays.asList(new TypeReference<DynamicStruct>(false, fooFields) {
+        });
+    List<TypeReference<?>> generatedStyle =
+        Arrays.asList(new TypeReference<AbiV2TestFixture.Foo>() {
+        });
+
+    assertEquals(
+        EventEncoder.buildMethodSignature("E", Utils.convert(generatedStyle)),
+        EventEncoder.buildMethodSignature("E", Utils.convert(runtimeStyle)));
   }
 }

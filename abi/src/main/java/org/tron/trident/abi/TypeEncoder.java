@@ -434,6 +434,7 @@ public class TypeEncoder {
             || DynamicStruct.class.isAssignableFrom(value.getComponentType())
             || DynamicArray.class.isAssignableFrom(value.getComponentType())
             || StaticStruct.class.isAssignableFrom(value.getComponentType())
+            || StaticArray.class.isAssignableFrom(value.getComponentType())
             || FixedPointType.class.isAssignableFrom(value.getComponentType())
             || DynamicBytes.class.isAssignableFrom(value.getComponentType())) {
       return false;

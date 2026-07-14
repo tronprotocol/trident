@@ -208,6 +208,41 @@ public class UtilsTest {
     Assertions.assertTrue(ex.getMessage().contains("StaticArrayN"),
         "expected guidance toward StaticArrayN, got: " + ex.getMessage());
   }
+
+  @Test
+  public void testGetStructTypeRejectsNestedStaticArrayField() {
+    // The current @Parameterized-based constructor-reflection path represents only
+    // one element-type level, so nested arrays are explicitly unsupported. It must
+    // fail loudly instead of emitting an invalid signature like "(staticarray2[2])"
+    // or silently misreading tail data during decode.
+    UnsupportedOperationException ex = Assertions.assertThrows(
+        UnsupportedOperationException.class,
+        () -> Utils.getStructType(TestStructWithNestedStaticArray.class));
+    Assertions.assertTrue(ex.getMessage().contains("Nested arrays"),
+        "expected nested-array rejection, got: " + ex.getMessage());
+  }
+
+  @Test
+  public void testGetTypeReferenceForParameterizedFieldRejectsNestedDynamicArray() {
+    // uint256[2][] field shape: DynamicArray field whose @Parameterized element
+    // is itself an array class.
+    UnsupportedOperationException ex = Assertions.assertThrows(
+        UnsupportedOperationException.class,
+        () -> Utils.getTypeReferenceForParameterizedField(
+            DynamicArray.class, StaticArray2.class));
+    Assertions.assertTrue(ex.getMessage().contains("Nested arrays"),
+        "expected nested-array rejection, got: " + ex.getMessage());
+  }
+
+  @Test
+  public void testGetTypeReferenceForParameterizedFieldAllowsStructElements() {
+    // Struct classes extend StaticArray/DynamicArray for encoding purposes but
+    // are legitimate array element types — the nested-array guard must not
+    // reject arrays of structs.
+    Assertions.assertDoesNotThrow(
+        () -> Utils.getTypeReferenceForParameterizedField(
+            StaticArray3.class, TestStructWithParameterizedStaticArray.class));
+  }
 }
 
 class TestStructWithParameterizedStaticArray extends StaticStruct {
@@ -221,5 +256,13 @@ class TestStructWithParameterizedDynamicArray extends StaticStruct {
   public TestStructWithParameterizedDynamicArray(
       Address address, @Parameterized(type = Uint256.class) DynamicArray<Uint256> uint256Array) {
     super(address, uint256Array);
+  }
+}
+
+class TestStructWithNestedStaticArray extends StaticStruct {
+  public TestStructWithNestedStaticArray(
+      @Parameterized(type = StaticArray2.class)
+      StaticArray2<StaticArray2<Uint256>> matrix) {
+    super(matrix);
   }
 }

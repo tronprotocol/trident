@@ -83,6 +83,11 @@ public class Utils {
         return getParameterizedTypeName(typeReference, type);
       } else if (typeReference.getSubTypeReference() != null) {
         return getParameterizedTypeName(typeReference, typeReference.getClassType());
+      } else if (typeReference.getInnerTypes() != null) {
+        List<TypeReference<?>> innerTypes = typeReference.getInnerTypes();
+        return convert(innerTypes).stream()
+            .map(Utils::getTypeName)
+            .collect(Collectors.joining(",", "(", ")"));
       } else {
         type = safeLoadTypeClass(getTypeName(reflectedType));
         if (StructType.class.isAssignableFrom(type)) {
@@ -146,8 +151,33 @@ public class Utils {
     };
   }
 
+  /**
+   * Builds the element TypeReference for an array-typed struct field declared via
+   * {@code @Parameterized} on a constructor parameter.
+   *
+   * <p><b>Limitation:</b> this annotation-based constructor-reflection path represents
+   * only one element-type level. Nested array fields (e.g. {@code uint256[2][2]} declared
+   * as {@code StaticArray2<StaticArray2<Uint256>>}) are therefore not supported by the
+   * current implementation and are rejected explicitly. Nested arrays remain supported
+   * through runtime type references, for example by placing
+   * {@code TypeReference.makeTypeReference("uint256[2][2]")} in the {@code innerTypes}
+   * list of a runtime struct reference.
+   */
   public static TypeReference getTypeReferenceForParameterizedField(
       Class fieldType, Class elementType) throws ClassNotFoundException {
+    // Struct classes extend StaticArray/DynamicArray for encoding purposes but are
+    // legitimate element types; only genuine array-of-array nesting is rejected.
+    if ((StaticArray.class.isAssignableFrom(elementType)
+            || DynamicArray.class.isAssignableFrom(elementType))
+        && !StructType.class.isAssignableFrom(elementType)) {
+      throw new UnsupportedOperationException(
+          "Nested arrays are not supported in constructor-reflected struct classes: "
+              + "@Parameterized element type " + elementType.getSimpleName()
+              + " on a " + fieldType.getSimpleName() + " field exceeds the single"
+              + " element-type level represented by the current @Parameterized-based path."
+              + " Describe the struct with runtime innerTypes instead, placing e.g."
+              + " TypeReference.makeTypeReference(\"uint256[2][2]\") in the field list.");
+    }
     if (StaticArray.class.isAssignableFrom(fieldType)) {
       int size = extractStaticArraySize(fieldType);
       TypeReference elementRef = TypeReference.create(elementType);
@@ -557,7 +587,7 @@ public class Utils {
    *
    * <p>Called once at the decoder entry; bounds every downstream recursive
    * traversal of subTypeReference / innerTypes (in {@code TypeDecoder.isDynamic},
-   * {@code buildTypeStringFromTypeReference}, {@code decodeStaticStruct},
+   * {@code Utils.getTypeName}, {@code decodeStaticStruct},
    * {@code decodeDynamicStruct}, etc.). All local state, no shared mutable
    * fields — safe for concurrent invocation on the same TypeReference.
    */

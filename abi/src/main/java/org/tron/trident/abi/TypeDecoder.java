@@ -842,7 +842,9 @@ public class TypeDecoder {
               decodeDynamicArray(
                   dynamicElementData,
                   0,
-                  Utils.getDynamicArrayTypeReference(parameter));
+                  // Same shape as getDynamicArrayTypeReference for a DynamicArray field,
+                  // but routed through the nested-array rejection guard.
+                  Utils.getTypeReferenceForParameterizedField(declaredField, parameter));
     } else if (StaticArray.class.isAssignableFrom(declaredField)) {
       // StaticArrayN of dynamic elements (e.g. string[2]): ABI-dynamic, decoded from its
       // tail data. isDynamicStructField only routes here when @Parameterized is present.

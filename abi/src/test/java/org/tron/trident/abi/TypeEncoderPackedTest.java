@@ -1079,4 +1079,38 @@ public class TypeEncoderPackedTest {
         UnsupportedOperationException.class,
         () -> TypeEncoder.encodePacked(new org.tron.trident.abi.datatypes.primitive.Double(0)));
   }
+
+  @Test
+  public void testEncodePackedRejectsNestedStaticArray() {
+    // Solidity's abi.encodePacked rejects nested arrays at compile time; before
+    // this guard the encoder silently fell back to standard ABI encoding
+    // (offset/length words), producing bytes that hash to wrong signatures.
+    StaticArray2<StaticArray2<Bool>> nestedStatic =
+        new StaticArray2<>(
+            new StaticArray2<>(Bool.class, new Bool(true), new Bool(false)),
+            new StaticArray2<>(Bool.class, new Bool(false), new Bool(true)));
+    assertThrows(
+        UnsupportedOperationException.class,
+        () -> TypeEncoder.encodePacked(nestedStatic));
+
+    StaticArray2<StaticArray2<Utf8String>> nestedDynamicLeaf =
+        new StaticArray2<>(
+            new StaticArray2<>(Utf8String.class, new Utf8String("a"), new Utf8String("b")),
+            new StaticArray2<>(Utf8String.class, new Utf8String("c"), new Utf8String("d")));
+    assertThrows(
+        UnsupportedOperationException.class,
+        () -> TypeEncoder.encodePacked(nestedDynamicLeaf));
+  }
+
+  @Test
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public void testEncodePackedRejectsStaticArrayInDynamicArray() {
+    DynamicArray nested =
+        new DynamicArray(
+            StaticArray2.class,
+            new StaticArray2<>(Bool.class, new Bool(true), new Bool(false)));
+    assertThrows(
+        UnsupportedOperationException.class,
+        () -> TypeEncoder.encodePacked(nested));
+  }
 }
