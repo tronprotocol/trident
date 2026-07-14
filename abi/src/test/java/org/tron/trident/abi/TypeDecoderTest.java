@@ -1121,10 +1121,13 @@ public class TypeDecoderTest {
 
   @Test
   public void testNonEmptyValuesForZeroLengthStaticArrayRejected() {
-    Exception e = assertThrows(
-        java.lang.reflect.InvocationTargetException.class,
-        () -> TypeDecoder.instantiateType("uint256[0]", new long[] {1, 2}));
-    assertTrue(e.getCause() instanceof UnsupportedOperationException);
+    UnsupportedOperationException e = assertThrows(
+        UnsupportedOperationException.class,
+        () -> new org.tron.trident.abi.datatypes.generated.StaticArray0<>(
+            Uint256.class,
+            Arrays.asList(
+                new Uint256(BigInteger.ONE), new Uint256(BigInteger.valueOf(2)))));
+    assertTrue(e.getMessage().contains("[0] elements"));
   }
 
   @Test

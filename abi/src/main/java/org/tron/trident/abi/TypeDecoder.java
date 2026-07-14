@@ -514,10 +514,9 @@ public class TypeDecoder {
     }
     if (isDynamic(elementType)) {
       throw new UnsupportedOperationException(
-          "Static arrays of dynamic elements are not supported on the"
-              + " constructor-reflection path (field " + declaredField.getSimpleName()
-              + " of " + structClass.getName()
-              + "); construct a TypeReference with innerTypes instead");
+          "Field " + declaredField.getSimpleName() + " of " + structClass.getName()
+              + " is a static array of dynamic elements, which makes the struct ABI-dynamic;"
+              + " the struct class must extend DynamicStruct, not StaticStruct");
     }
     TypeReference<T> arrayRef =
         (TypeReference<T>)
@@ -712,7 +711,7 @@ public class TypeDecoder {
         final Class<T> declaredField = (Class<T>) constructor.getParameterTypes()[i];
         final T value;
         final int beginIndex = offset + staticOffset;
-        if (isDynamic(declaredField)) {
+        if (isDynamicStructField(constructor, i)) {
           final int parameterOffset =
               decodeDynamicStructDynamicParameterOffset(
                   input.substring(beginIndex, beginIndex + 64))
@@ -740,10 +739,10 @@ public class TypeDecoder {
       }
       int dynamicParametersProcessed = 0;
       int dynamicParametersToProcess =
-          getDynamicStructDynamicParametersCount(constructor.getParameterTypes());
+          getDynamicStructDynamicParametersCount(constructor);
       for (int i = 0; i < length; ++i) {
         final Class<T> declaredField = (Class<T>) constructor.getParameterTypes()[i];
-        if (isDynamic(declaredField)) {
+        if (isDynamicStructField(constructor, i)) {
           final boolean isLastParameterInStruct =
               dynamicParametersProcessed == (dynamicParametersToProcess - 1);
           final int parameterLength =
@@ -783,10 +782,40 @@ public class TypeDecoder {
     }
   }
 
+  private static int getDynamicStructDynamicParametersCount(final Constructor<?> constructor) {
+    int count = 0;
+    for (int i = 0; i < constructor.getParameterCount(); i++) {
+      if (isDynamicStructField(constructor, i)) {
+        count++;
+      }
+    }
+    return count;
+  }
+
+  /**
+   * ABI-dynamic check for a constructor-reflected struct field. A field is dynamic if its
+   * declared class is dynamic, or if it is a {@code StaticArrayN} whose {@code @Parameterized}
+   * element type is dynamic (e.g. {@code string[2]}) — such arrays are encoded with a head
+   * offset and tail data, exactly like any other dynamic field.
+   */
   @SuppressWarnings("unchecked")
-  private static <T extends Type> int getDynamicStructDynamicParametersCount(
-      final Class<?>[] cls) {
-    return (int) Arrays.stream(cls).filter(c -> isDynamic((Class<T>) c)).count();
+  private static boolean isDynamicStructField(
+      final Constructor<?> constructor, final int parameterIndex) {
+    final Class<Type> declaredField =
+        (Class<Type>) constructor.getParameterTypes()[parameterIndex];
+    if (isDynamic(declaredField)) {
+      return true;
+    }
+    // Struct classes extend StaticArray for encoding purposes but are not arrays;
+    // a StaticStruct field is static by definition.
+    if (StaticArray.class.isAssignableFrom(declaredField)
+        && !StructType.class.isAssignableFrom(declaredField)) {
+      final Class<Type> elementType =
+          Utils.extractParameterFromAnnotation(
+              constructor.getParameterAnnotations()[parameterIndex]);
+      return elementType != null && isDynamic(elementType);
+    }
+    return false;
   }
 
   private static <T extends Type> T decodeDynamicParameterFromStruct(
@@ -814,6 +843,14 @@ public class TypeDecoder {
                   dynamicElementData,
                   0,
                   Utils.getDynamicArrayTypeReference(parameter));
+    } else if (StaticArray.class.isAssignableFrom(declaredField)) {
+      // StaticArrayN of dynamic elements (e.g. string[2]): ABI-dynamic, decoded from its
+      // tail data. isDynamicStructField only routes here when @Parameterized is present.
+      final TypeReference<T> arrayRef =
+          (TypeReference<T>)
+              Utils.getTypeReferenceForParameterizedField(declaredField, parameter);
+      final int size = ((TypeReference.StaticArrayTypeReference) arrayRef).getSize();
+      value = decodeStaticArray(dynamicElementData, 0, arrayRef, size);
     } else {
       value = decode(dynamicElementData, declaredField);
     }
@@ -848,6 +885,13 @@ public class TypeDecoder {
     return (decodeUintAsInt(input, 0) * 2);
   }
 
+  /**
+   * Class-level dynamic check: whether the class ITSELF is one of the four dynamic types.
+   * Only valid for leaf/element classes — for struct fields or type references, where a
+   * {@code StaticArrayN} class may hide dynamic elements, use
+   * {@link #isDynamicStructField(Constructor, int)} (constructor-reflection path) or
+   * {@link #isDynamic(TypeReference)} (innerTypes path) instead.
+   */
   static <T extends Type> boolean isDynamic(Class<T> parameter) {
     return DynamicBytes.class.isAssignableFrom(parameter)
         || Utf8String.class.isAssignableFrom(parameter)
