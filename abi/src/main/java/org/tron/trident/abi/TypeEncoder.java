@@ -167,6 +167,11 @@ public class TypeEncoder {
       }
       return encodedValue.substring(64 - ((NumericType) parameter).getBitSize() / 4, 64);
     } else if (parameter instanceof Address) {
+      // Slices by the stored Uint's bit size, not a fixed 160: addresses built via
+      // Address(BigInteger)/Address(String) are 160-bit-normalized and yield the canonical
+      // 20 packed bytes, but Address(Uint) (256-bit by default) yields 32 and
+      // Address(int bitSize, ...) yields bitSize/8. Kept as-is; the fix would be a fixed
+      // Address.DEFAULT_LENGTH / 4 slice. See the Address(Uint) constructor Javadoc.
       return encodedValue.substring(64 - ((Address) parameter).toUint().getBitSize() / 4, 64);
     } else if (parameter instanceof Bool) {
       return encodedValue.substring(62, 64);

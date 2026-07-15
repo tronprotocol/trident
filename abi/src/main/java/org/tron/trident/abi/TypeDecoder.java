@@ -93,6 +93,16 @@ public class TypeDecoder {
     return instantiateAtomicType(rc, value);
   }
 
+  /**
+   * Broken as inherited from web3j — every call throws. {@code getRawType().getClass()}
+   * below always yields {@code java.lang.Class} (the class of the Class object, not the
+   * raw type itself), so both {@code isAssignableFrom} branches are unreachable and any
+   * input falls through to {@code UnsupportedOperationException}. Nothing in this SDK
+   * calls this overload; use {@link #decodeStaticArray} / {@link #decodeDynamicArray}
+   * directly instead. Kept unfixed to stay aligned with upstream; the fix would be
+   * {@code (Class) ...getRawType()} plus end-to-end verification of the StaticArray
+   * branch (note its hardcoded length argument of 1).
+   */
   public static <T extends Array> T decode(
       String input, int offset, TypeReference<T> typeReference) {
     Class cls = ((ParameterizedType) typeReference.getType()).getRawType().getClass();
