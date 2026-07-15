@@ -111,9 +111,12 @@ public class TypeDecoder {
   @SuppressWarnings("unchecked")
   static <T extends Type> T decode(String input, int offset, Class<T> type) {
     if (NumericType.class.isAssignableFrom(type)) {
-      return (T) decodeNumeric(input.substring(offset), (Class<NumericType>) type);
+      return (T) decodeNumeric(
+          input.substring(offset, Math.min(input.length(), offset + MAX_BYTE_LENGTH_FOR_HEX_STRING)),
+          (Class<NumericType>) type);
     } else if (Address.class.isAssignableFrom(type)) {
-      return (T) decodeAddress(input.substring(offset));
+      return (T) decodeAddress(
+          input.substring(offset, Math.min(input.length(), offset + MAX_BYTE_LENGTH_FOR_HEX_STRING)));
     } else if (Bool.class.isAssignableFrom(type)) {
       return (T) decodeBool(input, offset);
     } else if (Bytes.class.isAssignableFrom(type)) {
@@ -399,8 +402,7 @@ public class TypeDecoder {
       return ((TypeReference.StaticArrayTypeReference<?>) typeReference).getSize();
     }
     try {
-      Class<?> cls = typeReference.getClassType();
-      return Integer.parseInt(cls.getSimpleName().replaceAll("\\D+", ""));
+      return Utils.extractStaticArraySize(typeReference.getClassType());
     } catch (Exception e) {
       throw new UnsupportedOperationException(
           "Cannot determine StaticArray length from " + typeReference.getType(), e);
@@ -622,7 +624,7 @@ public class TypeDecoder {
         tracker.dynamicParametersToProcess += 1;
       } else {
         if (StaticStruct.class.isAssignableFrom(declaredField)) {
-          value = decodeStaticStruct(input.substring(beginIndex), 0, innerType);
+          value = decodeStaticStruct(input, beginIndex, innerType);
           tracker.staticOffset += (value.bytes32PaddedLength() / Type.MAX_BYTE_LENGTH)
               * MAX_BYTE_LENGTH_FOR_HEX_STRING;
         } else if (StaticArray.class.isAssignableFrom(declaredField)) {
@@ -631,7 +633,7 @@ public class TypeDecoder {
           tracker.staticOffset += (value.bytes32PaddedLength() / Type.MAX_BYTE_LENGTH)
               * MAX_BYTE_LENGTH_FOR_HEX_STRING;
         } else {
-          value = decode(input.substring(beginIndex), 0, declaredField);
+          value = decode(input, beginIndex, declaredField);
           tracker.staticOffset += value.bytes32PaddedLength() * 2;
         }
         tracker.parameters.put(i, value);
@@ -722,8 +724,8 @@ public class TypeDecoder {
           if (StaticStruct.class.isAssignableFrom(declaredField)) {
             value =
                 decodeStaticStruct(
-                    input.substring(beginIndex),
-                    0,
+                    input,
+                    beginIndex,
                     TypeReference.create(declaredField));
             staticOffset += value.bytes32PaddedLength() * 2;
           } else if (StaticArray.class.isAssignableFrom(declaredField)) {
@@ -731,7 +733,7 @@ public class TypeDecoder {
                 input, beginIndex, classType, constructor, i, declaredField);
             staticOffset += value.bytes32PaddedLength() * 2;
           } else {
-            value = decode(input.substring(beginIndex), 0, declaredField);
+            value = decode(input, beginIndex, declaredField);
             staticOffset += value.bytes32PaddedLength() * 2;
           }
           parameters.put(i, value);
@@ -989,10 +991,6 @@ public class TypeDecoder {
           (Class<? extends StaticArray>)
               Class.forName("org.tron.trident.abi.datatypes.generated.StaticArray" + length);
 
-      // The Class-carrying constructor, not the deprecated List-only one: the latter
-      // re-derives the element type via AbiTypes.getType(value.getTypeAsString()),
-      // which breaks for types whose ABI token differs from their type string
-      // (e.g. TrcToken's is "trcToken256").
       return (T) arrayClass
           .getConstructor(Class.class, List.class)
           .newInstance(elements.get(0).getClass(), elements);
@@ -1086,11 +1084,14 @@ public class TypeDecoder {
                 getSingleElementLength(input, currOffset, cls)
                     * MAX_BYTE_LENGTH_FOR_HEX_STRING;
           } else {
-            String typeName = cls.getSimpleName();
-            String extractedLength =
-                typeName.substring(typeName.replaceAll("[0-9]+$", "").length());
+            // Prefer the size carried by the element's StaticArrayTypeReference: for
+            // sizes with no generated class (e.g. uint256[33]) cls is the bare
+            // StaticArray, whose name parses to nothing.
+            TypeReference<?> elementRef = typeReference.getSubTypeReference();
             int staticLength =
-                extractedLength.isEmpty() ? 0 : Integer.parseInt(extractedLength);
+                elementRef instanceof TypeReference.StaticArrayTypeReference
+                    ? ((TypeReference.StaticArrayTypeReference<?>) elementRef).getSize()
+                    : Utils.extractStaticArraySize(cls);
             final TypeReference innerType =
                 Utils.resolveStaticArrayInnerTypeReference(typeReference);
 

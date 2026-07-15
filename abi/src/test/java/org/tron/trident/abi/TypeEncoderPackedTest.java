@@ -11,9 +11,11 @@ import org.tron.trident.abi.datatypes.Bool;
 import org.tron.trident.abi.datatypes.Bytes;
 import org.tron.trident.abi.datatypes.DynamicArray;
 import org.tron.trident.abi.datatypes.DynamicBytes;
+import org.tron.trident.abi.datatypes.DynamicStruct;
 import org.tron.trident.abi.datatypes.Fixed;
 import org.tron.trident.abi.datatypes.Int;
 import org.tron.trident.abi.datatypes.StaticArray;
+import org.tron.trident.abi.datatypes.StaticStruct;
 import org.tron.trident.abi.datatypes.Ufixed;
 import org.tron.trident.abi.datatypes.Uint;
 import org.tron.trident.abi.datatypes.Utf8String;
@@ -886,6 +888,40 @@ public class TypeEncoderPackedTest {
     Assertions.assertThrows(
         UnsupportedOperationException.class,
         () -> TypeEncoder.encodePacked(arrayOfEmptyBytes));
+  }
+
+  @Test
+  public void testStructEncodePackedNotSupported() {
+    // Structs passed DIRECTLY to encodePacked (not as array elements) must be
+    // rejected: abi.encodePacked does not support structs. Since DynamicStruct
+    // extends DynamicArray and StaticStruct extends StaticArray, without an explicit
+    // guard they would slip through the array dispatch and yield corrupt bytes.
+    Assertions.assertThrows(
+        UnsupportedOperationException.class,
+        () -> TypeEncoder.encodePacked(new AbiV2TestFixture.Foo("id", "name")));
+
+    Assertions.assertThrows(
+        UnsupportedOperationException.class,
+        () -> TypeEncoder.encodePacked(
+            new AbiV2TestFixture.Bar(BigInteger.ONE, BigInteger.TEN)));
+
+    Assertions.assertThrows(
+        UnsupportedOperationException.class,
+        () -> TypeEncoder.encodePacked(
+            new DynamicStruct(new Uint(BigInteger.valueOf(7)), new Utf8String("hi"))));
+
+    Assertions.assertThrows(
+        UnsupportedOperationException.class,
+        () -> TypeEncoder.encodePacked(
+            new StaticStruct(
+                new Uint(BigInteger.ONE), new Uint(BigInteger.valueOf(2)))));
+
+    // Same rejection through the public FunctionEncoder entry point.
+    Assertions.assertThrows(
+        UnsupportedOperationException.class,
+        () -> FunctionEncoder.encodeConstructorPacked(
+            java.util.Collections.singletonList(
+                new AbiV2TestFixture.Foo("id", "name"))));
   }
 
   @Test

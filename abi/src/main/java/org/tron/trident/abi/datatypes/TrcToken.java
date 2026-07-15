@@ -40,4 +40,11 @@ public class TrcToken extends IntType {
   protected boolean valid() {
     return super.valid() && 0 <= value.signum();
   }
+
+  @Override
+  public String getTypeAsString() {
+    // IntType stores "trcToken256" (prefix + bit size); the canonical TVM ABI
+    // token has no size suffix, same as Address over Uint160.
+    return TYPE_NAME;
+  }
 }

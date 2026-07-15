@@ -29,6 +29,7 @@ import org.tron.trident.abi.datatypes.DynamicBytes;
 import org.tron.trident.abi.datatypes.DynamicStruct;
 import org.tron.trident.abi.datatypes.Function;
 import org.tron.trident.abi.datatypes.StaticStruct;
+import org.tron.trident.abi.datatypes.TrcToken;
 import org.tron.trident.abi.datatypes.Type;
 import org.tron.trident.abi.datatypes.Uint;
 import org.tron.trident.abi.datatypes.Utf8String;
@@ -50,6 +51,19 @@ public class DefaultFunctionEncoderTest {
         "baz(uint32,bool)",
         DefaultFunctionEncoder.buildMethodSignature(
             "baz", Arrays.asList(new Uint32(BigInteger.valueOf(69)), new Bool(true))));
+  }
+
+  @Test
+  public void testBuildMethodSignatureWithTrcToken() {
+    // Bare TrcToken parameters go through the instance getTypeAsString path;
+    // the canonical TVM token has no bit-size suffix.
+    assertEquals(
+        "transferToken(trcToken,uint256)",
+        DefaultFunctionEncoder.buildMethodSignature(
+            "transferToken",
+            Arrays.asList(
+                new TrcToken(BigInteger.valueOf(1000016)),
+                new Uint256(BigInteger.TEN))));
   }
 
   @Test

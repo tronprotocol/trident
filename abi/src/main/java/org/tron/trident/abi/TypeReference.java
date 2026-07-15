@@ -69,7 +69,7 @@ public abstract class TypeReference<T extends org.tron.trident.abi.datatypes.Typ
    *
    * @return the type wrapped by this Array TypeReference, or null if not Array
    */
-  TypeReference getSubTypeReference() {
+  public TypeReference getSubTypeReference() {
     return null;
   }
 

@@ -19,15 +19,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Deque;
-import java.util.IdentityHashMap;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.tron.trident.abi.datatypes.DynamicArray;
@@ -219,14 +214,16 @@ public class Utils {
   /**
    * Extracts the array size from a generated {@code StaticArrayN} subclass.
    * The bare {@link StaticArray} base class carries no size information and is rejected.
+   * Single source of truth for StaticArrayN size parsing — decoder paths that hold a
+   * {@code StaticArrayTypeReference} should prefer its {@code getSize()} and fall back here.
    */
-  private static int extractStaticArraySize(Class<?> staticArrayClass) {
+  static int extractStaticArraySize(Class<?> staticArrayClass) {
     String className = staticArrayClass.getSimpleName();
     String prefix = "StaticArray";
     if (!className.startsWith(prefix) || className.length() == prefix.length()) {
       throw new IllegalArgumentException(
           "Cannot determine static array size from class " + staticArrayClass.getName()
-              + "; @Parameterized fields must use a generated StaticArrayN subclass.");
+              + "; expected a generated StaticArrayN subclass (e.g. StaticArray2).");
     }
     String sizeStr = className.substring(prefix.length());
     try {
@@ -299,7 +296,7 @@ public class Utils {
                 typeReference.getClass())) {
           length = ((TypeReference.StaticArrayTypeReference) typeReference).getSize();
         } else {
-          length = Integer.parseInt(type.getSimpleName().replaceAll("\\D+", ""));
+          length = extractStaticArraySize(type);
         }
         return parameterizedTypeName + "[" + length + "]";
       } else {
@@ -579,11 +576,11 @@ public class Utils {
   private static final int MAX_TYPEREF_DEPTH = 10;
 
   /**
-   * Validates a TypeReference graph before decoding: rejects cycles on the
-   * current traversal path via identity comparison and caps the maximum depth at
-   * {@link #MAX_TYPEREF_DEPTH}. Walked
-   * iteratively (explicit stack) so this method itself cannot blow the JVM stack
-   * on malicious input.
+   * Validates a TypeReference graph before decoding by capping its depth at
+   * {@link #MAX_TYPEREF_DEPTH}. A cycle keeps increasing the depth along the cyclic
+   * path, so cycles are rejected by the same check; shared (diamond) nodes at legal
+   * depths pass. Recursion is bounded by the cap itself, so this method cannot blow
+   * the JVM stack on malicious input.
    *
    * <p>Called once at the decoder entry; bounds every downstream recursive
    * traversal of subTypeReference / innerTypes (in {@code TypeDecoder.isDynamic},
@@ -592,43 +589,23 @@ public class Utils {
    * fields — safe for concurrent invocation on the same TypeReference.
    */
   public static void validateTypeReferenceDepth(TypeReference<?> root) {
-    if (root == null) {
+    validateTypeReferenceDepth(root, 0);
+  }
+
+  private static void validateTypeReferenceDepth(TypeReference<?> node, int depth) {
+    if (node == null) {
       return;
     }
-    Deque<Object[]> stack = new ArrayDeque<>();
-    Set<TypeReference<?>> inPath =
-            Collections.newSetFromMap(new IdentityHashMap<>());
-    stack.push(new Object[]{root, 0, true});
-    while (!stack.isEmpty()) {
-      Object[] curr = stack.pop();
-      TypeReference<?> node = (TypeReference<?>) curr[0];
-      int depth = (Integer) curr[1];
-      boolean entering = (Boolean) curr[2];
-      if (!entering) {
-        inPath.remove(node);
-        continue;
-      }
-      if (depth >= MAX_TYPEREF_DEPTH) {
-        throw new UnsupportedOperationException(
-            "TypeReference depth exceeds " + MAX_TYPEREF_DEPTH
-                + " — possible cycle or excessively nested type");
-      }
-      if (!inPath.add(node)) {
-        throw new UnsupportedOperationException(
-            "Cycle detected in TypeReference graph");
-      }
-      stack.push(new Object[]{node, depth, false});
-      TypeReference<?> sub = node.getSubTypeReference();
-      if (sub != null) {
-        stack.push(new Object[]{sub, depth + 1, true});
-      }
-      List<TypeReference<?>> inners = node.getInnerTypes();
-      if (inners != null) {
-        for (TypeReference<?> inner : inners) {
-          if (inner != null) {
-            stack.push(new Object[]{inner, depth + 1, true});
-          }
-        }
+    if (depth > MAX_TYPEREF_DEPTH) {
+      throw new UnsupportedOperationException(
+          "TypeReference depth exceeds " + MAX_TYPEREF_DEPTH
+              + " — possible cycle or excessively nested type");
+    }
+    validateTypeReferenceDepth(node.getSubTypeReference(), depth + 1);
+    List<TypeReference<?>> inners = node.getInnerTypes();
+    if (inners != null) {
+      for (TypeReference<?> inner : inners) {
+        validateTypeReferenceDepth(inner, depth + 1);
       }
     }
   }

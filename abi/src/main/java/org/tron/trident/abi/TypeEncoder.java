@@ -34,6 +34,7 @@ import org.tron.trident.abi.datatypes.FixedPointType;
 import org.tron.trident.abi.datatypes.NumericType;
 import org.tron.trident.abi.datatypes.StaticArray;
 import org.tron.trident.abi.datatypes.StaticStruct;
+import org.tron.trident.abi.datatypes.StructType;
 import org.tron.trident.abi.datatypes.Type;
 import org.tron.trident.abi.datatypes.Ufixed;
 import org.tron.trident.abi.datatypes.Uint;
@@ -121,6 +122,19 @@ public class TypeEncoder {
    * @return
    */
   public static String encodePacked(Type parameter) {
+    // Structs are not supported by abi.encodePacked: "structs as well as nested
+    // arrays are not supported" — see
+    // https://docs.soliditylang.org/en/latest/abi-spec.html#non-standard-packed-mode
+    // (solc rejects them at compile time with "Type not supported in packed mode.").
+    // They must be rejected BEFORE the array dispatch below: DynamicStruct
+    // extends DynamicArray and StaticStruct extends StaticArray, so they would
+    // otherwise fall into arrayEncodePacked, whose component-type check cannot see
+    // them (a struct's componentType is Type.class) — silently producing corrupt
+    // packed bytes instead of an error.
+    if (parameter instanceof StructType) {
+      throw new UnsupportedOperationException(
+              "Type cannot be packed encoded: " + parameter.getClass());
+    }
     if (parameter instanceof Utf8String) {
       // removePadding can also be used, but is not necessary
       return Numeric.toHexStringNoPrefix(

@@ -173,10 +173,12 @@ public class UtilsTest {
     TypeReference<?> child = new TypeReference<Type>(false, Arrays.asList(root)) { };
     rootChildren.add(child);
 
+    // A cycle keeps increasing depth along the cyclic path, so it is rejected by
+    // the depth cap rather than a dedicated cycle check.
     UnsupportedOperationException ex = Assertions.assertThrows(
         UnsupportedOperationException.class,
         () -> Utils.validateTypeReferenceDepth(root));
-    Assertions.assertTrue(ex.getMessage().contains("Cycle"),
+    Assertions.assertTrue(ex.getMessage().contains("cycle"),
         "expected cycle-related message, got: " + ex.getMessage());
   }
 

@@ -327,7 +327,7 @@ public class TridentAbiEncodeDecodeCompatibilityTest {
                 if ("[]".equals(arrayPart)) {
                     baseTypeRef = new TypeReference<DynamicArray<Type>>() {
                         @Override
-                        TypeReference<?> getSubTypeReference() {
+                        public TypeReference<?> getSubTypeReference() {
                             return innerRef;
                         }
 
@@ -343,7 +343,7 @@ public class TridentAbiEncodeDecodeCompatibilityTest {
                     baseTypeRef =
                             new TypeReference.StaticArrayTypeReference<StaticArray<Type>>(size) {
                                 @Override
-                                TypeReference<?> getSubTypeReference() {
+                                public TypeReference<?> getSubTypeReference() {
                                     return innerRef;
                                 }
 

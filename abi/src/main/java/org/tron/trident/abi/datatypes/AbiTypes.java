@@ -400,6 +400,8 @@ public final class AbiTypes {
       return "string";
     } else if (DynamicBytes.class.equals(type)) {
       return "bytes";
+    } else if (TrcToken.class.equals(type)) {
+      return "trcToken";
     } else {
       return type.getSimpleName().toLowerCase();
     }
