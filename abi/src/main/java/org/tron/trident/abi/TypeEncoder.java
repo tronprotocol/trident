@@ -52,13 +52,7 @@ public class TypeEncoder {
   }
 
   /**
-   * Determines if a given ABI type is dynamic.
-   * According to the ABI specification, dynamic types require an offset pointer in the tuple header
-   * (occupying exactly 1 slot / 32 bytes) rather than being encoded inline. This method recursively
-   * checks StaticArrays to properly identify if they contain any dynamic elements.
-   *
-   * @param parameter The ABI type parameter to check.
-   * @return true if the type is dynamic, false otherwise.
+   * Returns whether the given value is ABI-dynamic, probing StaticArray elements recursively.
    */
   static boolean isDynamic(Type parameter) {
     if (parameter instanceof DynamicBytes
@@ -68,15 +62,11 @@ public class TypeEncoder {
       return true;
     }
     if (parameter instanceof StaticArray) {
-      StaticArray staticArray = (StaticArray) parameter;
+      StaticArray<?> staticArray = (StaticArray<?>) parameter;
       if (!staticArray.getValue().isEmpty()) {
-        return isDynamic((Type) staticArray.getValue().get(0));
+        return isDynamic(staticArray.getValue().get(0));
       }
-      Class<?> componentType = staticArray.getComponentType();
-      return DynamicBytes.class.isAssignableFrom(componentType)
-          || Utf8String.class.isAssignableFrom(componentType)
-          || DynamicArray.class.isAssignableFrom(componentType)
-          || DynamicStruct.class.isAssignableFrom(componentType);
+      return TypeDecoder.isDynamic(staticArray.getComponentType());
     }
     return false;
   }

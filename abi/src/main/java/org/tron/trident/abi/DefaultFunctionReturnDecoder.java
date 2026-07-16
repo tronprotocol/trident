@@ -23,7 +23,6 @@ import org.tron.trident.abi.datatypes.Array;
 import org.tron.trident.abi.datatypes.Bytes;
 import org.tron.trident.abi.datatypes.BytesType;
 import org.tron.trident.abi.datatypes.DynamicArray;
-import org.tron.trident.abi.datatypes.DynamicBytes;
 import org.tron.trident.abi.datatypes.DynamicStruct;
 import org.tron.trident.abi.datatypes.StaticArray;
 import org.tron.trident.abi.datatypes.StaticStruct;
@@ -118,9 +117,7 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
           if (typeReference instanceof TypeReference.StaticArrayTypeReference) {
             length = ((TypeReference.StaticArrayTypeReference) typeReference).getSize();
           } else {
-            length = Integer.parseInt(
-                    classType.getSimpleName()
-                            .substring(StaticArray.class.getSimpleName().length()));
+            length = Utils.extractStaticArraySize(classType);
           }
           result =
                   TypeDecoder.decodeStaticArray(
@@ -148,28 +145,10 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
   public static <T extends Type> int getDataOffset(
           String input, int offset, TypeReference<?> typeReference)
           throws ClassNotFoundException {
-    @SuppressWarnings("unchecked")
-    Class<Type> type = (Class<Type>) typeReference.getClassType();
-    if (DynamicBytes.class.isAssignableFrom(type)
-            || Utf8String.class.isAssignableFrom(type)
-            || DynamicArray.class.isAssignableFrom(type)
-            || DynamicStruct.class.isAssignableFrom(type)
-            || hasDynamicOffsetInStaticArray(typeReference)) {
+    if (isDynamic(typeReference)) {
       return TypeDecoder.decodeUintAsInt(input, offset) << 1;
     } else {
       return offset;
-    }
-  }
-
-  private static boolean hasDynamicOffsetInStaticArray(TypeReference<?> typeReference)
-          throws ClassNotFoundException {
-    @SuppressWarnings("unchecked")
-    Class<Type> type = (Class<Type>) typeReference.getClassType();
-    try {
-      return StaticArray.class.isAssignableFrom(type)
-              && isDynamic(typeReference);
-    } catch (ClassCastException e) {
-      return false;
     }
   }
 }

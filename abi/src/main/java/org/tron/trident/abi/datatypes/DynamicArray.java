@@ -14,7 +14,6 @@
 package org.tron.trident.abi.datatypes;
 
 import java.util.List;
-import org.tron.trident.abi.Utils;
 
 /**
  * Dynamic array type.
@@ -27,14 +26,8 @@ public class DynamicArray<T extends Type> extends Array<T> {
    */
   @Deprecated
   @SafeVarargs
-  @SuppressWarnings({"unchecked"})
   public DynamicArray(T... values) {
-    super(
-            StructType.class.isAssignableFrom(values[0].getClass())
-                || Array.class.isAssignableFrom(values[0].getClass())
-                    ? (Class<T>) values[0].getClass()
-                    : (Class<T>) AbiTypes.getType(values[0].getTypeAsString()),
-            values);
+    super(inferComponentType(values[0]), values);
   }
 
   /**
@@ -42,14 +35,8 @@ public class DynamicArray<T extends Type> extends Array<T> {
    *     throws {@link IndexOutOfBoundsException}. Use {@code DynamicArray(Class<T>, List<T>)}.
    */
   @Deprecated
-  @SuppressWarnings("unchecked")
   public DynamicArray(List<T> values) {
-    super(
-            StructType.class.isAssignableFrom(values.get(0).getClass())
-                || Array.class.isAssignableFrom(values.get(0).getClass())
-                    ? (Class<T>) values.get(0).getClass()
-                    : (Class<T>) AbiTypes.getType(values.get(0).getTypeAsString()),
-            values);
+    super(inferComponentType(values.get(0)), values);
   }
 
   @Deprecated
@@ -79,36 +66,6 @@ public class DynamicArray<T extends Type> extends Array<T> {
 
   @Override
   public String getTypeAsString() {
-    String type;
-    if (value.isEmpty()) {
-      Class<T> componentType = getComponentType();
-      boolean genericStruct =
-          componentType == DynamicStruct.class || componentType == StaticStruct.class;
-      boolean rawArrayType =
-          componentType != null
-              && Array.class.isAssignableFrom(componentType)
-              && !StructType.class.isAssignableFrom(componentType);
-      if (componentType == null || genericStruct || rawArrayType) {
-        throw new UnsupportedOperationException(
-            "Cannot determine type string for empty array of generic struct "
-                + "or nested array type. Either construct DynamicArray with a "
-                + "concrete element type, or compute the type string externally "
-                + "from a TypeReference.");
-      }
-      if (StructType.class.isAssignableFrom(componentType)) {
-        type = Utils.getStructType(componentType);
-      } else {
-        type = AbiTypes.getTypeAString(componentType);
-      }
-    } else {
-      if (StructType.class.isAssignableFrom(value.get(0).getClass())) {
-        type = value.get(0).getTypeAsString();
-      } else if (Array.class.isAssignableFrom(value.get(0).getClass())) {
-        type = value.get(0).getTypeAsString();
-      } else {
-        type = AbiTypes.getTypeAString(getComponentType());
-      }
-    }
-    return type + "[]";
+    return getElementTypeAsString() + "[]";
   }
 }

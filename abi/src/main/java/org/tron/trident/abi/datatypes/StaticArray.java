@@ -16,7 +16,6 @@ package org.tron.trident.abi.datatypes;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import org.tron.trident.abi.Utils;
 
 /**
  * Static array type.
@@ -53,14 +52,8 @@ public abstract class StaticArray<T extends Type> extends Array<T> {
    *     {@code StaticArray(Class<T>, int, List<T>)} instead.
    */
   @Deprecated
-  @SuppressWarnings("unchecked")
   public StaticArray(int expectedSize, List<T> values) {
-    super(
-            StructType.class.isAssignableFrom(values.get(0).getClass())
-            || Array.class.isAssignableFrom(values.get(0).getClass())
-                    ? (Class<T>) values.get(0).getClass()
-                    : (Class<T>) AbiTypes.getType(values.get(0).getTypeAsString()),
-            values);
+    super(inferComponentType(values.get(0)), values);
     checkValid(expectedSize);
   }
 
@@ -91,35 +84,7 @@ public abstract class StaticArray<T extends Type> extends Array<T> {
 
   @Override
   public String getTypeAsString() {
-    String type;
-    if (value.isEmpty()) {
-      Class<T> componentType = getComponentType();
-      boolean genericStruct =
-          componentType == DynamicStruct.class || componentType == StaticStruct.class;
-      boolean rawArrayType =
-          componentType != null
-              && Array.class.isAssignableFrom(componentType)
-              && !StructType.class.isAssignableFrom(componentType);
-      if (componentType == null || genericStruct || rawArrayType) {
-        throw new UnsupportedOperationException(
-            "Cannot determine type string for empty array of generic struct "
-                + "or nested array type. Either construct StaticArray with a "
-                + "concrete element type, or compute the type string externally "
-                + "from a TypeReference.");
-      }
-      if (StructType.class.isAssignableFrom(componentType)) {
-        type = Utils.getStructType(componentType);
-      } else {
-        type = AbiTypes.getTypeAString(componentType);
-      }
-    } else if (StructType.class.isAssignableFrom(value.get(0).getClass())) {
-      type = value.get(0).getTypeAsString();
-    } else if (Array.class.isAssignableFrom(value.get(0).getClass())) {
-      type = value.get(0).getTypeAsString();
-    } else {
-      type = AbiTypes.getTypeAString(getComponentType());
-    }
-    return type + "[" + value.size() + "]";
+    return getElementTypeAsString() + "[" + value.size() + "]";
   }
 
   private void checkValid(int expectedSize) {

@@ -122,11 +122,13 @@ public class TypeDecoder {
   static <T extends Type> T decode(String input, int offset, Class<T> type) {
     if (NumericType.class.isAssignableFrom(type)) {
       return (T) decodeNumeric(
-          input.substring(offset, Math.min(input.length(), offset + MAX_BYTE_LENGTH_FOR_HEX_STRING)),
+          input.substring(
+              offset, Math.min(input.length(), offset + MAX_BYTE_LENGTH_FOR_HEX_STRING)),
           (Class<NumericType>) type);
     } else if (Address.class.isAssignableFrom(type)) {
       return (T) decodeAddress(
-          input.substring(offset, Math.min(input.length(), offset + MAX_BYTE_LENGTH_FOR_HEX_STRING)));
+          input.substring(
+              offset, Math.min(input.length(), offset + MAX_BYTE_LENGTH_FOR_HEX_STRING)));
     } else if (Bool.class.isAssignableFrom(type)) {
       return (T) decodeBool(input, offset);
     } else if (Bytes.class.isAssignableFrom(type)) {
@@ -161,14 +163,14 @@ public class TypeDecoder {
       byte[] inputByteArray = Numeric.hexStringToByteArray(input);
       int typeLengthAsBytes = getTypeLengthInBytes(type);
       int valueOffset = Type.MAX_BYTE_LENGTH - typeLengthAsBytes;
-      if (inputByteArray.length < valueOffset + typeLengthAsBytes) {
+      if (inputByteArray.length < Type.MAX_BYTE_LENGTH) {
         throw new IndexOutOfBoundsException(
             "Input is too short to decode " + type.getSimpleName() + ": needs "
-                + (valueOffset + typeLengthAsBytes) + " bytes, found "
+                + Type.MAX_BYTE_LENGTH + " bytes, found "
                 + inputByteArray.length);
       }
       byte[] slice =
-          Arrays.copyOfRange(inputByteArray, valueOffset, valueOffset + typeLengthAsBytes);
+          Arrays.copyOfRange(inputByteArray, valueOffset, Type.MAX_BYTE_LENGTH);
 
       BigInteger numericValue;
       if (Uint.class.isAssignableFrom(type) || Ufixed.class.isAssignableFrom(type)) {
