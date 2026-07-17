@@ -36,7 +36,8 @@ public class Utf8String implements Type<String> {
   @Override
   public int bytes32PaddedLength() {
     int length = value == null ? 0 : value.getBytes(StandardCharsets.UTF_8).length;
-    return MAX_BYTE_LENGTH + (length + MAX_BYTE_LENGTH - 1) / MAX_BYTE_LENGTH * MAX_BYTE_LENGTH;
+    int count = (int) Math.ceil((double) length / MAX_BYTE_LENGTH);
+    return Math.addExact(MAX_BYTE_LENGTH, Math.multiplyExact(count, MAX_BYTE_LENGTH));
   }
 
   @Override

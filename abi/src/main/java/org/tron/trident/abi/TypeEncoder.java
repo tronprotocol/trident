@@ -187,7 +187,7 @@ public class TypeEncoder {
    * Encodes a static array containing a dynamic struct type. In this case, the array items are
    * decoded as dynamic values and have their offsets at the beginning of the encoding. Example:
    * For the following static array containing three elements: <code>StaticArray3</code>
-   * enc([struct1, struct2, struct2]) = offset(enc(struct1)) offset(enc(struct2))
+   * enc([struct1, struct2, struct3]) = offset(enc(struct1)) offset(enc(struct2))
    * offset(enc(struct3)) enc(struct1) enc(struct2) enc(struct3)
    *
    **/

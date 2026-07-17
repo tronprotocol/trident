@@ -922,49 +922,42 @@ public class TypeDecoder {
    * its outer Java class is StaticArray.
    */
   @SuppressWarnings("unchecked")
-  static boolean isDynamic(TypeReference<?> typeReference) {
-    try {
-      Class<Type> cls = (Class<Type>) typeReference.getClassType();
-      if (isDynamic(cls)) {
-        return true;
-      }
-      // Struct classes extend StaticArray/DynamicArray for encoding purposes but are
-      // not arrays: a StaticStruct is static by definition (dynamic structs are already
-      // caught by isDynamic(cls) above), so keep them out of the element-type probe.
-      if (StaticArray.class.isAssignableFrom(cls)
-          && !StructType.class.isAssignableFrom(cls)) {
-        TypeReference<?> subRef = typeReference.getSubTypeReference();
-        if (subRef != null) {
-          return isDynamic(subRef);
-        }
-        java.lang.reflect.Type type = typeReference.getType();
-        if (type instanceof ParameterizedType) {
-          final java.lang.reflect.Type elementType =
-              ((ParameterizedType) type).getActualTypeArguments()[0];
-          return isDynamic(new TypeReference<Type>() {
-            @Override
-            public java.lang.reflect.Type getType() {
-              return elementType;
-            }
-          });
-        }
-        try {
-          Class<Type> paramType = Utils.getParameterizedTypeFromArray(typeReference);
-          return isDynamic(paramType);
-        } catch (Exception e) {
-          throw new UnsupportedOperationException(
-              "Unable to determine element type of static array "
-                  + Utils.getTypeName(typeReference.getType()),
-              e);
-        }
-      }
-      return false;
-    } catch (ClassNotFoundException e) {
-      throw new UnsupportedOperationException(
-          "Unable to access parameterized type "
-              + Utils.getTypeName(typeReference.getType()),
-          e);
+  static boolean isDynamic(TypeReference<?> typeReference) throws ClassNotFoundException {
+    Class<Type> cls = (Class<Type>) typeReference.getClassType();
+    if (isDynamic(cls)) {
+      return true;
     }
+    // Struct classes extend StaticArray/DynamicArray for encoding purposes but are
+    // not arrays: a StaticStruct is static by definition (dynamic structs are already
+    // caught by isDynamic(cls) above), so keep them out of the element-type probe.
+    if (StaticArray.class.isAssignableFrom(cls)
+        && !StructType.class.isAssignableFrom(cls)) {
+      TypeReference<?> subRef = typeReference.getSubTypeReference();
+      if (subRef != null) {
+        return isDynamic(subRef);
+      }
+      java.lang.reflect.Type type = typeReference.getType();
+      if (type instanceof ParameterizedType) {
+        final java.lang.reflect.Type elementType =
+            ((ParameterizedType) type).getActualTypeArguments()[0];
+        return isDynamic(new TypeReference<Type>() {
+          @Override
+          public java.lang.reflect.Type getType() {
+            return elementType;
+          }
+        });
+      }
+      try {
+        Class<Type> paramType = Utils.getParameterizedTypeFromArray(typeReference);
+        return isDynamic(paramType);
+      } catch (Exception e) {
+        throw new UnsupportedOperationException(
+            "Unable to determine element type of static array "
+                + Utils.getTypeName(typeReference.getType()),
+            e);
+      }
+    }
+    return false;
   }
 
   static BigInteger asBigInteger(Object arg) {

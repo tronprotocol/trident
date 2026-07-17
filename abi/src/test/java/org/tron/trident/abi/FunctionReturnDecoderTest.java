@@ -1663,46 +1663,87 @@ public class FunctionReturnDecoderTest {
     assertEquals(expected, outputStaticArray);
   }
 
-//  @Test
-//  public void testDecodeMultiDimDynamicArrayFunction() throws ClassNotFoundException {
-//    //setGetMultiDimDynamicArrayFunction(uint256[][][])
-//    // [[[1]],[[2,3]],[[4,5],[6,7,8]]]
-//    String data = "0000000000000000000000000000000000000000000000000000000000000020"
-//        + "0000000000000000000000000000000000000000000000000000000000000003"
-//        + "0000000000000000000000000000000000000000000000000000000000000060"
-//        + "00000000000000000000000000000000000000000000000000000000000000e0"
-//        + "0000000000000000000000000000000000000000000000000000000000000180"
-//        + "0000000000000000000000000000000000000000000000000000000000000001"
-//        + "0000000000000000000000000000000000000000000000000000000000000020"
-//        + "0000000000000000000000000000000000000000000000000000000000000001"
-//        + "0000000000000000000000000000000000000000000000000000000000000001"
-//        + "0000000000000000000000000000000000000000000000000000000000000001"
-//        + "0000000000000000000000000000000000000000000000000000000000000020"
-//        + "0000000000000000000000000000000000000000000000000000000000000002"
-//        + "0000000000000000000000000000000000000000000000000000000000000002"
-//        + "0000000000000000000000000000000000000000000000000000000000000003"
-//        + "0000000000000000000000000000000000000000000000000000000000000002"
-//        + "0000000000000000000000000000000000000000000000000000000000000040"
-//        + "00000000000000000000000000000000000000000000000000000000000000a0"
-//        + "0000000000000000000000000000000000000000000000000000000000000002"
-//        + "0000000000000000000000000000000000000000000000000000000000000004"
-//        + "0000000000000000000000000000000000000000000000000000000000000005"
-//        + "0000000000000000000000000000000000000000000000000000000000000003"
-//        + "0000000000000000000000000000000000000000000000000000000000000006"
-//        + "0000000000000000000000000000000000000000000000000000000000000007"
-//        + "0000000000000000000000000000000000000000000000000000000000000008";
-//
-//    List<Type> outPutDynamicArrays
-//        = FunctionReturnDecoder.decode(data, AbiV2TestFixture.setGetMultiDimDynamicArrayFunction.getOutputParameters());
-//
-//    @SuppressWarnings("unchecked")
-//    DynamicArray<DynamicArray<DynamicArray<Uint256>>> outputDynamicArray = (DynamicArray<DynamicArray<DynamicArray<Uint256>>>)outPutDynamicArrays.get(0);
-//
-//    @SuppressWarnings("unchecked")
-//    DynamicArray<DynamicArray<DynamicArray<Uint256>>> expected =
-//        (DynamicArray<DynamicArray<DynamicArray<Uint256>>> )AbiV2TestFixture.setGetMultiDimDynamicArrayFunction
-//            .getInputParameters()
-//            .get(0);
-//    assertEquals(expected, outPutDynamicArrays.get(0));
-//  }
+  @Test
+  public void testDecodeMultiDimDynamicArrayFunction() throws ClassNotFoundException {
+    //setGetMultiDimDynamicArrayFunction(uint256[][][])
+    // [[[1]],[[2,3]],[[4,5],[6,7,8]]]
+    String data = "0000000000000000000000000000000000000000000000000000000000000020"
+        + "0000000000000000000000000000000000000000000000000000000000000003"
+        + "0000000000000000000000000000000000000000000000000000000000000060"
+        + "00000000000000000000000000000000000000000000000000000000000000e0"
+        + "0000000000000000000000000000000000000000000000000000000000000180"
+        + "0000000000000000000000000000000000000000000000000000000000000001"
+        + "0000000000000000000000000000000000000000000000000000000000000020"
+        + "0000000000000000000000000000000000000000000000000000000000000001"
+        + "0000000000000000000000000000000000000000000000000000000000000001"
+        + "0000000000000000000000000000000000000000000000000000000000000001"
+        + "0000000000000000000000000000000000000000000000000000000000000020"
+        + "0000000000000000000000000000000000000000000000000000000000000002"
+        + "0000000000000000000000000000000000000000000000000000000000000002"
+        + "0000000000000000000000000000000000000000000000000000000000000003"
+        + "0000000000000000000000000000000000000000000000000000000000000002"
+        + "0000000000000000000000000000000000000000000000000000000000000040"
+        + "00000000000000000000000000000000000000000000000000000000000000a0"
+        + "0000000000000000000000000000000000000000000000000000000000000002"
+        + "0000000000000000000000000000000000000000000000000000000000000004"
+        + "0000000000000000000000000000000000000000000000000000000000000005"
+        + "0000000000000000000000000000000000000000000000000000000000000003"
+        + "0000000000000000000000000000000000000000000000000000000000000006"
+        + "0000000000000000000000000000000000000000000000000000000000000007"
+        + "0000000000000000000000000000000000000000000000000000000000000008";
+
+    List<Type> outPutDynamicArrays
+        = FunctionReturnDecoder.decode(data, AbiV2TestFixture.setGetMultiDimDynamicArrayFunction.getOutputParameters());
+
+    @SuppressWarnings("unchecked")
+    DynamicArray<DynamicArray<DynamicArray<Uint256>>> outputDynamicArray = (DynamicArray<DynamicArray<DynamicArray<Uint256>>>)outPutDynamicArrays.get(0);
+
+    @SuppressWarnings("unchecked")
+    DynamicArray<DynamicArray<DynamicArray<Uint256>>> expected =
+        (DynamicArray<DynamicArray<DynamicArray<Uint256>>> )AbiV2TestFixture.setGetMultiDimDynamicArrayFunction
+            .getInputParameters()
+            .get(0);
+    assertEquals(expected, outPutDynamicArrays.get(0));
+  }
+
+  /**
+   * A TypeReference whose reflective type names a class that cannot be loaded,
+   * forcing {@code getClassType()} to throw {@link ClassNotFoundException}.
+   */
+  private static TypeReference<Uint> unresolvableTypeReference() {
+    return new TypeReference<Uint>() {
+      @Override
+      public java.lang.reflect.Type getType() {
+        return new java.lang.reflect.Type() {
+          @Override
+          public String getTypeName() {
+            return "org.tron.trident.abi.datatypes.DoesNotExist";
+          }
+        };
+      }
+    };
+  }
+
+  @Test
+  public void testGetDataOffsetThrowsCheckedExceptionForUnresolvableReference() {
+    // getDataOffset declares ClassNotFoundException; resolution failures must
+    // surface as that checked type, not as isDynamic's unchecked wrapper.
+    Assertions.assertThrows(
+        ClassNotFoundException.class,
+        () -> DefaultFunctionReturnDecoder.getDataOffset(
+            "0000000000000000000000000000000000000000000000000000000000000020",
+            0,
+            unresolvableTypeReference()));
+  }
+
+  @Test
+  public void testDecodeReportsInvalidClassReferenceForUnresolvableReference() {
+    List<TypeReference<?>> refs = Collections.singletonList(unresolvableTypeReference());
+    UnsupportedOperationException e = Assertions.assertThrows(
+        UnsupportedOperationException.class,
+        () -> FunctionReturnDecoder.decode(
+            "0x0000000000000000000000000000000000000000000000000000000000000020",
+            Utils.convert(refs)));
+    assertEquals("Invalid class reference provided", e.getMessage());
+  }
 }

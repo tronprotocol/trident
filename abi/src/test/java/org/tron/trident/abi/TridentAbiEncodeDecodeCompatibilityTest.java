@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -21,12 +22,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.tron.trident.abi.datatypes.DynamicArray;
-import org.tron.trident.abi.datatypes.DynamicBytes;
 import org.tron.trident.abi.datatypes.DynamicStruct;
 import org.tron.trident.abi.datatypes.StaticArray;
 import org.tron.trident.abi.datatypes.StaticStruct;
 import org.tron.trident.abi.datatypes.Type;
-import org.tron.trident.abi.datatypes.Utf8String;
 import org.tron.trident.utils.Numeric;
 
 /**
@@ -47,7 +46,7 @@ import org.tron.trident.utils.Numeric;
 @DisplayName("Trident ABI Encode Decode Compatibility")
 public class TridentAbiEncodeDecodeCompatibilityTest {
 
-    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final ObjectMapper MAPPER = new JsonMapper();
     /**
      * Test-data fixtures loaded from the test classpath. Each entry is a gzipped JSON
      * array of pre-generated ABI compatibility test cases. Multiple fixtures are merged so
@@ -186,7 +185,7 @@ public class TridentAbiEncodeDecodeCompatibilityTest {
                 }
                 componentTypes.add(componentTypeObj);
 
-                if (isDynamicType(componentTypeObj)) {
+                if (TypeEncoder.isDynamic(componentTypeObj)) {
                     hasDynamicComponent = true;
                 }
             }
@@ -227,25 +226,11 @@ public class TridentAbiEncodeDecodeCompatibilityTest {
 
         private static Type wrapAsArray(List<Type> elements, String arrayPart) {
             if ("[]".equals(arrayPart)) {
-                return new DynamicArray<Type>(Type.class, elements) { };
+                return new DynamicArray<>(Type.class, elements);
             }
             int arraySize = Integer.parseInt(
                     arrayPart.substring(1, arrayPart.length() - 1));
             return new StaticArray<Type>(Type.class, arraySize, elements) { };
-        }
-
-        private boolean isDynamicType(Type type) {
-            if (type instanceof DynamicBytes || type instanceof Utf8String
-                    || type instanceof DynamicArray || type instanceof DynamicStruct) {
-                return true;
-            }
-            if (type instanceof StaticArray) {
-                StaticArray<?> staticArray = (StaticArray<?>) type;
-                if (!staticArray.getValue().isEmpty()) {
-                    return isDynamicType((Type) staticArray.getValue().get(0));
-                }
-            }
-            return false;
         }
     }
 
