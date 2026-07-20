@@ -93,12 +93,29 @@ public abstract class FunctionEncoder {
   protected abstract String encodeParameters(List<Type> parameters);
 
   /**
+   * Encodes parameters prefixed with the given selector. Not part of the original
+   * subclass contract: implementations predating it inherit this throwing default,
+   * so the pre-existing entry points keep working and only the newer
+   * {@link #encode(String, List)} fails, with a clear message.
+   *
    * @param methodId Callback selector / Abi method Id (Hex format)
    */
-  protected abstract String encodeWithSelector(
-          final String methodId, final List<Type> parameters);
+  protected String encodeWithSelector(
+          final String methodId, final List<Type> parameters) {
+    throw new UnsupportedOperationException(
+            "encodeWithSelector is not implemented by " + getClass().getName()
+                    + "; override it to support FunctionEncoder.encode(methodId, parameters)");
+  }
 
-  protected abstract String encodePackedParameters(List<Type> parameters);
+  /**
+   * Encodes parameters using tight packing (abi.encodePacked). Not part of the
+   * original subclass contract; see {@link #encodeWithSelector(String, List)}.
+   */
+  protected String encodePackedParameters(List<Type> parameters) {
+    throw new UnsupportedOperationException(
+            "encodePackedParameters is not implemented by " + getClass().getName()
+                    + "; override it to support FunctionEncoder.encodeConstructorPacked(parameters)");
+  }
 
   protected static String buildMethodSignature(
       final String methodName, final List<Type> parameters) {

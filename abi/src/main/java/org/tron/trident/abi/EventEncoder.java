@@ -36,16 +36,6 @@ public class EventEncoder {
     return buildEventSignature(methodSignature);
   }
 
-  /**
-   * Encodes the given {@code Event} and removes '0x' of the encoded string.
-   *
-   * @param event the {@code Event} instance to be encoded
-   * @return a hexadecimal string representing the encoded event, excluding the prefix '0x'
-   */
-  public static String encodeWithOutPrefix(Event event) {
-    return encode(event).substring(2);
-  }
-
   static <T extends Type> String buildMethodSignature(
       String methodName, List<TypeReference<T>> parameters) {
 
@@ -63,15 +53,5 @@ public class EventEncoder {
     byte[] input = methodSignature.getBytes();
     byte[] hash = Hash.sha3(input);
     return Numeric.toHexString(hash);
-  }
-
-  /**
-   * Generates the event signature hash without the '0x' prefix
-   *
-   * @param methodSignature the string representation of the method signature for the event
-   * @return a hexadecimal string representing the event signature hash, excluding the prefix '0x'
-   */
-  public static String buildEventSignatureWithOutPrefix(String methodSignature) {
-    return buildEventSignature(methodSignature).substring(2);
   }
 }

@@ -1040,6 +1040,17 @@ public class TypeDecoderTest {
   }
 
   @Test
+  public void testTrcTokenLargeUnsignedRoundTrip() {
+    // trcToken is unsigned; a word with the top bit set must decode to the
+    // positive value, not a two's-complement negative one.
+    String hex = "8000000000000000000000000000000000000000000000000000000000000005";
+    BigInteger expected = BigInteger.ONE.shiftLeft(255).add(BigInteger.valueOf(5));
+
+    assertEquals(new TrcToken(expected), TypeDecoder.decodeNumeric(hex, TrcToken.class));
+    assertEquals(hex, TypeEncoder.encode(new TrcToken(expected)));
+  }
+
+  @Test
   public void testUtf8String() throws Exception {
     assertEquals(
         TypeDecoder.decodeUtf8String(

@@ -91,4 +91,23 @@ public class AbiTypesTest {
         new DynamicArray<>(TrcToken.class, Arrays.<TrcToken>asList());
     assertEquals("trcToken[]", empty.getTypeAsString());
   }
+
+  @Test
+  public void testGetTypeAString_bareBaseClassesCanonicalized() {
+    assertEquals("uint256", AbiTypes.getTypeAString(Uint.class));
+    assertEquals("int256", AbiTypes.getTypeAString(Int.class));
+    assertEquals("ufixed256", AbiTypes.getTypeAString(Ufixed.class));
+    assertEquals("fixed256", AbiTypes.getTypeAString(Fixed.class));
+  }
+
+  @Test
+  public void testBareBaseClassCompositeTypeStrings() {
+    DynamicArray<Uint> array =
+        new DynamicArray<>(Uint.class, new Uint(BigInteger.ONE));
+    assertEquals("uint256[]", array.getTypeAsString());
+
+    StaticStruct struct =
+        new StaticStruct(new Uint(BigInteger.ONE), new Int(BigInteger.TEN));
+    assertEquals("(uint256,int256)", struct.getTypeAsString());
+  }
 }

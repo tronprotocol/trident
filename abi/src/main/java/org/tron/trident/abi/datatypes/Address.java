@@ -30,13 +30,14 @@ public class Address implements Type<String> {
   private final Uint value;
 
   /**
-   * Stores the given {@link Uint} as-is, WITHOUT normalizing its bit size to 160. A plain
-   * {@code new Uint(value)} is 256-bit, and {@link org.tron.trident.abi.TypeEncoder#encodePacked}
-   * slices by the stored bit size — so an address built here packs to 32 bytes, not the
-   * canonical 20 (chain-side {@code abi.encodePacked(address)} is always 20 bytes), silently
-   * shifting every later field in the packed stream. Prefer {@link #Address(BigInteger)} or
-   * {@link #Address(String)}, which normalize to 160 bits and pack correctly.
+   * Stores the given {@link Uint} as-is, without normalizing its bit size to 160.
+   * {@link org.tron.trident.abi.TypeEncoder#encodePacked} slices by the stored bit
+   * size, so a 256-bit Uint packs to 32 bytes instead of the canonical 20.
+   *
+   * @deprecated use {@link #Address(BigInteger)} or {@link #Address(String)},
+   *     which normalize to 160 bits.
    */
+  @Deprecated
   public Address(Uint value) {
     this.value = value;
   }

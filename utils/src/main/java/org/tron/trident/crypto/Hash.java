@@ -16,6 +16,7 @@ package org.tron.trident.crypto;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Locale;
 import org.bouncycastle.crypto.digests.RIPEMD160Digest;
 import org.bouncycastle.crypto.digests.SHA512Digest;
 import org.bouncycastle.crypto.macs.HMac;
@@ -42,7 +43,7 @@ public class Hash {
    */
   public static byte[] hash(byte[] input, String algorithm) {
     try {
-      MessageDigest digest = MessageDigest.getInstance(algorithm.toUpperCase());
+      MessageDigest digest = MessageDigest.getInstance(algorithm.toUpperCase(Locale.ROOT));
       return digest.digest(input);
     } catch (NoSuchAlgorithmException e) {
       throw new RuntimeException("Couldn't find a " + algorithm + " provider", e);

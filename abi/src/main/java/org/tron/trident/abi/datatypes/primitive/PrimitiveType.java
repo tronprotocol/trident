@@ -14,6 +14,7 @@
 package org.tron.trident.abi.datatypes.primitive;
 
 import java.io.Serializable;
+import java.util.Locale;
 import java.util.Objects;
 import org.tron.trident.abi.datatypes.Type;
 
@@ -23,7 +24,7 @@ public abstract class PrimitiveType<T extends Serializable & Comparable<T>> impl
   private final T value;
 
   PrimitiveType(final T value) {
-    this.type = getClass().getSimpleName().toLowerCase();
+    this.type = getClass().getSimpleName().toLowerCase(Locale.ROOT);
     this.value = value;
   }
 

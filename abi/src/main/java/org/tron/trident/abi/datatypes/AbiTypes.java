@@ -13,6 +13,7 @@
 
 package org.tron.trident.abi.datatypes;
 
+import java.util.Locale;
 import org.tron.trident.abi.datatypes.generated.Bytes1;
 import org.tron.trident.abi.datatypes.generated.Bytes10;
 import org.tron.trident.abi.datatypes.generated.Bytes11;
@@ -402,8 +403,13 @@ public final class AbiTypes {
       return "bytes";
     } else if (TrcToken.class.equals(type)) {
       return "trcToken";
+    } else if (Uint.class.equals(type)
+        || org.tron.trident.abi.datatypes.Int.class.equals(type)
+        || Ufixed.class.equals(type)
+        || Fixed.class.equals(type)) {
+      return type.getSimpleName().toLowerCase(Locale.ROOT) + "256";
     } else {
-      return type.getSimpleName().toLowerCase();
+      return type.getSimpleName().toLowerCase(Locale.ROOT);
     }
   }
 }

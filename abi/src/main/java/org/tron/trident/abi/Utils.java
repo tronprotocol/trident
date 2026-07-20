@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.tron.trident.abi.datatypes.DynamicArray;
@@ -126,6 +127,19 @@ public class Utils {
                     + parameterAnnotation.getName(), e);
           }
         } else {
+          // An array-typed field without @Parameterized cannot recover its element
+          // type by reflection; the generic fallback below would lowercase the class
+          // simple name into an invalid signature token (e.g. "dynamicarray"),
+          // silently yielding a wrong function/event selector.
+          if (StaticArray.class.isAssignableFrom(cls)
+              || DynamicArray.class.isAssignableFrom(cls)) {
+            throw new UnsupportedOperationException(
+                "Missing @Parameterized annotation: constructor parameter " + i
+                    + " of struct " + type.getName() + " is the array type "
+                    + cls.getSimpleName() + ", whose element type cannot be recovered"
+                    + " reflectively. Annotate it with @Parameterized(type ="
+                    + " <ElementType>.class) so a valid ABI signature can be built.");
+          }
           sb.append(getTypeName(TypeReference.create(cls)));
         }
       }
@@ -160,6 +174,15 @@ public class Utils {
    */
   public static TypeReference getTypeReferenceForParameterizedField(
       Class fieldType, Class elementType) throws ClassNotFoundException {
+    // @Parameterized recovers the erased element type of an array field; on a
+    // non-array field it is meaningless.
+    if (!StaticArray.class.isAssignableFrom(fieldType)
+        && !DynamicArray.class.isAssignableFrom(fieldType)) {
+      throw new UnsupportedOperationException(
+          "@Parameterized is only applicable to array-typed struct fields: "
+              + fieldType.getSimpleName() + " is not a StaticArray/DynamicArray"
+              + " subtype. Remove the annotation from this field.");
+    }
     // Struct classes extend StaticArray/DynamicArray for encoding purposes but are
     // legitimate element types; only genuine array-of-array nesting is rejected.
     if ((StaticArray.class.isAssignableFrom(elementType)
@@ -260,7 +283,7 @@ public class Utils {
 
 
   static String getSimpleTypeName(Class<?> type) {
-    String simpleName = type.getSimpleName().toLowerCase();
+    String simpleName = type.getSimpleName().toLowerCase(Locale.ROOT);
 
     if (type.equals(Uint.class)
         || type.equals(Int.class)

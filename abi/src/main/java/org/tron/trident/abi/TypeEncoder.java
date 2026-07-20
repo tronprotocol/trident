@@ -431,6 +431,20 @@ public class TypeEncoder {
   }
 
   /**
+   * Types abi.encodePacked cannot represent as array elements: dynamic types
+   * (string/bytes), fixed-point types, structs and nested arrays.
+   */
+  private static boolean isPackedForbidden(Class<?> cls) {
+    return Utf8String.class.isAssignableFrom(cls)
+            || DynamicStruct.class.isAssignableFrom(cls)
+            || DynamicArray.class.isAssignableFrom(cls)
+            || StaticStruct.class.isAssignableFrom(cls)
+            || StaticArray.class.isAssignableFrom(cls)
+            || FixedPointType.class.isAssignableFrom(cls)
+            || DynamicBytes.class.isAssignableFrom(cls);
+  }
+
+  /**
    * Checks if the received array doesn't contain any element that can make the array unsupported
    * for abi.encodePacked
    *
@@ -439,14 +453,16 @@ public class TypeEncoder {
    * @return if the encodePacked is supported for the given array
    */
   private static <T extends Type> boolean isSupportingEncodedPacked(Array<T> value) {
-    if (Utf8String.class.isAssignableFrom(value.getComponentType())
-            || DynamicStruct.class.isAssignableFrom(value.getComponentType())
-            || DynamicArray.class.isAssignableFrom(value.getComponentType())
-            || StaticStruct.class.isAssignableFrom(value.getComponentType())
-            || StaticArray.class.isAssignableFrom(value.getComponentType())
-            || FixedPointType.class.isAssignableFrom(value.getComponentType())
-            || DynamicBytes.class.isAssignableFrom(value.getComponentType())) {
+    if (isPackedForbidden(value.getComponentType())) {
       return false;
+    }
+    // The declared componentType may be a supertype of the elements (e.g. an
+    // array built with Type.class), which the check above cannot see through;
+    // validate the actual element types as well.
+    for (T element : value.getValue()) {
+      if (isPackedForbidden(element.getClass())) {
+        return false;
+      }
     }
     return true;
   }

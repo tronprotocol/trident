@@ -43,7 +43,7 @@ public class DynamicArrayTest {
   public void testDynamicArrayWithAbiType() {
     final DynamicArray<Uint> array = new DynamicArray<>(Uint.class, arrayOfUints(1));
 
-    assertEquals(Uint.TYPE_NAME + "[]", array.getTypeAsString());
+    assertEquals("uint256[]", array.getTypeAsString());
   }
 
   @Test

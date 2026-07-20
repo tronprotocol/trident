@@ -245,6 +245,61 @@ public class UtilsTest {
         () -> Utils.getTypeReferenceForParameterizedField(
             StaticArray3.class, TestStructWithParameterizedStaticArray.class));
   }
+
+  @Test
+  public void testGetStructTypeRejectsUnannotatedDynamicArrayField() {
+    // A DynamicArray field without @Parameterized used to fall through to the
+    // generic class-name fallback and silently emit the invalid token
+    // "dynamicarray" into the signature — producing a wrong selector. It must
+    // fail loudly, naming the struct, the parameter and the missing annotation.
+    UnsupportedOperationException ex = Assertions.assertThrows(
+        UnsupportedOperationException.class,
+        () -> Utils.getStructType(TestStructWithUnannotatedDynamicArray.class));
+    Assertions.assertTrue(ex.getMessage().contains("@Parameterized"),
+        "expected missing-annotation message, got: " + ex.getMessage());
+    Assertions.assertTrue(
+        ex.getMessage().contains(TestStructWithUnannotatedDynamicArray.class.getName()),
+        "expected struct class name in message, got: " + ex.getMessage());
+    Assertions.assertTrue(ex.getMessage().contains("parameter 1"),
+        "expected parameter index in message, got: " + ex.getMessage());
+  }
+
+  @Test
+  public void testGetStructTypeRejectsUnannotatedStaticArrayField() {
+    // Same guard for generated StaticArrayN fields, which used to emit
+    // e.g. "staticarray2" as a signature token.
+    UnsupportedOperationException ex = Assertions.assertThrows(
+        UnsupportedOperationException.class,
+        () -> Utils.getStructType(TestStructWithUnannotatedStaticArray.class));
+    Assertions.assertTrue(ex.getMessage().contains("@Parameterized"),
+        "expected missing-annotation message, got: " + ex.getMessage());
+    Assertions.assertTrue(ex.getMessage().contains("StaticArray2"),
+        "expected field class name in message, got: " + ex.getMessage());
+  }
+
+  @Test
+  public void testGetStructTypeRejectsAnnotatedScalarField() {
+    // The inverse misuse of the missing-annotation case: @Parameterized on a
+    // non-array field used to fall into the DynamicArray branch of
+    // getTypeReferenceForParameterizedField, silently rewriting a "uint256"
+    // field into "uint256[]" in the signature.
+    UnsupportedOperationException ex = Assertions.assertThrows(
+        UnsupportedOperationException.class,
+        () -> Utils.getStructType(TestStructWithAnnotatedScalarField.class));
+    Assertions.assertTrue(ex.getMessage().contains("only applicable to array-typed"),
+        "expected non-array rejection message, got: " + ex.getMessage());
+    Assertions.assertTrue(ex.getMessage().contains("Uint256"),
+        "expected field class name in message, got: " + ex.getMessage());
+  }
+
+  @Test
+  public void testGetTypeReferenceForParameterizedFieldRejectsNonArrayFieldType() {
+    UnsupportedOperationException ex = Assertions.assertThrows(
+        UnsupportedOperationException.class,
+        () -> Utils.getTypeReferenceForParameterizedField(Uint256.class, Uint256.class));
+    Assertions.assertTrue(ex.getMessage().contains("only applicable to array-typed"),
+        "expected non-array rejection message, got: " + ex.getMessage());
+  }
 }
 
 class TestStructWithParameterizedStaticArray extends StaticStruct {
@@ -266,5 +321,26 @@ class TestStructWithNestedStaticArray extends StaticStruct {
       @Parameterized(type = StaticArray2.class)
       StaticArray2<StaticArray2<Uint256>> matrix) {
     super(matrix);
+  }
+}
+
+class TestStructWithUnannotatedDynamicArray extends StaticStruct {
+  public TestStructWithUnannotatedDynamicArray(
+      Address address, DynamicArray<Uint256> uint256Array) {
+    super(address, uint256Array);
+  }
+}
+
+class TestStructWithUnannotatedStaticArray extends StaticStruct {
+  public TestStructWithUnannotatedStaticArray(
+      Address address, StaticArray2<Uint256> uint256Array) {
+    super(address, uint256Array);
+  }
+}
+
+class TestStructWithAnnotatedScalarField extends StaticStruct {
+  public TestStructWithAnnotatedScalarField(
+      Address address, @Parameterized(type = Uint256.class) Uint256 value) {
+    super(address, value);
   }
 }

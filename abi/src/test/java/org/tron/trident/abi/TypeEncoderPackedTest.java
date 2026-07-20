@@ -16,6 +16,7 @@ import org.tron.trident.abi.datatypes.Fixed;
 import org.tron.trident.abi.datatypes.Int;
 import org.tron.trident.abi.datatypes.StaticArray;
 import org.tron.trident.abi.datatypes.StaticStruct;
+import org.tron.trident.abi.datatypes.Type;
 import org.tron.trident.abi.datatypes.Ufixed;
 import org.tron.trident.abi.datatypes.Uint;
 import org.tron.trident.abi.datatypes.Utf8String;
@@ -814,6 +815,42 @@ public class TypeEncoderPackedTest {
         "56657279206c6f6e6720737472696e672076616c756520666f722074657374"
             + "2156657279206c6f6e6720737472696e672076616c756520666f72207465737421",
         TypeEncoder.encodePacked(veryLargeString));
+  }
+
+  @Test
+  @SuppressWarnings("unchecked")
+  public void testSupertypeDeclaredArrayEncodePacked() {
+    // Arrays declared with a supertype componentType (e.g. Type.class) blind
+    // the componentType gate; the actual element types must be validated too.
+
+    // Dynamic scalar elements smuggled under Type.class.
+    DynamicArray<Type> hiddenString =
+        new DynamicArray<>(Type.class, new Uint16(0x45), new Utf8String("x"));
+    assertThrows(
+        UnsupportedOperationException.class, () -> TypeEncoder.encodePacked(hiddenString));
+
+    // Structs resurface one level down inside a supertype-declared array.
+    DynamicArray<Type> hiddenStruct =
+        new DynamicArray<>(Type.class, new AbiV2TestFixture.Foo("id", "name"));
+    assertThrows(
+        UnsupportedOperationException.class, () -> TypeEncoder.encodePacked(hiddenStruct));
+
+    // Nested arrays, likewise forbidden in packed mode.
+    DynamicArray<Type> hiddenNestedArray =
+        new DynamicArray<>(
+            Type.class, new DynamicArray<>(Uint16.class, new Uint16(0x45)));
+    assertThrows(
+        UnsupportedOperationException.class,
+        () -> TypeEncoder.encodePacked(hiddenNestedArray));
+
+    // Benign supertype declaration: allowed element types still encode, and
+    // identically to a precisely-declared array.
+    DynamicArray<Type> benign =
+        new DynamicArray<>(Type.class, new Uint16(0x45), new Uint16(0x7));
+    assertEquals(
+        TypeEncoder.encodePacked(
+            new DynamicArray<>(Uint16.class, new Uint16(0x45), new Uint16(0x7))),
+        TypeEncoder.encodePacked(benign));
   }
 
   @Test
