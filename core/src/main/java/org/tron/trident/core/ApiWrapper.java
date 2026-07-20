@@ -162,6 +162,8 @@ import org.tron.trident.utils.Strings;
 
 public class ApiWrapper implements Api {
 
+  private static final String KEY_PAIR_NOT_SET = "keyPair is null, should set privateKey";
+
   public final WalletGrpc.WalletBlockingStub blockingStub;
   public final WalletSolidityGrpc.WalletSolidityBlockingStub blockingStubSolidity;
   public final KeyPair keyPair;
@@ -557,11 +559,13 @@ public class ApiWrapper implements Api {
 
   @Override
   public Transaction signTransaction(TransactionExtention txnExt) {
+    Preconditions.checkArgument(keyPair != null, KEY_PAIR_NOT_SET);
     return signTransaction(txnExt, keyPair);
   }
 
   @Override
   public Transaction signTransaction(Transaction txn) {
+    Preconditions.checkArgument(keyPair != null, KEY_PAIR_NOT_SET);
     return signTransaction(txn, keyPair);
   }
 
@@ -3490,13 +3494,13 @@ public class ApiWrapper implements Api {
     validateCallValue(callValue);
     validateTokenId(tokenId);
     validateTokenValue(tokenValue);
+    Preconditions.checkArgument(keyPair != null, KEY_PAIR_NOT_SET);
     if (constructorParams != null && !constructorParams.isEmpty()) {
       ByteString constructorParamsByteString = encodeParameter(constructorParams);
       ByteString newByteCode = ByteString.copyFrom(ByteArray.fromHexString(bytecode))
           .concat(constructorParamsByteString);
       bytecode = ByteArray.toHexString(newByteCode.toByteArray());
     }
-    Preconditions.checkArgument(keyPair != null, "keyPair is null, should set privateKey");
     CreateSmartContract createSmartContract = createSmartContract(
         contractName, keyPair.toBase58CheckAddress(), abiStr, bytecode, callValue,
         consumeUserResourcePercent, originEnergyLimit, tokenValue, tokenId);

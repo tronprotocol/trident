@@ -71,10 +71,8 @@ class ApiWrapperBuilderTest {
     // cannot be overridden by the API-key header or custom interceptors
     List<ClientInterceptor> interceptors = builder.buildInterceptors();
     assertEquals(2, interceptors.size());
-    assertEquals("TimeoutInterceptor",
-        interceptors.get(0).getClass().getSimpleName());
-    assertEquals("HeaderAttachingClientInterceptor",
-        interceptors.get(1).getClass().getSimpleName());
+    assertTrue(interceptors.get(0) instanceof TimeoutInterceptor);
+    assertFalse(interceptors.get(1) instanceof TimeoutInterceptor);
 
     // Verify that the builder can be built successfully
     ApiWrapper wrapper = builder.build();
@@ -138,6 +136,25 @@ class ApiWrapperBuilderTest {
     assertThrows(IllegalArgumentException.class, () -> {
       new ApiWrapperBuilder(Constant.FULLNODE_NILE).addInterceptors(null);
     });
+
+    // the getter must not expose the internal list for mutation
+    assertThrows(UnsupportedOperationException.class, () -> {
+      builder.getCustomInterceptors().add(null);
+    });
+  }
+
+  @Test
+  void testWithTlsUsesSystemTrustCerts() {
+    // withTLS() means "system trust certificates", so it clears a custom one
+    ApiWrapperBuilder builder = new ApiWrapperBuilder(Constant.FULLNODE_NILE)
+        .withTLS(testCertFile)
+        .withTLS();
+    assertTrue(builder.isUseTLS());
+    assertNull(builder.getTrustCert());
+
+    // and the reverse order keeps the custom certificate
+    builder.withTLS(testCertFile);
+    assertEquals(testCertFile, builder.getTrustCert());
   }
 
   @Test

@@ -7,6 +7,7 @@ import io.grpc.Metadata;
 import io.grpc.stub.MetadataUtils;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import lombok.Getter;
 import org.tron.trident.core.interceptor.TimeoutInterceptor;
@@ -28,7 +29,6 @@ public class ApiWrapperBuilder {
   private String apiKey;
   @Getter
   private long timeoutMs; // 0 means no timeout
-  @Getter
   private final List<ClientInterceptor> customInterceptors = new ArrayList<>();
 
   public ApiWrapperBuilder(String grpcEndpoint, String grpcEndpointSolidity,
@@ -64,7 +64,10 @@ public class ApiWrapperBuilder {
   }
 
   /**
-   * Enable TLS
+   * Enable TLS using the system trust certificates.
+   * <p>
+   * A certificate previously set by {@link #withTLS(File)} is cleared.
+   * </p>
    */
   public ApiWrapperBuilder withTLS() {
     this.useTLS = true;
@@ -92,6 +95,10 @@ public class ApiWrapperBuilder {
 
   /**
    * Add multiple custom interceptors. Null elements are ignored.
+   * <p>
+   * Custom interceptors are applied outside the timeout interceptor, so they cannot
+   * change the deadline set by {@link #withTimeout(long)}.
+   * </p>
    */
   public ApiWrapperBuilder addInterceptors(List<ClientInterceptor> interceptors) {
     Preconditions.checkArgument(interceptors != null, "interceptors is null");
@@ -122,6 +129,13 @@ public class ApiWrapperBuilder {
         "hexPrivateKey should be 64 hex characters (32 bytes)");
     this.hexPrivateKey = cleaned;
     return this;
+  }
+
+  /**
+   * The custom interceptors added so far, as an unmodifiable view.
+   */
+  public List<ClientInterceptor> getCustomInterceptors() {
+    return Collections.unmodifiableList(customInterceptors);
   }
 
   /**

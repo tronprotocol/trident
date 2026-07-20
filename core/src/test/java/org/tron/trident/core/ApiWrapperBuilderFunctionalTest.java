@@ -184,6 +184,14 @@ class ApiWrapperBuilderFunctionalTest {
       client.signTransaction(transactionExtention);
       fail();
     } catch (Exception e) {
+      assertEquals("keyPair is null, should set privateKey", e.getMessage());
+    }
+
+    // passing an explicit null keyPair is an argument error, not a missing config
+    try {
+      client.signTransaction(transactionExtention, null);
+      fail();
+    } catch (Exception e) {
       assertEquals("keyPair is null", e.getMessage());
     }
     Transaction signTransaction = client.signTransaction(transactionExtention, keyPair);
@@ -213,6 +221,7 @@ class ApiWrapperBuilderFunctionalTest {
           Constant.FULLNODE_NILE_SOLIDITY, keyPair.toPrivateKey(), null, 5000);
       fail();
     } catch (Exception e) {
+      assertTrue(e instanceof IllegalArgumentException);
       assertEquals("interceptors is null", e.getMessage());
     }
 
@@ -222,6 +231,7 @@ class ApiWrapperBuilderFunctionalTest {
           Constant.FULLNODE_NILE_SOLIDITY, keyPair.toPrivateKey(), "");
       fail();
     } catch (Exception e) {
+      assertTrue(e instanceof IllegalArgumentException);
       assertEquals("apiKey is empty", e.getMessage());
     }
 
