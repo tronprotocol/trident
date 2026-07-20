@@ -7,13 +7,17 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import io.grpc.ClientInterceptor;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.tron.trident.core.interceptor.TimeoutInterceptor;
 import org.tron.trident.core.key.KeyPair;
 
 /**
@@ -51,7 +55,8 @@ class ApiWrapperBuilderTest {
     assertEquals(Constant.FULLNODE_NILE_SOLIDITY, builder.getGrpcEndpointSolidity());
     assertEquals(TEST_PRIVATE_KEY, builder.getHexPrivateKey());
     assertFalse(builder.isUseTLS());
-    assertEquals(0, builder.getInterceptors().size());
+    assertEquals(0, builder.getCustomInterceptors().size());
+    assertEquals(0, builder.buildInterceptors().size());
 
     // set tls/ApiKey/Timeout
     builder = builder.withTLS()
@@ -59,11 +64,17 @@ class ApiWrapperBuilderTest {
         .withTimeout(TEST_TIMEOUT_MS);
 
     assertTrue(builder.isUseTLS());
-    assertEquals(2, builder.getInterceptors().size());
-    assertEquals("HeaderAttachingClientInterceptor",
-        builder.getInterceptors().get(0).getClass().getSimpleName());
+    assertEquals(TEST_API_KEY, builder.getApiKey());
+    assertEquals(TEST_TIMEOUT_MS, builder.getTimeoutMs());
+
+    // TimeoutInterceptor is assembled first (innermost) so the configured deadline
+    // cannot be overridden by the API-key header or custom interceptors
+    List<ClientInterceptor> interceptors = builder.buildInterceptors();
+    assertEquals(2, interceptors.size());
     assertEquals("TimeoutInterceptor",
-        builder.getInterceptors().get(1).getClass().getSimpleName());
+        interceptors.get(0).getClass().getSimpleName());
+    assertEquals("HeaderAttachingClientInterceptor",
+        interceptors.get(1).getClass().getSimpleName());
 
     // Verify that the builder can be built successfully
     ApiWrapper wrapper = builder.build();
@@ -84,6 +95,49 @@ class ApiWrapperBuilderTest {
     builder = builder.withTLS(testCertFile);
     assertTrue(builder.isUseTLS());
     assertEquals(testCertFile, builder.getTrustCert());
+  }
+
+  @Test
+  void testPrivateKeyAcceptsHexPrefix() {
+    // "0x"-prefixed keys are accepted and normalized to the plain 64-char form
+    ApiWrapperBuilder builder = new ApiWrapperBuilder(Constant.FULLNODE_NILE)
+        .withPrivateKey("0x" + TEST_PRIVATE_KEY);
+    assertEquals(TEST_PRIVATE_KEY, builder.getHexPrivateKey());
+
+    // too-short keys are rejected
+    assertThrows(IllegalArgumentException.class, () -> {
+      new ApiWrapperBuilder(Constant.FULLNODE_NILE)
+          .withPrivateKey(TEST_PRIVATE_KEY.substring(2));
+    });
+  }
+
+  @Test
+  void testRepeatedSettersLastWins() {
+    ApiWrapperBuilder builder = new ApiWrapperBuilder(Constant.FULLNODE_NILE)
+        .withTimeout(1000L)
+        .withTimeout(TEST_TIMEOUT_MS)
+        .withApiKey("first-key")
+        .withApiKey(TEST_API_KEY);
+
+    assertEquals(TEST_TIMEOUT_MS, builder.getTimeoutMs());
+    assertEquals(TEST_API_KEY, builder.getApiKey());
+    // exactly one TimeoutInterceptor and one header interceptor, not stacked copies
+    assertEquals(2, builder.buildInterceptors().size());
+  }
+
+  @Test
+  void testAddInterceptors() {
+    ClientInterceptor interceptor = new TimeoutInterceptor(1000L);
+    ApiWrapperBuilder builder = new ApiWrapperBuilder(Constant.FULLNODE_NILE)
+        .addInterceptors(Arrays.asList(interceptor, null));
+
+    // null elements are filtered
+    assertEquals(1, builder.getCustomInterceptors().size());
+    assertEquals(1, builder.buildInterceptors().size());
+
+    assertThrows(IllegalArgumentException.class, () -> {
+      new ApiWrapperBuilder(Constant.FULLNODE_NILE).addInterceptors(null);
+    });
   }
 
   @Test
@@ -108,6 +162,15 @@ class ApiWrapperBuilderTest {
       new ApiWrapperBuilder(Constant.FULLNODE_NILE,
           Constant.FULLNODE_NILE_SOLIDITY, "123");
     });
+
+    // empty endpoints are rejected like null ones
+    assertThrows(IllegalArgumentException.class, () -> {
+      new ApiWrapperBuilder("");
+    });
+
+    assertThrows(IllegalArgumentException.class, () -> {
+      new ApiWrapperBuilder(Constant.FULLNODE_NILE).withGrpcEndpointSolidity("");
+    });
   }
 
   @Test
@@ -121,13 +184,17 @@ class ApiWrapperBuilderTest {
     assertTrue(toStringResult.contains("grpcEndpoint=" + Constant.FULLNODE_NILE));
     assertTrue(toStringResult.contains("grpcEndpointSolidity=" + Constant.FULLNODE_NILE_SOLIDITY));
     assertTrue(toStringResult.contains("hexPrivateKey=****"));
+    assertFalse(toStringResult.contains(TEST_PRIVATE_KEY));
     assertTrue(toStringResult.contains("useTLS=false"));
     assertTrue(toStringResult.contains("trustCert=null"));
 
-    builder.withTLS(testCertFile);
+    builder.withTLS(testCertFile).withApiKey(TEST_API_KEY);
     toStringResult = builder.toString();
     assertTrue(toStringResult.contains("useTLS=true"));
     assertTrue(toStringResult.contains("trustCert=" + testCertFile.getAbsolutePath()));
-    }
+    // the API key must never appear in logs
+    assertTrue(toStringResult.contains("apiKey=****"));
+    assertFalse(toStringResult.contains(TEST_API_KEY));
+  }
 
 }

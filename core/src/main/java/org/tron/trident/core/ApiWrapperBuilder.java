@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import org.tron.trident.core.interceptor.TimeoutInterceptor;
+import org.tron.trident.utils.Numeric;
 import org.tron.trident.utils.Strings;
 
 public class ApiWrapperBuilder {
@@ -24,22 +25,22 @@ public class ApiWrapperBuilder {
   @Getter
   private File trustCert; // Certificate for custom full node
   @Getter
-  private List<ClientInterceptor> interceptors = new ArrayList<>();// Default: no timeout
+  private String apiKey;
+  @Getter
+  private long timeoutMs; // 0 means no timeout
+  @Getter
+  private final List<ClientInterceptor> customInterceptors = new ArrayList<>();
 
   public ApiWrapperBuilder(String grpcEndpoint, String grpcEndpointSolidity,
       String hexPrivateKey) {
-    Preconditions.checkArgument(grpcEndpoint != null, "grpcEndpoint is null");
-    Preconditions.checkArgument(grpcEndpointSolidity != null, "grpcEndpointSolidity is null");
-    Preconditions.checkArgument(hexPrivateKey != null && hexPrivateKey.length() == 64,
-        "hexPrivateKey should be 64 hex characters (32 bytes)");
-
+    Preconditions.checkArgument(!Strings.isEmpty(grpcEndpoint), "grpcEndpoint is null or empty");
     this.grpcEndpoint = grpcEndpoint;
-    this.grpcEndpointSolidity = grpcEndpointSolidity;
-    this.hexPrivateKey = hexPrivateKey;
+    withGrpcEndpointSolidity(grpcEndpointSolidity);
+    withPrivateKey(hexPrivateKey);
   }
 
   public ApiWrapperBuilder(String grpcEndpoint) {
-    Preconditions.checkArgument(grpcEndpoint != null, "grpcEndpoint is null");
+    Preconditions.checkArgument(!Strings.isEmpty(grpcEndpoint), "grpcEndpoint is null or empty");
     this.grpcEndpoint = grpcEndpoint;
   }
 
@@ -55,7 +56,8 @@ public class ApiWrapperBuilder {
    */
   public ApiWrapperBuilder withTLS(File certFile) {
     Preconditions.checkNotNull(certFile, "certFile is null");
-    Preconditions.checkArgument(certFile.exists(), "cert file does not exist: " + certFile.getAbsolutePath());
+    Preconditions.checkArgument(certFile.exists(),
+        "cert file does not exist: " + certFile.getAbsolutePath());
     this.useTLS = true;
     this.trustCert = certFile;
     return this;
@@ -66,6 +68,7 @@ public class ApiWrapperBuilder {
    */
   public ApiWrapperBuilder withTLS() {
     this.useTLS = true;
+    this.trustCert = null;
     return this;
   }
 
@@ -74,11 +77,7 @@ public class ApiWrapperBuilder {
    */
   public ApiWrapperBuilder withApiKey(String apiKey) {
     Preconditions.checkArgument(!Strings.isEmpty(apiKey), "apiKey is empty");
-    Metadata header = new Metadata();
-    Metadata.Key<String> key =
-        Metadata.Key.of("TRON-PRO-API-KEY", Metadata.ASCII_STRING_MARSHALLER);
-    header.put(key, apiKey);
-    interceptors.add(MetadataUtils.newAttachHeadersInterceptor(header));
+    this.apiKey = apiKey;
     return this;
   }
 
@@ -87,16 +86,20 @@ public class ApiWrapperBuilder {
    */
   public ApiWrapperBuilder withTimeout(long timeoutMs) {
     Preconditions.checkArgument(timeoutMs > 0, "timeout should be greater than 0");
-    this.interceptors.add(new TimeoutInterceptor(timeoutMs));
+    this.timeoutMs = timeoutMs;
     return this;
   }
 
   /**
-   * Add multiple custom interceptors
+   * Add multiple custom interceptors. Null elements are ignored.
    */
-  public ApiWrapperBuilder withInterceptors(List<ClientInterceptor> interceptors) {
+  public ApiWrapperBuilder addInterceptors(List<ClientInterceptor> interceptors) {
     Preconditions.checkArgument(interceptors != null, "interceptors is null");
-    this.interceptors.addAll(interceptors);
+    for (ClientInterceptor interceptor : interceptors) {
+      if (interceptor != null) {
+        customInterceptors.add(interceptor);
+      }
+    }
     return this;
   }
 
@@ -104,19 +107,42 @@ public class ApiWrapperBuilder {
    * set grpcEndpointSolidity
    */
   public ApiWrapperBuilder withGrpcEndpointSolidity(String grpcEndpointSolidity) {
-    Preconditions.checkArgument(grpcEndpointSolidity != null, "grpcEndpointSolidity is null");
+    Preconditions.checkArgument(!Strings.isEmpty(grpcEndpointSolidity),
+        "grpcEndpointSolidity is null or empty");
     this.grpcEndpointSolidity = grpcEndpointSolidity;
     return this;
   }
 
   /**
-   * set PrivateKey
+   * set PrivateKey, an optional "0x" prefix is accepted
    */
   public ApiWrapperBuilder withPrivateKey(String hexPrivateKey) {
-    Preconditions.checkArgument(hexPrivateKey != null && hexPrivateKey.length() == 64,
+    String cleaned = Numeric.cleanHexPrefix(hexPrivateKey);
+    Preconditions.checkArgument(cleaned != null && cleaned.length() == 64,
         "hexPrivateKey should be 64 hex characters (32 bytes)");
-    this.hexPrivateKey = hexPrivateKey;
+    this.hexPrivateKey = cleaned;
     return this;
+  }
+
+  /**
+   * Assemble the final interceptor list: TimeoutInterceptor first (innermost, so the
+   * configured deadline is applied last and cannot be overridden by other interceptors,
+   * per gRPC's reverse-order execution), then the API-key header, then custom ones.
+   */
+  List<ClientInterceptor> buildInterceptors() {
+    List<ClientInterceptor> interceptors = new ArrayList<>();
+    if (timeoutMs > 0) {
+      interceptors.add(new TimeoutInterceptor(timeoutMs));
+    }
+    if (!Strings.isEmpty(apiKey)) {
+      Metadata header = new Metadata();
+      Metadata.Key<String> key =
+          Metadata.Key.of("TRON-PRO-API-KEY", Metadata.ASCII_STRING_MARSHALLER);
+      header.put(key, apiKey);
+      interceptors.add(MetadataUtils.newAttachHeadersInterceptor(header));
+    }
+    interceptors.addAll(customInterceptors);
+    return interceptors;
   }
 
   public ApiWrapper build() {
@@ -130,7 +156,9 @@ public class ApiWrapperBuilder {
         .add("hexPrivateKey", hexPrivateKey != null ? "****" : null)
         .add("useTLS", useTLS)
         .add("trustCert", trustCert != null ? trustCert.getAbsolutePath() : null)
-        .add("interceptors", interceptors)
+        .add("apiKey", apiKey != null ? "****" : null)
+        .add("timeoutMs", timeoutMs)
+        .add("customInterceptors", customInterceptors)
         .toString();
   }
 
