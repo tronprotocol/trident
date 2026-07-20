@@ -28,7 +28,7 @@ public class ApiWrapperBuilder {
   @Getter
   private String apiKey;
   @Getter
-  private long timeoutMs; // 0 means no timeout
+  private long timeoutMs; // unset, no timeout interceptor is added
   private final List<ClientInterceptor> customInterceptors = new ArrayList<>();
 
   public ApiWrapperBuilder(String grpcEndpoint, String grpcEndpointSolidity,
