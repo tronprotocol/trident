@@ -144,6 +144,7 @@ subprojects {
     checkstyle {
         toolVersion = "8.29"
         configFile = file("../config/checkstyle/checkStyleAll.xml")
+        maxWarnings = 0
     }
     checkstyleMain {
         source = 'src/main/java'

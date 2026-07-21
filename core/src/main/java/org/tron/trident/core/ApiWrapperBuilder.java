@@ -55,7 +55,8 @@ public class ApiWrapperBuilder {
    */
   public ApiWrapperBuilder withTLS(File certFile) {
     Preconditions.checkNotNull(certFile, "certFile is null");
-    Preconditions.checkArgument(certFile.exists(), "cert file does not exist: " + certFile.getAbsolutePath());
+    Preconditions.checkArgument(certFile.exists(),
+        "cert file does not exist: " + certFile.getAbsolutePath());
     this.useTLS = true;
     this.trustCert = certFile;
     return this;
