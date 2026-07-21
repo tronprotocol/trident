@@ -146,7 +146,13 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
           String input, int offset, TypeReference<?> typeReference)
           throws ClassNotFoundException {
     if (isDynamic(typeReference)) {
-      return TypeDecoder.decodeUintAsInt(input, offset) << 1;
+      int dataOffset = TypeDecoder.decodeUintAsInt(input, offset);
+      try {
+        return Math.multiplyExact(dataOffset, 2);
+      } catch (ArithmeticException e) {
+        throw new IllegalArgumentException(
+            "Invalid ABI data offset: " + dataOffset, e);
+      }
     } else {
       return offset;
     }

@@ -314,12 +314,31 @@ public class TypeDecoder {
     }
   }
 
+  /**
+   * Rejects reads that would run past the end of the input: {@code windowLength}
+   * hex chars must exist at {@code offset}.
+   */
+  private static void checkWindowBounds(int inputLength, int offset, int windowLength) {
+    if (offset < 0 || windowLength < 0 || (long) offset + windowLength > inputLength) {
+      throw new IllegalArgumentException(
+          "Invalid ABI input: offset " + offset + " with length " + windowLength
+              + " out of bounds for length " + inputLength);
+    }
+  }
+
   static int decodeUintAsInt(String rawInput, int offset) {
+    checkWindowBounds(rawInput.length(), offset, MAX_BYTE_LENGTH_FOR_HEX_STRING);
     String input = rawInput.substring(offset, offset + MAX_BYTE_LENGTH_FOR_HEX_STRING);
-    return decode(input, 0, Uint.class).getValue().intValue();
+    BigInteger value = decode(input, 0, Uint.class).getValue();
+    if (value.bitLength() > 31) {
+      throw new IllegalArgumentException(
+          "Invalid ABI uint " + value + " exceeds Integer.MAX_VALUE");
+    }
+    return value.intValue();
   }
 
   public static Bool decodeBool(String rawInput, int offset) {
+    checkWindowBounds(rawInput.length(), offset, MAX_BYTE_LENGTH_FOR_HEX_STRING);
     String input = rawInput.substring(offset, offset + MAX_BYTE_LENGTH_FOR_HEX_STRING);
     BigInteger numericValue = Numeric.toBigInt(input);
     boolean value = numericValue.equals(BigInteger.ONE);
@@ -353,10 +372,18 @@ public class TypeDecoder {
 
   public static DynamicBytes decodeDynamicBytes(String input, int offset) {
     int encodedLength = decodeUintAsInt(input, offset);
-    int hexStringEncodedLength = encodedLength << 1;
-
     int valueOffset = offset + MAX_BYTE_LENGTH_FOR_HEX_STRING;
 
+    // Reject lengths that cannot physically fit in the remaining input.
+    // Also stops `encodedLength << 1` from flipping the sign bit when
+    // encodedLength is in the upper half of the int domain.
+    int remainingHex = input.length() - valueOffset;
+    if (encodedLength < 0 || encodedLength > remainingHex / 2) {
+      throw new IllegalArgumentException(
+          "Invalid ABI dynamic bytes length: " + encodedLength);
+    }
+
+    int hexStringEncodedLength = encodedLength << 1;
     String data = input.substring(valueOffset, valueOffset + hexStringEncodedLength);
     byte[] bytes = Numeric.hexStringToByteArray(data);
 
@@ -446,6 +473,7 @@ public class TypeDecoder {
           currOffset += (value.bytes32PaddedLength() / Type.MAX_BYTE_LENGTH)
               * MAX_BYTE_LENGTH_FOR_HEX_STRING;
         } else {
+          checkWindowBounds(input.length(), currOffset, MAX_BYTE_LENGTH_FOR_HEX_STRING);
           value = decode(input.substring(currOffset, currOffset + 64), 0, declaredField);
           currOffset += MAX_BYTE_LENGTH_FOR_HEX_STRING;
         }
@@ -485,6 +513,7 @@ public class TypeDecoder {
               input, currOffset, classType, constructor, i, declaredField);
           currOffset += value.bytes32PaddedLength() * 2;
         } else {
+          checkWindowBounds(input.length(), currOffset, MAX_BYTE_LENGTH_FOR_HEX_STRING);
           value = decode(input.substring(currOffset, currOffset + 64), 0, declaredField);
           currOffset += 64;
         }
@@ -627,6 +656,7 @@ public class TypeDecoder {
       final T value;
       final int beginIndex = offset + tracker.staticOffset;
       if (isDynamic(innerType)) {
+        checkWindowBounds(input.length(), beginIndex, MAX_BYTE_LENGTH_FOR_HEX_STRING);
         final int parameterOffset =
             decodeDynamicStructDynamicParameterOffset(
                 input.substring(beginIndex, beginIndex + 64))
@@ -635,6 +665,7 @@ public class TypeDecoder {
         tracker.staticOffset += 64;
         tracker.dynamicParametersToProcess += 1;
       } else {
+        checkWindowBounds(input.length(), beginIndex, MAX_BYTE_LENGTH_FOR_HEX_STRING);
         if (StaticStruct.class.isAssignableFrom(declaredField)) {
           value = decodeStaticStruct(input, beginIndex, innerType);
           tracker.staticOffset += (value.bytes32PaddedLength() / Type.MAX_BYTE_LENGTH)
@@ -726,6 +757,7 @@ public class TypeDecoder {
         final T value;
         final int beginIndex = offset + staticOffset;
         if (isDynamicStructField(constructor, i)) {
+          checkWindowBounds(input.length(), beginIndex, MAX_BYTE_LENGTH_FOR_HEX_STRING);
           final int parameterOffset =
               decodeDynamicStructDynamicParameterOffset(
                   input.substring(beginIndex, beginIndex + 64))
@@ -733,6 +765,9 @@ public class TypeDecoder {
           parameterOffsets.add(parameterOffset);
           staticOffset += 64;
         } else {
+          // Static head fields occupy 64 hex chars each; downstream decodeNumeric
+          // assumes that, so reject short input here rather than letting arraycopy throw.
+          checkWindowBounds(input.length(), beginIndex, MAX_BYTE_LENGTH_FOR_HEX_STRING);
           if (StaticStruct.class.isAssignableFrom(declaredField)) {
             value =
                 decodeStaticStruct(
@@ -839,6 +874,7 @@ public class TypeDecoder {
       final Class<T> declaredField,
       final Class<T> parameter)
       throws ClassNotFoundException {
+    checkWindowBounds(input.length(), parameterOffset, parameterLength);
     final String dynamicElementData =
         input.substring(parameterOffset, parameterOffset + parameterLength);
 
@@ -879,6 +915,7 @@ public class TypeDecoder {
       final int parameterLength,
       final TypeReference<T> parameterTypeReference)
       throws ClassNotFoundException {
+    checkWindowBounds(input.length(), parameterOffset, parameterLength);
     final String dynamicElementData =
         input.substring(parameterOffset, parameterOffset + parameterLength);
     final Class<T> declaredField = parameterTypeReference.getClassType();
@@ -898,7 +935,13 @@ public class TypeDecoder {
   }
 
   private static int decodeDynamicStructDynamicParameterOffset(final String input) {
-    return (decodeUintAsInt(input, 0) * 2);
+    int parameterOffset = decodeUintAsInt(input, 0);
+    try {
+      return Math.multiplyExact(parameterOffset, 2);
+    } catch (ArithmeticException e) {
+      throw new IllegalArgumentException(
+          "Invalid ABI dynamic struct parameter offset: " + parameterOffset, e);
+    }
   }
 
   /**
@@ -1004,6 +1047,21 @@ public class TypeDecoder {
     }
   }
 
+  /**
+   * Advances an array-element offset by an input-derived element length, computing in long to
+   * absorb any multiplication that would otherwise overflow int, and rejecting offsets past the
+   * end of input.
+   */
+  private static int advanceArrayElementOffset(
+      final String input, final int currOffset, final long elementLengthHex, final int index) {
+    long nextOffset = (long) currOffset + elementLengthHex;
+    if (nextOffset < 0 || nextOffset > input.length()) {
+      throw new IllegalArgumentException(
+          "Invalid ABI array element offset at index " + index + ": " + nextOffset);
+    }
+    return (int) nextOffset;
+  }
+
   private static <T extends Type> T decodeArrayElements(
       String input,
       int offset,
@@ -1012,6 +1070,14 @@ public class TypeDecoder {
       BiFunction<List<T>, String, T> consumer) {
     try {
       Class<T> cls = Utils.getParameterizedTypeFromArray(typeReference);
+      int remainingHex = input.length() - offset;
+      if (offset < 0
+          || length < 0
+          || remainingHex < 0
+          || length > remainingHex / MAX_BYTE_LENGTH_FOR_HEX_STRING) {
+        throw new IllegalArgumentException(
+            "Invalid ABI array length: " + length);
+      }
       List<T> elements = new ArrayList<>(length);
       if (StructType.class.isAssignableFrom(cls)) {
         int currOffset = offset;
@@ -1029,9 +1095,12 @@ public class TypeDecoder {
                       (TypeReference<T>) new TypeReference<DynamicStruct>(
                           typeReference.isIndexed(),
                           typeReference.getSubTypeReference().getInnerTypes()) {});
-              currOffset +=
-                  getSingleElementLength(input, currOffset, cls)
-                      * MAX_BYTE_LENGTH_FOR_HEX_STRING;
+              currOffset = advanceArrayElementOffset(
+                  input,
+                  currOffset,
+                  (long) getSingleElementLength(input, currOffset, cls)
+                      * MAX_BYTE_LENGTH_FOR_HEX_STRING,
+                  i);
             } else {
               value =
                   TypeDecoder.decodeDynamicStruct(
@@ -1040,9 +1109,12 @@ public class TypeDecoder {
                           + getDataOffset(
                           input, currOffset, typeReference),
                       TypeReference.create(cls));
-              currOffset +=
-                  getSingleElementLength(input, currOffset, cls)
-                      * MAX_BYTE_LENGTH_FOR_HEX_STRING;
+              currOffset = advanceArrayElementOffset(
+                  input,
+                  currOffset,
+                  (long) getSingleElementLength(input, currOffset, cls)
+                      * MAX_BYTE_LENGTH_FOR_HEX_STRING,
+                  i);
             }
           } else {
             if (Optional.ofNullable(typeReference)
@@ -1053,16 +1125,22 @@ public class TypeDecoder {
                   input,
                   currOffset,
                   (TypeReference<T>) typeReference.getSubTypeReference());
-              currOffset +=
-                  (value.bytes32PaddedLength() / Type.MAX_BYTE_LENGTH)
-                      * MAX_BYTE_LENGTH_FOR_HEX_STRING;
+              currOffset = advanceArrayElementOffset(
+                  input,
+                  currOffset,
+                  (long) (value.bytes32PaddedLength() / Type.MAX_BYTE_LENGTH)
+                      * MAX_BYTE_LENGTH_FOR_HEX_STRING,
+                  i);
             } else {
               value =
                   TypeDecoder.decodeStaticStruct(
                       input, currOffset, TypeReference.create(cls));
-              currOffset +=
-                  (value.bytes32PaddedLength() / Type.MAX_BYTE_LENGTH)
-                      * MAX_BYTE_LENGTH_FOR_HEX_STRING;
+              currOffset = advanceArrayElementOffset(
+                  input,
+                  currOffset,
+                  (long) (value.bytes32PaddedLength() / Type.MAX_BYTE_LENGTH)
+                      * MAX_BYTE_LENGTH_FOR_HEX_STRING,
+                  i);
             }
           }
           elements.add(value);
@@ -1085,9 +1163,12 @@ public class TypeDecoder {
                             + getDataOffset(
                             input, currOffset, typeReference),
                         dynamicTypeRef);
-            currOffset +=
-                getSingleElementLength(input, currOffset, cls)
-                    * MAX_BYTE_LENGTH_FOR_HEX_STRING;
+            currOffset = advanceArrayElementOffset(
+                input,
+                currOffset,
+                (long) getSingleElementLength(input, currOffset, cls)
+                    * MAX_BYTE_LENGTH_FOR_HEX_STRING,
+                i);
           } else {
             // Prefer the size carried by the element's StaticArrayTypeReference: for
             // sizes with no generated class (e.g. uint256[33]) cls is the bare
@@ -1156,9 +1237,12 @@ public class TypeDecoder {
                   (T)
                       TypeDecoder.decodeStaticArray(
                           input, currOffset, staticReference, staticLength);
-              currOffset +=
-                  (value.bytes32PaddedLength() / Type.MAX_BYTE_LENGTH)
-                      * MAX_BYTE_LENGTH_FOR_HEX_STRING;
+              currOffset = advanceArrayElementOffset(
+                  input,
+                  currOffset,
+                  (long) (value.bytes32PaddedLength() / Type.MAX_BYTE_LENGTH)
+                      * MAX_BYTE_LENGTH_FOR_HEX_STRING,
+                  i);
             }
           }
           elements.add(value);
@@ -1174,9 +1258,12 @@ public class TypeDecoder {
             currOffset += MAX_BYTE_LENGTH_FOR_HEX_STRING;
           } else {
             value = decode(input, currOffset, cls);
-            currOffset +=
-                getSingleElementLength(input, currOffset, cls)
-                    * MAX_BYTE_LENGTH_FOR_HEX_STRING;
+            currOffset = advanceArrayElementOffset(
+                input,
+                currOffset,
+                (long) getSingleElementLength(input, currOffset, cls)
+                    * MAX_BYTE_LENGTH_FOR_HEX_STRING,
+                i);
           }
           elements.add(value);
         }
