@@ -1,7 +1,6 @@
 package org.tron.trident.core;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -63,7 +62,7 @@ class ApiWrapperBuilderFunctionalTest {
       blockExtention = client.getBlock(false, NodeType.SOLIDITY_NODE);
       fail();
     } catch (Exception e) {
-      assertTrue(e instanceof IllegalArgumentException);
+      assertTrue(e instanceof IllegalStateException);
     }
 
     client.close();
@@ -128,7 +127,24 @@ class ApiWrapperBuilderFunctionalTest {
       client.getNowBlockSolidity();
       fail();
     } catch (Exception e) {
-      assertEquals("the channelSolidity is null or close", e.getMessage());
+      assertTrue(e instanceof IllegalStateException);
+      assertEquals("the channelSolidity is null or closed", e.getMessage());
+    }
+
+    try {
+      client.getRewardSolidity(keyPair.toBase58CheckAddress());
+      fail();
+    } catch (Exception e) {
+      assertTrue(e instanceof IllegalStateException);
+      assertEquals("the channelSolidity is null or closed", e.getMessage());
+    }
+
+    try {
+      client.getEnergyPricesOnSolidity();
+      fail();
+    } catch (Exception e) {
+      assertTrue(e instanceof IllegalStateException);
+      assertEquals("the channelSolidity is null or closed", e.getMessage());
     }
 
     BlockExtention blockExtention = client.getBlock(false);
@@ -138,7 +154,8 @@ class ApiWrapperBuilderFunctionalTest {
       client.transfer(keyPair.toBase58CheckAddress(), toAddress, 10);
       fail();
     } catch (Exception e) {
-      assertEquals("createTransactionExtention error,blockingStubSolidity is null", e.getMessage());
+      assertEquals("createTransactionExtention error,the channelSolidity is null or closed",
+          e.getMessage());
     }
 
     client.enableLocalCreate(Utils.getBlockId(blockExtention),
@@ -167,6 +184,14 @@ class ApiWrapperBuilderFunctionalTest {
       client.signTransaction(transactionExtention);
       fail();
     } catch (Exception e) {
+      assertEquals("keyPair is null, should set privateKey", e.getMessage());
+    }
+
+    // passing an explicit null keyPair is an argument error, not a missing config
+    try {
+      client.signTransaction(transactionExtention, null);
+      fail();
+    } catch (Exception e) {
       assertEquals("keyPair is null", e.getMessage());
     }
     Transaction signTransaction = client.signTransaction(transactionExtention, keyPair);
@@ -185,6 +210,36 @@ class ApiWrapperBuilderFunctionalTest {
     }
 
     client.close();
+  }
+
+  @Test
+  @SuppressWarnings("deprecation")
+  void testDeprecatedConstructors() {
+    // a null interceptor list fails fast at construction
+    try {
+      new ApiWrapper(Constant.FULLNODE_NILE,
+          Constant.FULLNODE_NILE_SOLIDITY, keyPair.toPrivateKey(), null, 5000);
+      fail();
+    } catch (Exception e) {
+      assertTrue(e instanceof IllegalArgumentException);
+      assertEquals("interceptors is null", e.getMessage());
+    }
+
+    // an empty apiKey fails fast at construction
+    try {
+      new ApiWrapper(Constant.FULLNODE_NILE,
+          Constant.FULLNODE_NILE_SOLIDITY, keyPair.toPrivateKey(), "");
+      fail();
+    } catch (Exception e) {
+      assertTrue(e instanceof IllegalArgumentException);
+      assertEquals("apiKey is empty", e.getMessage());
+    }
+
+    // "0x"-prefixed keys are accepted
+    ApiWrapper clientPrefixedKey = new ApiWrapper(Constant.FULLNODE_NILE,
+        Constant.FULLNODE_NILE_SOLIDITY, "0x" + keyPair.toPrivateKey());
+    assertEquals(keyPair.toPrivateKey(), clientPrefixedKey.keyPair.toPrivateKey());
+    clientPrefixedKey.close();
   }
 
   @Test

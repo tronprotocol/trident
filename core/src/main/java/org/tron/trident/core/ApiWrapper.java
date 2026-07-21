@@ -145,7 +145,7 @@ import org.tron.trident.utils.Strings;
  * // Full-featured client with both FullNode and SolidityNode access
  * ApiWrapper client = new ApiWrapperBuilder(grpcEndpoint, grpcEndpointSolidity, privateKey)
  *     .withApiKey("your-api-key")       // Optional: set API key for TronGrid
- *     .withTLS()                        // Optional: enable TLS,use withTLS(new File("xxx.crt"))
+ *     .withTLS()                        // Optional: enable TLS, use withTLS(new File("xxx.crt"))
  *     .withTimeout(5000)                // Optional: set request timeout in milliseconds
  *     .build();
  *
@@ -161,6 +161,8 @@ import org.tron.trident.utils.Strings;
  */
 
 public class ApiWrapper implements Api {
+
+  private static final String KEY_PAIR_NOT_SET = "keyPair is null, should set privateKey";
 
   public final WalletGrpc.WalletBlockingStub blockingStub;
   public final WalletSolidityGrpc.WalletSolidityBlockingStub blockingStubSolidity;
@@ -191,21 +193,25 @@ public class ApiWrapper implements Api {
   private long expireTimeStamp = -1;
 
   public ApiWrapper(ApiWrapperBuilder builder) {
+    keyPair = Strings.isEmpty(builder.getHexPrivateKey()) ? null : new KeyPair(
+        builder.getHexPrivateKey());
 
     // Build channels with interceptors and Create stubs
     channel = buildChannel(builder, builder.getGrpcEndpoint());
     blockingStub = WalletGrpc.newBlockingStub(channel);
 
     if (builder.getGrpcEndpointSolidity() != null) {
-      channelSolidity = buildChannel(builder, builder.getGrpcEndpointSolidity());
+      try {
+        channelSolidity = buildChannel(builder, builder.getGrpcEndpointSolidity());
+      } catch (RuntimeException e) {
+        channel.shutdown();
+        throw e;
+      }
       blockingStubSolidity = WalletSolidityGrpc.newBlockingStub(channelSolidity);
     } else {
       channelSolidity = null;
       blockingStubSolidity = null;
     }
-
-    keyPair = Strings.isEmpty(builder.getHexPrivateKey()) ? null : new KeyPair(
-        builder.getHexPrivateKey());
   }
 
   private ManagedChannel buildChannel(ApiWrapperBuilder builder, String target) {
@@ -224,8 +230,9 @@ public class ApiWrapper implements Api {
       }
     }
 
-    if (!builder.getInterceptors().isEmpty()) {
-      channelBuilder.intercept(builder.getInterceptors());
+    List<ClientInterceptor> interceptors = builder.buildInterceptors();
+    if (!interceptors.isEmpty()) {
+      channelBuilder.intercept(interceptors);
     }
     return channelBuilder.build();
   }
@@ -258,7 +265,7 @@ public class ApiWrapper implements Api {
   public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey,
                     List<ClientInterceptor> clientInterceptors) {
     this(new ApiWrapperBuilder(grpcEndpoint, grpcEndpointSolidity, hexPrivateKey)
-            .withInterceptors(clientInterceptors));
+            .addInterceptors(clientInterceptors));
   }
 
   /**
@@ -280,7 +287,7 @@ public class ApiWrapper implements Api {
   public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey,
                     List<ClientInterceptor> clientInterceptors, int timeout) {
     this(new ApiWrapperBuilder(grpcEndpoint, grpcEndpointSolidity, hexPrivateKey)
-            .withInterceptors(clientInterceptors)
+            .addInterceptors(clientInterceptors)
             .withTimeout(timeout));
   }
 
@@ -459,7 +466,7 @@ public class ApiWrapper implements Api {
     if (this.channelSolidity == null
         || this.channelSolidity.isShutdown()
         || this.channelSolidity.isTerminated()) {
-      throw new IllegalArgumentException("the channelSolidity is null or close");
+      throw new IllegalStateException("the channelSolidity is null or closed");
     }
   }
 
@@ -552,11 +559,13 @@ public class ApiWrapper implements Api {
 
   @Override
   public Transaction signTransaction(TransactionExtention txnExt) {
+    Preconditions.checkArgument(keyPair != null, KEY_PAIR_NOT_SET);
     return signTransaction(txnExt, keyPair);
   }
 
   @Override
   public Transaction signTransaction(Transaction txn) {
+    Preconditions.checkArgument(keyPair != null, KEY_PAIR_NOT_SET);
     return signTransaction(txn, keyPair);
   }
 
@@ -600,9 +609,8 @@ public class ApiWrapper implements Api {
       }
       solidHeadBlockId = referHeadBlockId;
       transactionExpireTimeStamp = expireTimeStamp;
-    } else if (blockingStubSolidity == null) {
-      throw new RuntimeException("blockingStubSolidity is null");
     } else {
+      checkSolidityChannel();
       BlockReq blockReq = BlockReq.newBuilder().setDetail(false).build();
       BlockExtention solidHeadBlock = blockingStubSolidity.getBlock(blockReq);
       solidHeadBlockId = Utils.getBlockId(solidHeadBlock);
@@ -2269,6 +2277,7 @@ public class ApiWrapper implements Api {
   @Deprecated
   @Override
   public NumberMessage getRewardSolidity(String address) {
+    checkSolidityChannel();
     ByteString bsAddress = parseAddress(address);
     BytesMessage bytesMessage = BytesMessage.newBuilder()
         .setValue(bsAddress)
@@ -2915,6 +2924,7 @@ public class ApiWrapper implements Api {
   @Deprecated
   @Override
   public PricesResponseMessage getBandwidthPricesOnSolidity() {
+    checkSolidityChannel();
     return blockingStubSolidity.getBandwidthPrices(EmptyMessage.getDefaultInstance());
   }
 
@@ -2932,6 +2942,7 @@ public class ApiWrapper implements Api {
   @Deprecated
   @Override
   public PricesResponseMessage getEnergyPricesOnSolidity() {
+    checkSolidityChannel();
     return blockingStubSolidity.getEnergyPrices(EmptyMessage.getDefaultInstance());
   }
 
@@ -3483,14 +3494,12 @@ public class ApiWrapper implements Api {
     validateCallValue(callValue);
     validateTokenId(tokenId);
     validateTokenValue(tokenValue);
+    Preconditions.checkArgument(keyPair != null, KEY_PAIR_NOT_SET);
     if (constructorParams != null && !constructorParams.isEmpty()) {
       ByteString constructorParamsByteString = encodeParameter(constructorParams);
       ByteString newByteCode = ByteString.copyFrom(ByteArray.fromHexString(bytecode))
           .concat(constructorParamsByteString);
       bytecode = ByteArray.toHexString(newByteCode.toByteArray());
-    }
-    if (keyPair == null) {
-      throw new IllegalArgumentException("keyPair is null, should set privateKey");
     }
     CreateSmartContract createSmartContract = createSmartContract(
         contractName, keyPair.toBase58CheckAddress(), abiStr, bytecode, callValue,
