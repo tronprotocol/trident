@@ -114,7 +114,8 @@ public abstract class FunctionEncoder {
   protected String encodePackedParameters(List<Type> parameters) {
     throw new UnsupportedOperationException(
             "encodePackedParameters is not implemented by " + getClass().getName()
-                    + "; override it to support FunctionEncoder.encodeConstructorPacked(parameters)");
+                + "; override it to support "
+                + "FunctionEncoder.encodeConstructorPacked(parameters)");
   }
 
   protected static String buildMethodSignature(

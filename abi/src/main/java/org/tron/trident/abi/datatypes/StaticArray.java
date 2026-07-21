@@ -47,7 +47,7 @@ public abstract class StaticArray<T extends Type> extends Array<T> {
 
   /**
    * @deprecated Infers the element type from {@code values.get(0)}, so passing an empty list
-   *     throws {@link ArrayIndexOutOfBoundsException}. Notably this makes the deprecated
+   *     throws {@link IndexOutOfBoundsException}. Notably this makes the deprecated
    *     constructors of {@code StaticArray0} unusable. Use
    *     {@code StaticArray(Class<T>, int, List<T>)} instead.
    */

@@ -202,7 +202,7 @@ public class Utils {
       // Built directly from the classes at hand, mirroring the reference shape
       // makeTypeReference produces. Round-tripping through a Solidity name string
       // is lossy for element types whose simple name is not a valid ABI token
-      // (TrcToken, Fixed/Ufixed, struct classes).
+      // (Fixed/Ufixed, struct classes).
       return new TypeReference.StaticArrayTypeReference<StaticArray>(size) {
         @Override
         public TypeReference getSubTypeReference() {
@@ -605,7 +605,9 @@ public class Utils {
    * depths pass. Recursion is bounded by the cap itself, so this method cannot blow
    * the JVM stack on malicious input.
    *
-   * <p>Called once at the decoder entry; bounds every downstream recursive
+   * <p>Called from {@code DefaultFunctionReturnDecoder.build} for each output
+   * parameter (direct {@code TypeDecoder} entry points are not guarded); bounds
+   * every downstream recursive
    * traversal of subTypeReference / innerTypes (in {@code TypeDecoder.isDynamic},
    * {@code Utils.getTypeName}, {@code decodeStaticStruct},
    * {@code decodeDynamicStruct}, etc.). All local state, no shared mutable

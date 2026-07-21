@@ -61,7 +61,8 @@ public abstract class FunctionReturnDecoder {
    * Decode ABI encoded return value DynamicBytes from smart contract function call.
    *
    * @param rawInput ABI encoded input
-   * @return {@link DynamicBytes} of values returned by function, null if invalid response
+   * @return the raw {@code byte[]} value of the decoded {@link DynamicBytes}, null if invalid
+   * response
    */
   public static byte[] decodeDynamicBytes(String rawInput) {
     List outputParameters = new ArrayList<TypeReference<Type>>();

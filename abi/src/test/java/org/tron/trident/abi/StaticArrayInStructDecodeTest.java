@@ -17,9 +17,7 @@ import org.tron.trident.abi.datatypes.generated.Uint256;
 import org.tron.trident.abi.datatypes.reflection.Parameterized;
 
 /**
- * Regression coverage for PR #212 finding #3:
- *
- * <p>Decoding a struct that DIRECTLY contains a fixed-size array member (e.g. Solidity
+ * Regression coverage: decoding a struct that DIRECTLY contains a fixed-size array member (e.g. Solidity
  * {@code struct S { uint256 a; uint256[2] b; }}) crashes. When the struct TypeReference is
  * built the normal way ({@code new TypeReference<S>(){}}, i.e. {@code innerTypes == null}),
  * {@link DefaultFunctionReturnDecoder#build} dispatches to the reflection path
@@ -57,7 +55,7 @@ public class StaticArrayInStructDecodeTest {
   }
 
   /**
-   * Regression guard for finding #3: a static struct that directly contains a fixed-size array
+   * Regression guard: a static struct that directly contains a fixed-size array
    * member must decode via the reflection path ({@code new TypeReference<S>(){}},
    * {@code innerTypes == null}). Before the fix this threw
    * {@code UnsupportedOperationException("Array types must be wrapped in a TypeReference")}.
@@ -96,7 +94,7 @@ public class StaticArrayInStructDecodeTest {
           + "6869000000000000000000000000000000000000000000000000000000000000"; // "hi"
 
   /**
-   * Regression guard for finding #3 on the dynamic-struct reflection path
+   * Regression guard on the dynamic-struct reflection path
    * ({@code decodeDynamicStructElements}): a DynamicStruct with a static array member must decode.
    */
   @Test

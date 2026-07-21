@@ -1,6 +1,6 @@
 package org.tron.trident.abi;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,10 +17,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import java.util.zip.GZIPInputStream;
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.api.Test;
 import org.tron.trident.abi.datatypes.DynamicArray;
 import org.tron.trident.abi.datatypes.DynamicStruct;
 import org.tron.trident.abi.datatypes.StaticArray;
@@ -50,8 +48,8 @@ public class TridentAbiEncodeDecodeCompatibilityTest {
     /**
      * Test-data fixtures loaded from the test classpath. Each entry is a gzipped JSON
      * array of pre-generated ABI compatibility test cases. Multiple fixtures are merged so
-     * the parameterized test runs across all of them; case names are prefixed with the
-     * fixture file (without extension) to keep JUnit identifiers unique.
+     * the aggregated tests run across all of them; case names are prefixed with the
+     * fixture file (without extension) so failure messages identify the source fixture.
      */
     private static final String[] TEST_DATA_RESOURCES = {
         "contract-interface.json.gz",
@@ -414,11 +412,48 @@ public class TridentAbiEncodeDecodeCompatibilityTest {
      * then asserts the resulting hex matches the expected encoding from the fixture.
      * Type identification correctness gates selector correctness; byte-for-byte
      * encoding correctness gates wire compatibility.
+     *
+     * <p>Runs as a single aggregated test (not per-case parameterized) so passing
+     * and skipped cases produce no per-case test-event output; on failure the
+     * assertion message lists the failing case names plus the skipped-case count.
      */
-    @ParameterizedTest(name = "{0}")
-    @MethodSource("loadTestCases")
+    @Test
     @DisplayName("Parameter Encoding Should Match Expected Result")
-    void testParameterEncoding(TestCase testCase) throws Exception {
+    void testParameterEncoding() throws Exception {
+        List<String> failures = new ArrayList<>();
+        int skipped = 0;
+        for (TestCase testCase : loadTestCases()) {
+            try {
+                String actual = encodeParameterCase(testCase);
+                String expected = testCase.result.toLowerCase();
+                if (!expected.equals(actual)) {
+                    failures.add(testCase + ": encoding mismatch"
+                            + "\n    values:   " + testCase.values
+                            + "\n    expected: " + expected
+                            + "\n    actual:   " + actual);
+                }
+            } catch (SkippedCaseException e) {
+                skipped++;
+            } catch (Exception e) {
+                failures.add(testCase + ": " + e.getClass().getSimpleName()
+                        + " - " + e.getMessage());
+            }
+        }
+        if (!failures.isEmpty()) {
+            int shown = Math.min(failures.size(), 20);
+            fail("Parameter encoding failed for " + failures.size() + " case(s)"
+                    + " (" + skipped + " skipped):\n  "
+                    + String.join("\n  ", failures.subList(0, shown))
+                    + (failures.size() > shown ? "\n  ..." : ""));
+        }
+    }
+
+    /**
+     * Runs one parameter-encoding fixture case and returns the lower-case
+     * hex-prefixed encoding. Throws {@link SkippedCaseException} for cases outside
+     * the current Trident impl's support (formerly Assumptions-based skips).
+     */
+    private static String encodeParameterCase(TestCase testCase) throws Exception {
         // 1. Parse the ABI interface definition.
         JsonNode interfaceArray = MAPPER.readTree(testCase.abi);
         ObjectNode functionAbi = (ObjectNode) interfaceArray.get(0);
@@ -451,7 +486,7 @@ public class TridentAbiEncodeDecodeCompatibilityTest {
             // a sign-extended one. This is a documented behavior difference; skip
             // such cases rather than fail.
             if (isSignedIntOutOfRange(typeStr, valueElement)) {
-                Assumptions.assumeTrue(false,
+                throw new SkippedCaseException(
                         "Skipping " + typeStr
                                 + ": fixture value outside signed range "
                                 + "(reference auto-wraps, trident encodes literally)");
@@ -470,7 +505,7 @@ public class TridentAbiEncodeDecodeCompatibilityTest {
                                 : e;
                 if (cause instanceof UnsupportedOperationException
                         || cause instanceof IllegalArgumentException) {
-                    Assumptions.assumeTrue(false,
+                    throw new SkippedCaseException(
                             "Skipping " + typeStr + ": "
                                     + cause.getClass().getSimpleName()
                                     + " - " + cause.getMessage());
@@ -479,12 +514,19 @@ public class TridentAbiEncodeDecodeCompatibilityTest {
             }
         }
 
-        // 4. Encode and compare.
+        // 4. Encode.
         String encoded = FunctionEncoder.encodeConstructor(values);
-        String actual = Numeric.prependHexPrefix(encoded).toLowerCase();
-        String expected = testCase.result.toLowerCase();
+        return Numeric.prependHexPrefix(encoded).toLowerCase();
+    }
 
-        assertEquals(expected, actual, "Encoding mismatch for: " + testCase.name);
+    /**
+     * Signals a fixture case outside the current impl's support; counted as
+     * skipped by the aggregated tests instead of failing them.
+     */
+    private static final class SkippedCaseException extends Exception {
+        SkippedCaseException(String message) {
+            super(message);
+        }
     }
 
     /**
@@ -494,24 +536,44 @@ public class TridentAbiEncodeDecodeCompatibilityTest {
      * definitions, then re-encodes the decoded values. The final bytes must still
      * match the fixture, which exercises return-offset handling for dynamic values
      * and structs.
+     *
+     * <p>Runs as a single aggregated test (not per-case parameterized) so passing
+     * cases produce no per-case test-event output; on failure the assertion message
+     * lists the failing case names.
      */
-    @ParameterizedTest(name = "{0}")
-    @MethodSource("loadTestCases")
+    @Test
     @DisplayName("Encode Decode Should Round Trip Expected Result")
-    void testEncodeDecodeRoundTrip(TestCase testCase) throws Exception {
-        JsonNode interfaceArray = MAPPER.readTree(testCase.abi);
-        JsonNode outputsArray = interfaceArray.get(0).get("outputs");
-        List<TypeReference<Type>> outputReferences =
-                AbiTypeReferenceBuilder.buildOutputTypeReferences(outputsArray);
+    void testEncodeDecodeRoundTrip() throws Exception {
+        List<String> failures = new ArrayList<>();
+        for (TestCase testCase : loadTestCases()) {
+            try {
+                JsonNode interfaceArray = MAPPER.readTree(testCase.abi);
+                JsonNode outputsArray = interfaceArray.get(0).get("outputs");
+                List<TypeReference<Type>> outputReferences =
+                        AbiTypeReferenceBuilder.buildOutputTypeReferences(outputsArray);
 
-        List<Type> decodedValues =
-                FunctionReturnDecoder.decode(testCase.result, outputReferences);
+                List<Type> decodedValues =
+                        FunctionReturnDecoder.decode(testCase.result, outputReferences);
 
-        String encoded = FunctionEncoder.encodeConstructor(decodedValues);
-        String actual = Numeric.prependHexPrefix(encoded).toLowerCase();
-        String expected = testCase.result.toLowerCase();
-
-        assertEquals(expected, actual, "Decode round-trip mismatch for: " + testCase.name);
+                String encoded = FunctionEncoder.encodeConstructor(decodedValues);
+                String actual = Numeric.prependHexPrefix(encoded).toLowerCase();
+                String expected = testCase.result.toLowerCase();
+                if (!expected.equals(actual)) {
+                    failures.add(testCase + ": decode round-trip mismatch"
+                            + "\n    expected: " + expected
+                            + "\n    actual:   " + actual);
+                }
+            } catch (Exception e) {
+                failures.add(testCase + ": " + e.getClass().getSimpleName()
+                        + " - " + e.getMessage());
+            }
+        }
+        if (!failures.isEmpty()) {
+            int shown = Math.min(failures.size(), 20);
+            fail("Decode round-trip failed for " + failures.size() + " case(s):\n  "
+                    + String.join("\n  ", failures.subList(0, shown))
+                    + (failures.size() > shown ? "\n  ..." : ""));
+        }
     }
 
     /**
