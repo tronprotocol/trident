@@ -6,7 +6,7 @@ plugins {
 description 'Trident-Java gRPC core classes'
 
 def protobufVersion = '3.25.8'
-def grpcVersion = '1.75.0'
+// grpcVersion lives in the root ext block, next to the coupled nettyVersion
 def protocGenVersion = '1.60.0' // https://github.com/grpc/grpc-java/pull/11371 , 1.64.x is not supported CentOS 7.
 
 dependencies {
