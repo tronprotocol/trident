@@ -15,21 +15,11 @@ buildscript {
     }
     dependencies {
         classpath 'io.github.gradle-nexus:publish-plugin:1.1.0'
-        classpath 'com.github.johnrengelman.shadow:com.github.johnrengelman.shadow.gradle.plugin:8.1.1'
-    }
-    configurations.classpath {
-        resolutionStrategy {
-            force("commons-io:commons-io:2.18.0")
-            force("org.apache.logging.log4j:log4j-api:2.25.4")
-            force("org.apache.logging.log4j:log4j-core:2.25.4")
-            force("org.codehaus.plexus:plexus-utils:3.6.1")
-        }
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'java-library'
-apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'maven-publish'
 
 ext {
@@ -82,15 +72,13 @@ allprojects {
 
     configurations.configureEach {
         resolutionStrategy {
+            // pin the advertised guava; otherwise resolution floats with grpc's requests
             force("com.google.guava:guava:$googleGuavaVersion")
-            force("com.fasterxml.jackson.core:jackson-core:$jacksonVersion")
-            force("com.squareup.okio:okio:3.9.0")
+            // checkstyle's build-time transitive; its 1.9.4 has CVE-2025-48734
             force("commons-beanutils:commons-beanutils:1.11.0")
-            // align unshaded netty modules (grpc-netty/vertx transitives) to one version.
-            // done as a version substitution instead of platform("io.netty:netty-bom")
-            // because the publish workflow copies implementation.allDependencies into the
-            // released POM, where a BOM dependency would surface as an unresolvable jar-typed
-            // entry; netty-tcnative-* is excluded as it follows a separate versioning scheme
+            // align netty transitives (grpc-netty/vertx). NOT a platform("io.netty:netty-bom"):
+            // the publish workflow copies implementation.allDependencies into the released POM,
+            // where a BOM surfaces as an unresolvable dependency. tcnative versions independently
             eachDependency { details ->
                 if (details.requested.group == 'io.netty'
                         && !details.requested.name.startsWith('netty-tcnative')) {
@@ -172,10 +160,6 @@ subprojects {
     checkstyleTest {
         source = files() //use empty files to ignore test class
     }
-}
-
-shadowJar {
-    zip64 = true
 }
 
 javadoc {
