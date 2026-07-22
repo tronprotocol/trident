@@ -333,7 +333,7 @@ public class SECP256K1 {
       // previously valid "0x"-prefixed keys keep working now that this check is
       // enforced at runtime.
       final String rawHex =
-          hexKey.startsWith("0x") || hexKey.startsWith("0X") ? hexKey.substring(2) : hexKey;
+          (hexKey.startsWith("0x") || hexKey.startsWith("0X")) ? hexKey.substring(2) : hexKey;
       Preconditions.checkArgument(rawHex.length() == 64, "hexKey must be 64 hex characters long");
       return create(Bytes32.fromHexString(rawHex));
     }

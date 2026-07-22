@@ -1076,7 +1076,8 @@ public class TypeDecoder {
           || remainingHex < 0
           || length > remainingHex / MAX_BYTE_LENGTH_FOR_HEX_STRING) {
         throw new IllegalArgumentException(
-            "Invalid ABI array length: " + length);
+            "Invalid ABI array: length " + length + " at offset " + offset
+                + " out of bounds for input length " + input.length());
       }
       List<T> elements = new ArrayList<>(length);
       if (StructType.class.isAssignableFrom(cls)) {
