@@ -6,8 +6,6 @@ plugins {
 description 'Trident-Java gRPC core classes'
 
 def protobufVersion = '3.25.8'
-// grpcVersion and protocGenVersion live in the root ext block; protocGenVersion
-// is platform-dependent (1.60.0 for CentOS 7 compat, 1.81.0 on macOS/arm64).
 
 dependencies {
     implementation "com.google.guava:guava:$googleGuavaVersion"
