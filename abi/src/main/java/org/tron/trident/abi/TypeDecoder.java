@@ -75,15 +75,9 @@ public class TypeDecoder {
    * Limits for the decode in progress, or null when none is:
    * {@code {values, maxValues, payloadHex, maxPayloadHex}}.
    *
-   * <p>Element tail pointers come straight from the input and nothing requires them to be
-   * distinct, so L elements may all name one tail — or overlapping tails — and each decodes
-   * independently while passing a bound measured against the whole remaining input, amplifying
-   * what the response retains in values or in bytes. Both are counted for the whole decode,
-   * against what the response actually carries.
-   *
-   * <p>Held per-thread so the decode signatures stay as they are; the outermost decode seeds
-   * this and clears it on the way out, so nested decodes share one count and a decode that
-   * throws leaves nothing behind on a pooled thread.
+   * <p>Caps how many values and payload bytes one response may decode into, so aliased or
+   * overlapping tail offsets cannot amplify it. Held per-thread; seeded by the function-return
+   * and array entry points and cleared by whichever call opened it.
    */
   private static final ThreadLocal<long[]> DECODE_LIMITS = new ThreadLocal<>();
 
@@ -91,18 +85,16 @@ public class TypeDecoder {
    * Opens limits covering an input of {@code inputLengthHex} hex chars, unless already open.
    * Returns true when this call opened them, in which case the caller closes them in a finally.
    *
-   * <p>The value limit is the input's word count, because every value in a well-formed encoding
-   * owns a word of its own; the byte limit is the input itself, which a well-formed encoding
-   * never spends more of than it carries. Neither leaves room for a shape that decodes the same
-   * bytes twice.
+   * <p>Caps values at the input's word count (rounded up, so a truncated input fails the
+   * later bounds check instead of this cap) and payload at the input length itself.
    */
   static boolean beginDecodeLimits(int inputLengthHex) {
     if (DECODE_LIMITS.get() != null) {
       return false;
     }
-    DECODE_LIMITS.set(
-        new long[] {
-            0L, inputLengthHex / MAX_BYTE_LENGTH_FOR_HEX_STRING, 0L, inputLengthHex});
+    final long maxValues =
+        (long) Math.ceil((double) inputLengthHex / MAX_BYTE_LENGTH_FOR_HEX_STRING);
+    DECODE_LIMITS.set(new long[] {0L, maxValues, 0L, inputLengthHex});
     return true;
   }
 
@@ -119,7 +111,7 @@ public class TypeDecoder {
     if (++limits[0] > limits[1]) {
       throw new IllegalArgumentException(
           "Invalid ABI input: decodes to more values than it can carry (over "
-              + limits[1] + ") — elements share or overlap tail offsets");
+              + limits[1] + ") - elements share or overlap tail offsets");
     }
   }
 
@@ -132,8 +124,8 @@ public class TypeDecoder {
     limits[2] += hexChars;
     if (limits[2] > limits[3]) {
       throw new IllegalArgumentException(
-          "Invalid ABI input: decodes more bytes than it occupies (" + limits[2]
-              + " hex chars of " + limits[3] + ") — elements share or overlap tail offsets");
+          "Invalid ABI input: decodes more than it occupies (" + limits[2]
+              + " of " + limits[3] + " hex chars) - elements share or overlap tail offsets");
     }
   }
 
@@ -187,10 +179,9 @@ public class TypeDecoder {
   @SuppressWarnings("unchecked")
   static <T extends Type> T decode(String input, int offset, Class<T> type) {
     if (!DynamicBytes.class.isAssignableFrom(type)
-        && !Utf8String.class.isAssignableFrom(type)
-        && !Array.class.isAssignableFrom(type)) {
-      // A fixed-width value owns the single word it is read from. Containers own nothing of
-      // their own when they are inline, which is why they are not counted here.
+        && !Utf8String.class.isAssignableFrom(type)) {
+      // A fixed-width value owns the single word it is read from; dynamic bytes and strings
+      // are charged as payload where their length is read.
       countDecodedValue();
     }
     if (NumericType.class.isAssignableFrom(type)) {
@@ -1163,7 +1154,7 @@ public class TypeDecoder {
       TypeReference<T> typeReference,
       int length,
       BiFunction<List<T>, String, T> consumer) {
-    final boolean outermostDecode = beginDecodeLimits(input.length());
+    final boolean outermostDecode = beginDecodeLimits(input.length() - offset);
     try {
       Class<T> cls = Utils.getParameterizedTypeFromArray(typeReference);
       int remainingHex = input.length() - offset;

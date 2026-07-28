@@ -55,7 +55,7 @@ public class TypeDecoderAmplificationTest {
   private static final int WORD = 64;
 
   private static final String TOO_MANY_VALUES = "more values than it can carry";
-  private static final String TOO_MANY_BYTES = "more bytes than it occupies";
+  private static final String TOO_MANY_BYTES = "more than it occupies";
 
   /**
    * Asserts the decode is rejected, and rejected by the accounting rather than incidentally.
