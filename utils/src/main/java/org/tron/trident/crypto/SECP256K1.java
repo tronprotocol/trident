@@ -324,6 +324,16 @@ public class SECP256K1 {
     }
 
     public static PrivateKey create(final Bytes32 key) {
+      Preconditions.checkNotNull(key, "key must not be null");
+      // Reject out-of-range scalars at construction instead of letting Bouncy Castle
+      // throw the same error later at signing time (ECDomainParameters
+      // .validatePrivateScalar). Without this, 0 and n fail only when signing, and
+      // n + 1 even derives the same address as private key 1 via the mod-n reduction
+      // in PublicKey.create.
+      final BigInteger d = key.toUnsignedBigInteger();
+      Preconditions.checkArgument(
+          d.compareTo(BigInteger.ONE) >= 0 && d.compareTo(CURVE_ORDER) < 0,
+          "Scalar is not in the interval [1, n - 1]");
       return new PrivateKey(key);
     }
 

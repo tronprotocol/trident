@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import io.grpc.ClientInterceptor;
 import java.io.File;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -19,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.tron.trident.core.interceptor.TimeoutInterceptor;
 import org.tron.trident.core.key.KeyPair;
+import org.tron.trident.crypto.SECP256K1;
 
 /**
  * Unit tests for ApiWrapperBuilder class
@@ -107,6 +109,23 @@ class ApiWrapperBuilderTest {
       new ApiWrapperBuilder(Constant.FULLNODE_NILE)
           .withPrivateKey(TEST_PRIVATE_KEY.substring(2));
     });
+  }
+
+  @Test
+  void testWithPrivateKeyRejectsOutOfRangeScalars() {
+    BigInteger n = SECP256K1.CURVE.getN();
+    for (BigInteger invalid : new BigInteger[] {
+        BigInteger.ZERO, n, n.add(BigInteger.ONE)}) {
+      assertThrows(IllegalArgumentException.class, () -> {
+        new ApiWrapperBuilder(Constant.FULLNODE_NILE)
+            .withPrivateKey(String.format("%064x", invalid));
+      });
+    }
+
+    // n - 1 is the top of the valid range and must still be accepted
+    String nMinus1 = String.format("%064x", n.subtract(BigInteger.ONE));
+    assertEquals(nMinus1, new ApiWrapperBuilder(Constant.FULLNODE_NILE)
+        .withPrivateKey(nMinus1).getHexPrivateKey());
   }
 
   @Test

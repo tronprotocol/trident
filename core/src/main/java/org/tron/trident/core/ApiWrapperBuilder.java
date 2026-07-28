@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import lombok.Getter;
 import org.tron.trident.core.interceptor.TimeoutInterceptor;
+import org.tron.trident.crypto.SECP256K1;
 import org.tron.trident.utils.Numeric;
 import org.tron.trident.utils.Strings;
 
@@ -126,11 +127,17 @@ public class ApiWrapperBuilder {
 
   /**
    * set PrivateKey, an optional "0x" prefix is accepted
+   *
+   * @throws IllegalArgumentException if the key is not 64 hex characters or its scalar
+   *     is outside the valid secp256k1 range [1, n - 1]
    */
   public ApiWrapperBuilder withPrivateKey(String hexPrivateKey) {
     String cleaned = Numeric.cleanHexPrefix(hexPrivateKey);
     Preconditions.checkArgument(cleaned != null && cleaned.length() == 64,
         "hexPrivateKey should be 64 hex characters (32 bytes)");
+    // fail fast here instead of at build(): rejects scalars outside [1, n - 1]
+    // and non-hex characters
+    SECP256K1.PrivateKey.create(cleaned);
     this.hexPrivateKey = cleaned;
     return this;
   }
