@@ -242,6 +242,20 @@ class ApiWrapperBuilderTest {
   }
 
   @Test
+  void testCloseTerminatesChannels() {
+    ApiWrapper wrapper = new ApiWrapperBuilder(
+        Constant.FULLNODE_NILE,
+        Constant.FULLNODE_NILE_SOLIDITY,
+        TEST_PRIVATE_KEY
+    ).build();
+
+    // close() must not return before both channels are fully terminated
+    wrapper.close();
+    assertTrue(wrapper.channel.isTerminated());
+    assertTrue(wrapper.channelSolidity.isTerminated());
+  }
+
+  @Test
   void testToStringDoesNotExposeInterceptorContent() {
     String secret = "super-secret-token";
     ClientInterceptor leaky = new TimeoutInterceptor(1000L) {

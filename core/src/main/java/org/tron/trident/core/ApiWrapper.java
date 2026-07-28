@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
 import lombok.Getter;
 import org.bouncycastle.jcajce.provider.digest.SHA256;
 import org.tron.trident.abi.FunctionEncoder;
@@ -163,6 +164,7 @@ import org.tron.trident.utils.Strings;
 public class ApiWrapper implements Api {
 
   private static final String KEY_PAIR_NOT_SET = "keyPair is null, should set privateKey";
+  private static final long CLOSE_TIMEOUT_SECONDS = 5;
 
   public final WalletGrpc.WalletBlockingStub blockingStub;
   public final WalletSolidityGrpc.WalletSolidityBlockingStub blockingStubSolidity;
@@ -538,6 +540,21 @@ public class ApiWrapper implements Api {
     channel.shutdown();
     if (channelSolidity != null) {
       channelSolidity.shutdown();
+    }
+    awaitTermination(channel);
+    if (channelSolidity != null) {
+      awaitTermination(channelSolidity);
+    }
+  }
+
+  private void awaitTermination(ManagedChannel channel) {
+    try {
+      if (!channel.awaitTermination(CLOSE_TIMEOUT_SECONDS, TimeUnit.SECONDS)) {
+        channel.shutdownNow();
+      }
+    } catch (InterruptedException e) {
+      channel.shutdownNow();
+      Thread.currentThread().interrupt();
     }
   }
 
