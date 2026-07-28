@@ -391,14 +391,18 @@ public class ApiWrapper implements Api {
    *
    * @param address account or contract address in any allowed formats.
    * @return hex address
+   * @throws IllegalArgumentException if the decoded address is not a valid TRON address
+   *     (21 bytes with the 0x41 prefix)
    */
   public static ByteString parseAddress(String address) {
+    Preconditions.checkArgument(!Strings.isEmpty(address), "address is null or empty");
     byte[] raw;
     if (address.startsWith("T")) {
       raw = Base58Check.base58ToBytes(address);
     } else {
       raw = ByteArray.fromHexString(address);
     }
+    Preconditions.checkArgument(Utils.addressValid(raw), "invalid address: " + address);
     return ByteString.copyFrom(raw);
   }
 
@@ -820,16 +824,17 @@ public class ApiWrapper implements Api {
   @Override
   public TransactionExtention freezeBalance(String ownerAddress, long frozenBalance,
       int frozenDuration, int resourceCode, String receiveAddress) throws IllegalException {
-    ByteString rawFrom = parseAddress(ownerAddress);
-    ByteString rawReceiveFrom = parseAddress(receiveAddress);
-    FreezeBalanceContract freezeBalanceContract =
+    FreezeBalanceContract.Builder freezeBuilder =
         FreezeBalanceContract.newBuilder()
-            .setOwnerAddress(rawFrom)
+            .setOwnerAddress(parseAddress(ownerAddress))
             .setFrozenBalance(frozenBalance)
             .setFrozenDuration(frozenDuration)
-            .setResourceValue(resourceCode)
-            .setReceiverAddress(rawReceiveFrom)
-            .build();
+            .setResourceValue(resourceCode);
+    // the receiver is optional; an empty value means freezing for the owner itself
+    if (!Strings.isEmpty(receiveAddress)) {
+      freezeBuilder.setReceiverAddress(parseAddress(receiveAddress));
+    }
+    FreezeBalanceContract freezeBalanceContract = freezeBuilder.build();
     return createTransactionExtention(freezeBalanceContract,
         Transaction.Contract.ContractType.FreezeBalanceContract);
   }
@@ -886,12 +891,15 @@ public class ApiWrapper implements Api {
   public TransactionExtention unfreezeBalance(String ownerAddress, int resourceCode,
       String receiveAddress) throws IllegalException {
 
-    UnfreezeBalanceContract unfreezeBalanceContract =
+    UnfreezeBalanceContract.Builder unfreezeBuilder =
         UnfreezeBalanceContract.newBuilder()
             .setOwnerAddress(parseAddress(ownerAddress))
-            .setResourceValue(resourceCode)
-            .setReceiverAddress(parseAddress(receiveAddress))
-            .build();
+            .setResourceValue(resourceCode);
+    // the receiver is optional; an empty value means unfreezing the owner's own stake
+    if (!Strings.isEmpty(receiveAddress)) {
+      unfreezeBuilder.setReceiverAddress(parseAddress(receiveAddress));
+    }
+    UnfreezeBalanceContract unfreezeBalanceContract = unfreezeBuilder.build();
 
     return createTransactionExtention(unfreezeBalanceContract,
         Transaction.Contract.ContractType.UnfreezeBalanceContract);
