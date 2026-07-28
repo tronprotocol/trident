@@ -16,6 +16,7 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.TlsChannelCredentials;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -565,7 +566,12 @@ public class ApiWrapper implements Api {
   @Override
   public Transaction signTransaction(TransactionExtention txnExt, KeyPair keyPair) {
     Preconditions.checkArgument(keyPair != null, "keyPair is null");
-    byte[] txId = txnExt.getTxid().toByteArray();
+    byte[] txId = calculateTransactionHash(txnExt.getTransaction());
+    ByteString providedTxid = txnExt.getTxid();
+    if (!providedTxid.isEmpty()) {
+      Preconditions.checkArgument(Arrays.equals(txId, providedTxid.toByteArray()),
+          "txid does not match the transaction raw data");
+    }
     byte[] signature = KeyPair.signTransaction(txId, keyPair);
     return txnExt.getTransaction().toBuilder().addSignature(ByteString.copyFrom(signature)).build();
   }
