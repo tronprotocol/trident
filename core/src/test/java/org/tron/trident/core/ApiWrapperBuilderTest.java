@@ -158,6 +158,33 @@ class ApiWrapperBuilderTest {
   }
 
   @Test
+  void testWithTlsRejectsDirectory() throws IOException {
+    // a directory must be rejected immediately, not fail later in build()
+    File certDirectory = Files.createDirectory(tempDir.resolve("cert-dir")).toFile();
+    IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> {
+      new ApiWrapperBuilder(Constant.FULLNODE_NILE).withTLS(certDirectory);
+    });
+    assertTrue(e.getMessage().contains("not a file"));
+  }
+
+  @Test
+  void testWithTlsRejectsUnreadableFile() throws IOException {
+    File unreadable = tempDir.resolve("unreadable-cert.pem").toFile();
+    Files.write(unreadable.toPath(), "dummy".getBytes());
+    // skip silently if the platform does not support revoking read permission (e.g. root)
+    if (unreadable.setReadable(false) && !unreadable.canRead()) {
+      try {
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> {
+          new ApiWrapperBuilder(Constant.FULLNODE_NILE).withTLS(unreadable);
+        });
+        assertTrue(e.getMessage().contains("not readable"));
+      } finally {
+        unreadable.setReadable(true);
+      }
+    }
+  }
+
+  @Test
   void testConstructorWithNullParameters() {
     // Test constructor with null parameters
     assertThrows(IllegalArgumentException.class, () -> {
@@ -212,6 +239,24 @@ class ApiWrapperBuilderTest {
     // the API key must never appear in logs
     assertTrue(toStringResult.contains("apiKey=****"));
     assertFalse(toStringResult.contains(TEST_API_KEY));
+  }
+
+  @Test
+  void testToStringDoesNotExposeInterceptorContent() {
+    String secret = "super-secret-token";
+    ClientInterceptor leaky = new TimeoutInterceptor(1000L) {
+      @Override
+      public String toString() {
+        return "LeakyInterceptor{token=" + secret + "}";
+      }
+    };
+    String toStringResult = new ApiWrapperBuilder(Constant.FULLNODE_NILE)
+        .addInterceptors(Arrays.asList(leaky))
+        .toString();
+
+    // interceptor instances must not be expanded, only their count is shown
+    assertTrue(toStringResult.contains("customInterceptorCount=1"));
+    assertFalse(toStringResult.contains(secret));
   }
 
 }

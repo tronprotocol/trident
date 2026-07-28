@@ -58,6 +58,10 @@ public class ApiWrapperBuilder {
     Preconditions.checkNotNull(certFile, "certFile is null");
     Preconditions.checkArgument(certFile.exists(),
         "cert file does not exist: " + certFile.getAbsolutePath());
+    Preconditions.checkArgument(certFile.isFile(),
+        "cert file is not a file: " + certFile.getAbsolutePath());
+    Preconditions.checkArgument(certFile.canRead(),
+        "cert file is not readable: " + certFile.getAbsolutePath());
     this.useTLS = true;
     this.trustCert = certFile;
     return this;
@@ -172,7 +176,7 @@ public class ApiWrapperBuilder {
         .add("trustCert", trustCert != null ? trustCert.getAbsolutePath() : null)
         .add("apiKey", apiKey != null ? "****" : null)
         .add("timeoutMs", timeoutMs)
-        .add("customInterceptors", customInterceptors)
+        .add("customInterceptorCount", customInterceptors.size())
         .toString();
   }
 
