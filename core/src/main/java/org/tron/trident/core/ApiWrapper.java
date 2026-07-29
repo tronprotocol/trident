@@ -167,8 +167,7 @@ public class ApiWrapper implements Api {
   private static final String KEY_PAIR_NOT_SET = "keyPair is null, should set privateKey";
   private static final long CLOSE_TIMEOUT_SECONDS = 5;
   // upper bound for any supported address form (base58: 34, hex: 42, 0x-hex: 44);
-  // rejects oversized input before decoding to keep hostile strings cheap
-  private static final int MAX_ADDRESS_LENGTH = 64;
+  private static final int MAX_ADDRESS_LENGTH = 44;
 
   public final WalletGrpc.WalletBlockingStub blockingStub;
   public final WalletSolidityGrpc.WalletSolidityBlockingStub blockingStubSolidity;
@@ -569,6 +568,7 @@ public class ApiWrapper implements Api {
     try {
       if (!channel.awaitTermination(CLOSE_TIMEOUT_SECONDS, TimeUnit.SECONDS)) {
         channel.shutdownNow();
+        channel.awaitTermination(CLOSE_TIMEOUT_SECONDS, TimeUnit.SECONDS);
       }
     } catch (InterruptedException e) {
       channel.shutdownNow();

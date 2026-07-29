@@ -58,6 +58,13 @@ public class SECP256K1 {
 
   public static final String ALGORITHM = "ECDSA";
   public static final String CURVE_NAME = "secp256k1";
+  /**
+   * @deprecated trident no longer registers Bouncy Castle in the JVM-global
+   *     provider list, so a provider named "BC" is not guaranteed to exist.
+   *     Callers that need it must register it themselves, e.g.
+   *     {@code Security.addProvider(new BouncyCastleProvider())}.
+   */
+  @Deprecated
   public static final String PROVIDER = "BC";
 
   public static final ECDomainParameters CURVE;
