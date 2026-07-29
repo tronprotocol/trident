@@ -166,6 +166,9 @@ public class ApiWrapper implements Api {
 
   private static final String KEY_PAIR_NOT_SET = "keyPair is null, should set privateKey";
   private static final long CLOSE_TIMEOUT_SECONDS = 5;
+  // upper bound for any supported address form (base58: 34, hex: 42, 0x-hex: 44);
+  // rejects oversized input before decoding to keep hostile strings cheap
+  private static final int MAX_ADDRESS_LENGTH = 64;
 
   public final WalletGrpc.WalletBlockingStub blockingStub;
   public final WalletSolidityGrpc.WalletSolidityBlockingStub blockingStubSolidity;
@@ -390,18 +393,28 @@ public class ApiWrapper implements Api {
   /**
    * The function receives addresses in any formats.
    *
-   * @param address account or contract address in any allowed formats.
+   * @param address account or contract address in any allowed formats. An empty string
+   *     returns {@link ByteString#EMPTY}, which leaves the protobuf address field unset.
    * @return hex address
    * @throws IllegalArgumentException if the decoded address is not a valid TRON address
-   *     (21 bytes with the 0x41 prefix)
    */
   public static ByteString parseAddress(String address) {
-    Preconditions.checkArgument(!Strings.isEmpty(address), "address is null or empty");
+    Preconditions.checkNotNull(address, "address is null");
+    Preconditions.checkArgument(address.length() <= MAX_ADDRESS_LENGTH,
+        "invalid address length: " + address.length());
+    if (address.isEmpty()) {
+      return ByteString.EMPTY;
+    }
     byte[] raw;
-    if (address.startsWith("T")) {
-      raw = Base58Check.base58ToBytes(address);
-    } else {
-      raw = ByteArray.fromHexString(address);
+    try {
+      if (address.startsWith("T")) {
+        raw = Base58Check.base58ToBytes(address);
+      } else {
+        raw = ByteArray.fromHexString(address);
+      }
+    } catch (Exception e) {
+      throw new IllegalArgumentException(
+          "invalid address: " + address + " (" + e.getMessage() + ")");
     }
     Preconditions.checkArgument(Utils.addressValid(raw), "invalid address: " + address);
     return ByteString.copyFrom(raw);
@@ -566,12 +579,17 @@ public class ApiWrapper implements Api {
   @Override
   public Transaction signTransaction(TransactionExtention txnExt, KeyPair keyPair) {
     Preconditions.checkArgument(keyPair != null, "keyPair is null");
-    byte[] txId = calculateTransactionHash(txnExt.getTransaction());
-    ByteString providedTxid = txnExt.getTxid();
-    if (!providedTxid.isEmpty()) {
-      Preconditions.checkArgument(Arrays.equals(txId, providedTxid.toByteArray()),
-          "txid does not match the transaction raw data");
+    if (txnExt.getTransaction().getRawData().getSerializedSize() == 0) {
+      String detail = txnExt.getResult().getMessage().toStringUtf8();
+      throw new IllegalArgumentException(
+          "txnExt carries no transaction" + (detail.isEmpty() ? "" : ": " + detail));
     }
+    ByteString providedTxid = txnExt.getTxid();
+    Preconditions.checkArgument(!providedTxid.isEmpty(),
+        "txnExt has no txid; use signTransaction(Transaction, KeyPair) for a raw transaction");
+    byte[] txId = calculateTransactionHash(txnExt.getTransaction());
+    Preconditions.checkArgument(Arrays.equals(txId, providedTxid.toByteArray()),
+        "txid does not match the transaction raw data");
     byte[] signature = KeyPair.signTransaction(txId, keyPair);
     return txnExt.getTransaction().toBuilder().addSignature(ByteString.copyFrom(signature)).build();
   }
@@ -579,6 +597,8 @@ public class ApiWrapper implements Api {
   @Override
   public Transaction signTransaction(Transaction txn, KeyPair keyPair) {
     Preconditions.checkArgument(keyPair != null, "keyPair is null");
+    Preconditions.checkArgument(txn.getRawData().getSerializedSize() > 0,
+        "transaction raw data is empty");
     byte[] txId = calculateTransactionHash(txn);
     byte[] signature = KeyPair.signTransaction(txId, keyPair);
     return txn.toBuilder().addSignature(ByteString.copyFrom(signature)).build();
@@ -830,17 +850,14 @@ public class ApiWrapper implements Api {
   @Override
   public TransactionExtention freezeBalance(String ownerAddress, long frozenBalance,
       int frozenDuration, int resourceCode, String receiveAddress) throws IllegalException {
-    FreezeBalanceContract.Builder freezeBuilder =
+    FreezeBalanceContract freezeBalanceContract =
         FreezeBalanceContract.newBuilder()
             .setOwnerAddress(parseAddress(ownerAddress))
             .setFrozenBalance(frozenBalance)
             .setFrozenDuration(frozenDuration)
-            .setResourceValue(resourceCode);
-    // the receiver is optional; an empty value means freezing for the owner itself
-    if (!Strings.isEmpty(receiveAddress)) {
-      freezeBuilder.setReceiverAddress(parseAddress(receiveAddress));
-    }
-    FreezeBalanceContract freezeBalanceContract = freezeBuilder.build();
+            .setResourceValue(resourceCode)
+            .setReceiverAddress(parseAddress(receiveAddress))
+            .build();
     return createTransactionExtention(freezeBalanceContract,
         Transaction.Contract.ContractType.FreezeBalanceContract);
   }
@@ -897,15 +914,12 @@ public class ApiWrapper implements Api {
   public TransactionExtention unfreezeBalance(String ownerAddress, int resourceCode,
       String receiveAddress) throws IllegalException {
 
-    UnfreezeBalanceContract.Builder unfreezeBuilder =
+    UnfreezeBalanceContract unfreezeBalanceContract =
         UnfreezeBalanceContract.newBuilder()
             .setOwnerAddress(parseAddress(ownerAddress))
-            .setResourceValue(resourceCode);
-    // the receiver is optional; an empty value means unfreezing the owner's own stake
-    if (!Strings.isEmpty(receiveAddress)) {
-      unfreezeBuilder.setReceiverAddress(parseAddress(receiveAddress));
-    }
-    UnfreezeBalanceContract unfreezeBalanceContract = unfreezeBuilder.build();
+            .setResourceValue(resourceCode)
+            .setReceiverAddress(parseAddress(receiveAddress))
+            .build();
 
     return createTransactionExtention(unfreezeBalanceContract,
         Transaction.Contract.ContractType.UnfreezeBalanceContract);

@@ -2,6 +2,7 @@ package org.tron.trident.core;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.protobuf.ByteString;
 import org.junit.jupiter.api.Test;
@@ -47,7 +48,27 @@ class ParseAddressTest {
     assertThrows(IllegalArgumentException.class,
         () -> ApiWrapper.parseAddress("42" + VALID_HEX.substring(2)));
 
-    assertThrows(IllegalArgumentException.class, () -> ApiWrapper.parseAddress(""));
-    assertThrows(IllegalArgumentException.class, () -> ApiWrapper.parseAddress(null));
+    assertThrows(NullPointerException.class, () -> ApiWrapper.parseAddress(null));
+
+    // undecodable input surfaces as IllegalArgumentException per the javadoc,
+    // not as Bouncy Castle's DecoderException (an IllegalStateException)
+    IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
+        () -> ApiWrapper.parseAddress("zz" + VALID_HEX.substring(2)));
+    assertTrue(e.getMessage().contains("invalid address"));
+
+    // oversized input is rejected before decoding, echoing only the length
+    StringBuilder oversized = new StringBuilder(VALID_HEX);
+    for (int i = 0; i < 1000; i++) {
+      oversized.append("00");
+    }
+    IllegalArgumentException tooLong = assertThrows(IllegalArgumentException.class,
+        () -> ApiWrapper.parseAddress(oversized.toString()));
+    assertTrue(tooLong.getMessage().contains("invalid address length"));
+  }
+
+  @Test
+  void testParseEmptyMeansUnsetOptionalField() {
+    // "" maps to an unset optional protobuf field (freeze receiver, constant-call owner)
+    assertEquals(ByteString.EMPTY, ApiWrapper.parseAddress(""));
   }
 }
