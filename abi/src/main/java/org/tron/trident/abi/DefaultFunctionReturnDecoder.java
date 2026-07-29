@@ -82,6 +82,20 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
       Utils.validateTypeReferenceDepth(typeReference);
     }
 
+    // Counts the values and payload bytes this result decodes into, to reject a response that
+    // inflates into more than it carries.
+    final boolean outermostDecode = TypeDecoder.beginDecodeLimits(input.length());
+    try {
+      return buildResults(input, outputParameters);
+    } finally {
+      if (outermostDecode) {
+        TypeDecoder.endDecodeLimits();
+      }
+    }
+  }
+
+  private static List<Type> buildResults(
+      String input, List<TypeReference<Type>> outputParameters) {
     List<Type> results = new ArrayList<>(outputParameters.size());
 
     int offset = 0;

@@ -71,6 +71,64 @@ public class TypeDecoder {
 
   static final int MAX_BYTE_LENGTH_FOR_HEX_STRING = Type.MAX_BYTE_LENGTH << 1;
 
+  /**
+   * Limits for the decode in progress, or null when none is:
+   * {@code {values, maxValues, payloadHex, maxPayloadHex}}.
+   *
+   * <p>Caps how many values and payload bytes one response may decode into, so aliased or
+   * overlapping tail offsets cannot amplify it. Held per-thread; seeded by the function-return
+   * and array entry points and cleared by whichever call opened it.
+   */
+  private static final ThreadLocal<long[]> DECODE_LIMITS = new ThreadLocal<>();
+
+  /**
+   * Opens limits covering an input of {@code inputLengthHex} hex chars, unless already open.
+   * Returns true when this call opened them, in which case the caller closes them in a finally.
+   *
+   * <p>Caps values at the input's word count (rounded up, so a truncated input fails the
+   * later bounds check instead of this cap) and payload at the input length itself.
+   */
+  static boolean beginDecodeLimits(int inputLengthHex) {
+    if (DECODE_LIMITS.get() != null) {
+      return false;
+    }
+    final long maxValues =
+        (long) Math.ceil((double) inputLengthHex / MAX_BYTE_LENGTH_FOR_HEX_STRING);
+    DECODE_LIMITS.set(new long[] {0L, maxValues, 0L, inputLengthHex});
+    return true;
+  }
+
+  static void endDecodeLimits() {
+    DECODE_LIMITS.remove();
+  }
+
+  /** Counts one word-owning value: a fixed-width value, or an element's tail head slot. */
+  private static void countDecodedValue() {
+    final long[] limits = DECODE_LIMITS.get();
+    if (limits == null) {
+      return;
+    }
+    if (++limits[0] > limits[1]) {
+      throw new IllegalArgumentException(
+          "Invalid ABI input: decodes to more values than it can carry (over "
+              + limits[1] + ") - elements share or overlap tail offsets");
+    }
+  }
+
+  /** Counts the input a dynamic payload accounts for, in hex chars. */
+  private static void countDecodedPayload(long hexChars) {
+    final long[] limits = DECODE_LIMITS.get();
+    if (limits == null) {
+      return;
+    }
+    limits[2] += hexChars;
+    if (limits[2] > limits[3]) {
+      throw new IllegalArgumentException(
+          "Invalid ABI input: decodes more than it occupies (" + limits[2]
+              + " of " + limits[3] + " hex chars) - elements share or overlap tail offsets");
+    }
+  }
+
   public static Type instantiateType(String solidityType, Object value)
       throws InvocationTargetException,
       NoSuchMethodException,
@@ -120,6 +178,12 @@ public class TypeDecoder {
 
   @SuppressWarnings("unchecked")
   static <T extends Type> T decode(String input, int offset, Class<T> type) {
+    if (!DynamicBytes.class.isAssignableFrom(type)
+        && !Utf8String.class.isAssignableFrom(type)) {
+      // A fixed-width value owns the single word it is read from; dynamic bytes and strings
+      // are charged as payload where their length is read.
+      countDecodedValue();
+    }
     if (NumericType.class.isAssignableFrom(type)) {
       return (T) decodeNumeric(
           input.substring(
@@ -329,7 +393,9 @@ public class TypeDecoder {
   static int decodeUintAsInt(String rawInput, int offset) {
     checkWindowBounds(rawInput.length(), offset, MAX_BYTE_LENGTH_FOR_HEX_STRING);
     String input = rawInput.substring(offset, offset + MAX_BYTE_LENGTH_FOR_HEX_STRING);
-    BigInteger value = decode(input, 0, Uint.class).getValue();
+    // decodeNumeric rather than decode: a length or offset word is structure, not a decoded
+    // value, and counting it would charge the same word twice.
+    BigInteger value = decodeNumeric(input, Uint.class).getValue();
     if (value.bitLength() > 31) {
       throw new IllegalArgumentException(
           "Invalid ABI uint " + value + " exceeds Integer.MAX_VALUE");
@@ -382,6 +448,12 @@ public class TypeDecoder {
       throw new IllegalArgumentException(
           "Invalid ABI dynamic bytes length: " + encodedLength);
     }
+
+    // The length word plus the payload padded to whole words: what a well-formed encoding
+    // spends here.
+    countDecodedPayload(
+        (1 + (long) Math.ceil((double) encodedLength / Type.MAX_BYTE_LENGTH))
+            * MAX_BYTE_LENGTH_FOR_HEX_STRING);
 
     int hexStringEncodedLength = encodedLength << 1;
     String data = input.substring(valueOffset, valueOffset + hexStringEncodedLength);
@@ -657,6 +729,7 @@ public class TypeDecoder {
       final int beginIndex = offset + tracker.staticOffset;
       if (isDynamic(innerType)) {
         checkWindowBounds(input.length(), beginIndex, MAX_BYTE_LENGTH_FOR_HEX_STRING);
+        countDecodedValue();
         final int parameterOffset =
             decodeDynamicStructDynamicParameterOffset(
                 input.substring(beginIndex, beginIndex + 64))
@@ -758,6 +831,7 @@ public class TypeDecoder {
         final int beginIndex = offset + staticOffset;
         if (isDynamicStructField(constructor, i)) {
           checkWindowBounds(input.length(), beginIndex, MAX_BYTE_LENGTH_FOR_HEX_STRING);
+          countDecodedValue();
           final int parameterOffset =
               decodeDynamicStructDynamicParameterOffset(
                   input.substring(beginIndex, beginIndex + 64))
@@ -1062,12 +1136,25 @@ public class TypeDecoder {
     return (int) nextOffset;
   }
 
+  /**
+   * Resolves an element's tail pointer and counts the head slot that element owns. Counting per
+   * dereference is what makes an aliased tail cost again on every element naming it, and it
+   * covers elements holding nothing countable of their own — an empty nested array owns its
+   * head slot even though it materialises no values.
+   */
+  private static int countedDataOffset(
+      String input, int offset, TypeReference<?> typeReference) throws ClassNotFoundException {
+    countDecodedValue();
+    return getDataOffset(input, offset, typeReference);
+  }
+
   private static <T extends Type> T decodeArrayElements(
       String input,
       int offset,
       TypeReference<T> typeReference,
       int length,
       BiFunction<List<T>, String, T> consumer) {
+    final boolean outermostDecode = beginDecodeLimits(input.length() - offset);
     try {
       Class<T> cls = Utils.getParameterizedTypeFromArray(typeReference);
       int remainingHex = input.length() - offset;
@@ -1092,7 +1179,7 @@ public class TypeDecoder {
               value =
                   TypeDecoder.decodeDynamicStruct(
                       input,
-                      offset + getDataOffset(input, currOffset, typeReference),
+                      offset + countedDataOffset(input, currOffset, typeReference),
                       (TypeReference<T>) new TypeReference<DynamicStruct>(
                           typeReference.isIndexed(),
                           typeReference.getSubTypeReference().getInnerTypes()) {});
@@ -1107,7 +1194,7 @@ public class TypeDecoder {
                   TypeDecoder.decodeDynamicStruct(
                       input,
                       offset
-                          + getDataOffset(
+                          + countedDataOffset(
                           input, currOffset, typeReference),
                       TypeReference.create(cls));
               currOffset = advanceArrayElementOffset(
@@ -1161,7 +1248,7 @@ public class TypeDecoder {
                     TypeDecoder.decodeDynamicArray(
                         input,
                         offset
-                            + getDataOffset(
+                            + countedDataOffset(
                             input, currOffset, typeReference),
                         dynamicTypeRef);
             currOffset = advanceArrayElementOffset(
@@ -1223,7 +1310,7 @@ public class TypeDecoder {
               // outer container stores an offset pointer (1 slot); actual data
               // is at offset + pointerValue, in head/tail form.
               int hexStringDataOffset =
-                  getDataOffset(input, currOffset, staticReference);
+                  countedDataOffset(input, currOffset, staticReference);
               value =
                   (T)
                       TypeDecoder.decodeStaticArray(
@@ -1254,7 +1341,7 @@ public class TypeDecoder {
         for (int i = 0; i < length; i++) {
           T value;
           if (isDynamic(cls)) {
-            int hexStringDataOffset = getDataOffset(input, currOffset, typeReference);
+            int hexStringDataOffset = countedDataOffset(input, currOffset, typeReference);
             value = decode(input, offset + hexStringDataOffset, cls);
             currOffset += MAX_BYTE_LENGTH_FOR_HEX_STRING;
           } else {
@@ -1278,6 +1365,10 @@ public class TypeDecoder {
           "Unable to access parameterized type "
               + Utils.getTypeName(typeReference.getType()),
           e);
+    } finally {
+      if (outermostDecode) {
+        endDecodeLimits();
+      }
     }
   }
 }
