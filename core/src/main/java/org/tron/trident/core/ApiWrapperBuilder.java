@@ -136,8 +136,12 @@ public class ApiWrapperBuilder {
     Preconditions.checkArgument(cleaned != null && cleaned.length() == 64,
         "hexPrivateKey should be 64 hex characters (32 bytes)");
     // fail fast here instead of at build(): rejects scalars outside [1, n - 1]
-    // and non-hex characters
-    SECP256K1.PrivateKey.create(cleaned);
+    // and non-hex characters; never echo the key material in the message
+    try {
+      SECP256K1.PrivateKey.create(cleaned);
+    } catch (Exception e) {
+      throw new IllegalArgumentException("invalid hexPrivateKey (" + e.getMessage() + ")");
+    }
     this.hexPrivateKey = cleaned;
     return this;
   }
