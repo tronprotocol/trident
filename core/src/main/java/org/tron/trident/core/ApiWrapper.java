@@ -586,7 +586,7 @@ public class ApiWrapper implements Api {
     }
     ByteString providedTxid = txnExt.getTxid();
     Preconditions.checkArgument(!providedTxid.isEmpty(),
-        "txnExt has no txid; use signTransaction(Transaction, KeyPair) for a raw transaction");
+        "txnExt has no txid");
     byte[] txId = calculateTransactionHash(txnExt.getTransaction());
     Preconditions.checkArgument(Arrays.equals(txId, providedTxid.toByteArray()),
         "txid does not match the transaction raw data");
