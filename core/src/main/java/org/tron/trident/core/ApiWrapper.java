@@ -16,10 +16,12 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.TlsChannelCredentials;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
 import lombok.Getter;
 import org.bouncycastle.jcajce.provider.digest.SHA256;
 import org.tron.trident.abi.FunctionEncoder;
@@ -163,6 +165,9 @@ import org.tron.trident.utils.Strings;
 public class ApiWrapper implements Api {
 
   private static final String KEY_PAIR_NOT_SET = "keyPair is null, should set privateKey";
+  private static final long CLOSE_TIMEOUT_SECONDS = 5;
+  // upper bound for any supported address form (base58: 34, hex: 42, 0x-hex: 44);
+  private static final int MAX_ADDRESS_LENGTH = 44;
 
   public final WalletGrpc.WalletBlockingStub blockingStub;
   public final WalletSolidityGrpc.WalletSolidityBlockingStub blockingStubSolidity;
@@ -387,16 +392,30 @@ public class ApiWrapper implements Api {
   /**
    * The function receives addresses in any formats.
    *
-   * @param address account or contract address in any allowed formats.
+   * @param address account or contract address in any allowed formats. An empty string
+   *     returns {@link ByteString#EMPTY}, which leaves the protobuf address field unset.
    * @return hex address
+   * @throws IllegalArgumentException if the decoded address is not a valid TRON address
    */
   public static ByteString parseAddress(String address) {
-    byte[] raw;
-    if (address.startsWith("T")) {
-      raw = Base58Check.base58ToBytes(address);
-    } else {
-      raw = ByteArray.fromHexString(address);
+    Preconditions.checkNotNull(address, "address is null");
+    Preconditions.checkArgument(address.length() <= MAX_ADDRESS_LENGTH,
+        "invalid address length: " + address.length());
+    if (address.isEmpty()) {
+      return ByteString.EMPTY;
     }
+    byte[] raw;
+    try {
+      if (address.startsWith("T")) {
+        raw = Base58Check.base58ToBytes(address);
+      } else {
+        raw = ByteArray.fromHexString(address);
+      }
+    } catch (Exception e) {
+      throw new IllegalArgumentException(
+          "invalid address: " + address + " (" + e.getMessage() + ")");
+    }
+    Preconditions.checkArgument(Utils.addressValid(raw), "invalid address: " + address);
     return ByteString.copyFrom(raw);
   }
 
@@ -539,12 +558,38 @@ public class ApiWrapper implements Api {
     if (channelSolidity != null) {
       channelSolidity.shutdown();
     }
+    awaitTermination(channel);
+    if (channelSolidity != null) {
+      awaitTermination(channelSolidity);
+    }
+  }
+
+  private void awaitTermination(ManagedChannel channel) {
+    try {
+      if (!channel.awaitTermination(CLOSE_TIMEOUT_SECONDS, TimeUnit.SECONDS)) {
+        channel.shutdownNow();
+        channel.awaitTermination(CLOSE_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+      }
+    } catch (InterruptedException e) {
+      channel.shutdownNow();
+      Thread.currentThread().interrupt();
+    }
   }
 
   @Override
   public Transaction signTransaction(TransactionExtention txnExt, KeyPair keyPair) {
     Preconditions.checkArgument(keyPair != null, "keyPair is null");
-    byte[] txId = txnExt.getTxid().toByteArray();
+    if (txnExt.getTransaction().getRawData().getSerializedSize() == 0) {
+      String detail = txnExt.getResult().getMessage().toStringUtf8();
+      throw new IllegalArgumentException(
+          "txnExt carries no transaction" + (detail.isEmpty() ? "" : ": " + detail));
+    }
+    ByteString providedTxid = txnExt.getTxid();
+    Preconditions.checkArgument(!providedTxid.isEmpty(),
+        "txnExt has no txid");
+    byte[] txId = calculateTransactionHash(txnExt.getTransaction());
+    Preconditions.checkArgument(Arrays.equals(txId, providedTxid.toByteArray()),
+        "txid does not match the transaction raw data");
     byte[] signature = KeyPair.signTransaction(txId, keyPair);
     return txnExt.getTransaction().toBuilder().addSignature(ByteString.copyFrom(signature)).build();
   }
@@ -552,6 +597,8 @@ public class ApiWrapper implements Api {
   @Override
   public Transaction signTransaction(Transaction txn, KeyPair keyPair) {
     Preconditions.checkArgument(keyPair != null, "keyPair is null");
+    Preconditions.checkArgument(txn.getRawData().getSerializedSize() > 0,
+        "transaction raw data is empty");
     byte[] txId = calculateTransactionHash(txn);
     byte[] signature = KeyPair.signTransaction(txId, keyPair);
     return txn.toBuilder().addSignature(ByteString.copyFrom(signature)).build();
@@ -803,15 +850,13 @@ public class ApiWrapper implements Api {
   @Override
   public TransactionExtention freezeBalance(String ownerAddress, long frozenBalance,
       int frozenDuration, int resourceCode, String receiveAddress) throws IllegalException {
-    ByteString rawFrom = parseAddress(ownerAddress);
-    ByteString rawReceiveFrom = parseAddress(receiveAddress);
     FreezeBalanceContract freezeBalanceContract =
         FreezeBalanceContract.newBuilder()
-            .setOwnerAddress(rawFrom)
+            .setOwnerAddress(parseAddress(ownerAddress))
             .setFrozenBalance(frozenBalance)
             .setFrozenDuration(frozenDuration)
             .setResourceValue(resourceCode)
-            .setReceiverAddress(rawReceiveFrom)
+            .setReceiverAddress(parseAddress(receiveAddress))
             .build();
     return createTransactionExtention(freezeBalanceContract,
         Transaction.Contract.ContractType.FreezeBalanceContract);

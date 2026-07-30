@@ -19,7 +19,6 @@ import com.google.common.base.Preconditions;
 import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyPairGenerator;
-import java.security.Security;
 import java.security.spec.ECGenParameterSpec;
 import java.util.Arrays;
 import java.util.Objects;
@@ -59,6 +58,13 @@ public class SECP256K1 {
 
   public static final String ALGORITHM = "ECDSA";
   public static final String CURVE_NAME = "secp256k1";
+  /**
+   * @deprecated trident no longer registers Bouncy Castle in the JVM-global
+   *     provider list, so a provider named "BC" is not guaranteed to exist.
+   *     Callers that need it must register it themselves, e.g.
+   *     {@code Security.addProvider(new BouncyCastleProvider())}.
+   */
+  @Deprecated
   public static final String PROVIDER = "BC";
 
   public static final ECDomainParameters CURVE;
@@ -68,16 +74,14 @@ public class SECP256K1 {
   private static final BigInteger CURVE_ORDER;
 
   static {
-    //support android platform
-    Security.removeProvider(BouncyCastleProvider.PROVIDER_NAME);
-    Security.insertProviderAt(new BouncyCastleProvider(), 1);
-
     final X9ECParameters params = SECNamedCurves.getByName(CURVE_NAME);
     CURVE = new ECDomainParameters(params.getCurve(), params.getG(), params.getN(), params.getH());
     CURVE_ORDER = CURVE.getN();
     HALF_CURVE_ORDER = CURVE_ORDER.shiftRight(1);
     try {
-      KEY_PAIR_GENERATOR = KeyPairGenerator.getInstance(ALGORITHM, PROVIDER);
+      // pass the provider explicitly instead of touching the JVM-global provider
+      // list; also bypasses Android's stripped built-in "BC"
+      KEY_PAIR_GENERATOR = KeyPairGenerator.getInstance(ALGORITHM, new BouncyCastleProvider());
     } catch (final Exception e) {
       throw new RuntimeException(e);
     }
@@ -324,6 +328,12 @@ public class SECP256K1 {
     }
 
     public static PrivateKey create(final Bytes32 key) {
+      Preconditions.checkNotNull(key, "key must not be null");
+      // Reject out-of-range scalars at construction instead of letting Bouncy Castle
+      // throw the same error later at signing time. Without this, 0 and n fail only
+      // when signing, and n + 1 even derives the same address as private key 1 via
+      // the mod-n reduction in PublicKey.create.
+      CURVE.validatePrivateScalar(key.toUnsignedBigInteger());
       return new PrivateKey(key);
     }
 

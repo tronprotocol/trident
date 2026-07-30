@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import io.grpc.ClientInterceptor;
 import java.io.File;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -19,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.tron.trident.core.interceptor.TimeoutInterceptor;
 import org.tron.trident.core.key.KeyPair;
+import org.tron.trident.crypto.SECP256K1;
 
 /**
  * Unit tests for ApiWrapperBuilder class
@@ -110,6 +112,23 @@ class ApiWrapperBuilderTest {
   }
 
   @Test
+  void testWithPrivateKeyRejectsOutOfRangeScalars() {
+    BigInteger n = SECP256K1.CURVE.getN();
+    for (BigInteger invalid : new BigInteger[] {
+        BigInteger.ZERO, n, n.add(BigInteger.ONE)}) {
+      assertThrows(IllegalArgumentException.class, () -> {
+        new ApiWrapperBuilder(Constant.FULLNODE_NILE)
+            .withPrivateKey(String.format("%064x", invalid));
+      });
+    }
+
+    // n - 1 is the top of the valid range and must still be accepted
+    String nMinus1 = String.format("%064x", n.subtract(BigInteger.ONE));
+    assertEquals(nMinus1, new ApiWrapperBuilder(Constant.FULLNODE_NILE)
+        .withPrivateKey(nMinus1).getHexPrivateKey());
+  }
+
+  @Test
   void testRepeatedSettersLastWins() {
     ApiWrapperBuilder builder = new ApiWrapperBuilder(Constant.FULLNODE_NILE)
         .withTimeout(1000L)
@@ -155,6 +174,33 @@ class ApiWrapperBuilderTest {
     // and the reverse order keeps the custom certificate
     builder.withTLS(testCertFile);
     assertEquals(testCertFile, builder.getTrustCert());
+  }
+
+  @Test
+  void testWithTlsRejectsDirectory() throws IOException {
+    // a directory must be rejected immediately, not fail later in build()
+    File certDirectory = Files.createDirectory(tempDir.resolve("cert-dir")).toFile();
+    IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> {
+      new ApiWrapperBuilder(Constant.FULLNODE_NILE).withTLS(certDirectory);
+    });
+    assertTrue(e.getMessage().contains("not a file"));
+  }
+
+  @Test
+  void testWithTlsRejectsUnreadableFile() throws IOException {
+    File unreadable = tempDir.resolve("unreadable-cert.pem").toFile();
+    Files.write(unreadable.toPath(), "dummy".getBytes());
+    // skip silently if the platform does not support revoking read permission (e.g. root)
+    if (unreadable.setReadable(false) && !unreadable.canRead()) {
+      try {
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> {
+          new ApiWrapperBuilder(Constant.FULLNODE_NILE).withTLS(unreadable);
+        });
+        assertTrue(e.getMessage().contains("not readable"));
+      } finally {
+        unreadable.setReadable(true);
+      }
+    }
   }
 
   @Test
@@ -212,6 +258,38 @@ class ApiWrapperBuilderTest {
     // the API key must never appear in logs
     assertTrue(toStringResult.contains("apiKey=****"));
     assertFalse(toStringResult.contains(TEST_API_KEY));
+  }
+
+  @Test
+  void testCloseTerminatesChannels() {
+    ApiWrapper wrapper = new ApiWrapperBuilder(
+        Constant.FULLNODE_NILE,
+        Constant.FULLNODE_NILE_SOLIDITY,
+        TEST_PRIVATE_KEY
+    ).build();
+
+    // close() must not return before both channels are fully terminated
+    wrapper.close();
+    assertTrue(wrapper.channel.isTerminated());
+    assertTrue(wrapper.channelSolidity.isTerminated());
+  }
+
+  @Test
+  void testToStringDoesNotExposeInterceptorContent() {
+    String secret = "super-secret-token";
+    ClientInterceptor leaky = new TimeoutInterceptor(1000L) {
+      @Override
+      public String toString() {
+        return "LeakyInterceptor{token=" + secret + "}";
+      }
+    };
+    String toStringResult = new ApiWrapperBuilder(Constant.FULLNODE_NILE)
+        .addInterceptors(Arrays.asList(leaky))
+        .toString();
+
+    // interceptor instances must not be expanded, only their count is shown
+    assertTrue(toStringResult.contains("customInterceptorCount=1"));
+    assertFalse(toStringResult.contains(secret));
   }
 
 }

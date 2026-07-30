@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import lombok.Getter;
 import org.tron.trident.core.interceptor.TimeoutInterceptor;
+import org.tron.trident.crypto.SECP256K1;
 import org.tron.trident.utils.Numeric;
 import org.tron.trident.utils.Strings;
 
@@ -58,6 +59,10 @@ public class ApiWrapperBuilder {
     Preconditions.checkNotNull(certFile, "certFile is null");
     Preconditions.checkArgument(certFile.exists(),
         "cert file does not exist: " + certFile.getAbsolutePath());
+    Preconditions.checkArgument(certFile.isFile(),
+        "cert file is not a file: " + certFile.getAbsolutePath());
+    Preconditions.checkArgument(certFile.canRead(),
+        "cert file is not readable: " + certFile.getAbsolutePath());
     this.useTLS = true;
     this.trustCert = certFile;
     return this;
@@ -122,11 +127,21 @@ public class ApiWrapperBuilder {
 
   /**
    * set PrivateKey, an optional "0x" prefix is accepted
+   *
+   * @throws IllegalArgumentException if the key is not 64 hex characters or its scalar
+   *     is outside the valid secp256k1 range [1, n - 1]
    */
   public ApiWrapperBuilder withPrivateKey(String hexPrivateKey) {
     String cleaned = Numeric.cleanHexPrefix(hexPrivateKey);
     Preconditions.checkArgument(cleaned != null && cleaned.length() == 64,
         "hexPrivateKey should be 64 hex characters (32 bytes)");
+    // fail fast here instead of at build(): rejects scalars outside [1, n - 1]
+    // and non-hex characters; never echo the key material in the message
+    try {
+      SECP256K1.PrivateKey.create(cleaned);
+    } catch (Exception e) {
+      throw new IllegalArgumentException("invalid hexPrivateKey (" + e.getMessage() + ")");
+    }
     this.hexPrivateKey = cleaned;
     return this;
   }
@@ -172,7 +187,7 @@ public class ApiWrapperBuilder {
         .add("trustCert", trustCert != null ? trustCert.getAbsolutePath() : null)
         .add("apiKey", apiKey != null ? "****" : null)
         .add("timeoutMs", timeoutMs)
-        .add("customInterceptors", customInterceptors)
+        .add("customInterceptorCount", customInterceptors.size())
         .toString();
   }
 
