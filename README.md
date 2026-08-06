@@ -76,8 +76,15 @@ ApiWrapper client = ApiWrapper.ofShasta("private key");
 // Or nile testnet
 ApiWrapper client = ApiWrapper.ofNile("private_key");
 
-//Initialize with special grpc endpoint
-ApiWrapper client = new ApiWrapper("grpc endpoint", "solidity grpc endpoint", "private_key");
+// Or initialize with a custom grpc endpoint.
+ApiWrapper client = new ApiWrapperBuilder("grpc endpoint")
+    .withGrpcEndpointSolidity("solidity grpc endpoint")
+    .withPrivateKey("private_key")
+    .withApiKey("api_key")             // Optional: API key from TronGrid
+    .withTLS()                         // Optional: or withTLS(new File("xxx.crt"))
+    .withTimeout(5000)                 // Optional: request timeout in milliseconds
+    .addInterceptors(interceptors)     // Optional: custom gRPC interceptors
+    .build();
 
 // Send TRX
 TransactionExtention transactionExtention = client.transfer("fromAddress", "toAddress", 100_000_000L); //100TRX
