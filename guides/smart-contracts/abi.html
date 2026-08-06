@@ -11,10 +11,10 @@
         <link rel="canonical" href="https://tronprotocol.github.io/trident/guides/smart-contracts/abi.html">
       
       
-        <link rel="prev" href="overview.html">
+        <link rel="prev" href="interaction.html">
       
       
-        <link rel="next" href="deployment.html">
+        <link rel="next" href="complex-abi-examples.html">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -714,6 +714,8 @@
       
         
       
+        
+      
     
     
       
@@ -763,6 +765,50 @@
   
   <span class="md-ellipsis">
     Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="deployment.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contract Deployment
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="interaction.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contract Interaction
     
   </span>
   
@@ -845,6 +891,24 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#struct-support-abi-v2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Struct Support (ABI v2)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#packed-encoding" class="md-nav__link">
+    <span class="md-ellipsis">
+      Packed Encoding
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -861,33 +925,11 @@
   
   
     <li class="md-nav__item">
-      <a href="deployment.html" class="md-nav__link">
+      <a href="complex-abi-examples.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Contract Deployment
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="interaction.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Contract Interaction
+    Complex ABI Examples
     
   </span>
   
@@ -1061,6 +1103,38 @@
 </span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="p">);</span>
 </span></code></pre></div>
 <p>Using incorrect types will result in transaction failure or unexpected behavior.</p>
+<h2 id="struct-support-abi-v2">Struct Support (ABI v2)</h2>
+<p>Trident supports ABI v2: structs (Solidity <code>tuple</code> types), nested structs, arrays of structs and nested arrays can all be encoded and decoded.</p>
+<p>Map a Solidity struct to a Java class by extending <code>StaticStruct</code> (all fields are fixed-size types) or <code>DynamicStruct</code> (contains at least one dynamic field such as <code>string</code>, <code>bytes</code> or a dynamic array), and pass the fields to the <code>super</code> constructor in declaration order:</p>
+<div class="language-solidity highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1">// In smart contract</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="kt">struct</span><span class="w"> </span><span class="nv">MarketParams</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">loanToken</span><span class="p">;</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">collateralToken</span><span class="p">;</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">oracle</span><span class="p">;</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">irm</span><span class="p">;</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">    </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">lltv</span><span class="p">;</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="p">}</span>
+</span></code></pre></div>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.tron.trident.abi.datatypes.Address</span><span class="p">;</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.tron.trident.abi.datatypes.StaticStruct</span><span class="p">;</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.tron.trident.abi.datatypes.generated.Uint256</span><span class="p">;</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MarketParams</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">StaticStruct</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">MarketParams</span><span class="p">(</span><span class="n">Address</span><span class="w"> </span><span class="n">loanToken</span><span class="p">,</span><span class="w"> </span><span class="n">Address</span><span class="w"> </span><span class="n">collateralToken</span><span class="p">,</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">        </span><span class="n">Address</span><span class="w"> </span><span class="n">oracle</span><span class="p">,</span><span class="w"> </span><span class="n">Address</span><span class="w"> </span><span class="n">irm</span><span class="p">,</span><span class="w"> </span><span class="n">Uint256</span><span class="w"> </span><span class="n">lltv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">      </span><span class="kd">super</span><span class="p">(</span><span class="n">loanToken</span><span class="p">,</span><span class="w"> </span><span class="n">collateralToken</span><span class="p">,</span><span class="w"> </span><span class="n">oracle</span><span class="p">,</span><span class="w"> </span><span class="n">irm</span><span class="p">,</span><span class="w"> </span><span class="n">lltv</span><span class="p">);</span>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>A struct class works like any other <code>Type</code>:</p>
+<ul>
+<li><strong>Encode</strong>: pass an instance as a function parameter to <code>FunctionEncoder.encode</code>, or encode it standalone with <code>TypeEncoder.encode(struct)</code> — for example to compute <code>keccak256(abi.encode(struct))</code> identifiers.</li>
+<li><strong>Decode</strong>: reference the class with <code>new TypeReference&lt;MarketParams&gt;() {}</code> in <code>FunctionReturnDecoder.decode</code>, and the decoder instantiates it through the constructor above.</li>
+</ul>
+<p>Structs nest naturally: a <code>DynamicStruct</code> can contain a <code>StaticStruct</code> field, and <code>DynamicArray&lt;SomeStruct&gt;</code> handles arrays of structs.</p>
+<p>For complete, runnable walkthroughs decoding and re-encoding real mainnet transactions of JustLend V2 and SunSwap V4 with structs, see <a href="complex-abi-examples.html">Complex ABI Examples</a>.</p>
+<h2 id="packed-encoding">Packed Encoding</h2>
+<p><code>TypeEncoder.encodePacked(type)</code> implements Solidity's <code>abi.encodePacked</code> — values are concatenated without padding, as commonly used for hash-based signatures and commitments.</p>
 
 
 

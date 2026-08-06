@@ -2,66 +2,70 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://tronprotocol.github.io/trident/index.html</loc>
-         <lastmod>2026-01-28</lastmod>
+         <lastmod>2026-08-06</lastmod>
     </url>
     <url>
          <loc>https://tronprotocol.github.io/trident/guides/keypair/key-management.html</loc>
-         <lastmod>2026-01-28</lastmod>
+         <lastmod>2026-08-06</lastmod>
     </url>
     <url>
          <loc>https://tronprotocol.github.io/trident/guides/smart-contracts/abi.html</loc>
-         <lastmod>2026-01-28</lastmod>
+         <lastmod>2026-08-06</lastmod>
+    </url>
+    <url>
+         <loc>https://tronprotocol.github.io/trident/guides/smart-contracts/complex-abi-examples.html</loc>
+         <lastmod>2026-08-06</lastmod>
     </url>
     <url>
          <loc>https://tronprotocol.github.io/trident/guides/smart-contracts/deployment.html</loc>
-         <lastmod>2026-01-28</lastmod>
+         <lastmod>2026-08-06</lastmod>
     </url>
     <url>
          <loc>https://tronprotocol.github.io/trident/guides/smart-contracts/interaction.html</loc>
-         <lastmod>2026-01-28</lastmod>
+         <lastmod>2026-08-06</lastmod>
     </url>
     <url>
          <loc>https://tronprotocol.github.io/trident/guides/smart-contracts/overview.html</loc>
-         <lastmod>2026-01-28</lastmod>
+         <lastmod>2026-08-06</lastmod>
     </url>
     <url>
          <loc>https://tronprotocol.github.io/trident/guides/transactions/signing.html</loc>
-         <lastmod>2026-01-28</lastmod>
+         <lastmod>2026-08-06</lastmod>
     </url>
     <url>
          <loc>https://tronprotocol.github.io/trident/guides/transactions/transaction-guide.html</loc>
-         <lastmod>2026-01-28</lastmod>
+         <lastmod>2026-08-06</lastmod>
     </url>
     <url>
          <loc>https://tronprotocol.github.io/trident/quickstart/getting-started.html</loc>
-         <lastmod>2026-01-28</lastmod>
+         <lastmod>2026-08-06</lastmod>
     </url>
     <url>
          <loc>https://tronprotocol.github.io/trident/security/gpg-verification.html</loc>
-         <lastmod>2026-01-28</lastmod>
+         <lastmod>2026-08-06</lastmod>
     </url>
     <url>
          <loc>https://tronprotocol.github.io/trident/trident-docs/lib/python3.13/site-packages/backrefs-6.1.dist-info/licenses/LICENSE.html</loc>
-         <lastmod>2026-01-28</lastmod>
+         <lastmod>2026-08-06</lastmod>
     </url>
     <url>
          <loc>https://tronprotocol.github.io/trident/trident-docs/lib/python3.13/site-packages/idna-3.11.dist-info/licenses/LICENSE.html</loc>
-         <lastmod>2026-01-28</lastmod>
+         <lastmod>2026-08-06</lastmod>
     </url>
     <url>
          <loc>https://tronprotocol.github.io/trident/trident-docs/lib/python3.13/site-packages/markdown-3.10.dist-info/licenses/LICENSE.html</loc>
-         <lastmod>2026-01-28</lastmod>
+         <lastmod>2026-08-06</lastmod>
     </url>
     <url>
          <loc>https://tronprotocol.github.io/trident/trident-docs/lib/python3.13/site-packages/mkdocs_get_deps-0.2.0.dist-info/licenses/LICENSE.html</loc>
-         <lastmod>2026-01-28</lastmod>
+         <lastmod>2026-08-06</lastmod>
     </url>
     <url>
          <loc>https://tronprotocol.github.io/trident/trident-docs/lib/python3.13/site-packages/mkdocs_material_extensions-1.3.1.dist-info/licenses/LICENSE.html</loc>
-         <lastmod>2026-01-28</lastmod>
+         <lastmod>2026-08-06</lastmod>
     </url>
     <url>
          <loc>https://tronprotocol.github.io/trident/trident-docs/lib/python3.13/site-packages/pymdown_extensions-10.17.1.dist-info/licenses/LICENSE.html</loc>
-         <lastmod>2026-01-28</lastmod>
+         <lastmod>2026-08-06</lastmod>
     </url>
 </urlset>
