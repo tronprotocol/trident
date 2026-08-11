@@ -18,8 +18,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
+import java.util.Arrays;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.tron.trident.abi.AbiV2TestFixture.Bar;
 import org.tron.trident.abi.datatypes.Address;
 import org.tron.trident.abi.datatypes.Bool;
 import org.tron.trident.abi.datatypes.Bytes;
@@ -66,6 +68,7 @@ import org.tron.trident.abi.datatypes.generated.Int8;
 import org.tron.trident.abi.datatypes.generated.Int80;
 import org.tron.trident.abi.datatypes.generated.Int88;
 import org.tron.trident.abi.datatypes.generated.Int96;
+import org.tron.trident.abi.datatypes.generated.StaticArray1;
 import org.tron.trident.abi.datatypes.generated.StaticArray2;
 import org.tron.trident.abi.datatypes.generated.StaticArray3;
 import org.tron.trident.abi.datatypes.generated.Uint104;
@@ -1037,6 +1040,17 @@ public class TypeDecoderTest {
   }
 
   @Test
+  public void testTrcTokenLargeUnsignedRoundTrip() {
+    // trcToken is unsigned; a word with the top bit set must decode to the
+    // positive value, not a two's-complement negative one.
+    String hex = "8000000000000000000000000000000000000000000000000000000000000005";
+    BigInteger expected = BigInteger.ONE.shiftLeft(255).add(BigInteger.valueOf(5));
+
+    assertEquals(new TrcToken(expected), TypeDecoder.decodeNumeric(hex, TrcToken.class));
+    assertEquals(hex, TypeEncoder.encode(new TrcToken(expected)));
+  }
+
+  @Test
   public void testUtf8String() throws Exception {
     assertEquals(
         TypeDecoder.decodeUtf8String(
@@ -1067,7 +1081,9 @@ public class TypeDecoderTest {
 
     assertEquals(
         TypeDecoder.decodeStaticArray(
-            "000000000000000000000000000000000000000000000000000000000000000d"
+            "0000000000000000000000000000000000000000000000000000000000000040"
+                + "0000000000000000000000000000000000000000000000000000000000000080"
+                + "000000000000000000000000000000000000000000000000000000000000000d"
                 + "48656c6c6f2c20776f726c642100000000000000000000000000000000000000"
                 + "000000000000000000000000000000000000000000000000000000000000000d"
                 + "776f726c64212048656c6c6f2c00000000000000000000000000000000000000",
@@ -1079,6 +1095,8 @@ public class TypeDecoderTest {
             Utf8String.class,
             new Utf8String("Hello, world!"),
             new Utf8String("world! Hello,"))));
+
+
 
     Type arr = TypeDecoder.instantiateType("uint256[2]", new long[] {10, Long.MAX_VALUE});
 
@@ -1093,6 +1111,66 @@ public class TypeDecoderTest {
   }
 
   @Test
+  public void testIsDynamicUnresolvableElementTypeThrows() {
+    // A raw StaticArray reference with no element type information: answering
+    // "static" here used to silently corrupt downstream offset math; it must throw.
+    assertThrows(
+        UnsupportedOperationException.class,
+        () -> TypeDecoder.isDynamic(
+            TypeReference.create(org.tron.trident.abi.datatypes.generated.StaticArray2.class)));
+  }
+
+  @Test
+  public void testEmptyStaticArrayInstantiateType() throws Exception {
+    Type arr = TypeDecoder.instantiateType("uint256[0]", new long[] {});
+
+    assertTrue(arr instanceof org.tron.trident.abi.datatypes.generated.StaticArray0);
+    assertTrue(((org.tron.trident.abi.datatypes.generated.StaticArray0<?>) arr)
+        .getValue().isEmpty());
+    assertEquals("uint256[0]", arr.getTypeAsString());
+  }
+
+  @Test
+  public void testNonEmptyValuesForZeroLengthStaticArrayRejected() {
+    UnsupportedOperationException e = assertThrows(
+        UnsupportedOperationException.class,
+        () -> new org.tron.trident.abi.datatypes.generated.StaticArray0<>(
+            Uint256.class,
+            Arrays.asList(
+                new Uint256(BigInteger.ONE), new Uint256(BigInteger.valueOf(2)))));
+    assertTrue(e.getMessage().contains("[0] elements"));
+  }
+
+  @Test
+  public void testDecodeNumericTruncatedInput() {
+    // 17 bytes instead of the 32 a Uint256 word requires: must fail fast, not
+    // zero-pad the tail (which would return value << 120).
+    assertThrows(
+        IndexOutOfBoundsException.class,
+        () -> TypeDecoder.decodeNumeric(
+            "00000000000000000000000000000000000f4e0c", Uint256.class));
+    // Empty input must not silently decode to zero.
+    assertThrows(
+        IndexOutOfBoundsException.class,
+        () -> TypeDecoder.decodeNumeric("", Uint256.class));
+  }
+
+  @Test
+  public void testTrcTokenStaticArray() throws Exception {
+    assertEquals(
+        TypeDecoder.decodeStaticArray(
+            "00000000000000000000000000000000000000000000000000000000000f4e0c"
+                + "00000000000000000000000000000000000000000000000000000000000f4e0d",
+            0,
+            TypeReference.makeTypeReference("trcToken[2]"),
+            2),
+        (new StaticArray2<>(
+            TrcToken.class,
+            new TrcToken(1003020),
+            new TrcToken(1003021))));
+  }
+
+  @Test
   public void testEmptyStaticArray() {
     assertThrows(
         UnsupportedOperationException.class,
@@ -1104,13 +1182,6 @@ public class TypeDecoderTest {
                     0) {
                 },
                 0));
-  }
-
-  @Test
-  public void testEmptyStaticArrayInstantiateType() {
-    assertThrows(
-        ClassNotFoundException.class,
-        () -> TypeDecoder.instantiateType("uint256[0]", new long[] {}));
   }
 
   @Test
@@ -1139,6 +1210,8 @@ public class TypeDecoderTest {
     assertEquals(
         TypeDecoder.decodeDynamicArray(
             "0000000000000000000000000000000000000000000000000000000000000002" // length
+                + "0000000000000000000000000000000000000000000000000000000000000040"
+                + "0000000000000000000000000000000000000000000000000000000000000080"
                 + "000000000000000000000000000000000000000000000000000000000000000d"
                 + "48656c6c6f2c20776f726c642100000000000000000000000000000000000000"
                 + "000000000000000000000000000000000000000000000000000000000000000d"
@@ -1162,6 +1235,62 @@ public class TypeDecoderTest {
     assertEquals(dynamicArray.getValue().get(0), (new Utf8String("Hello, world!")));
 
     assertEquals(dynamicArray.getValue().get(1), (new Utf8String("world! Hello,")));
+  }
+
+  @Test
+  public void testDynamicArrayOfDynamicArrays() throws Exception {
+    assertEquals(
+        TypeDecoder.decodeDynamicArray(
+            "0000000000000000000000000000000000000000000000000000000000000002"
+                + "0000000000000000000000000000000000000000000000000000000000000040"
+                + "00000000000000000000000000000000000000000000000000000000000000a0"
+                + "0000000000000000000000000000000000000000000000000000000000000001"
+                + "0000000000000000000000000000000000000000000000000000000000000000"
+                + "0000000000000000000000000000000000000000000000000000000000000000"
+                + "0000000000000000000000000000000000000000000000000000000000000001"
+                + "0000000000000000000000000000000000000000000000000000000000000001"
+                + "0000000000000000000000000000000000000000000000000000000000000000",
+            0,
+            new TypeReference<DynamicArray<DynamicArray<AbiV2TestFixture.Bar>>>() {}),
+        new DynamicArray(
+            DynamicArray.class,
+            Arrays.asList(
+                new DynamicArray(
+                    AbiV2TestFixture.Bar.class,
+                    new AbiV2TestFixture.Bar(
+                        new Uint256(BigInteger.ZERO),
+                        new Uint256(BigInteger.ZERO))),
+                new DynamicArray(
+                    AbiV2TestFixture.Bar.class,
+                    new AbiV2TestFixture.Bar(
+                        new Uint256(BigInteger.ONE),
+                        new Uint256(BigInteger.ZERO))))));
+  }
+
+  @Test
+  public void testDynamicArrayOfStaticArrays() throws Exception {
+    assertEquals(
+        TypeDecoder.decodeDynamicArray(
+            "0000000000000000000000000000000000000000000000000000000000000002"
+                + "0000000000000000000000000000000000000000000000000000000000000000"
+                + "0000000000000000000000000000000000000000000000000000000000000000"
+                + "0000000000000000000000000000000000000000000000000000000000000001"
+                + "0000000000000000000000000000000000000000000000000000000000000000",
+            0,
+            new TypeReference<DynamicArray<StaticArray1<Bar>>>() {}),
+        new DynamicArray(
+            StaticArray1.class,
+            Arrays.asList(
+                new StaticArray1(
+                    AbiV2TestFixture.Bar.class,
+                    new AbiV2TestFixture.Bar(
+                        new Uint256(BigInteger.ZERO),
+                        new Uint256(BigInteger.ZERO))),
+                new StaticArray1(
+                    AbiV2TestFixture.Bar.class,
+                    new AbiV2TestFixture.Bar(
+                        new Uint256(BigInteger.ONE),
+                        new Uint256(BigInteger.ZERO))))));
   }
 
   @SuppressWarnings("unchecked")
@@ -1188,5 +1317,33 @@ public class TypeDecoderTest {
     assertEquals(staticArray3StaticArray3.getComponentType(), StaticArray3.class);
     row1 = staticArray3StaticArray3.getValue().get(1).getValue().get(1);
     assertEquals(row1.getValue().get(1), (new Uint256(2)));
+  }
+
+  @Test
+  public void testDecodeNestedStaticArray() {
+    // uint256[2][2]
+    // Element 1: uint256[2] = [64, 2]
+    // Element 2: uint256[2] = [3, 4]
+    String input = "0000000000000000000000000000000000000000000000000000000000000040" // 64
+                 + "0000000000000000000000000000000000000000000000000000000000000002" // 2
+                 + "0000000000000000000000000000000000000000000000000000000000000003" // 3
+                 + "0000000000000000000000000000000000000000000000000000000000000004"; // 4
+
+    // Using TypeReference to define uint256[2][2]
+    TypeReference.StaticArrayTypeReference<StaticArray2<StaticArray2<Uint256>>> typeRef = 
+        new TypeReference.StaticArrayTypeReference<StaticArray2<StaticArray2<Uint256>>>(2) {
+          @Override
+          public TypeReference getSubTypeReference() {
+            return new TypeReference.StaticArrayTypeReference<StaticArray2<Uint256>>(2) {};
+          }
+        };
+
+    StaticArray2<StaticArray2<Uint256>> result = TypeDecoder.decodeStaticArray(input, 0, typeRef, 2);
+
+    assertEquals(2, result.getValue().size());
+    assertEquals(java.math.BigInteger.valueOf(64), result.getValue().get(0).getValue().get(0).getValue());
+    assertEquals(java.math.BigInteger.valueOf(2), result.getValue().get(0).getValue().get(1).getValue());
+    assertEquals(java.math.BigInteger.valueOf(3), result.getValue().get(1).getValue().get(0).getValue());
+    assertEquals(java.math.BigInteger.valueOf(4), result.getValue().get(1).getValue().get(1).getValue());
   }
 }

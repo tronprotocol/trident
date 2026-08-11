@@ -16,7 +16,7 @@ package org.tron.trident.abi.datatypes.primitive;
 import org.tron.trident.abi.datatypes.NumericType;
 import org.tron.trident.abi.datatypes.generated.Int32;
 
-public final class Int extends Number<Integer> {
+public final class Int extends Number<java.lang.Integer> {
 
   public Int(int value) {
     super(value);

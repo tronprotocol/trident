@@ -15,6 +15,7 @@ package org.tron.trident.abi;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.tron.trident.abi.datatypes.AbiTypes;
@@ -41,8 +42,15 @@ public abstract class TypeReference<T extends org.tron.trident.abi.datatypes.Typ
   private final Type type;
   private final boolean indexed;
 
+  protected List<TypeReference<?>> innerTypes;
+
   protected TypeReference() {
     this(false);
+  }
+
+  protected TypeReference(boolean indexed, List<TypeReference<?>> innerTypesIn) {
+    this(indexed);
+    this.innerTypes = innerTypesIn;
   }
 
   protected TypeReference(boolean indexed) {
@@ -61,9 +69,14 @@ public abstract class TypeReference<T extends org.tron.trident.abi.datatypes.Typ
    *
    * @return the type wrapped by this Array TypeReference, or null if not Array
    */
-  TypeReference getSubTypeReference() {
+  public TypeReference getSubTypeReference() {
     return null;
   }
+
+  public List<TypeReference<?>> getInnerTypes() {
+    return this.innerTypes;
+  }
+
 
   public int compareTo(TypeReference<T> o) {
     // taken from the blog post comments - this results in an errror if the
@@ -93,7 +106,7 @@ public abstract class TypeReference<T extends org.tron.trident.abi.datatypes.Typ
     if (getType() instanceof ParameterizedType) {
       return (Class<T>) ((ParameterizedType) clsType).getRawType();
     } else {
-      return (Class<T>) Class.forName(clsType.getTypeName());
+      return Utils.safeLoadTypeClass(Utils.getTypeName(clsType));
     }
   }
 
@@ -178,7 +191,7 @@ public abstract class TypeReference<T extends org.tron.trident.abi.datatypes.Typ
         arrayWrappedType =
             new TypeReference<DynamicArray>(indexed) {
               @Override
-              TypeReference getSubTypeReference() {
+              public TypeReference getSubTypeReference() {
                 return baseTr;
               }
 
@@ -216,7 +229,7 @@ public abstract class TypeReference<T extends org.tron.trident.abi.datatypes.Typ
             new TypeReference.StaticArrayTypeReference<StaticArray>(arraySizeInt) {
 
               @Override
-              TypeReference getSubTypeReference() {
+              public TypeReference getSubTypeReference() {
                 return baseTr;
               }
 

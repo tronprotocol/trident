@@ -1,4 +1,7 @@
-def DEFAULT_VERSION = '0.11.0'
+import org.gradle.nativeplatform.platform.internal.Architectures
+import org.gradle.internal.os.OperatingSystem
+
+def DEFAULT_VERSION = '1.0.0'
 def DEFAULT_GROUP = 'io.github.tronprotocol'
 
 buildscript {
@@ -15,24 +18,31 @@ buildscript {
     }
     dependencies {
         classpath 'io.github.gradle-nexus:publish-plugin:1.1.0'
-        classpath 'com.github.johnrengelman.shadow:com.github.johnrengelman.shadow.gradle.plugin:8.1.1'
-    }
-    configurations.classpath {
-        resolutionStrategy {
-            force("commons-io:commons-io:2.18.0")
-        }
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'java-library'
-apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'maven-publish'
 
+def arch = System.getProperty("os.arch").toLowerCase(Locale.ROOT)
+def isArm64 = Architectures.AARCH64.isAlias(arch)
+def isMac = OperatingSystem.current().isMacOsX()
+
 ext {
-    bouncycastleVersion = '1.78.1'
+    bouncycastleVersion = '1.84'
     junitJupiterVersion = '5.4.2'
     googleGuavaVersion = '33.0.0-jre'
+    jacksonVersion = '2.18.9'
+    // grpc-netty and netty are compatibility-coupled: each grpc-java release is
+    // tested against a specific netty line, so bump these two together
+    grpcVersion = '1.81.0'
+    // https://github.com/grpc/grpc-java/issues/7690
+    // https://github.com/grpc/grpc-java/pull/12319, Add support for macOS aarch64 with universal binary
+    // https://github.com/grpc/grpc-java/pull/11371 , 1.64.x is not supported CentOS 7.
+    protocGenVersion = isArm64 || isMac ? '1.81.0' : '1.60.0'
+    nettyVersion = '4.1.135.Final'
+    vertxVersion = '4.5.27'
 }
 
 allprojects {
@@ -73,12 +83,19 @@ allprojects {
 
     configurations.configureEach {
         resolutionStrategy {
+            // pin the advertised guava; otherwise resolution floats with grpc's requests
             force("com.google.guava:guava:$googleGuavaVersion")
-            force("com.squareup.okio:okio:3.9.0")
-            force("io.netty:netty-codec:4.1.125.Final")
-            force("io.netty:netty-codec-http:4.1.125.Final")
-            force("io.netty:netty-codec-http2:4.1.125.Final")
+            // checkstyle's build-time transitive; its 1.9.4 has CVE-2025-48734
             force("commons-beanutils:commons-beanutils:1.11.0")
+            // align netty transitives (grpc-netty/vertx). NOT a platform("io.netty:netty-bom"):
+            // the publish workflow copies implementation.allDependencies into the released POM,
+            // where a BOM surfaces as an unresolvable dependency. tcnative versions independently
+            eachDependency { details ->
+                if (details.requested.group == 'io.netty'
+                        && !details.requested.name.startsWith('netty-tcnative')) {
+                    details.useVersion(nettyVersion)
+                }
+            }
         }
     }
 
@@ -144,6 +161,7 @@ subprojects {
     checkstyle {
         toolVersion = "8.29"
         configFile = file("../config/checkstyle/checkStyleAll.xml")
+        maxWarnings = 0
     }
     checkstyleMain {
         source = 'src/main/java'
@@ -153,10 +171,6 @@ subprojects {
     checkstyleTest {
         source = files() //use empty files to ignore test class
     }
-}
-
-shadowJar {
-    zip64 = true
 }
 
 javadoc {

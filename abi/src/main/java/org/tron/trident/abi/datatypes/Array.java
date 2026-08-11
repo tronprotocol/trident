@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import org.tron.trident.abi.Utils;
 
 /**
  * Fixed size array.
@@ -58,8 +59,8 @@ public abstract class Array<T extends Type> implements Type<List<T>> {
   @Override
   public int bytes32PaddedLength() {
     int length = 0;
-    for (int i = 0; i < value.size(); i++) {
-      int valueLength = value.get(i).bytes32PaddedLength();
+    for (T t : value) {
+      int valueLength = t.bytes32PaddedLength();
       length += valueLength;
     }
     return length;
@@ -77,9 +78,54 @@ public abstract class Array<T extends Type> implements Type<List<T>> {
   @Override
   public abstract String getTypeAsString();
 
+  /**
+   * Computes the Solidity type string of this array's elements; the dynamic and static
+   * subclasses append their respective {@code []} / {@code [N]} suffix to it.
+   */
+  String getElementTypeAsString() {
+    if (value.isEmpty()) {
+      Class<T> componentType = getComponentType();
+      boolean genericStruct =
+          componentType == DynamicStruct.class || componentType == StaticStruct.class;
+      boolean rawArrayType =
+          componentType != null
+              && Array.class.isAssignableFrom(componentType)
+              && !StructType.class.isAssignableFrom(componentType);
+      if (componentType == null || genericStruct || rawArrayType) {
+        throw new UnsupportedOperationException(
+            "Cannot determine type string for empty array of generic struct "
+                + "or nested array type. Either construct the array with a "
+                + "concrete element type, or compute the type string externally "
+                + "from a TypeReference.");
+      }
+      if (StructType.class.isAssignableFrom(componentType)) {
+        return Utils.getStructType(componentType);
+      }
+      return AbiTypes.getTypeAString(componentType);
+    }
+    if (StructType.class.isAssignableFrom(value.get(0).getClass())
+        || Array.class.isAssignableFrom(value.get(0).getClass())) {
+      return value.get(0).getTypeAsString();
+    }
+    return AbiTypes.getTypeAString(getComponentType());
+  }
+
   private void checkValid(Class<T> type, List<T> values) {
     Objects.requireNonNull(type);
     Objects.requireNonNull(values);
+  }
+
+  /**
+   * Infers the component type from the first array element, for the deprecated subclass
+   * constructors that take values without an explicit element class.
+   */
+  @SuppressWarnings("unchecked")
+  static <T extends Type> Class<T> inferComponentType(T firstValue) {
+    if (StructType.class.isAssignableFrom(firstValue.getClass())
+        || Array.class.isAssignableFrom(firstValue.getClass())) {
+      return (Class<T>) firstValue.getClass();
+    }
+    return (Class<T>) AbiTypes.getType(firstValue.getTypeAsString());
   }
 
   @Override

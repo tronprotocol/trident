@@ -29,6 +29,15 @@ public class Address implements Type<String> {
 
   private final Uint value;
 
+  /**
+   * Stores the given {@link Uint} as-is, without normalizing its bit size to 160.
+   * {@link org.tron.trident.abi.TypeEncoder#encodePacked} slices by the stored bit
+   * size, so a 256-bit Uint packs to 32 bytes instead of the canonical 20.
+   *
+   * @deprecated use {@link #Address(BigInteger)} or {@link #Address(String)},
+   *     which normalize to 160 bits.
+   */
+  @Deprecated
   public Address(Uint value) {
     this.value = value;
   }

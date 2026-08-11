@@ -13,6 +13,8 @@
 
 package org.tron.trident.abi.datatypes;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * UTF-8 encoded string type.
  */
@@ -27,9 +29,15 @@ public class Utf8String implements Type<String> {
     this.value = value;
   }
 
+  /**
+   * Returns the Bytes32 Padded length. If the string is empty, we only encode its length. Else,
+   * we concatenate its length along of its value
+   */
   @Override
   public int bytes32PaddedLength() {
-    return 2 * MAX_BYTE_LENGTH;
+    int length = value == null ? 0 : value.getBytes(StandardCharsets.UTF_8).length;
+    int count = (int) Math.ceil((double) length / MAX_BYTE_LENGTH);
+    return Math.addExact(MAX_BYTE_LENGTH, Math.multiplyExact(count, MAX_BYTE_LENGTH));
   }
 
   @Override

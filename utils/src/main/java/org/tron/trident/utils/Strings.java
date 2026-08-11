@@ -14,6 +14,7 @@
 package org.tron.trident.utils;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * String utility functions.
@@ -36,7 +37,7 @@ public class Strings {
     if (string == null || string.length() == 0) {
       return string;
     } else {
-      return string.substring(0, 1).toUpperCase() + string.substring(1);
+      return string.substring(0, 1).toUpperCase(Locale.ROOT) + string.substring(1);
     }
   }
 
@@ -44,7 +45,7 @@ public class Strings {
     if (string == null || string.length() == 0) {
       return string;
     } else {
-      return string.substring(0, 1).toLowerCase() + string.substring(1);
+      return string.substring(0, 1).toLowerCase(Locale.ROOT) + string.substring(1);
     }
   }
 

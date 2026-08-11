@@ -17,6 +17,7 @@ import java.math.BigInteger;
 import java.util.List;
 import org.tron.trident.abi.datatypes.Function;
 import org.tron.trident.abi.datatypes.StaticArray;
+import org.tron.trident.abi.datatypes.StaticStruct;
 import org.tron.trident.abi.datatypes.Type;
 import org.tron.trident.abi.datatypes.Uint;
 
@@ -64,11 +65,53 @@ public class DefaultFunctionEncoder extends FunctionEncoder {
     return result.toString();
   }
 
+  /**
+   * Encodes a function call including its method signature (selector) and its parameters.
+   *
+   * @param methodId   the 4-byte selector (8 hex chars)
+   * @param parameters the list of parameters to encode
+   * @return the complete ABI-encoded hex string representing the function call
+   */
+  public String encodeWithSelector(String methodId, List<Type> parameters) {
+    final StringBuilder result = new StringBuilder(methodId);
+
+    return encodeParameters(parameters, result);
+  }
+
+  /**
+   * Encodes parameters using tight packing (abi.encodePacked).
+   * This is a non-standard ABI encoding used primarily for computing hashes,
+   * where padding is omitted and dynamic types are concatenated without length prefixes.
+   *
+   * @param parameters the list of parameters to pack
+   * @return the packed ABI-encoded hex string
+   */
+  @Override
+  protected String encodePackedParameters(List<Type> parameters) {
+    final StringBuilder result = new StringBuilder();
+    for (Type parameter : parameters) {
+      result.append(TypeEncoder.encodePacked(parameter));
+    }
+    return result.toString();
+  }
+
+  /**
+   * Calculates the length of the tuple head (in 32-byte slots) required for the given parameters.
+   * Crucially, all dynamic types (including StaticArrays containing dynamic elements) always occupy exactly 
+   * 1 slot in the head (for the offset pointer). Pure static arrays and structs are flattened to calculate 
+   * their total inline slot requirement.
+   *
+   * @param parameters the list of types to be encoded.
+   * @return the total number of 32-byte slots required for the tuple head.
+   */
+  @SuppressWarnings("unchecked")
   private static int getLength(final List<Type> parameters) {
     int count = 0;
     for (final Type type : parameters) {
-      if (type instanceof StaticArray) {
-        count += ((StaticArray) type).getValue().size();
+      if (TypeEncoder.isDynamic(type)) {
+        count++;
+      } else if (type instanceof StaticArray || type instanceof StaticStruct) {
+        count += type.bytes32PaddedLength() / Type.MAX_BYTE_LENGTH;
       } else {
         count++;
       }

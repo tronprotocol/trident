@@ -13,10 +13,13 @@
 
 package org.tron.trident.abi;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
+import org.tron.trident.abi.datatypes.Address;
+import org.tron.trident.abi.datatypes.DynamicBytes;
 import org.tron.trident.abi.datatypes.Type;
 import org.tron.trident.abi.spi.FunctionReturnDecoderProvider;
 
@@ -32,10 +35,15 @@ import org.tron.trident.abi.spi.FunctionReturnDecoderProvider;
  */
 public abstract class FunctionReturnDecoder {
 
-  private static FunctionReturnDecoder DEFAULT_DECODER;
+  private static final FunctionReturnDecoder decoder;
 
-  private static final ServiceLoader<FunctionReturnDecoderProvider> loader =
-      ServiceLoader.load(FunctionReturnDecoderProvider.class);
+  static {
+    ServiceLoader<FunctionReturnDecoderProvider> loader =
+            ServiceLoader.load(FunctionReturnDecoderProvider.class);
+    final Iterator<FunctionReturnDecoderProvider> iterator = loader.iterator();
+
+    decoder = iterator.hasNext() ? iterator.next().get() : new DefaultFunctionReturnDecoder();
+  }
 
   /**
    * Decode ABI encoded return values from smart contract function call.
@@ -46,8 +54,34 @@ public abstract class FunctionReturnDecoder {
    * invalid response
    */
   public static List<Type> decode(String rawInput, List<TypeReference<Type>> outputParameters) {
-    return decoder().decodeFunctionResult(rawInput, outputParameters);
+    return decoder.decodeFunctionResult(rawInput, outputParameters);
   }
+
+  /**
+   * Decode ABI encoded return value DynamicBytes from smart contract function call.
+   *
+   * @param rawInput ABI encoded input
+   * @return the raw {@code byte[]} value of the decoded {@link DynamicBytes}, null if invalid
+   * response
+   */
+  public static byte[] decodeDynamicBytes(String rawInput) {
+    List outputParameters = new ArrayList<TypeReference<Type>>();
+    outputParameters.add(new TypeReference<DynamicBytes>() {});
+
+    List<Type> typeList = decoder.decodeFunctionResult(rawInput, outputParameters);
+
+    return typeList.isEmpty() ? null : ((DynamicBytes) typeList.get(0)).getValue();
+  }
+
+  public static String decodeAddress(String rawInput) {
+    List outputParameters = new ArrayList<TypeReference<Type>>();
+    outputParameters.add(new TypeReference<Address>() {});
+
+    List<Type> typeList = decoder.decodeFunctionResult(rawInput, outputParameters);
+
+    return typeList.isEmpty() ? null : ((Address) typeList.get(0)).getValue();
+  }
+
 
   /**
    * Decodes an indexed parameter associated with an event. Indexed parameters are individually
@@ -73,7 +107,7 @@ public abstract class FunctionReturnDecoder {
    */
   public static <T extends Type> Type decodeIndexedValue(
       String rawInput, TypeReference<T> typeReference) {
-    return decoder().decodeEventParameter(rawInput, typeReference);
+    return decoder.decodeEventParameter(rawInput, typeReference);
   }
 
   protected abstract List<Type> decodeFunctionResult(
@@ -82,15 +116,4 @@ public abstract class FunctionReturnDecoder {
   protected abstract <T extends Type> Type decodeEventParameter(
       String rawInput, TypeReference<T> typeReference);
 
-  private static FunctionReturnDecoder decoder() {
-    final Iterator<FunctionReturnDecoderProvider> iterator = loader.iterator();
-    return iterator.hasNext() ? iterator.next().get() : defaultDecoder();
-  }
-
-  private static FunctionReturnDecoder defaultDecoder() {
-    if (DEFAULT_DECODER == null) {
-      DEFAULT_DECODER = new DefaultFunctionReturnDecoder();
-    }
-    return DEFAULT_DECODER;
-  }
 }

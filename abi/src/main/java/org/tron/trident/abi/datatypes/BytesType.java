@@ -30,7 +30,12 @@ public abstract class BytesType implements Type<byte[]> {
 
   @Override
   public int bytes32PaddedLength() {
-    return value.length * 32;
+    if (value.length < MAX_BYTE_LENGTH) {
+      return MAX_BYTE_LENGTH;
+    } else if (value.length % MAX_BYTE_LENGTH == 0) {
+      return value.length;
+    }
+    return (value.length / MAX_BYTE_LENGTH + 1) * MAX_BYTE_LENGTH;
   }
 
   @Override

@@ -13,6 +13,9 @@
 
 package org.tron.trident.abi;
 
+import static org.tron.trident.abi.TypeDecoder.instantiateType;
+import static org.tron.trident.abi.TypeReference.makeTypeReference;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -32,19 +35,35 @@ import org.tron.trident.utils.Numeric;
  * @see DefaultFunctionEncoder
  * @see FunctionEncoderProvider
  */
+
 public abstract class FunctionEncoder {
 
-  private static FunctionEncoder DEFAULT_ENCODER;
+  private static final FunctionEncoder FUNCTION_ENCODER;
 
-  private static final ServiceLoader<FunctionEncoderProvider> loader =
-      ServiceLoader.load(FunctionEncoderProvider.class);
+  static {
+    ServiceLoader<FunctionEncoderProvider> loader =
+            ServiceLoader.load(FunctionEncoderProvider.class);
+    final Iterator<FunctionEncoderProvider> iterator = loader.iterator();
+
+    FUNCTION_ENCODER =
+            iterator.hasNext() ? iterator.next().get() : new DefaultFunctionEncoder();
+  }
 
   public static String encode(final Function function) {
-    return encoder().encodeFunction(function);
+    return FUNCTION_ENCODER.encodeFunction(function);
+  }
+
+  /** Encode function when we know function method Id / Selector. */
+  public static String encode(final String methodId, final List<Type> parameters) {
+    return FUNCTION_ENCODER.encodeWithSelector(methodId, parameters);
   }
 
   public static String encodeConstructor(final List<Type> parameters) {
-    return encoder().encodeParameters(parameters);
+    return FUNCTION_ENCODER.encodeParameters(parameters);
+  }
+
+  public static String encodeConstructorPacked(final List<Type> parameters) {
+    return FUNCTION_ENCODER.encodePackedParameters(parameters);
   }
 
   public static Function makeFunction(
@@ -52,16 +71,19 @@ public abstract class FunctionEncoder {
       List<String> solidityInputTypes,
       List<Object> arguments,
       List<String> solidityOutputTypes)
-      throws ClassNotFoundException, NoSuchMethodException, InstantiationException,
-      IllegalAccessException, InvocationTargetException {
+      throws ClassNotFoundException,
+            NoSuchMethodException,
+            InstantiationException,
+            IllegalAccessException,
+            InvocationTargetException {
     List<Type> encodedInput = new ArrayList<>();
     Iterator argit = arguments.iterator();
     for (String st : solidityInputTypes) {
-      encodedInput.add(TypeDecoder.instantiateType(st, argit.next()));
+      encodedInput.add(instantiateType(st, argit.next()));
     }
     List<TypeReference<?>> encodedOutput = new ArrayList<>();
     for (String st : solidityOutputTypes) {
-      encodedOutput.add(TypeReference.makeTypeReference(st));
+      encodedOutput.add(makeTypeReference(st));
     }
     return new Function(fnname, encodedInput, encodedOutput);
   }
@@ -69,6 +91,32 @@ public abstract class FunctionEncoder {
   protected abstract String encodeFunction(Function function);
 
   protected abstract String encodeParameters(List<Type> parameters);
+
+  /**
+   * Encodes parameters prefixed with the given selector. Not part of the original
+   * subclass contract: implementations predating it inherit this throwing default,
+   * so the pre-existing entry points keep working and only the newer
+   * {@link #encode(String, List)} fails, with a clear message.
+   *
+   * @param methodId Callback selector / Abi method Id (Hex format)
+   */
+  protected String encodeWithSelector(
+          final String methodId, final List<Type> parameters) {
+    throw new UnsupportedOperationException(
+            "encodeWithSelector is not implemented by " + getClass().getName()
+                    + "; override it to support FunctionEncoder.encode(methodId, parameters)");
+  }
+
+  /**
+   * Encodes parameters using tight packing (abi.encodePacked). Not part of the
+   * original subclass contract; see {@link #encodeWithSelector(String, List)}.
+   */
+  protected String encodePackedParameters(List<Type> parameters) {
+    throw new UnsupportedOperationException(
+            "encodePackedParameters is not implemented by " + getClass().getName()
+                + "; override it to support "
+                + "FunctionEncoder.encodeConstructorPacked(parameters)");
+  }
 
   protected static String buildMethodSignature(
       final String methodName, final List<Type> parameters) {
@@ -87,17 +135,5 @@ public abstract class FunctionEncoder {
     final byte[] input = methodSignature.getBytes();
     final byte[] hash = Hash.sha3(input);
     return Numeric.toHexString(hash).substring(2, 10);
-  }
-
-  private static FunctionEncoder encoder() {
-    final Iterator<FunctionEncoderProvider> iterator = loader.iterator();
-    return iterator.hasNext() ? iterator.next().get() : defaultEncoder();
-  }
-
-  private static FunctionEncoder defaultEncoder() {
-    if (DEFAULT_ENCODER == null) {
-      DEFAULT_ENCODER = new DefaultFunctionEncoder();
-    }
-    return DEFAULT_ENCODER;
   }
 }

@@ -6,19 +6,22 @@ import static org.tron.trident.core.utils.TokenValidator.validateTokenId;
 import static org.tron.trident.core.utils.TokenValidator.validateTokenValue;
 import static org.tron.trident.core.utils.Utils.encodeParameter;
 
+import com.google.common.base.Preconditions;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Message;
+import io.grpc.ChannelCredentials;
 import io.grpc.ClientInterceptor;
+import io.grpc.Grpc;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
-import io.grpc.Metadata;
-import io.grpc.stub.MetadataUtils;
-import java.util.ArrayList;
+import io.grpc.TlsChannelCredentials;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import lombok.Getter;
 import org.bouncycastle.jcajce.provider.digest.SHA256;
 import org.tron.trident.abi.FunctionEncoder;
@@ -45,7 +48,6 @@ import org.tron.trident.core.account.AccountPermissions;
 import org.tron.trident.core.contract.Contract;
 import org.tron.trident.core.contract.ContractFunction;
 import org.tron.trident.core.exceptions.IllegalException;
-import org.tron.trident.core.interceptor.TimeoutInterceptor;
 import org.tron.trident.core.key.KeyPair;
 import org.tron.trident.core.transaction.BlockId;
 import org.tron.trident.core.transaction.TransactionBuilder;
@@ -130,14 +132,30 @@ import org.tron.trident.proto.Response.TransactionSignWeight;
 import org.tron.trident.proto.Response.WitnessList;
 import org.tron.trident.utils.Base58Check;
 import org.tron.trident.utils.Numeric;
+import org.tron.trident.utils.Strings;
 
 /**
- * A {@code ApiWrapper} object is the entry point for calling the functions.
+ * The entry point for interacting with the TRON network.
  *
- * <p>A {@code ApiWrapper} object is bind with a private key and a full node.
- * {@link #broadcastTransaction}, {@link #signTransaction} and other transaction related
- * operations can be done via a {@code ApiWrapper} object.</p>
+ * <p>An {@code ApiWrapper} instance is bound to a full node and allows performing various
+ * operations such as {@link #broadcastTransaction}, {@link #signTransaction}, and other
+ * transaction-related actions.</p>
  *
+ * <p>It is recommended to use the Builder pattern to create an instance. For example:</p>
+ *
+ * <pre>{@code
+ * // Full-featured client with both FullNode and SolidityNode access
+ * ApiWrapper client = new ApiWrapperBuilder(grpcEndpoint, grpcEndpointSolidity, privateKey)
+ *     .withApiKey("your-api-key")       // Optional: set API key for TronGrid
+ *     .withTLS()                        // Optional: enable TLS, use withTLS(new File("xxx.crt"))
+ *     .withTimeout(5000)                // Optional: set request timeout in milliseconds
+ *     .build();
+ *
+ * // Simple client for FullNode queries only
+ * ApiWrapper client = new ApiWrapperBuilder(grpcEndpoint).build();
+ * }</pre>
+ *
+ * <p>Use {@code ApiWrapper} to interact with contracts and transactions on the TRON network.</p>
  * @see org.tron.trident.core.contract.Contract
  * @see org.tron.trident.proto.Chain.Transaction
  * @see org.tron.trident.proto.Contract
@@ -145,6 +163,11 @@ import org.tron.trident.utils.Numeric;
  */
 
 public class ApiWrapper implements Api {
+
+  private static final String KEY_PAIR_NOT_SET = "keyPair is null, should set privateKey";
+  private static final long CLOSE_TIMEOUT_SECONDS = 5;
+  // upper bound for any supported address form (base58: 34, hex: 42, 0x-hex: 44);
+  private static final int MAX_ADDRESS_LENGTH = 44;
 
   public final WalletGrpc.WalletBlockingStub blockingStub;
   public final WalletSolidityGrpc.WalletSolidityBlockingStub blockingStubSolidity;
@@ -174,114 +197,115 @@ public class ApiWrapper implements Api {
   @Getter
   private long expireTimeStamp = -1;
 
-  public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey) {
-    channel = ManagedChannelBuilder.forTarget(grpcEndpoint)
-        .usePlaintext()
-        .build();
-    channelSolidity = ManagedChannelBuilder.forTarget(grpcEndpointSolidity)
-        .usePlaintext()
-        .build();
+  public ApiWrapper(ApiWrapperBuilder builder) {
+    keyPair = Strings.isEmpty(builder.getHexPrivateKey()) ? null : new KeyPair(
+        builder.getHexPrivateKey());
+
+    // Build channels with interceptors and Create stubs
+    channel = buildChannel(builder, builder.getGrpcEndpoint());
     blockingStub = WalletGrpc.newBlockingStub(channel);
-    blockingStubSolidity = WalletSolidityGrpc.newBlockingStub(channelSolidity);
-    keyPair = new KeyPair(hexPrivateKey);
+
+    if (builder.getGrpcEndpointSolidity() != null) {
+      try {
+        channelSolidity = buildChannel(builder, builder.getGrpcEndpointSolidity());
+      } catch (RuntimeException e) {
+        channel.shutdown();
+        throw e;
+      }
+      blockingStubSolidity = WalletSolidityGrpc.newBlockingStub(channelSolidity);
+    } else {
+      channelSolidity = null;
+      blockingStubSolidity = null;
+    }
   }
 
-  public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey,
-      String apiKey) {
-    channel = ManagedChannelBuilder.forTarget(grpcEndpoint)
-        .usePlaintext()
-        .build();
-    channelSolidity = ManagedChannelBuilder.forTarget(grpcEndpointSolidity)
-        .usePlaintext()
-        .build();
+  private ManagedChannel buildChannel(ApiWrapperBuilder builder, String target) {
+    ManagedChannelBuilder<?> channelBuilder;
+    if (!builder.isUseTLS()) {
+      channelBuilder =  ManagedChannelBuilder.forTarget(target).usePlaintext();
+    } else {
+      try {
+        ChannelCredentials credentials = builder.getTrustCert() == null
+            ? TlsChannelCredentials.create()
+            : TlsChannelCredentials.newBuilder().trustManager(builder.getTrustCert()).build();
 
-    //attach api key
-    Metadata header = new Metadata();
-    Metadata.Key<String> key = Metadata.Key.of("TRON-PRO-API-KEY",
-        Metadata.ASCII_STRING_MARSHALLER);
-    header.put(key, apiKey);
-
-    //create a client to interceptor to attach the custom metadata headers
-    blockingStub = WalletGrpc.newBlockingStub(channel)
-        .withInterceptors(MetadataUtils.newAttachHeadersInterceptor(header));
-    blockingStubSolidity = WalletSolidityGrpc.newBlockingStub(channelSolidity)
-        .withInterceptors(MetadataUtils.newAttachHeadersInterceptor(header));
-
-    keyPair = new KeyPair(hexPrivateKey);
-  }
-
-  public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey,
-      List<ClientInterceptor> clientInterceptors) {
-    channel = ManagedChannelBuilder.forTarget(grpcEndpoint)
-        .intercept(clientInterceptors)
-        .usePlaintext()
-        .build();
-    channelSolidity = ManagedChannelBuilder.forTarget(grpcEndpointSolidity)
-        .intercept(clientInterceptors)
-        .usePlaintext()
-        .build();
-    blockingStub = WalletGrpc.newBlockingStub(channel);
-    blockingStubSolidity = WalletSolidityGrpc.newBlockingStub(channelSolidity);
-    keyPair = new KeyPair(hexPrivateKey);
-  }
-
-  /*
-     constructor enable setting timeout
-   */
-  public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey,
-      int timeout) {
-    channel = ManagedChannelBuilder.forTarget(grpcEndpoint)
-        .usePlaintext()
-        .intercept(new TimeoutInterceptor(timeout))
-        .build();
-    channelSolidity = ManagedChannelBuilder.forTarget(grpcEndpointSolidity)
-        .usePlaintext()
-        .intercept(new TimeoutInterceptor(timeout))
-        .build();
-    blockingStub = WalletGrpc.newBlockingStub(channel);
-    blockingStubSolidity = WalletSolidityGrpc.newBlockingStub(channelSolidity);
-    keyPair = new KeyPair(hexPrivateKey);
-  }
-
-  /*
-     constructor enable setting timeout and custom interceptors
-   */
-  public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey,
-      List<ClientInterceptor> clientInterceptors, int timeout) {
-
-    List<ClientInterceptor> clientInterceptorList = new ArrayList<>();
-    // first set timeout to ensure the configuration takes effect
-    clientInterceptorList.add(new TimeoutInterceptor(timeout));
-
-    if (clientInterceptors != null) {
-      clientInterceptors.stream()
-          .filter(Objects::nonNull)
-          .forEach(clientInterceptorList::add);
+        channelBuilder = Grpc.newChannelBuilder(target, credentials);
+      } catch (IOException e) {
+        throw new RuntimeException("Failed to create TLS channel", e);
+      }
     }
 
-    channel = ManagedChannelBuilder.forTarget(grpcEndpoint)
-        .usePlaintext()
-        .intercept(clientInterceptorList)
-        .build();
-    channelSolidity = ManagedChannelBuilder.forTarget(grpcEndpointSolidity)
-        .usePlaintext()
-        .intercept(clientInterceptorList)
-        .build();
-    blockingStub = WalletGrpc.newBlockingStub(channel);
-    blockingStubSolidity = WalletSolidityGrpc.newBlockingStub(channelSolidity);
-    keyPair = new KeyPair(hexPrivateKey);
+    List<ClientInterceptor> interceptors = builder.buildInterceptors();
+    if (!interceptors.isEmpty()) {
+      channelBuilder.intercept(interceptors);
+    }
+    return channelBuilder.build();
   }
 
   /**
-   * The constructor for main net. Use TronGrid as default
+   * @deprecated Since 1.0.0, scheduled for removal in future versions. Recommend using Builder pattern to create ApiWrapper
+   * @see ApiWrapperBuilder
+   */
+  @Deprecated
+  public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey) {
+    this(new ApiWrapperBuilder(grpcEndpoint, grpcEndpointSolidity, hexPrivateKey));
+  }
+
+  /**
+   * @deprecated Since 1.0.0, scheduled for removal in future versions. Recommend using Builder pattern to create ApiWrapper
+   * @see ApiWrapperBuilder
+   */
+  @Deprecated
+  public ApiWrapper(
+          String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey, String apiKey) {
+    this(new ApiWrapperBuilder(grpcEndpoint, grpcEndpointSolidity, hexPrivateKey)
+        .withApiKey(apiKey));
+  }
+
+  /**
+   * @deprecated Since 1.0.0, scheduled for removal in future versions. Recommend using Builder pattern to create ApiWrapper
+   * @see ApiWrapperBuilder
+   */
+  @Deprecated
+  public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey,
+                    List<ClientInterceptor> clientInterceptors) {
+    this(new ApiWrapperBuilder(grpcEndpoint, grpcEndpointSolidity, hexPrivateKey)
+            .addInterceptors(clientInterceptors));
+  }
+
+  /**
+   * @deprecated Since 1.0.0, scheduled for removal in future versions. Recommend using Builder pattern to create ApiWrapper
+   * @see ApiWrapperBuilder
+   */
+  @Deprecated
+  public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey,
+                    int timeout) {
+    this(new ApiWrapperBuilder(grpcEndpoint, grpcEndpointSolidity, hexPrivateKey)
+        .withTimeout(timeout));
+  }
+
+  /**
+   * @deprecated Since 1.0.0, scheduled for removal in future versions. Recommend using Builder pattern to create ApiWrapper
+   * @see ApiWrapperBuilder
+   */
+  @Deprecated
+  public ApiWrapper(String grpcEndpoint, String grpcEndpointSolidity, String hexPrivateKey,
+                    List<ClientInterceptor> clientInterceptors, int timeout) {
+    this(new ApiWrapperBuilder(grpcEndpoint, grpcEndpointSolidity, hexPrivateKey)
+            .addInterceptors(clientInterceptors)
+            .withTimeout(timeout));
+  }
+
+  /**
+   * The constructor for the main net. Use TronGrid as default
    *
    * @param hexPrivateKey the binding private key. Operations require private key will all use this unless the private key is specified elsewhere.
    * @param apiKey this function works with TronGrid, an API key is required.
    * @return a ApiWrapper object
    */
   public static ApiWrapper ofMainnet(String hexPrivateKey, String apiKey) {
-    return new ApiWrapper(Constant.TRONGRID_MAIN_NET, Constant.TRONGRID_MAIN_NET_SOLIDITY,
-        hexPrivateKey, apiKey);
+    return new ApiWrapperBuilder(Constant.TRONGRID_MAIN_NET, Constant.TRONGRID_MAIN_NET_SOLIDITY,
+        hexPrivateKey).withApiKey(apiKey).build();
   }
 
   /**
@@ -294,8 +318,8 @@ public class ApiWrapper implements Api {
    */
   @Deprecated
   public static ApiWrapper ofMainnet(String hexPrivateKey) {
-    return new ApiWrapper(Constant.TRONGRID_MAIN_NET, Constant.TRONGRID_MAIN_NET_SOLIDITY,
-        hexPrivateKey);
+    return new ApiWrapperBuilder(Constant.TRONGRID_MAIN_NET, Constant.TRONGRID_MAIN_NET_SOLIDITY,
+        hexPrivateKey).build();
   }
 
   /**
@@ -305,8 +329,8 @@ public class ApiWrapper implements Api {
    * @return a ApiWrapper object
    */
   public static ApiWrapper ofShasta(String hexPrivateKey) {
-    return new ApiWrapper(Constant.TRONGRID_SHASTA, Constant.TRONGRID_SHASTA_SOLIDITY,
-        hexPrivateKey);
+    return new ApiWrapperBuilder(Constant.TRONGRID_SHASTA, Constant.TRONGRID_SHASTA_SOLIDITY,
+        hexPrivateKey).build();
   }
 
   /**
@@ -316,7 +340,8 @@ public class ApiWrapper implements Api {
    * @return a ApiWrapper object
    */
   public static ApiWrapper ofNile(String hexPrivateKey) {
-    return new ApiWrapper(Constant.FULLNODE_NILE, Constant.FULLNODE_NILE_SOLIDITY, hexPrivateKey);
+    return new ApiWrapperBuilder(Constant.FULLNODE_NILE, Constant.FULLNODE_NILE_SOLIDITY,
+       hexPrivateKey).build();
   }
 
   /**
@@ -367,16 +392,30 @@ public class ApiWrapper implements Api {
   /**
    * The function receives addresses in any formats.
    *
-   * @param address account or contract address in any allowed formats.
+   * @param address account or contract address in any allowed formats. An empty string
+   *     returns {@link ByteString#EMPTY}, which leaves the protobuf address field unset.
    * @return hex address
+   * @throws IllegalArgumentException if the decoded address is not a valid TRON address
    */
   public static ByteString parseAddress(String address) {
-    byte[] raw;
-    if (address.startsWith("T")) {
-      raw = Base58Check.base58ToBytes(address);
-    } else {
-      raw = ByteArray.fromHexString(address);
+    Preconditions.checkNotNull(address, "address is null");
+    Preconditions.checkArgument(address.length() <= MAX_ADDRESS_LENGTH,
+        "invalid address length: " + address.length());
+    if (address.isEmpty()) {
+      return ByteString.EMPTY;
     }
+    byte[] raw;
+    try {
+      if (address.startsWith("T")) {
+        raw = Base58Check.base58ToBytes(address);
+      } else {
+        raw = ByteArray.fromHexString(address);
+      }
+    } catch (Exception e) {
+      throw new IllegalArgumentException(
+          "invalid address: " + address + " (" + e.getMessage() + ")");
+    }
+    Preconditions.checkArgument(Utils.addressValid(raw), "invalid address: " + address);
     return ByteString.copyFrom(raw);
   }
 
@@ -407,7 +446,6 @@ public class ApiWrapper implements Api {
    * @throws IllegalArgumentException if the input is null, empty, or contains invalid node type
    */
   private boolean useSolidityNode(NodeType... nodeType) {
-
     // check null
     if (nodeType == null) {
       throw new IllegalArgumentException("nodeType should not be null");
@@ -435,7 +473,20 @@ public class ApiWrapper implements Api {
       throw new IllegalArgumentException("only one nodeType is allowed");
     }
 
-    return nodeType[0] == NodeType.SOLIDITY_NODE;
+    if (nodeType[0] == NodeType.SOLIDITY_NODE) {
+      checkSolidityChannel();
+      return true;
+    }
+
+    return false;
+  }
+
+  private void checkSolidityChannel() {
+    if (this.channelSolidity == null
+        || this.channelSolidity.isShutdown()
+        || this.channelSolidity.isTerminated()) {
+      throw new IllegalStateException("the channelSolidity is null or closed");
+    }
   }
 
   public static VoteWitnessContract createVoteWitnessContract(ByteString ownerAddress,
@@ -504,18 +555,50 @@ public class ApiWrapper implements Api {
 
   public void close() {
     channel.shutdown();
-    channelSolidity.shutdown();
+    if (channelSolidity != null) {
+      channelSolidity.shutdown();
+    }
+    awaitTermination(channel);
+    if (channelSolidity != null) {
+      awaitTermination(channelSolidity);
+    }
+  }
+
+  private void awaitTermination(ManagedChannel channel) {
+    try {
+      if (!channel.awaitTermination(CLOSE_TIMEOUT_SECONDS, TimeUnit.SECONDS)) {
+        channel.shutdownNow();
+        channel.awaitTermination(CLOSE_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+      }
+    } catch (InterruptedException e) {
+      channel.shutdownNow();
+      Thread.currentThread().interrupt();
+    }
   }
 
   @Override
   public Transaction signTransaction(TransactionExtention txnExt, KeyPair keyPair) {
-    byte[] txId = txnExt.getTxid().toByteArray();
+    Preconditions.checkArgument(keyPair != null, "keyPair is null");
+    if (txnExt.getTransaction().getRawData().getSerializedSize() == 0) {
+      String detail = txnExt.getResult().getMessage().toStringUtf8();
+      throw new IllegalArgumentException(
+          "txnExt carries no transaction" + (detail.isEmpty() ? "" : ": " + detail));
+    }
+    ByteString providedTxid = txnExt.getTxid();
+    Preconditions.checkArgument(!providedTxid.isEmpty(),
+        "txnExt has no txid");
+    byte[] txId = calculateTransactionHash(txnExt.getTransaction());
+    Preconditions.checkArgument(Arrays.equals(txId, providedTxid.toByteArray()),
+        "txid does not match the transaction raw data");
     byte[] signature = KeyPair.signTransaction(txId, keyPair);
     return txnExt.getTransaction().toBuilder().addSignature(ByteString.copyFrom(signature)).build();
   }
 
   @Override
   public Transaction signTransaction(Transaction txn, KeyPair keyPair) {
+    Preconditions.checkArgument(keyPair != null, "keyPair is null");
+    Preconditions.checkArgument(txn.getRawData().getSerializedSize() > 0,
+        "transaction raw data is empty");
     byte[] txId = calculateTransactionHash(txn);
     byte[] signature = KeyPair.signTransaction(txId, keyPair);
     return txn.toBuilder().addSignature(ByteString.copyFrom(signature)).build();
@@ -523,11 +606,13 @@ public class ApiWrapper implements Api {
 
   @Override
   public Transaction signTransaction(TransactionExtention txnExt) {
+    Preconditions.checkArgument(keyPair != null, KEY_PAIR_NOT_SET);
     return signTransaction(txnExt, keyPair);
   }
 
   @Override
   public Transaction signTransaction(Transaction txn) {
+    Preconditions.checkArgument(keyPair != null, KEY_PAIR_NOT_SET);
     return signTransaction(txn, keyPair);
   }
 
@@ -572,6 +657,7 @@ public class ApiWrapper implements Api {
       solidHeadBlockId = referHeadBlockId;
       transactionExpireTimeStamp = expireTimeStamp;
     } else {
+      checkSolidityChannel();
       BlockReq blockReq = BlockReq.newBuilder().setDetail(false).build();
       BlockExtention solidHeadBlock = blockingStubSolidity.getBlock(blockReq);
       solidHeadBlockId = Utils.getBlockId(solidHeadBlock);
@@ -764,15 +850,13 @@ public class ApiWrapper implements Api {
   @Override
   public TransactionExtention freezeBalance(String ownerAddress, long frozenBalance,
       int frozenDuration, int resourceCode, String receiveAddress) throws IllegalException {
-    ByteString rawFrom = parseAddress(ownerAddress);
-    ByteString rawReceiveFrom = parseAddress(receiveAddress);
     FreezeBalanceContract freezeBalanceContract =
         FreezeBalanceContract.newBuilder()
-            .setOwnerAddress(rawFrom)
+            .setOwnerAddress(parseAddress(ownerAddress))
             .setFrozenBalance(frozenBalance)
             .setFrozenDuration(frozenDuration)
             .setResourceValue(resourceCode)
-            .setReceiverAddress(rawReceiveFrom)
+            .setReceiverAddress(parseAddress(receiveAddress))
             .build();
     return createTransactionExtention(freezeBalanceContract,
         Transaction.Contract.ContractType.FreezeBalanceContract);
@@ -2129,6 +2213,7 @@ public class ApiWrapper implements Api {
   @Deprecated
   @Override
   public Account getAccountSolidity(String address) {
+    checkSolidityChannel();
     ByteString bsAddress = parseAddress(address);
     AccountAddressMessage accountAddressMessage = AccountAddressMessage.newBuilder()
         .setAddress(bsAddress)
@@ -2149,6 +2234,7 @@ public class ApiWrapper implements Api {
   @Override
   public TransactionInfoList getTransactionInfoByBlockNumSolidity(long blockNum)
       throws IllegalException {
+    checkSolidityChannel();
     if (blockNum < 0) {
       throw new IllegalException("blockNum must be >= 0");
     }
@@ -2167,6 +2253,8 @@ public class ApiWrapper implements Api {
   @Deprecated
   @Override
   public BlockExtention getNowBlockSolidity() throws IllegalException {
+
+    checkSolidityChannel();
     BlockExtention blockExtention = blockingStubSolidity.getNowBlock2(
         EmptyMessage.newBuilder().build());
 
@@ -2188,6 +2276,9 @@ public class ApiWrapper implements Api {
   @Deprecated
   @Override
   public Transaction getTransactionByIdSolidity(String txID) throws IllegalException {
+
+    checkSolidityChannel();
+
     ByteString bsTxId = ByteString.copyFrom(ByteArray.fromHexString(txID));
     BytesMessage request = BytesMessage.newBuilder()
         .setValue(bsTxId)
@@ -2231,6 +2322,7 @@ public class ApiWrapper implements Api {
   @Deprecated
   @Override
   public NumberMessage getRewardSolidity(String address) {
+    checkSolidityChannel();
     ByteString bsAddress = parseAddress(address);
     BytesMessage bytesMessage = BytesMessage.newBuilder()
         .setValue(bsAddress)
@@ -2877,6 +2969,7 @@ public class ApiWrapper implements Api {
   @Deprecated
   @Override
   public PricesResponseMessage getBandwidthPricesOnSolidity() {
+    checkSolidityChannel();
     return blockingStubSolidity.getBandwidthPrices(EmptyMessage.getDefaultInstance());
   }
 
@@ -2894,6 +2987,7 @@ public class ApiWrapper implements Api {
   @Deprecated
   @Override
   public PricesResponseMessage getEnergyPricesOnSolidity() {
+    checkSolidityChannel();
     return blockingStubSolidity.getEnergyPrices(EmptyMessage.getDefaultInstance());
   }
 
@@ -3445,6 +3539,7 @@ public class ApiWrapper implements Api {
     validateCallValue(callValue);
     validateTokenId(tokenId);
     validateTokenValue(tokenValue);
+    Preconditions.checkArgument(keyPair != null, KEY_PAIR_NOT_SET);
     if (constructorParams != null && !constructorParams.isEmpty()) {
       ByteString constructorParamsByteString = encodeParameter(constructorParams);
       ByteString newByteCode = ByteString.copyFrom(ByteArray.fromHexString(bytecode))

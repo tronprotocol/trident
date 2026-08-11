@@ -25,6 +25,7 @@ public class DynamicStruct extends DynamicArray<Type> implements StructType {
     this(Type.class, values);
   }
 
+  @SuppressWarnings("unchecked")
   private DynamicStruct(Class<Type> type, List<Type> values) {
     super(type, values);
     for (Type value : values) {
@@ -51,7 +52,7 @@ public class DynamicStruct extends DynamicArray<Type> implements StructType {
     final StringBuilder type = new StringBuilder("(");
     for (int i = 0; i < itemTypes.size(); ++i) {
       final Class<Type> cls = itemTypes.get(i);
-      if (StructType.class.isAssignableFrom(cls)) {
+      if (StructType.class.isAssignableFrom(cls) || Array.class.isAssignableFrom(cls)) {
         type.append(getValue().get(i).getTypeAsString());
       } else {
         type.append(AbiTypes.getTypeAString(cls));

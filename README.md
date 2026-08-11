@@ -21,7 +21,7 @@ The latest version (built with JDK 1.8) can be found on [Maven Central](https://
 ### Gradle
 
 ```groovy
-implementation("io.github.tronprotocol:trident:0.11.0")
+implementation("io.github.tronprotocol:trident:1.0.0")
 ```
 
 ### Maven
@@ -32,7 +32,7 @@ Add repo setting:
 <dependency>
   <groupId>io.github.tronprotocol</groupId>
   <artifactId>trident</artifactId>
-  <version>0.11.0</version>
+  <version>1.0.0</version>
 </dependency>
 ```
 
@@ -45,20 +45,23 @@ You can use locally built packages by the following steps:
 2. Add the following to your project's `build.gradle`:
 ```groovy
 dependencies {
-    implementation files('libs/trident-0.11.0.jar')
+    implementation files('libs/trident-1.0.0.jar')
     implementation "com.google.guava:guava:33.0.0-jre"
-    implementation "io.grpc:grpc-netty-shaded:1.75.0"
-    implementation "io.grpc:grpc-netty:1.75.0"
-    implementation "io.grpc:grpc-okhttp:1.75.0"
-    implementation "io.grpc:grpc-protobuf:1.75.0"
-    implementation "io.grpc:grpc-stub:1.75.0"
+    implementation "io.grpc:grpc-netty-shaded:1.81.0"
+    implementation "io.grpc:grpc-netty:1.81.0"
+    implementation "io.grpc:grpc-okhttp:1.81.0"
+    implementation "io.grpc:grpc-protobuf:1.81.0"
+    implementation "io.grpc:grpc-stub:1.81.0"
     implementation "com.google.protobuf:protobuf-java-util:3.25.8"
-    implementation "org.bouncycastle:bcprov-jdk18on:1.78.1"
-    implementation "io.vertx:vertx-core:4.5.21"
-    implementation "io.netty:netty-all:4.1.125.Final"
+    implementation "org.bouncycastle:bcprov-jdk18on:1.84"
+    implementation "io.vertx:vertx-core:4.5.27"
+    implementation platform("io.netty:netty-bom:4.1.135.Final")
+    implementation "io.netty:netty-buffer"
     implementation "com.alibaba.fastjson2:fastjson2:2.0.55"
 }
 ```
+
+> **Note:** If your code directly uses other netty modules (e.g. `io.netty.channel.*`, `io.netty.handler.*`, `io.netty.codec.*`), add the corresponding artifact after the BOM without specifying a version — the version will be resolved by `netty-bom`. For example: `implementation "io.netty:netty-handler"`.
 
 ## Quick Start
 
@@ -73,8 +76,15 @@ ApiWrapper client = ApiWrapper.ofShasta("private key");
 // Or nile testnet
 ApiWrapper client = ApiWrapper.ofNile("private_key");
 
-//Initialize with special grpc endpoint
-ApiWrapper client = new ApiWrapper("grpc endpoint", "solidity grpc endpoint", "private_key");
+// Or initialize with a custom grpc endpoint.
+ApiWrapper client = new ApiWrapperBuilder("grpc endpoint")
+    .withGrpcEndpointSolidity("solidity grpc endpoint")
+    .withPrivateKey("private_key")
+    .withApiKey("api_key")             // Optional: API key from TronGrid
+    .withTLS()                         // Optional: or withTLS(new File("xxx.crt"))
+    .withTimeout(5000)                 // Optional: request timeout in milliseconds
+    .addInterceptors(interceptors)     // Optional: custom gRPC interceptors
+    .build();
 
 // Send TRX
 TransactionExtention transactionExtention = client.transfer("fromAddress", "toAddress", 100_000_000L); //100TRX

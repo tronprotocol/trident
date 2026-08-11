@@ -13,6 +13,9 @@
 
 package org.tron.trident.abi;
 
+import static org.tron.trident.abi.TypeDecoder.MAX_BYTE_LENGTH_FOR_HEX_STRING;
+import static org.tron.trident.abi.TypeDecoder.isDynamic;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -20,7 +23,6 @@ import org.tron.trident.abi.datatypes.Array;
 import org.tron.trident.abi.datatypes.Bytes;
 import org.tron.trident.abi.datatypes.BytesType;
 import org.tron.trident.abi.datatypes.DynamicArray;
-import org.tron.trident.abi.datatypes.DynamicBytes;
 import org.tron.trident.abi.datatypes.DynamicStruct;
 import org.tron.trident.abi.datatypes.StaticArray;
 import org.tron.trident.abi.datatypes.StaticStruct;
@@ -31,7 +33,7 @@ import org.tron.trident.utils.Numeric;
 import org.tron.trident.utils.Strings;
 
 /**
- * Ethereum Contract Application Binary Interface (ABI) encoding for functions. Further details are
+ * Ethereum Contract Application Binary Interface (ABI) decoding for functions. Further details are
  * available <a href="https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI">here</a>.
  */
 public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
@@ -73,60 +75,77 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
   }
 
   private static List<Type> build(String input, List<TypeReference<Type>> outputParameters) {
+    // Reject cyclic or excessively nested TypeReference graphs up front; any
+    // downstream recursion through subTypeReference / innerTypes is then bounded
+    // by what passed validation here.
+    for (TypeReference<?> typeReference : outputParameters) {
+      Utils.validateTypeReferenceDepth(typeReference);
+    }
+
+    // Counts the values and payload bytes this result decodes into, to reject a response that
+    // inflates into more than it carries.
+    final boolean outermostDecode = TypeDecoder.beginDecodeLimits(input.length());
+    try {
+      return buildResults(input, outputParameters);
+    } finally {
+      if (outermostDecode) {
+        TypeDecoder.endDecodeLimits();
+      }
+    }
+  }
+
+  private static List<Type> buildResults(
+      String input, List<TypeReference<Type>> outputParameters) {
     List<Type> results = new ArrayList<>(outputParameters.size());
 
     int offset = 0;
     for (TypeReference<?> typeReference : outputParameters) {
       try {
+        int hexStringDataOffset = getDataOffset(input, offset, typeReference);
+
         @SuppressWarnings("unchecked")
         Class<Type> classType = (Class<Type>) typeReference.getClassType();
 
-        int hexStringDataOffset = getDataOffset(input, offset, classType);
-
         Type result;
         if (DynamicStruct.class.isAssignableFrom(classType)) {
-          if (outputParameters.size() != 1) {
-            throw new UnsupportedOperationException(
-                "Multiple return objects containing a struct is not supported");
-          }
           result =
-              TypeDecoder.decodeDynamicStruct(
-                  input, hexStringDataOffset, typeReference);
-          offset += TypeDecoder.MAX_BYTE_LENGTH_FOR_HEX_STRING;
+                  TypeDecoder.decodeDynamicStruct(
+                          input, hexStringDataOffset, typeReference);
+          offset += MAX_BYTE_LENGTH_FOR_HEX_STRING;
 
         } else if (DynamicArray.class.isAssignableFrom(classType)) {
           result =
-              TypeDecoder.decodeDynamicArray(
-                  input, hexStringDataOffset, typeReference);
-          offset += TypeDecoder.MAX_BYTE_LENGTH_FOR_HEX_STRING;
-
-        } else if (typeReference instanceof TypeReference.StaticArrayTypeReference) {
-          int length = ((TypeReference.StaticArrayTypeReference) typeReference).getSize();
-          result =
-              TypeDecoder.decodeStaticArray(
-                  input, hexStringDataOffset, typeReference, length);
-          offset += length * TypeDecoder.MAX_BYTE_LENGTH_FOR_HEX_STRING;
+                  TypeDecoder.decodeDynamicArray(
+                          input, hexStringDataOffset, typeReference);
+          offset += MAX_BYTE_LENGTH_FOR_HEX_STRING;
 
         } else if (StaticStruct.class.isAssignableFrom(classType)) {
           result =
-              TypeDecoder.decodeStaticStruct(
-                  input, hexStringDataOffset, typeReference);
-          offset +=
-              classType.getDeclaredFields().length * TypeDecoder.MAX_BYTE_LENGTH_FOR_HEX_STRING;
-        } else if (StaticArray.class.isAssignableFrom(classType)) {
-          int length =
-              Integer.parseInt(
-                  classType
-                      .getSimpleName()
-                      .substring(StaticArray.class.getSimpleName().length()));
-          result =
-              TypeDecoder.decodeStaticArray(
-                  input, hexStringDataOffset, typeReference, length);
-          offset += length * TypeDecoder.MAX_BYTE_LENGTH_FOR_HEX_STRING;
+                  TypeDecoder.decodeStaticStruct(
+                          input, hexStringDataOffset, typeReference);
+          offset += (result.bytes32PaddedLength() / Type.MAX_BYTE_LENGTH)
+                          * MAX_BYTE_LENGTH_FOR_HEX_STRING;
 
+        } else if (StaticArray.class.isAssignableFrom(classType)) {
+          int length;
+          if (typeReference instanceof TypeReference.StaticArrayTypeReference) {
+            length = ((TypeReference.StaticArrayTypeReference) typeReference).getSize();
+          } else {
+            length = Utils.extractStaticArraySize(classType);
+          }
+          result =
+                  TypeDecoder.decodeStaticArray(
+                          input, hexStringDataOffset, typeReference, length);
+          if (isDynamic(typeReference)) {
+            offset += MAX_BYTE_LENGTH_FOR_HEX_STRING;
+          } else {
+            offset +=
+                (result.bytes32PaddedLength() / Type.MAX_BYTE_LENGTH)
+                    * MAX_BYTE_LENGTH_FOR_HEX_STRING;
+          }
         } else {
           result = TypeDecoder.decode(input, hexStringDataOffset, classType);
-          offset += TypeDecoder.MAX_BYTE_LENGTH_FOR_HEX_STRING;
+          offset += MAX_BYTE_LENGTH_FOR_HEX_STRING;
         }
         results.add(result);
 
@@ -137,11 +156,17 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
     return results;
   }
 
-  private static <T extends Type> int getDataOffset(String input, int offset, Class<T> type) {
-    if (DynamicBytes.class.isAssignableFrom(type)
-        || Utf8String.class.isAssignableFrom(type)
-        || DynamicArray.class.isAssignableFrom(type)) {
-      return TypeDecoder.decodeUintAsInt(input, offset) << 1;
+  public static <T extends Type> int getDataOffset(
+          String input, int offset, TypeReference<?> typeReference)
+          throws ClassNotFoundException {
+    if (isDynamic(typeReference)) {
+      int dataOffset = TypeDecoder.decodeUintAsInt(input, offset);
+      try {
+        return Math.multiplyExact(dataOffset, 2);
+      } catch (ArithmeticException e) {
+        throw new IllegalArgumentException(
+            "Invalid ABI data offset: " + dataOffset, e);
+      }
     } else {
       return offset;
     }

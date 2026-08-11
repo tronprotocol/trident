@@ -45,10 +45,15 @@ public abstract class StaticArray<T extends Type> extends Array<T> {
     this(values.size(), values);
   }
 
+  /**
+   * @deprecated Infers the element type from {@code values.get(0)}, so passing an empty list
+   *     throws {@link IndexOutOfBoundsException}. Notably this makes the deprecated
+   *     constructors of {@code StaticArray0} unusable. Use
+   *     {@code StaticArray(Class<T>, int, List<T>)} instead.
+   */
   @Deprecated
-  @SuppressWarnings("unchecked")
   public StaticArray(int expectedSize, List<T> values) {
-    super((Class<T>) AbiTypes.getType(values.get(0).getTypeAsString()), values);
+    super(inferComponentType(values.get(0)), values);
     checkValid(expectedSize);
   }
 
@@ -79,7 +84,7 @@ public abstract class StaticArray<T extends Type> extends Array<T> {
 
   @Override
   public String getTypeAsString() {
-    return AbiTypes.getTypeAString(getComponentType()) + "[" + value.size() + "]";
+    return getElementTypeAsString() + "[" + value.size() + "]";
   }
 
   private void checkValid(int expectedSize) {

@@ -15,10 +15,10 @@
 
 package org.tron.trident.crypto;
 
+import com.google.common.base.Preconditions;
 import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyPairGenerator;
-import java.security.Security;
 import java.security.spec.ECGenParameterSpec;
 import java.util.Arrays;
 import java.util.Objects;
@@ -58,6 +58,13 @@ public class SECP256K1 {
 
   public static final String ALGORITHM = "ECDSA";
   public static final String CURVE_NAME = "secp256k1";
+  /**
+   * @deprecated trident no longer registers Bouncy Castle in the JVM-global
+   *     provider list, so a provider named "BC" is not guaranteed to exist.
+   *     Callers that need it must register it themselves, e.g.
+   *     {@code Security.addProvider(new BouncyCastleProvider())}.
+   */
+  @Deprecated
   public static final String PROVIDER = "BC";
 
   public static final ECDomainParameters CURVE;
@@ -67,16 +74,14 @@ public class SECP256K1 {
   private static final BigInteger CURVE_ORDER;
 
   static {
-    //support android platform
-    Security.removeProvider(BouncyCastleProvider.PROVIDER_NAME);
-    Security.insertProviderAt(new BouncyCastleProvider(), 1);
-
     final X9ECParameters params = SECNamedCurves.getByName(CURVE_NAME);
     CURVE = new ECDomainParameters(params.getCurve(), params.getG(), params.getN(), params.getH());
     CURVE_ORDER = CURVE.getN();
     HALF_CURVE_ORDER = CURVE_ORDER.shiftRight(1);
     try {
-      KEY_PAIR_GENERATOR = KeyPairGenerator.getInstance(ALGORITHM, PROVIDER);
+      // pass the provider explicitly instead of touching the JVM-global provider
+      // list; also bypasses Android's stripped built-in "BC"
+      KEY_PAIR_GENERATOR = KeyPairGenerator.getInstance(ALGORITHM, new BouncyCastleProvider());
     } catch (final Exception e) {
       throw new RuntimeException(e);
     }
@@ -121,7 +126,7 @@ public class SECP256K1 {
   public static boolean verify(
       final Bytes data, final Signature signature, final PublicKey pub,
       final UnaryOperator<Bytes> preprocessor) {
-    assert preprocessor != null : "preprocessor must not be null";
+    Preconditions.checkNotNull(preprocessor, "preprocessor must not be null");
     return verify(preprocessor.apply(data), signature, pub);
   }
 
@@ -155,10 +160,12 @@ public class SECP256K1 {
    */
   private static BigInteger recoverFromSignature(
       final int recId, final BigInteger r, final BigInteger s, final Bytes32 dataHash) {
-    assert (recId >= 0);
-    assert (r.signum() >= 0);
-    assert (s.signum() >= 0);
-    assert (dataHash != null);
+    Preconditions.checkNotNull(r, "r must not be null");
+    Preconditions.checkNotNull(s, "s must not be null");
+    Preconditions.checkNotNull(dataHash, "dataHash must not be null");
+    Preconditions.checkArgument(recId >= 0, "recId must be greater than or equal to 0");
+    Preconditions.checkArgument(r.signum() >= 0, "r must be greater than or equal to 0");
+    Preconditions.checkArgument(s.signum() >= 0, "s must be greater than or equal to 0");
 
     // 1.0 For j from 0 to h (h == recId here and the loop is outside this function)
     // 1.1 Let x = r + jn
@@ -293,8 +300,8 @@ public class SECP256K1 {
    */
   public static Bytes32 calculateECDHKeyAgreement(final PrivateKey privKey,
       final PublicKey theirPubKey) {
-    assert privKey != null : "missing private key";
-    assert theirPubKey != null : "missing remote public key";
+    Preconditions.checkNotNull(privKey, "missing private key");
+    Preconditions.checkNotNull(theirPubKey, "missing remote public key");
 
     final ECPrivateKeyParameters privKeyP = new ECPrivateKeyParameters(privKey.getD(), CURVE);
     final ECPublicKeyParameters pubKeyP = new ECPublicKeyParameters(theirPubKey.asEcPoint(), CURVE);
@@ -311,22 +318,34 @@ public class SECP256K1 {
     private final Bytes32 encoded;
 
     private PrivateKey(final Bytes32 encoded) {
-      assert encoded != null;
+      Preconditions.checkNotNull(encoded, "encoded must not be null");
       this.encoded = encoded;
     }
 
     public static PrivateKey create(final BigInteger key) {
-      assert key != null;
+      Preconditions.checkNotNull(key, "key must not be null");
       return create(UInt256.valueOf(key).toBytes());
     }
 
     public static PrivateKey create(final Bytes32 key) {
+      Preconditions.checkNotNull(key, "key must not be null");
+      // Reject out-of-range scalars at construction instead of letting Bouncy Castle
+      // throw the same error later at signing time. Without this, 0 and n fail only
+      // when signing, and n + 1 even derives the same address as private key 1 via
+      // the mod-n reduction in PublicKey.create.
+      CURVE.validatePrivateScalar(key.toUnsignedBigInteger());
       return new PrivateKey(key);
     }
 
     public static PrivateKey create(final String hexKey) {
-      assert hexKey.length() == 64;
-      return create(Bytes32.fromHexString(hexKey));
+      Preconditions.checkNotNull(hexKey, "hexKey must not be null");
+      // Tolerate the optional "0x" prefix that Bytes32.fromHexString accepts, so
+      // previously valid "0x"-prefixed keys keep working now that this check is
+      // enforced at runtime.
+      final String rawHex =
+          (hexKey.startsWith("0x") || hexKey.startsWith("0X")) ? hexKey.substring(2) : hexKey;
+      Preconditions.checkArgument(rawHex.length() == 64, "hexKey must be 64 hex characters long");
+      return create(Bytes32.fromHexString(rawHex));
     }
 
     @Override
@@ -369,7 +388,15 @@ public class SECP256K1 {
 
     @Override
     public String toString() {
-      return encoded.toString();
+      return "SECP256K1.PrivateKey{REDACTED}";
+    }
+
+    /**
+     * Return the privateKey String. Unless you absolutely need
+     * the privateKey it is better for security reasons to just use toString().
+     */
+    public String toStringWithPrivateKey() {
+      return encoded.toUnprefixedHexString();
     }
   }
 
@@ -395,7 +422,7 @@ public class SECP256K1 {
     }
 
     public static PublicKey create(final BigInteger key) {
-      assert key != null;
+      Preconditions.checkNotNull(key, "key must not be null");
       return create(toBytes64(key.toByteArray()));
     }
 
@@ -424,8 +451,8 @@ public class SECP256K1 {
     }
 
     private PublicKey(final Bytes encoded) {
-      assert encoded != null;
-      assert encoded.size() == BYTE_LENGTH;
+      Preconditions.checkNotNull(encoded, "encoded must not be null");
+      Preconditions.checkArgument(encoded.size() == BYTE_LENGTH, "encoded byte size must be 64");
       this.encoded = encoded;
     }
 
@@ -487,8 +514,8 @@ public class SECP256K1 {
     private final PublicKey publicKey;
 
     public KeyPair(final PrivateKey privateKey, final PublicKey publicKey) {
-      assert privateKey != null;
-      assert publicKey != null;
+      Preconditions.checkNotNull(privateKey, "privateKey must not be null");
+      Preconditions.checkNotNull(publicKey, "publicKey must not be null");
       this.privateKey = privateKey;
       this.publicKey = publicKey;
     }
@@ -572,8 +599,8 @@ public class SECP256K1 {
      * neither 27 or 28).
      */
     public static Signature create(final BigInteger r, final BigInteger s, final byte recId) {
-      assert r != null;
-      assert s != null;
+      Preconditions.checkNotNull(r, "r must not be null");
+      Preconditions.checkNotNull(s, "s must not be null");
       checkInBounds("r", r);
       checkInBounds("s", s);
       if (recId != 0 && recId != 1) {
@@ -596,7 +623,9 @@ public class SECP256K1 {
     }
 
     public static Signature decode(final Bytes bytes) {
-      assert bytes.size() == BYTES_REQUIRED : "encoded SECP256K1 signature must be 65 bytes long";
+      Preconditions.checkNotNull(bytes, "bytes must not be null");
+      Preconditions.checkArgument(bytes.size() == BYTES_REQUIRED,
+          "encoded SECP256K1 signature must be 65 bytes long");
 
       final BigInteger r = bytes.slice(0, 32).toUnsignedBigInteger();
       final BigInteger s = bytes.slice(32, 32).toUnsignedBigInteger();

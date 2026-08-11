@@ -18,13 +18,13 @@ import java.math.BigInteger;
 /**
  * Unsigned integer type.
  */
-public class TrcToken extends IntType {
+public class TrcToken extends Uint {
 
   public static final String TYPE_NAME = "trcToken";
   public static final Uint DEFAULT = new Uint(BigInteger.ZERO);
 
   protected TrcToken(int bitSize, BigInteger value) {
-    super(TYPE_NAME, bitSize, value);
+    super(bitSize, value);
   }
 
   public TrcToken(int value) {
@@ -37,7 +37,9 @@ public class TrcToken extends IntType {
   }
 
   @Override
-  protected boolean valid() {
-    return super.valid() && 0 <= value.signum();
+  public String getTypeAsString() {
+    // Uint stores "uint256" (prefix + bit size); the canonical TVM ABI
+    // token is "trcToken", same as Address over Uint160.
+    return TYPE_NAME;
   }
 }

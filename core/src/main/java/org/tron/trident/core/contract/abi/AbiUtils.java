@@ -3,6 +3,7 @@ package org.tron.trident.core.contract.abi;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import java.util.Locale;
 import org.tron.trident.proto.Common.SmartContract.ABI;
 
 /**
@@ -231,7 +232,7 @@ public class AbiUtils {
    * UnknownEntryType if the type string doesn't match any known type
    */
   private static ABI.Entry.EntryType getEntryType(String type) {
-    switch (type.toLowerCase()) {
+    switch (type.toLowerCase(Locale.ROOT)) {
       case "constructor":
         return ABI.Entry.EntryType.Constructor;
       case "function":
@@ -257,7 +258,7 @@ public class AbiUtils {
    * UnknownMutabilityType if the string doesn't match any known type
    */
   private static ABI.Entry.StateMutabilityType getStateMutability(String stateMutability) {
-    switch (stateMutability.toLowerCase()) {
+    switch (stateMutability.toLowerCase(Locale.ROOT)) {
       case "pure":
         return ABI.Entry.StateMutabilityType.Pure;
       case "view":

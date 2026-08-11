@@ -20,17 +20,23 @@ import java.util.List;
  */
 public class DynamicArray<T extends Type> extends Array<T> {
 
+  /**
+   * @deprecated Infers the element type from {@code values[0]}, so passing an empty array
+   *     throws {@link ArrayIndexOutOfBoundsException}. Use {@code DynamicArray(Class<T>, T...)}.
+   */
   @Deprecated
   @SafeVarargs
-  @SuppressWarnings({"unchecked"})
   public DynamicArray(T... values) {
-    super((Class<T>) AbiTypes.getType(values[0].getTypeAsString()), values);
+    super(inferComponentType(values[0]), values);
   }
 
+  /**
+   * @deprecated Infers the element type from {@code values.get(0)}, so passing an empty list
+   *     throws {@link IndexOutOfBoundsException}. Use {@code DynamicArray(Class<T>, List<T>)}.
+   */
   @Deprecated
-  @SuppressWarnings("unchecked")
   public DynamicArray(List<T> values) {
-    super((Class<T>) AbiTypes.getType(values.get(0).getTypeAsString()), values);
+    super(inferComponentType(values.get(0)), values);
   }
 
   @Deprecated
@@ -60,6 +66,6 @@ public class DynamicArray<T extends Type> extends Array<T> {
 
   @Override
   public String getTypeAsString() {
-    return AbiTypes.getTypeAString(getComponentType()) + "[]";
+    return getElementTypeAsString() + "[]";
   }
 }

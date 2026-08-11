@@ -1,0 +1,105 @@
+name: PR Build
+
+on:
+  push:
+    branches: [ 'main', 'master', 'release_**' ]
+  pull_request:
+    branches: [ 'main', 'master', 'develop', 'release_**' ]
+    types: [ opened, synchronize, reopened ]
+    paths-ignore: [ '**/*.md', '.gitignore', '**/.gitignore', '.editorconfig',
+                    '.gitattributes', 'docs/**', '.github/ISSUE_TEMPLATE/**',
+                    '.github/PULL_REQUEST_TEMPLATE/**', '.github/CODEOWNERS' ]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  checkstyle:
+    name: Checkstyle
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Set up JDK 8
+        uses: actions/setup-java@v5
+        with:
+          java-version: '8'
+          distribution: 'temurin'
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v5
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ubuntu-22.04-x86_64-jdk8-gradle-${{ hashFiles('**/*.gradle', '**/gradle-wrapper.properties') }}
+          restore-keys: ubuntu-22.04-x86_64-jdk8-gradle-
+
+      - name: Run checkstyle
+        run: ./gradlew checkstyleMain --continue --no-daemon
+
+      - name: Upload checkstyle reports
+        if: failure()
+        uses: actions/upload-artifact@v6
+        with:
+          name: checkstyle-reports
+          path: '*/build/reports/checkstyle/'
+
+  unit-test:
+    name: Unit Tests (JDK ${{ matrix.java }} / ${{ matrix.arch }})
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - java: '8'
+            runner: ubuntu-22.04
+            arch: x86_64
+          - java: '17'
+            runner: ubuntu-24.04-arm
+            arch: aarch64
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Set up JDK ${{ matrix.java }}
+        uses: actions/setup-java@v5
+        with:
+          java-version: ${{ matrix.java }}
+          distribution: 'temurin'
+
+      - name: Check Java version
+        run: java -version
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v5
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ matrix.runner }}-${{ matrix.arch }}-jdk${{ matrix.java }}-gradle-${{ hashFiles('**/*.gradle', '**/gradle-wrapper.properties') }}
+          restore-keys: ${{ matrix.runner }}-${{ matrix.arch }}-jdk${{ matrix.java }}-gradle-
+
+      - name: Run unit tests
+        # --continue: keep running remaining modules after a failure so the log
+        # shows every failing case in one run (failures still fail this step).
+        run: ./gradlew clean test --continue --no-daemon
+
+      - name: Upload test reports
+        if: failure()
+        uses: actions/upload-artifact@v6
+        with:
+          name: test-reports-jdk${{ matrix.java }}-${{ matrix.arch }}
+          path: |
+            */build/reports/tests/test/
+            */build/test-results/test/

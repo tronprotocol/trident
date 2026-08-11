@@ -3,13 +3,13 @@ package org.tron.trident.core.utils;
 import com.google.protobuf.Any;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.bouncycastle.util.encoders.Hex;
-import org.tron.trident.abi.TypeEncoder;
+import org.tron.trident.abi.FunctionEncoder;
 import org.tron.trident.abi.datatypes.Type;
-import org.tron.trident.core.exceptions.ContractCreateException;
 import org.tron.trident.core.transaction.BlockId;
 import org.tron.trident.crypto.Hash;
 import org.tron.trident.proto.Chain;
@@ -110,12 +110,9 @@ public class Utils {
     return address;
   }
 
-  public static ByteString encodeParameter(List<Type<?>> params) throws ContractCreateException {
-    StringBuilder builder = new StringBuilder();
-    for (Type<?> p : params) {
-      builder.append(TypeEncoder.encode(p));
-    }
-    return ByteString.copyFrom(Hex.decode(builder.toString()));
+  public static ByteString encodeParameter(List<Type<?>> params) {
+    String encoded = FunctionEncoder.encodeConstructor(new ArrayList<Type>(params));
+    return ByteString.copyFrom(Hex.decode(encoded));
   }
 
   public static byte[] replaceLibraryAddress(String code, String libraryAddressPair,
