@@ -2,6 +2,7 @@ org.tron.trident.abi
 org.tron.trident.abi.datatypes
 org.tron.trident.abi.datatypes.generated
 org.tron.trident.abi.datatypes.primitive
+org.tron.trident.abi.datatypes.reflection
 org.tron.trident.abi.spi
 org.tron.trident.api
 org.tron.trident.commons
