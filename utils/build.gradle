@@ -5,10 +5,12 @@ plugins {
 description 'Minimal set of trident utility classes'
 
 dependencies {
-    // only io.vertx.core.buffer.Buffer is used (crypto/tuwenitypes), never vertx JSON,
-    // so vertx's jackson-core transitive is dead weight — drop it from the graph
+    // The Bytes wrappers only use Vert.x Buffer. The direct netty-buffer
+    // dependency below also supplies the matching netty-common.
     implementation("io.vertx:vertx-core:$vertxVersion") {
         exclude group: 'com.fasterxml.jackson.core', module: 'jackson-core'
+        // The publishing script copies the module name into the Maven exclusion.
+        exclude group: 'io.netty', module: '*'
     }
     implementation "io.netty:netty-buffer:$nettyVersion"
     implementation "com.google.guava:guava:$googleGuavaVersion"
