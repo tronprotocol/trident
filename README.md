@@ -14,7 +14,7 @@ Trident is a lightweight Java SDK for interacting with the TRON blockchain. It p
 
 ## Adding Trident to your build
 
-Since version 0.11.0, Trident can be built with JDK 1.8 or JDK17 on Gradle 8.5.
+Build Trident with JDK 8 or 17 using the Gradle 8.14.8 Wrapper.
 
 The latest version (built with JDK 1.8) can be found on [Maven Central](https://mvnrepository.com/artifact/io.github.tronprotocol/trident).
 
@@ -46,16 +46,16 @@ You can use locally built packages by the following steps:
 ```groovy
 dependencies {
     implementation files('libs/trident-1.0.0.jar')
-    implementation "com.google.guava:guava:33.0.0-jre"
-    implementation "io.grpc:grpc-netty-shaded:1.81.0"
-    implementation "io.grpc:grpc-netty:1.81.0"
-    implementation "io.grpc:grpc-okhttp:1.81.0"
-    implementation "io.grpc:grpc-protobuf:1.81.0"
-    implementation "io.grpc:grpc-stub:1.81.0"
-    implementation "com.google.protobuf:protobuf-java-util:3.25.8"
-    implementation "org.bouncycastle:bcprov-jdk18on:1.84"
-    implementation "io.vertx:vertx-core:4.5.27"
-    implementation platform("io.netty:netty-bom:4.1.135.Final")
+    implementation "com.google.guava:guava:33.8.0-jre"
+    implementation "io.grpc:grpc-netty-shaded:1.86.0"
+    implementation "io.grpc:grpc-netty:1.86.0"
+    implementation "io.grpc:grpc-okhttp:1.86.0"
+    implementation "io.grpc:grpc-protobuf:1.86.0"
+    implementation "io.grpc:grpc-stub:1.86.0"
+    implementation "com.google.protobuf:protobuf-java-util:3.25.9"
+    implementation "org.bouncycastle:bcprov-jdk18on:1.87"
+    implementation "io.vertx:vertx-core:4.5.35"
+    implementation platform("io.netty:netty-bom:4.2.21.Final")
     implementation "io.netty:netty-buffer"
     implementation "com.alibaba.fastjson2:fastjson2:2.0.55"
 }
