@@ -132,6 +132,24 @@ jobs:
                                         }
                                     }
                                 }
+
+                                // Publish aligned Netty versions explicitly: resolution rules and
+                                // imported BOM constraints do not propagate to every consumer.
+                                rootProject.project(':core').configurations.runtimeClasspath
+                                        .incoming.resolutionResult.allComponents
+                                        .collect { it.moduleVersion }
+                                        .findAll { it != null && it.group == 'io.netty'
+                                                && !it.name.startsWith('netty-tcnative') }
+                                        .sort { it.name }
+                                        .each { dep ->
+                                            def dependencyIdentifier = "${dep.group}:${dep.name}:${dep.version}"
+                                            if (seenDependencies.add(dependencyIdentifier)) {
+                                                def dependencyNode = dependenciesNode.appendNode('dependency')
+                                                dependencyNode.appendNode('groupId', dep.group)
+                                                dependencyNode.appendNode('artifactId', dep.name)
+                                                dependencyNode.appendNode('version', dep.version)
+                                            }
+                                        }
                             }
                             //end withXml
                         }

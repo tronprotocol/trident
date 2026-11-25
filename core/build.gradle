@@ -5,7 +5,7 @@ plugins {
 
 description 'Trident-Java gRPC core classes'
 
-def protobufVersion = '3.25.8'
+def protobufVersion = '3.25.9'
 
 dependencies {
     implementation "com.google.guava:guava:$googleGuavaVersion"
