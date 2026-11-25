@@ -21,7 +21,7 @@ The latest version (built with JDK 1.8) can be found on [Maven Central](https://
 ### Gradle
 
 ```groovy
-implementation("io.github.tronprotocol:trident:1.0.0")
+implementation("io.github.tronprotocol:trident:1.0.1")
 ```
 
 ### Maven
@@ -32,7 +32,7 @@ Add repo setting:
 <dependency>
   <groupId>io.github.tronprotocol</groupId>
   <artifactId>trident</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
 </dependency>
 ```
 
@@ -45,7 +45,7 @@ You can use locally built packages by the following steps:
 2. Add the following to your project's `build.gradle`:
 ```groovy
 dependencies {
-    implementation files('libs/trident-1.0.0.jar')
+    implementation files('libs/trident-1.0.1.jar')
     implementation "com.google.guava:guava:33.8.0-jre"
     implementation "io.grpc:grpc-netty-shaded:1.86.0"
     implementation "io.grpc:grpc-netty:1.86.0"
