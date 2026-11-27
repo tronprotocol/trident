@@ -5,7 +5,7 @@ plugins {
 
 description 'Trident-Java gRPC core classes'
 
-def protobufVersion = '3.25.8'
+def protobufVersion = '3.25.9'
 
 dependencies {
     implementation "com.google.guava:guava:$googleGuavaVersion"
@@ -18,6 +18,12 @@ dependencies {
     implementation "io.grpc:grpc-okhttp:$grpcVersion"
     implementation "io.grpc:grpc-protobuf:$grpcVersion"
     implementation "io.grpc:grpc-stub:$grpcVersion"
+
+    // Publish matching versions for the Netty modules declared by grpc-netty.
+    implementation "io.netty:netty-codec-http2:$nettyVersion"
+    implementation "io.netty:netty-handler-proxy:$nettyVersion"
+    implementation "io.netty:netty-transport-native-unix-common:$nettyVersion"
+
     compileOnly 'org.apache.tomcat:annotations-api:6.0.53' // necessary for Java 9+
 
     implementation "com.google.protobuf:protobuf-java-util:$protobufVersion"
